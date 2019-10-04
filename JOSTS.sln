@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "JOSTS", "JOSTS\JOSTS.pyproj", "{22E49816-71D2-4EF9-8EE6-49A591F2BBF2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22E49816-71D2-4EF9-8EE6-49A591F2BBF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22E49816-71D2-4EF9-8EE6-49A591F2BBF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22E49816-71D2-4EF9-8EE6-49A591F2BBF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22E49816-71D2-4EF9-8EE6-49A591F2BBF2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAD4CB42-2673-4850-A404-1899D644B522}
+	EndGlobalSection
+EndGlobal
