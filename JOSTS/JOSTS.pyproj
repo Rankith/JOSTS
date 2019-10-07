@@ -53,12 +53,19 @@
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
     <Folder Include="app\static\app\fonts\" />
+    <Folder Include="app\static\app\images\" />
+    <Folder Include="app\static\app\images\wag\" />
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="JOSTS\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\images\wag\ph1.svg" />
+    <Content Include="app\static\app\images\wag\ph2.svg" />
+    <Content Include="app\static\app\images\wag\ph3.svg" />
+    <Content Include="app\templates\app\skill.html" />
+    <Content Include="app\templates\app\skills.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

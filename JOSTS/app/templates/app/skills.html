@@ -1,0 +1,20 @@
+﻿{% extends "app/layout.html" %}
+
+{% block content %}
+{% load staticfiles %}
+<ul>
+{% for skill in lang_skills %}
+    <li><a href="#" onclick="SkillClick({{skill.id}})">{{ skill.text }}</a></li>
+   
+{% endfor %}
+</ul>
+<div id="divSkill">
+
+</div>
+<script type="text/javascript">
+    function SkillClick(idIn)
+    {
+        $("#divSkill").load("/skill?id=" +idIn);
+    }
+</script>
+{% endblock %}
