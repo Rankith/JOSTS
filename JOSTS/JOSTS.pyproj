@@ -62,8 +62,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\images\wag\ph1.svg" />
+    <Content Include="app\static\app\images\wag\PH11011.svg" />
+    <Content Include="app\static\app\images\wag\PH11012.svg" />
+    <Content Include="app\static\app\images\wag\PH1103.svg" />
     <Content Include="app\static\app\images\wag\ph2.svg" />
+    <Content Include="app\static\app\images\wag\PH21021.svg" />
+    <Content Include="app\static\app\images\wag\PH222.svg" />
     <Content Include="app\static\app\images\wag\ph3.svg" />
+    <Content Include="app\static\app\images\wag\PH31.svg" />
+    <Content Include="app\static\app\images\wag\PH42.svg" />
+    <Content Include="app\static\app\images\wag\PH4321.svg" />
     <Content Include="app\templates\app\skill.html" />
     <Content Include="app\templates\app\skills.html" />
     <Content Include="requirements.txt" />

@@ -1,13 +1,31 @@
-﻿{% extends "app/layout.html" %}
+{% extends "app/layout.html" %}
 
 {% block content %}
 {% load staticfiles %}
-<ul>
+<div class="container text-white">
 {% for skill in lang_skills %}
-    <li><a href="#" onclick="SkillClick({{skill.id}})">{{ skill.text }}</a></li>
-   
+    {% if forloop.first %}<div class="row">{% endif %}
+    <div class="col-lg-3 col-md-4 col-sm-6" style="height:170px">
+        <div class="row">
+            <div class="col">
+                <div style="height:150px" class="bg-white rounded">
+                    <div class="row h-100 justify-content-center align-items-center">
+                        <div class="col-12">
+                            <img class="img-fluid" src="{% static 'app/images/wag/'%}{{ skill.skill.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">{{skill.skill.id_number}}</div>
+            <div class="col text-right">{{skill.skill.letter_value}} = {{skill.skill.value}}</div>
+        </div>
+    </div>
+    
+    {% if forloop.last %}</div>{% endif %}
 {% endfor %}
-</ul>
+</div>
 <div id="divSkill">
 
 </div>
