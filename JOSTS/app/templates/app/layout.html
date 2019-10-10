@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div class="container body-content" style="background-color:#939dac">
+    <div id="divMain" class="container body-content" style="background-color:#939dac">
 {% block content %}{% endblock %}
         <hr/>
         <footer>
@@ -43,10 +43,7 @@
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
  <script type="text/javascript">
-         $(window).resize(
-            function () {
-                adjustWidth();
-            });
+          $(document).ready(SetListHeight);
     </script>
 {% block scripts %}{% endblock %}
 
