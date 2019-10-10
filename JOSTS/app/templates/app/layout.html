@@ -19,7 +19,7 @@
                 </button>
                 <a href="/" class="navbar-brand">STS</a>
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse" id="navbarSupportedContent">
                 <ul class="nav navbar-nav">
                     <li class="nav=item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
                     <li class="nav=item"><a class="nav-link" href="{% url 'skills' %}">Skills</a></li>
@@ -42,6 +42,12 @@
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
+ <script type="text/javascript">
+         $(window).resize(
+            function () {
+                adjustWidth();
+            });
+    </script>
 {% block scripts %}{% endblock %}
 
 </body>

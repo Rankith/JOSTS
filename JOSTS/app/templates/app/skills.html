@@ -2,37 +2,58 @@
 
 {% block content %}
 {% load staticfiles %}
-<div class="container text-white">
-{% for skill in lang_skills %}
-    {% if forloop.first %}<div class="row">{% endif %}
-    <div class="col-lg-3 col-md-4 col-sm-6" style="height:170px">
-        <div class="row">
-            <div class="col">
-                <div style="height:150px" class="bg-white rounded">
-                    <div class="row h-100 justify-content-center align-items-center">
-                        <div class="col-12">
-                            <img class="img-fluid" src="{% static 'app/images/wag/'%}{{ skill.skill.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+<div id="divContentParent" class="position-relative">
+    <div id="divSkill" class="position-fixed" onclick="CloseSkill()" style="cursor:pointer">
+
+    </div>
+    <div class="text-white" id="divSkillList">
+    {% for skill in lang_skills %}
+        {% if forloop.first %}<div class="row">{% endif %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="SkillClick({{skill.id}})" style="height:170px;cursor:pointer" >
+            <div class="row">
+                <div class="col">
+                    <div style="height:150px" class="bg-white rounded">
+                        <div class="row h-100 justify-content-center align-items-center">
+                            <div class="col-12">
+                                <img class="img-fluid" src="{% static 'app/images/wag/'%}{{ skill.skill.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col"><div class="text-center">{{skill.skill.id_number}}</div></div>
+                <div class="col text-right"><div class="text-center">{{skill.skill.letter_value}} = {{skill.skill.value}}</div></div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col">{{skill.skill.id_number}}</div>
-            <div class="col text-right">{{skill.skill.letter_value}} = {{skill.skill.value}}</div>
-        </div>
+        {% if forloop.last %}</div>{% endif %}
+    {% endfor %}
     </div>
-    
-    {% if forloop.last %}</div>{% endif %}
-{% endfor %}
-</div>
-<div id="divSkill">
-
 </div>
 <script type="text/javascript">
+
+    function CloseSkill() {
+        $("#divSkill").empty();
+        SetSkillListPadding();
+    }
+    function adjustWidth()
+    {
+       var parentwidth = $("#divContentParent").width();
+       $("#divSkill").width(parentwidth);
+     }
     function SkillClick(idIn)
     {
-        $("#divSkill").load("/skill?id=" +idIn);
+        $("#divSkill").load("/skill?id=" + idIn, SetSkillListPadding);
+
     }
+    function SetSkillListPadding()
+    {
+        //console.log( $("#divSkill").height());
+        $("#divSkillList").css("padding-top", $("#divSkill").height());
+        adjustWidth();
+
+    }
+
+
 </script>
 {% endblock %}
