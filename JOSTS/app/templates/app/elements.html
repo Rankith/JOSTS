@@ -1,0 +1,68 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+{% load staticfiles %}
+<div id="divContentParent">
+    
+    <div id="divElement" class="collapse" style="cursor:pointer">
+
+    </div>
+
+    <div class="text-white col" id="divElementList" style="overflow:auto">
+    {% for element in lang_elements %}
+        {% if forloop.first %}<div class="row">{% endif %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
+            <div class="row">
+                <div class="col">
+                    <div style="height:150px" class="image-background rounded">
+                        <div class="row h-100 justify-content-center align-items-center">
+                            <div class="col-12">
+                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><div class="text-center">{{element.element.id_number}}</div></div>
+                <div class="col"><div class="text-center">{{element.element.letter_value}} = {{element.element.value}}</div></div>
+            </div>
+        </div>
+        {% if forloop.last %}</div>{% endif %}
+    {% endfor %}
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    function CloseElement() {
+       
+        $("#divElement").collapse("hide");
+         $("#divElement").empty();
+        //SetListHeight();
+    }
+    function ElementClick(idIn)
+    {
+        //attach setting the list height to the element div finishing its animation
+        $('#divElement').on('hidden.bs.collapse', function() {
+            SetListHeight();
+        }).on('shown.bs.collapse', function() {
+            SetListHeight();
+        }).on('show.bs.collapse', function() {
+            SetListHeight();
+        });
+        $("#divElement").load("/element?id=" + idIn, ShowAndSetHeight);
+    }
+    function ShowAndSetHeight() {
+        $("#divElement").collapse("show");
+       
+    }
+    function SetListHeight() {
+        console.log("Setting Height");
+        $("#divElementList").height($(window).height() - $(".navbar").height() - $("#divElement").height() - 120);
+       
+    }
+   
+
+</script>
+{% endblock %}

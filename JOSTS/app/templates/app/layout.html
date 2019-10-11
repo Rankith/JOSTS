@@ -22,7 +22,7 @@
             <div class="navbar-collapse collapse" id="navbarSupportedContent">
                 <ul class="nav navbar-nav">
                     <li class="nav=item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav=item"><a class="nav-link" href="{% url 'skills' %}">Skills</a></li>
+                    <li class="nav=item"><a class="nav-link" href="{% url 'elements' %}">Elements</a></li>
                     <li class="nav=item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
                     <li class="nav=item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
                 </ul>
@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div id="divMain" class="container body-content" style="background-color:#939dac">
+    <div id="divMain" class="container body-content content-area-background" >
 {% block content %}{% endblock %}
         <hr/>
         <footer>
@@ -43,7 +43,12 @@
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
  <script type="text/javascript">
-          $(document).ready(SetListHeight);
+          
+     $(document).ready(function () {
+         $(window).resize(SetPadding);
+         SetListHeight;
+     });
+
     </script>
 {% block scripts %}{% endblock %}
 

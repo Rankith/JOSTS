@@ -40,3 +40,25 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+
+.image-background{
+    background-color:grey
+}
+
+.content-area-background {
+    background-color:#939dac
+}
+
+.detail-background {
+    background-color:#314765
+}
+.detail-top-right {
+    position: absolute;
+    top: 8px;
+    right: 16px
+}
+.detail-top-left {
+    position: absolute;
+    top: 8px;
+    left: 16px
+}

@@ -13,7 +13,7 @@ class Video(models.Model):
     def __str__(self):
         return self.event + " " + self.file
 
-class Skill(models.Model):
+class Element(models.Model):
     event = models.CharField(max_length=2)
     str_grp = models.IntegerField(default=0)
     code_order = models.IntegerField(default=0)
@@ -29,9 +29,12 @@ class Skill(models.Model):
     def image_url(self):
         return self.event + self.id_number.replace(".","")
 
-class EnglishSkill(models.Model):
-    skill = models.ForeignKey(Skill, on_delete=models.SET_NULL,null=True)
+class ElementText(models.Model):
+    element = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True)
     language = models.CharField(max_length=2,default="EN")
-    text = models.CharField(max_length=400)
+    text = models.CharField(max_length=400,blank=True,default='')
+    short_text = models.CharField(max_length=50,blank=True,default='')
+    named = models.CharField(max_length=50,blank=True,default='')
+    author_note = models.CharField(max_length=400,blank=True,default='')
     def __str__(self):
-        return self.skill.event + " " + self.text
+        return self.element.event + " " + self.text

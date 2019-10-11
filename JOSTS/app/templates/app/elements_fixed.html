@@ -1,0 +1,71 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+{% load staticfiles %}
+<div id="divContentParent" class="position-relative">
+    
+    <div id="divElement" class="collapse" style="cursor:pointer;position:fixed;z-index:131">
+
+    </div>
+
+    <div class="text-white col" id="divElementList">
+    {% for element in lang_elements %}
+        {% if forloop.first %}<div class="row">{% endif %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
+            <div class="row">
+                <div class="col">
+                    <div style="height:150px" class="image-background rounded">
+                        <div class="row h-100 justify-content-center align-items-center">
+                            <div class="col-12">
+                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><div class="text-center">{{element.element.id_number}}</div></div>
+                <div class="col text-right"><div class="text-center">{{element.element.letter_value}} = {{element.element.value}}</div></div>
+            </div>
+        </div>
+        {% if forloop.last %}</div>{% endif %}
+    {% endfor %}
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    function CloseElement() {
+       
+        $("#divElement").collapse("hide");
+        
+        //SetListHeight();
+    }
+    function ElementClick(idIn)
+    {
+        //attach setting the list height to the element div finishing its animation
+        $('#divElement').on('hidden.bs.collapse', function () {
+             $("#divElement").empty();
+            SetPadding();
+        }).on('shown.bs.collapse', function() {
+            SetPadding();
+        }).on('show.bs.collapse', function() {
+            SetPadding();
+        });
+        $("#divElement").load("/element?id=" + idIn, ShowAndSetHeight);
+    }
+    function ShowAndSetHeight() {
+        $("#divElement").collapse("show");
+       
+    }
+    function SetPadding() {
+        console.log("Setting Padding");
+        $("#divElementList").css("padding-top", $("#divElement").height());
+        $("#divElement").width($("#divContentParent").width());
+       
+    }
+    function SetListHeight() {
+    }
+
+</script>
+{% endblock %}

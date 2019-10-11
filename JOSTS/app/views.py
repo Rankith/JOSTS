@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest
-from app.models import Skill,EnglishSkill,Video
+from app.models import Element,ElementText,Video
 
 def home(request):
     """Renders the home page."""
@@ -46,17 +46,17 @@ def about(request):
     )
 
 
-def skills(request):
-    skills = EnglishSkill.objects.filter(language="EN")
+def elements(request):
+    elements = ElementText.objects.filter(language="EN")
     context = {
-        'lang_skills': skills,
+        'lang_elements': elements,
         }
-    return render(request, 'app/skills.html',context=context)
+    return render(request, 'app/elements_fixed.html',context=context)
 
-def skill(request):
+def element(request):
     idIn = request.GET.get('id')
-    skill = EnglishSkill.objects.filter(id=idIn)
+    element = ElementText.objects.filter(id=idIn)
     context = {
-        'lang_skills': skill[0],
+        'lang_elements': element[0],
         }
-    return render(request, 'app/skill.html',context=context)
+    return render(request, 'app/element.html',context=context)

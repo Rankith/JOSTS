@@ -1,0 +1,40 @@
+﻿{% block content %}
+{% load staticfiles %}
+
+<div class="text-center detail-background rounded-top">
+    <div class="row" onclick="CloseElement()">
+        <div class="col">
+            <div style="height:220px" class="image-background rounded position-relative">
+               <div class="detail-top-left text-white">{{lang_elements.named}}</div>
+                <div class="detail-top-right"><img class="img-fluid" src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg"  style="max-height:50px;overflow:hidden"/></div>
+                <div class="row h-100 justify-content-center align-items-center">
+                    <div class="col-12 text-white position-relative">
+                        <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ lang_elements.element.image_url}}.svg"  style="max-height:200px;overflow:hidden"/>
+                    </div>
+                    <div class="col-12 pb-1 text-white" style="margin-top:-1rem">
+                        {{ lang_elements.text}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"><div class="text-center text-white">{{lang_elements.element.id_number}}</div></div>
+        <div class="col"><div class="text-center text-white">{{lang_elements.element.letter_value}} = {{lang_elements.element.value}}</div></div>
+         <div class="col text-white">
+              <div class="form-check">
+            
+            <input type="checkbox" class="form-check-input" id="chkYourNote">
+                  <label for="chkYourNote" class="form-check-label">NOTES</label>
+                  </div>
+        </div>
+        <div class="col text-white">
+             <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="chkAdditionalInfo">
+                  <label for="chkAdditionalInfo" class="form-check-label">INFO&nbsp;</label>
+                 </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

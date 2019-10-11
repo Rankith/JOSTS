@@ -13,8 +13,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
-    path('skills/', views.skills, name='skills'),
-    path('skill/', views.skill, name='skill'),
+    path('elements/', views.elements, name='elements'),
+    path('element/', views.element, name='element'),
     path('login/',
          LoginView.as_view
          (
