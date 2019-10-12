@@ -3,6 +3,7 @@ Definition of models.
 """
 
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Video(models.Model):
@@ -35,6 +36,11 @@ class ElementText(models.Model):
     text = models.CharField(max_length=400,blank=True,default='')
     short_text = models.CharField(max_length=50,blank=True,default='')
     named = models.CharField(max_length=50,blank=True,default='')
-    author_note = models.CharField(max_length=400,blank=True,default='')
+    additional_info = models.CharField(max_length=400,blank=True,default='')
     def __str__(self):
         return self.element.event + " " + self.text
+
+class UserNote(models.Model):
+    element = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    note = models.CharField(max_length=400,blank=True,default='')

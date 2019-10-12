@@ -33,8 +33,15 @@
     </div>
 
 </div>
+{% endblock %}
+{% block scripts %}
 <script type="text/javascript">
 
+
+         $(document).ready(function () {
+         $(window).resize(SetPadding);
+         SetListHeight;
+     });
     function CloseElement() {
        
         $("#divElement").collapse("hide");

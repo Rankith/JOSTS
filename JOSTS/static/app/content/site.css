@@ -52,3 +52,53 @@ input[type="checkbox"].input-validation-error {
 .detail-background {
     background-color:#314765
 }
+.detail-top-right {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+}
+.detail-top-left {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+}
+.detail-bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+}
+.detail-bottom-right {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+}
+.your-note {
+    position: absolute;
+    bottom: 1px;
+    right: 0px;
+    background-color: rgb(132, 120, 120);
+    opacity:0.8;
+    /*border-bottom-left-radius: 0.25rem;*/
+    z-index: 101;
+}
+.additional-info {
+    position: absolute;
+    bottom: 1px;
+    left: 0px;
+    max-width: 40%;
+    background-color: yellow;
+    color: black;
+    /*border-bottom-left-radius: 0.25rem;*/
+    font-size:0.8rem;
+    padding-left:0.2rem;
+    padding-right:0.2rem;
+    z-index:101;
+}
+.detail-image {
+    height: 200px;
+    overflow: hidden;
+}
+.detail-sym {
+    max-height: 50px;
+    overflow: hidden;
+}
