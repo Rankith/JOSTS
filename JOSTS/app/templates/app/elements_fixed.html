@@ -2,45 +2,84 @@
 
 {% block content %}
 {% load staticfiles %}
-<div id="divContentParent" class="position-relative">
-    
-    <div id="divElement" class="collapse" style="cursor:pointer;position:fixed;z-index:131">
-
+<div class="wrapper-sidebar">
+    <div id="divSearchSidebar" style="overflow:hidden">
+        <div class="d-flex h-100">
+            <div>
+                <div id="dismiss">
+                    <svg class="svg-inline--fa fa-arrow-left fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="arrow-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"></path></svg>
+                    <i class="fas fa-arrow-left fa-2x"></i>
+                </div>
+                <div class="sidebar-header">
+                    <h3>Search</h3>
+                </div>
+                Searchy things
+            </div>
+            <div id="sidebarCollapse" class="sidebar-collapse">
+                <i class="fas fa-ellipsis-v fa-2x"></i>
+            </div>
+        </div>
+        
     </div>
+    <div id="divContentParent" class="position-relative">
+    
+        <div id="divElement" class="collapse" style="cursor:pointer;position:fixed;z-index:131">
 
-    <div class="text-white col" id="divElementList">
-    {% for element in lang_elements %}
-        {% if forloop.first %}<div class="row">{% endif %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
-            <div class="row">
-                <div class="col">
-                    <div style="height:150px" class="image-background rounded">
-                        <div class="row h-100 justify-content-center align-items-center">
-                            <div class="col-12">
-                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+        </div>
+
+        <div class="text-white col" id="divElementList">
+        {% for element in lang_elements %}
+            {% if forloop.first %}<div class="row">{% endif %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
+                <div class="row">
+                    <div class="col">
+                        <div style="height:150px" class="image-background rounded">
+                            <div class="row h-100 justify-content-center align-items-center">
+                                <div class="col-12">
+                                    <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col"><div class="text-center">{{element.element.id_number}}</div></div>
+                    <div class="col text-right"><div class="text-center">{{element.element.letter_value}} = {{element.element.value}}</div></div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col"><div class="text-center">{{element.element.id_number}}</div></div>
-                <div class="col text-right"><div class="text-center">{{element.element.letter_value}} = {{element.element.value}}</div></div>
-            </div>
+            {% if forloop.last %}</div>{% endif %}
+        {% endfor %}
         </div>
-        {% if forloop.last %}</div>{% endif %}
-    {% endfor %}
-    </div>
 
-</div>
+    </div>
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
 
 
          $(document).ready(function () {
-         $(window).resize(SetPadding);
-         SetListHeight;
+              $(window).resize(SetPadding);
+              SetListHeight;
+              $('#sidebarCollapse').on('click', function () {
+                // open or close navbar
+                $('#divSearchSidebar').toggleClass('active');
+                // close dropdowns
+                $('.collapse.in').toggleClass('in');
+                // and also adjust aria-expanded attributes we use for the open/closed arrows
+                // in our CSS
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+              });
+             /* $("#divSearchSidebar").mCustomScrollbar({
+                  theme: "minimal",
+                 
+              });*/
+
+             $('#dismiss').on('click', function () {
+                // hide sidebar
+                $('#divSearchSidebar').removeClass('active');
+                // hide overlay
+               // $('.overlay').removeClass('active');
+            });
      });
     function CloseElement() {
        
