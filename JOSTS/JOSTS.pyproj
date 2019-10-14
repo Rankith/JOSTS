@@ -4,7 +4,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>JOSTS</Name>
     <RootNamespace>JOSTS</RootNamespace>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|env1|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -80,6 +80,12 @@
     <Content Include="app\static\app\images\wag\sym\PH31.svg" />
     <Content Include="app\static\app\images\wag\sym\PH42.svg" />
     <Content Include="app\static\app\images\wag\sym\PH4321.svg" />
+    <Content Include="app\static\app\images\wag\BB_White.svg" />
+    <Content Include="app\static\app\images\wag\FX_White.svg" />
+    <Content Include="app\static\app\images\wag\UB_White.svg" />
+    <Content Include="app\static\app\images\wag\V_White.svg" />
+    <Content Include="app\templates\app\element_list.html" />
+    <Content Include="app\templates\app\element_search.html" />
     <Content Include="app\templates\app\element.html" />
     <Content Include="app\templates\app\elements_fixed.html" />
     <Content Include="app\templates\app\elements.html" />
@@ -120,9 +126,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="Global|PythonCore|3.6-32" />
-  </ItemGroup>
-  <ItemGroup>
+    <Interpreter Include="env1\">
+      <Id>env1</Id>
+      <Version>3.7</Version>
+      <Description>env1 (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
     <Interpreter Include="env\">
       <Id>env</Id>
       <Version>3.6</Version>

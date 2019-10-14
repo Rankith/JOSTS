@@ -30,4 +30,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),
     path('ajax/update_user_note', views.update_user_note, name='update_user_note'),
+    path('element_search/', views.element_search, name='element_search'),
+    path('element_list/', views.element_list, name='element_list'),
 ]

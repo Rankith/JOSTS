@@ -48,8 +48,13 @@ def about(request):
 
 def elements(request):
     elements = ElementText.objects.filter(language="EN")
+    vals = Element.objects.order_by('letter_value').values('letter_value').distinct()
+    groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
     context = {
         'lang_elements': elements,
+        'vals':vals,
+        'groups': groups,
+        'events': ['FX','BB','UB','V']
         }
     return render(request, 'app/elements_fixed.html',context=context)
 
@@ -77,3 +82,21 @@ def update_user_note(request):
     )
     resp = {'updated':True}
     return JsonResponse(resp)
+
+def element_search(request):
+    idIn = request.GET.get('disc')
+    vals = Element.objects.order_by('letter_value').distinct('letter_value')
+    groups = Element.objects.order_by('str_grp').distinct('str_grp')
+    context = {
+        'vals':vals,
+        'groups': groups,
+        }
+    return render(request, 'app/element_search.html',context=context)
+
+def element_list(request):
+    elements = ElementText.objects.filter(**request.GET)
+   
+    context = {
+        'lang_elements': elements,
+        }
+    return render(request, 'app/element_list.html',context=context)

@@ -10,10 +10,12 @@
                     <svg class="svg-inline--fa fa-arrow-left fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="arrow-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"></path></svg>
                     <i class="fas fa-arrow-left fa-2x"></i>
                 </div>
-                <div class="sidebar-header">
-                    <h3>Search</h3>
+                <div class="pl-2">
+                    <div class="sidebar-header">
+                        <h3>Search</h3>
+                    </div>
+                    {% include "app/element_search.html" %}    
                 </div>
-                Searchy things
             </div>
             <div id="sidebarCollapse" class="sidebar-collapse">
                 <i class="fas fa-ellipsis-v fa-2x"></i>
@@ -28,27 +30,7 @@
         </div>
 
         <div class="text-white col" id="divElementList">
-        {% for element in lang_elements %}
-            {% if forloop.first %}<div class="row">{% endif %}
-            <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
-                <div class="row">
-                    <div class="col">
-                        <div style="height:150px" class="image-background rounded">
-                            <div class="row h-100 justify-content-center align-items-center">
-                                <div class="col-12">
-                                    <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col"><div class="text-center">{{element.element.id_number}}</div></div>
-                    <div class="col text-right"><div class="text-center">{{element.element.letter_value}} = {{element.element.value}}</div></div>
-                </div>
-            </div>
-            {% if forloop.last %}</div>{% endif %}
-        {% endfor %}
+             {% include "app/element_list.html" %}    
         </div>
 
     </div>
@@ -80,7 +62,22 @@
                 // hide overlay
                // $('.overlay').removeClass('active');
             });
-     });
+         });
+    function SearchChange() {
+        CreateSearchParams();
+    }
+    function CreateSearchParams() {
+        var Groups = new Array();
+        var Values = new Array();
+        var strValues = "";
+        $(".check-search:checkbox:checked").each(function (i) {
+            Values.push([$(this).attr("data-search"), $(this).val()]);
+            strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+            //console.log($(this).attr("data-search") + " : " + $(this).val());
+        });
+        console.log(Values);
+        $("#divElementList").load("/element_list/?" + strValues);
+    }
     function CloseElement() {
        
         $("#divElement").collapse("hide");

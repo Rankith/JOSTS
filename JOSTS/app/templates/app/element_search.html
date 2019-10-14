@@ -1,0 +1,49 @@
+﻿{% block content %}
+{% load staticfiles %}
+
+    <div class="row no-gutters">
+        {% for event in events %}
+        <div class="col">
+            <label id="lblE{{event}}" class="search-button">
+                <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search" data-search="element__event" onchange="SearchChange()">
+                <div class="search-button event-button">
+                    <img class="img-fluid" src="{% static 'app/images/wag/' %}{{event}}_White.svg" />
+                </div>
+            </label>
+        </div>
+        
+        {% endfor %}
+    </div>
+
+    <div class="row no-gutters">
+        {% for group in groups %}
+        <div class="col">
+            <label id="lblG{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkG{{forloop.counter}}" value="{{group.str_grp}}" class="check-search" data-search="element__str_grp" onchange="SearchChange()">
+                <div class="search-button group-button"><div>{{group.str_grp}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row no-gutters">
+        {% for val in vals %}
+        <div class="col">
+            <label id="lblV{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkV{{forloop.counter}}" value="{{val.letter_value}}" class="check-search" data-search="element__letter_val" onchange="SearchChange()">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{val.letter_value}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row no-gutters">
+        <div class="col">
+            <label id="lblReset" class="search-button">
+                <input type="checkbox" id="chkReset">
+                <div class="search-button red-button"><div style="text-transform:uppercase"><i class="fas fa-undo"></i></div></div>
+            </label>
+        </div>
+    </div>
+
+{% endblock %}
