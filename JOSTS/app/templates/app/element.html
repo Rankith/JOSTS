@@ -25,38 +25,44 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row no-gutters">
         <div class="col"><div class="text-center text-white">{{lang_elements.element.id_number}}</div></div>
         <div class="col"><div class="text-center text-white">{{lang_elements.element.letter_value}} = {{lang_elements.element.value}}</div></div>
        
         <div class="col text-white">
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="chkAdditionalInfo" style="margin-top:.45rem">
-                <label for="chkAdditionalInfo" class="form-check-label">INFO&nbsp;</label>
-            </div>
+            <table class="w-100">
+                <tr>
+                    <td align="right">
+                        <label id="lblAdditionalInfo" class="switch" style="display:none">
+                            <input type="checkbox" id="chkAdditionalInfo">
+                            <span class="slider round"></span>
+                        </label></td>
+                    <td style="vertical-align:top"  align="left">
+                        <label for="chkAdditionalInfo" style="margin-bottom:0 !important">INFO&nbsp;</label>
+                    </td>
+                </tr>
+            </table>
         </div>
-         <div class="col text-white">
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="chkYourNote" style="margin-top:.45rem">
-                <label for="chkYourNote" class="form-check-label">NOTES</label>
-            </div>
+        <div class="col text-white">
+            <table class="w-100">
+                <tr>
+                    <td align="right">
+                        <label id="lblYourNote" class="switch" style="display:none">
+                            <input type="checkbox" id="chkYourNote">
+                            <span class="slider round"></span>
+                        </label></td>
+                    <td style="vertical-align:top" align="left">
+                         <label for="chkYourNote" style="margin-bottom:0 !important">NOTES&nbsp;</label>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
     //store checkboxes in ls and load as needed
-    if (localStorage.additional_info) {
-        $('#chkAdditionalInfo').prop("checked", localStorage.additional_info == 1)
-        $('#chkAdditionalInfo').prop("checked") ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
-    }
-    else
-        $("#divAdditionalInfo").hide();
-    $('#chkAdditionalInfo').change(function() {
-        localStorage.additional_info = this.checked ? 1 : 0
-        this.checked ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
-    });
-    if (localStorage.your_note) {
+     if (localStorage.your_note) {
         $('#chkYourNote').prop("checked", localStorage.your_note == 1)
         $('#chkYourNote').prop("checked") ? $("#divYourNote").show() : $("#divYourNote").hide();
     }
@@ -67,6 +73,19 @@
         this.checked ? $("#divYourNote").show() : $("#divYourNote").hide();
     });
 
+    if (localStorage.additional_info) {
+        $('#chkAdditionalInfo').prop("checked", localStorage.additional_info == 1)
+        $('#chkAdditionalInfo').prop("checked") ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
+    }
+    else
+        $("#divAdditionalInfo").hide();
+    $('#chkAdditionalInfo').change(function() {
+        localStorage.additional_info = this.checked ? 1 : 0
+        this.checked ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
+    });
+   
+    $("#lblAdditionalInfo").show();
+   $("#lblYourNote").show();
     //stop the notes area from closing if you click in it.
     $("#txtUserNotes").click(function(e) {
         e.stopPropagation();
