@@ -6,6 +6,7 @@ from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote
+from django.db.models import Q
 
 def home(request):
     """Renders the home page."""
@@ -94,7 +95,15 @@ def element_search(request):
     return render(request, 'app/element_search.html',context=context)
 
 def element_list(request):
-    elements = ElementText.objects.filter(**request.GET)
+    dget = dict(request.GET)
+    query = Q(language="EN")
+    for k,v in dget.items():
+        innerQuery = Q()
+        for i in v:
+            kwargs = {'{0}'.format(k): i}
+            innerQuery.add(Q(**kwargs), Q.OR)
+        query.add(innerQuery,Q.AND)
+    elements = ElementText.objects.filter(query)
    
     context = {
         'lang_elements': elements,

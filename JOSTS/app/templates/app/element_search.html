@@ -30,7 +30,7 @@
         {% for val in vals %}
         <div class="col">
             <label id="lblV{{forloop.counter}}" class="search-button">
-                <input type="checkbox" id="chkV{{forloop.counter}}" value="{{val.letter_value}}" class="check-search" data-search="element__letter_val" onchange="SearchChange()">
+                <input type="checkbox" id="chkV{{forloop.counter}}" value="{{val.letter_value}}" class="check-search" data-search="element__letter_value" onchange="SearchChange()">
                 <div class="search-button value-button"><div style="text-transform:uppercase">{{val.letter_value}}</div></div>
             </label>
         </div>
