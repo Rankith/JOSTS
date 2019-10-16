@@ -78,6 +78,14 @@
         console.log(Values);
         $("#divElementList").load("/element_list/?" + strValues);
     }
+
+    function SearchReset() {
+        $(".check-search:checkbox:checked").each(function (i) {
+            $(this).removeAttr('checked');
+        });
+        SearchChange();
+    }
+
     function CloseElement() {
        
         $("#divElement").collapse("hide");

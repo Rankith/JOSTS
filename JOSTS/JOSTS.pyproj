@@ -64,16 +64,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\images\wag\ph1.svg" />
-    <Content Include="app\static\app\images\wag\elements\PH11011.svg" />
-    <Content Include="app\static\app\images\wag\elements\PH11012.svg" />
-    <Content Include="app\static\app\images\wag\elements\PH1103.svg" />
+    <Content Include="app\static\app\images\wag\elements\BB11011.svg" />
+    <Content Include="app\static\app\images\wag\elements\UB11012.svg" />
+    <Content Include="app\static\app\images\wag\elements\UB1103.svg" />
     <Content Include="app\static\app\images\wag\ph2.svg" />
-    <Content Include="app\static\app\images\wag\elements\PH21021.svg" />
-    <Content Include="app\static\app\images\wag\elements\PH222.svg" />
+    <Content Include="app\static\app\images\wag\elements\FX21021.svg" />
+    <Content Include="app\static\app\images\wag\elements\UB222.svg" />
     <Content Include="app\static\app\images\wag\ph3.svg" />
-    <Content Include="app\static\app\images\wag\elements\PH31.svg" />
-    <Content Include="app\static\app\images\wag\elements\PH42.svg" />
-    <Content Include="app\static\app\images\wag\elements\PH4321.svg" />
+    <Content Include="app\static\app\images\wag\elements\FX31.svg" />
+    <Content Include="app\static\app\images\wag\elements\UB42.svg" />
+    <Content Include="app\static\app\images\wag\elements\FX4321.svg" />
     <Content Include="app\static\app\images\wag\sym\PH11011.svg" />
     <Content Include="app\static\app\images\wag\sym\PH1103.svg" />
     <Content Include="app\static\app\images\wag\sym\PH222.svg" />
@@ -89,6 +89,7 @@
     <Content Include="app\templates\app\element.html" />
     <Content Include="app\templates\app\elements_fixed.html" />
     <Content Include="app\templates\app\elements.html" />
+    <Content Include="app\templates\app\import.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

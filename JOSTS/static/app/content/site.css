@@ -230,6 +230,7 @@ input:checked + .slider:before {
     width: 0;
     height: 0;
     position:absolute;
+    cursor:pointer
 }
 
 .group-button {
@@ -349,6 +350,18 @@ input:checked + .special-button {
     background-image: -o-linear-gradient(top, #ffaaaa, #782121);
     background-image: linear-gradient(to bottom, #ffaaaa, #782121);
     filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#ffaaaa, endColorstr=#782121);
+}
+
+.red-button:hover {
+    /*border: 1px solid #5f5fd3;*/
+    background-color: #f4d7d7;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f4d7d7), to(#c83737));
+    background-image: -webkit-linear-gradient(top, #f4d7d7, #c83737);
+    background-image: -moz-linear-gradient(top, #f4d7d7, #c83737);
+    background-image: -ms-linear-gradient(top, #f4d7d7, #c83737);
+    background-image: -o-linear-gradient(top, #f4d7d7, #c83737);
+    background-image: linear-gradient(to bottom, #f4d7d7, #c83737);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4d7d7, endColorstr=#c83737);
 }
 
 input:checked + .red-button {
