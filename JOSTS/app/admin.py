@@ -8,7 +8,7 @@ class ElementAdmin(ImportExportModelAdmin):
 class UserNoteAdmin(admin.ModelAdmin):
     list_display = ('user','element','note')
 class ElementTextAdmin(ImportExportModelAdmin):
-    list_display = ('element','language','text','short_text','named','additional_info')
+    list_display = ('element','language','id_number_text','text','short_text','named','additional_info','hold_text')
 
 class ElementResource(resources.ModelResource):
     class Meta:

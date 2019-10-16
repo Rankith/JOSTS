@@ -54,8 +54,8 @@ input[type="checkbox"].input-validation-error {
 }
 .detail-top-right {
     position: absolute;
-    top: 8px;
-    right: 16px;
+    top: 5px;
+    right: 5px;
 }
 .detail-top-left {
     position: absolute;
@@ -99,7 +99,7 @@ input[type="checkbox"].input-validation-error {
     overflow: hidden;
 }
 .detail-sym {
-    max-height: 50px;
+    max-height: 62px;
     overflow: hidden;
 }
 

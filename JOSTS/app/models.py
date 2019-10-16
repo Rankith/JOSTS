@@ -21,6 +21,12 @@ class Element(models.Model):
     id_number = models.CharField(max_length=20)
     letter_value = models.CharField(max_length=1,default='A')
     value = models.DecimalField(max_digits=3,default=0.1,decimal_places=1)
+    letter_value_9 = models.CharField(max_length=1,default='A')
+    value_9 = models.DecimalField(max_digits=3,default=0.1,decimal_places=1)
+    letter_value_8 = models.CharField(max_length=1,default='A')
+    value_8 = models.DecimalField(max_digits=3,default=0.1,decimal_places=1)
+    letter_value_67 = models.CharField(max_length=1,default='A')
+    value_67 = models.DecimalField(max_digits=3,default=0.1,decimal_places=1)
     range = models.CharField(max_length=25,default='',blank=True)
     show_exercise_builder = models.BooleanField(default=False)
     videos = models.ManyToManyField(Video,blank=True)
@@ -37,6 +43,8 @@ class ElementText(models.Model):
     short_text = models.CharField(max_length=50,blank=True,default='')
     named = models.CharField(max_length=50,blank=True,default='')
     additional_info = models.CharField(max_length=400,blank=True,default='')
+    id_number_text = models.CharField(max_length=50,blank=True,default='')
+    hold_text = models.CharField(max_length=50,blank=True,default='')
     def __str__(self):
         return self.element.event + " " + self.text
 

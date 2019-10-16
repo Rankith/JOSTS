@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="69.000000pt"
+   height="67.000000pt"
+   viewBox="0 0 69.000000 67.000000"
+   preserveAspectRatio="xMidYMid meet"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="ub540503.svg">
+  <defs
+     id="defs18" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1347"
+     inkscape:window-height="996"
+     id="namedview16"
+     showgrid="false"
+     inkscape:zoom="4.1126578"
+     inkscape:cx="23.536793"
+     inkscape:cy="35.335465"
+     inkscape:window-x="547"
+     inkscape:window-y="2"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     borderlayer="true" />
+  <metadata
+     id="metadata4">
+Created by potrace 1.11, written by Peter Selinger 2001-2013
+<rdf:RDF>
+  <cc:Work
+     rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+    <dc:title></dc:title>
+  </cc:Work>
+</rdf:RDF>
+</metadata>
+  <g
+     id="g13340"
+     transform="translate(0.5039883,-7.336268)">
+    <path
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.4000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       d="m 11.718169,38.040533 c -1.8448896,0 -1.8497896,2.75525 0,2.75525 1.84979,0 1.77618,-2.75525 0,-2.75525 z"
+       id="path8069-8-8-4"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sss" />
+    <path
+       inkscape:transform-center-y="-7.1791135"
+       inkscape:transform-center-x="11.628475"
+       sodipodi:nodetypes="cscccsccccscssscc"
+       inkscape:connector-curvature="0"
+       id="path4233-8-9-2-8-7-3-3-7-69-4-4-5-6-06-36"
+       d="m 3.4407084,47.761808 c 0,-9.642732 0.5829973,-21.999436 7.8875376,-21.999436 7.160726,0 9.087605,10.935295 9.088458,21.815252 0,0 -0.102355,-4.735439 5.242706,-10.799734 6.404494,-7.266286 13.462312,10.830943 6.539499,10.830943 -3.471092,0 -3.688381,-2.753726 -1.051756,-7.493594 1.318312,-2.369934 4.985672,-5.064489 8.361688,-5.064489 l 1.659123,12.325174 3.295165,-10.083294 2.278859,9.951017 c 0,0 6.559755,-12.410916 9.261743,-17.656397 0,0 1.92083,-3.927358 5.947147,-2.115141 -7.744238,-3.727174 -9.560254,12.991134 -3.096709,11.259233 3.417194,-0.915635 3.363957,-5.661685 -0.37981,-4.658546 -4.701067,1.259648 -5.241375,13.30294 0.151924,13.530826 5.393298,0.227887 5.925032,-4.937526 5.925032,-4.937526 l 0,13.226977"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.4000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+  </g>
+</svg>
