@@ -85,12 +85,22 @@ def update_user_note(request):
     return JsonResponse(resp)
 
 def element_search(request):
-    idIn = request.GET.get('disc')
-    vals = Element.objects.order_by('letter_value').distinct('letter_value')
-    groups = Element.objects.order_by('str_grp').distinct('str_grp')
+    vals = Element.objects.exclude(event="V").order_by('letter_value').values('letter_value').distinct()
+    groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
+    groupDict = {}
+    valueDict = {}
+    for group in groups:
+        groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
+        groupDict[group['str_grp']] = groupEvents
+    for value in vals:
+        valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value']).order_by('event').values('event').distinct())
+        valueDict[value['letter_value']] = valueEvents
     context = {
         'vals':vals,
         'groups': groups,
+        'groupsEvents': groupDict,
+        'valueEvents': valueDict,
+        'events': ['FX','BB','UB','V'],
         }
     return render(request, 'app/element_search.html',context=context)
 

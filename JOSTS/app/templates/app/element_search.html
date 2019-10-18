@@ -1,49 +1,114 @@
 ﻿{% block content %}
 {% load staticfiles %}
+<div class="sidebar-header">
+    <h3>Search</h3>
+</div>
+<div class="row no-gutters">
+    {% for event in events %}
+    <div class="col">
+        <label id="lblE{{event}}" class="search-button">
+            <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search check-search-event" data-search="element__event" onchange="SearchChangeEvent(this)">
+            <div class="search-button event-button">
+                <img class="img-fluid" src="{% static 'app/images/wag/' %}{{event}}_White.svg" />
+            </div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
 
-    <div class="row no-gutters">
-        {% for event in events %}
-        <div class="col">
-            <label id="lblE{{event}}" class="search-button">
-                <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search" data-search="element__event" onchange="SearchChange()">
-                <div class="search-button event-button">
-                    <img class="img-fluid" src="{% static 'app/images/wag/' %}{{event}}_White.svg" />
-                </div>
-            </label>
-        </div>
+<div class="row no-gutters">
+    {% for key, value in groupsEvents.items %}
+    <div class="pr-2">
+        <label id="lblG{{forloop.counter}}" class="search-button">
+            <input type="checkbox" id="chkG{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__str_grp" onchange="SearchChange(this)">
+            <div class="search-button group-button"><div>{{key}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row no-gutters">
+    {% for key, value in valueEvents.items %}
+    <div class="pr-2">
+        <label id="lblV{{forloop.counter}}" class="search-button">
+            <input type="checkbox" id="chkV{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__letter_value" onchange="SearchChange(this)">
+            <div class="search-button value-button"><div style="text-transform:uppercase">{{key}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row no-gutters">
+    <div class="pr-2">
+        <label id="lblReset" class="search-button">
+
+            <div class="search-button red-button" onclick="SearchReset()"><div style="text-transform:uppercase"><i class="fas fa-undo"></i></div></div>
+        </label>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    function SearchChangeEvent(el) {
         
-        {% endfor %}
-    </div>
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-event').not(el).prop('checked', false);
+            $('.check-search-event').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            ShowHideSearches();
+            CreateSearchParams();
+        }
+    }
 
-    <div class="row no-gutters">
-        {% for group in groups %}
-        <div class="col">
-            <label id="lblG{{forloop.counter}}" class="search-button">
-                <input type="checkbox" id="chkG{{forloop.counter}}" value="{{group.str_grp}}" class="check-search" data-search="element__str_grp" onchange="SearchChange()">
-                <div class="search-button group-button"><div>{{group.str_grp}}</div></div>
-            </label>
-        </div>
-        {% endfor %}
-    </div>
-
-    <div class="row no-gutters">
-        {% for val in vals %}
-        <div class="col">
-            <label id="lblV{{forloop.counter}}" class="search-button">
-                <input type="checkbox" id="chkV{{forloop.counter}}" value="{{val.letter_value}}" class="check-search" data-search="element__letter_value" onchange="SearchChange()">
-                <div class="search-button value-button"><div style="text-transform:uppercase">{{val.letter_value}}</div></div>
-            </label>
-        </div>
-        {% endfor %}
-    </div>
-
-    <div class="row no-gutters">
-        <div class="col">
-            <label id="lblReset" class="search-button">
-               
-                <div class="search-button red-button" onclick="SearchReset()"><div style="text-transform:uppercase"><i class="fas fa-undo"></i></div></div>
-            </label>
-        </div>
-    </div>
-
+    function ShowHideSearches() {
+        ev = $('.check-search-event:checked').val();
+        $('.check-search').not('.check-search-event').not('.search-' + ev).parent().hide();
+        $('.check-search.search-' + ev).parent().show();
+    }
+    function SearchChange(el) {
+        localStorage.setItem(el.id, el.checked ? 1 : 0);
+        CreateSearchParams();
+    }
+    function CreateSearchParams() {
+        var strValues = "";
+        $(".check-search:checkbox:checked").each(function (i) {
+            if ($(this).parent().is(":visible"))
+                strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+            //console.log($(this).attr("data-search") + " : " + $(this).val());
+        });
+        $.get("/element_list/?" + strValues, function (data) {
+                 $("#divElementList").empty();
+                 $("#divElementList").append(data);
+             });
+        //$("#divElementList").empty();
+        //$("#divElementList").load("/element_list/?" + strValues);
+    }
+    function SearchReset() {
+        $(".check-search:checkbox:checked:not(.check-search-event)").each(function (i) {
+            localStorage.setItem(this.id, 0);
+            $(this).removeAttr('checked');
+            
+        });
+        CreateSearchParams();
+        }
+    function LoadLastSelections() {
+        $(".check-search:checkbox").each(function (i) {
+            if (localStorage.getItem(this.id) == "1")
+                $(this).prop('checked', true);
+            else
+                $(this).prop('checked', false);
+        });
+        if ($(".check-search-event:checkbox:checked").length == 0)
+            $(".check-search:checkbox")[0].click();
+        else {
+            ShowHideSearches();
+            CreateSearchParams();
+        }
+    }
+</script>
 {% endblock %}

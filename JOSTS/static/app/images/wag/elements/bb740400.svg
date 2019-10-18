@@ -13,8 +13,8 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    width="500"
-   height="225"
-   viewBox="0 0 500 225"
+   height="250"
+   viewBox="0 0 500 250"
    sodipodi:docname="bb740400.svg">
   <metadata
      id="metadata10350">
@@ -44,15 +44,15 @@
      id="namedview10346"
      showgrid="false"
      inkscape:zoom="1.1520976"
-     inkscape:cx="164.12983"
-     inkscape:cy="179.99234"
+     inkscape:cx="230.53045"
+     inkscape:cy="109.6858"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg10344" />
   <g
      id="g4140"
-     transform="translate(13.281248,-5.6250289)">
+     transform="translate(13.281248,6.8749711)">
     <path
        sodipodi:nodetypes="sscsssscssssssssssssssssssscssssccssssccssssccssssccssssccssssccssssccssssccccscssscsccccscssssccsssssssscssssssscssssssssssccssscsssssssscsssssssssscscssssscssssssssssssscsssscscssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssscssssssssssssssssssssssssss"
        style="fill:#fefefe"

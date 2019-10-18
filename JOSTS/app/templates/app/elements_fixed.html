@@ -10,11 +10,8 @@
                     <svg class="svg-inline--fa fa-arrow-left fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="arrow-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"></path></svg>
                     <i class="fas fa-arrow-left fa-2x"></i>
                 </div>
-                <div class="pl-2">
-                    <div class="sidebar-header">
-                        <h3>Search</h3>
-                    </div>
-                    {% include "app/element_search.html" %}    
+                <div id="divSearchArea" class="pl-2">
+   
                 </div>
             </div>
             <div id="sidebarCollapse" class="sidebar-collapse">
@@ -37,8 +34,6 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-
-
          $(document).ready(function () {
               $(window).resize(SetPadding);
               SetListHeight;
@@ -62,32 +57,15 @@
                 // hide overlay
                // $('.overlay').removeClass('active');
              });
-             $(".check-search:checkbox")[0].click();
+             $.get("/element_search/", function (data) {
+                 $("#divSearchArea").empty();
+                 $("#divSearchArea").append(data);
+                 LoadLastSelections();
+             });
+
+            
+
          });
-    function SearchChange() {
-        CreateSearchParams();
-    }
-    function CreateSearchParams() {
-        var Groups = new Array();
-        var Values = new Array();
-        var strValues = "";
-        $(".check-search:checkbox:checked").each(function (i) {
-            Values.push([$(this).attr("data-search"), $(this).val()]);
-            strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
-            //console.log($(this).attr("data-search") + " : " + $(this).val());
-        });
-        console.log(Values);
-        $("#divElementList").empty();
-        $("#divElementList").load("/element_list/?" + strValues);
-    }
-
-    function SearchReset() {
-        $(".check-search:checkbox:checked").each(function (i) {
-            $(this).removeAttr('checked');
-        });
-        SearchChange();
-    }
-
     function CloseElement() {
        
         $("#divElement").collapse("hide");
