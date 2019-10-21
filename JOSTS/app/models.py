@@ -34,7 +34,7 @@ class Element(models.Model):
     def __str__(self):
         return self.event + " " + str(self.id_number)
     def image_url(self):
-        return self.event + self.id_number.replace(".","")
+        return self.event.lower() + self.id_number.replace(".","")
 
 class ElementText(models.Model):
     element = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True)
