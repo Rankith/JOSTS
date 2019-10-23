@@ -63,7 +63,8 @@
                  LoadLastSelections();
              });
 
-            
+            if ($(window).width() >= 1200)
+                $('#sidebarCollapse').click();
 
          });
     function CloseElement() {
@@ -93,6 +94,8 @@
         console.log("Setting Padding");
         $("#divElementList").css("padding-top", $("#divElement").height());
         $("#divElement").width($("#divContentParent").width());
+
+        
        
     }
     function SetListHeight() {
