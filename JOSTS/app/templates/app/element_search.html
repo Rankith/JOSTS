@@ -27,12 +27,23 @@
     {% endfor %}
 </div>
 
-<div class="row no-gutters">
+<div class="row no-gutters" id="Values">
     {% for key, value in valueEvents.items %}
     <div class="pr-2">
         <label id="lblV{{forloop.counter}}" class="search-button">
             <input type="checkbox" id="chkV{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__letter_value" onchange="SearchChange(this)">
             <div class="search-button value-button"><div style="text-transform:uppercase">{{key}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row no-gutters" id="ranges">
+    {% for value in ranges %}
+    <div class="pr-2">
+        <label id="lblVV{{forloop.counter}}" class="search-button">
+            <input type="checkbox" id="chkVV{{forloop.counter}}" value="{{value.range}}" class="check-search search-V" data-search="element__range" onchange="SearchChange(this)">
+            <div class="search-button value-button"><div style="text-transform:uppercase">{{value.range}}</div></div>
         </label>
     </div>
     {% endfor %}
@@ -69,6 +80,10 @@
         ev = $('.check-search-event:checked').val();
         $('.check-search').not('.check-search-event').not('.search-' + ev).parent().hide();
         $('.check-search.search-' + ev).parent().show();
+        /*if (ev == "V") {
+            $('#Values').hide();
+            $('#VaultValues').hide();*/
+        
     }
     function SearchChange(el) {
         localStorage.setItem(el.id, el.checked ? 1 : 0);

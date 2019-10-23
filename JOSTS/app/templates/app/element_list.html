@@ -16,7 +16,11 @@
         </div>
         <div class="row">
             <div class="col"><div class="text-center">{{element.id_number_text}}</div></div>
-            <div class="col text-right"><div class="text-center">{{element.element.letter_value}} = {{element.element.value}}</div></div>
+            <div class="col text-right"><div class="text-center">{% if element.element.letter_value == ''%}
+                                                                    {{element.element.value}}
+                                                                  {% else %}
+                                                                     {{element.element.letter_value}} = {{element.element.value}}
+                                                                   {% endif %}</div></div>
         </div>
     </div>
     {% if forloop.last %}</div>{% endif %}
