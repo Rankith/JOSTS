@@ -19,14 +19,14 @@ class ElementTextAdmin(ImportExportModelAdmin):
     list_editable = ('language','id_number_text','text','short_text','named','additional_info','hold_text') #comment if importing
 
 class RuleAdmin(ImportExportModelAdmin): 
-    list_display = ('rule_id','event','section','rule_no','sub_rule')
+    list_display = ('id','rule_id','event','section','rule_no','sub_rule')
     list_filter = ('event',)
     list_editable = ('event','section','rule_no','sub_rule')
 
 class RuleTextAdmin(ImportExportModelAdmin):
     list_display = ('rule','cue','response','additional_info','rule_description','specific_deduction','cat0','cat1','cat2','cat3','cat4')
     list_filter = ('rule__event','rule__section')
-    list_display = ('cue','response','additional_info','rule_description','specific_deduction','cat0','cat1','cat2','cat3','cat4')
+    list_editable = ('cue','response','additional_info','rule_description','specific_deduction','cat0','cat1','cat2','cat3','cat4')
     list_search = ('cue','response','additional_info','rule_description')
 
 
