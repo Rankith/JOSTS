@@ -96,7 +96,7 @@
                 strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
             //console.log($(this).attr("data-search") + " : " + $(this).val());
         });
-        $.get("/element_list/?" + strValues, function (data) {
+        $.get("/" + type + "_list/?" + strValues, function (data) {
                  $("#divElementList").empty();
                  $("#divElementList").append(data);
              });

@@ -52,3 +52,25 @@ class UserNote(models.Model):
     element = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     note = models.CharField(max_length=400,blank=True,default='')
+
+class Rule(models.Model):
+    event = models.CharField(max_length=2,blank=True,default='')
+    rule_id = models.CharField(max_length=30,blank=True,default='')
+    section = models.CharField(max_length=30,blank=True,default='')
+    rule_no = models.CharField(max_length=30,blank=True,default='')
+    sub_rule = models.CharField(max_length=30,blank=True,default='')
+    def __str__(self):
+        return self.event + " " + str(self.rule_id)
+
+class RuleText(models.Model):
+    rule = models.ForeignKey(Rule, on_delete=models.SET_NULL,null=True)
+    cue = models.TextField(blank=True,default='')
+    response = models.TextField(blank=True,default='')
+    additional_info = models.CharField(max_length=400,blank=True,default='')
+    rule_description = models.CharField(max_length=400,blank=True,default='')
+    specific_deduction = models.CharField(max_length=400,blank=True,default='')
+    cat0 = models.CharField(max_length=30,blank=True,default='')
+    cat1 = models.CharField(max_length=30,blank=True,default='')
+    cat2 = models.CharField(max_length=30,blank=True,default='')
+    cat3 = models.CharField(max_length=30,blank=True,default='')
+    cat4 = models.CharField(max_length=30,blank=True,default='')

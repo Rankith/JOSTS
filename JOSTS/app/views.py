@@ -50,14 +50,11 @@ def about(request):
 
 
 def elements(request):
-    elements = ElementText.objects.filter(language="EN")
-    vals = Element.objects.order_by('letter_value').values('letter_value').distinct()
-    groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
+    #elements = ElementText.objects.filter(language="EN")
+    #vals = Element.objects.order_by('letter_value').values('letter_value').distinct()
+    #groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
     context = {
-        'lang_elements': elements,
-        'vals':vals,
-        'groups': groups,
-        'events': ['FX','BB','UB','V']
+        'type':'element',
         }
     return render(request, 'app/elements_fixed.html',context=context)
 
@@ -114,6 +111,71 @@ def element_search(request):
     return render(request, 'app/element_search.html',context=context)
 
 def element_list(request):
+    dget = dict(request.GET)
+    query = Q(language="EN")
+    for k,v in dget.items():
+        innerQuery = Q()
+        for i in v:
+            kwargs = {'{0}'.format(k): i}
+            innerQuery.add(Q(**kwargs), Q.OR)
+        query.add(innerQuery,Q.AND)
+    elements = ElementText.objects.filter(query)
+   
+    context = {
+        'lang_elements': elements,
+        }
+    return render(request, 'app/element_list.html',context=context)
+
+
+#RULES
+def rules(request):
+    context = {
+        'type':'rule',
+        }
+    return render(request, 'app/elements_fixed.html',context=context)
+
+def rule(request):
+    idIn = request.GET.get('id')
+    element = ElementText.objects.filter(id=idIn)
+    userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
+    if (len(userNote) > 0):
+        userNote = userNote[0].note;
+    else:
+        userNote = '';
+    context = {
+        'lang_elements': element[0],
+        'user_note': userNote,
+        }
+    return render(request, 'app/element.html',context=context)
+
+def rule_search(request):
+    vals = Element.objects.exclude(event="V").order_by('letter_value').values('letter_value').distinct()
+    groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
+    ranges = Element.objects.order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
+    groupDict = {}
+    valueDict = {}
+    #vvals = Element.objects.filter(event="V").filter(value__gte=7.0).filter(value__lt=8.0).update(range=7)
+    #vvals = Element.objects.filter(event="V").filter(value__gte=8.0).filter(value__lt=9.0).update(range=8)
+    #vvals = Element.objects.filter(event="V").filter(value__gte=9.0).filter(value__lt=10.0).update(range=9)
+    #vvals = Element.objects.filter(event="V").filter(value__gte=10).update(range=10)
+    Element.objects.filter(event="V").update(letter_value='')
+    for group in groups:
+        groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
+        groupDict[group['str_grp']] = groupEvents
+    for value in vals:
+        valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value']).order_by('event').values('event').distinct())
+        valueDict[value['letter_value']] = valueEvents
+    context = {
+        'vals':vals,
+        'groups': groups,
+        'groupsEvents': groupDict,
+        'valueEvents': valueDict,
+        'events': ['FX','BB','UB','V'],
+        'ranges': ranges,
+        }
+    return render(request, 'app/element_search.html',context=context)
+
+def rule_list(request):
     dget = dict(request.GET)
     query = Q(language="EN")
     for k,v in dget.items():

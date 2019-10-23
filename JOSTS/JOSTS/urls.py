@@ -32,4 +32,8 @@ urlpatterns = [
     path('ajax/update_user_note', views.update_user_note, name='update_user_note'),
     path('element_search/', views.element_search, name='element_search'),
     path('element_list/', views.element_list, name='element_list'),
+    path('rules/', views.rules, name='rules'),
+    path('rule/', views.rule, name='rule'),
+    path('rule_search/', views.rule_search, name='rule_search'),
+    path('rule_list/', views.rule_list, name='rule_list'),
 ]
