@@ -60,7 +60,7 @@ class Rule(models.Model):
     rule_no = models.CharField(max_length=30,blank=True,default='')
     sub_rule = models.CharField(max_length=30,blank=True,default='')
     def __str__(self):
-        return self.event + " " + str(self.rule_id)
+        return self.id
 
 class RuleText(models.Model):
     rule = models.ForeignKey(Rule, on_delete=models.SET_NULL,null=True)
