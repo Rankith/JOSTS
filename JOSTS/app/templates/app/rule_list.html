@@ -10,12 +10,20 @@
                 <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}">
                     {{rule.rule.section}}
                 </div>
-                    <div id="detail-{{forloop.counter}}" class="panel-collapse collapse show">
+                    <div id="detail-{{forloop.counter}}" class="collapse show">
                         <ul class="list-group">
             {% endifchanged %}
-                         <li class="list-group-item bg-secondary" onclick="ElementClick({{rule.id}})" style="cursor:pointer" >
-                            {{rule.cue}}
-                        </li>
+                             <li class="list-group-item bg-secondary" style="cursor:pointer" >
+                                 <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
+                                    {{rule.cue}}
+                                 </div>
+                                
+                            </li>
+                             <div id="answer-{{forloop.counter}}" class="collapse" data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
+                                     <div class="list-group-item bg-white text-dark">
+                                        {{rule.response}}
+                                     </div>
+                                 </div>
            
         {% endfor %}
                 </ul>
