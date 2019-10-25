@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -107,6 +107,7 @@ def element_search(request):
         'valueEvents': valueDict,
         'events': ['FX','BB','UB','V'],
         'ranges': ranges,
+        'type':'element',
         }
     return render(request, 'app/element_search.html',context=context)
 
@@ -123,6 +124,7 @@ def element_list(request):
    
     context = {
         'lang_elements': elements,
+        'num_elements': str(len(elements)) + " Elements",
         }
     return render(request, 'app/element_list.html',context=context)
 
@@ -149,45 +151,30 @@ def rule(request):
     return render(request, 'app/element.html',context=context)
 
 def rule_search(request):
-    vals = Element.objects.exclude(event="V").order_by('letter_value').values('letter_value').distinct()
-    groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
-    ranges = Element.objects.order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
-    groupDict = {}
-    valueDict = {}
-    ruleDict = {}
-    #vvals = Element.objects.filter(event="V").filter(value__gte=7.0).filter(value__lt=8.0).update(range=7)
-    #vvals = Element.objects.filter(event="V").filter(value__gte=8.0).filter(value__lt=9.0).update(range=8)
-    #vvals = Element.objects.filter(event="V").filter(value__gte=9.0).filter(value__lt=10.0).update(range=9)
-    #vvals = Element.objects.filter(event="V").filter(value__gte=10).update(range=10)
-    Element.objects.filter(event="V").update(letter_value='')
-    for group in groups:
-        groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
-        groupDict[group['str_grp']] = groupEvents
-    for value in vals:
-        valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value']).order_by('event').values('event').distinct())
-        valueDict[value['letter_value']] = valueEvents
+    sections = Rule.objects.order_by('section').values('section').distinct()
+    sectionDict = {}
+    for section in sections:
+        sectionDict[section['section']] = section['section'].split(" ")[1];
     context = {
-        'vals':vals,
-        'groups': groups,
-        'groupsEvents': groupDict,
-        'valueEvents': valueDict,
-        'events': ['FX','BB','UB','V'],
-        'ranges': ranges,
+        'sections':sections,
+        'sectionsDict': sectionDict,
+        'type': 'rule',
         }
     return render(request, 'app/element_search.html',context=context)
 
 def rule_list(request):
     dget = dict(request.GET)
-    query = Q(language="EN")
+    query = Q()
     for k,v in dget.items():
         innerQuery = Q()
         for i in v:
             kwargs = {'{0}'.format(k): i}
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
-    elements = ElementText.objects.filter(query)
+    rules = RuleText.objects.filter(query)
    
     context = {
-        'lang_elements': elements,
+        'rules': rules,
+        'num_rules': str(len(rules)) + " Rules",
         }
-    return render(request, 'app/element_list.html',context=context)
+    return render(request, 'app/rule_list.html',context=context)

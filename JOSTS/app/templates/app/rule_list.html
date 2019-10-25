@@ -1,0 +1,10 @@
+﻿
+{% load staticfiles %} 
+{% for rule in rules %}
+    {% if forloop.first %}<div class="row">{% endif %}
+    <div class="col-12" onclick="ElementClick({{rule.id}})" style="cursor:pointer" >
+       {{rule.cue}}
+    </div>
+    {% if forloop.last %}</div>{% endif %}
+{% endfor %}
+<div id="divNumElements" style="display:none">{{num_rules}}</div>

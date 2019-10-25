@@ -15,39 +15,51 @@
     </div>
     {% endfor %}
 </div>
-
-<div class="row no-gutters">
-    {% for key, value in groupsEvents.items %}
-    <div class="pr-2">
-        <label id="lblG{{forloop.counter}}" class="search-button">
-            <input type="checkbox" id="chkG{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__str_grp" onchange="SearchChange(this)">
-            <div class="search-button group-button"><div>{{key}}</div></div>
-        </label>
+{% if type == 'element' %}
+    <div class="row no-gutters">
+        {% for key, value in groupsEvents.items %}
+        <div class="pr-2">
+            <label id="lblG{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkG{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__str_grp" onchange="SearchChange(this)">
+                <div class="search-button group-button"><div>{{key}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<div class="row no-gutters" id="Values">
-    {% for key, value in valueEvents.items %}
-    <div class="pr-2">
-        <label id="lblV{{forloop.counter}}" class="search-button">
-            <input type="checkbox" id="chkV{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__letter_value" onchange="SearchChange(this)">
-            <div class="search-button value-button"><div style="text-transform:uppercase">{{key}}</div></div>
-        </label>
+    <div class="row no-gutters" id="Values">
+        {% for key, value in valueEvents.items %}
+        <div class="pr-2">
+            <label id="lblV{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkV{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__letter_value" onchange="SearchChange(this)">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{key}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<div class="row no-gutters" id="ranges">
-    {% for value in ranges %}
-    <div class="pr-2">
-        <label id="lblVV{{forloop.counter}}" class="search-button">
-            <input type="checkbox" id="chkVV{{forloop.counter}}" value="{{value.range}}" class="check-search search-V" data-search="element__range" onchange="SearchChange(this)">
-            <div class="search-button value-button"><div style="text-transform:uppercase">{{value.range}}</div></div>
-        </label>
+    <div class="row no-gutters" id="ranges">
+        {% for value in ranges %}
+        <div class="pr-2">
+            <label id="lblVV{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkVV{{forloop.counter}}" value="{{value.range}}" class="check-search search-V" data-search="element__range" onchange="SearchChange(this)">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{value.range}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
+{% else %}
+    <div class="row no-gutters">
+        {% for key, value in sectionsDict.items %}
+        <div class="pr-2">
+            <label id="lblS{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkS{{forloop.counter}}" value="{{key}}" class="check-search" data-search="rule__section" onchange="SearchChange(this)">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{value}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
 
 <div class="row no-gutters">
     <div class="pr-2">
@@ -57,6 +69,8 @@
         </label>
     </div>
 </div>
+
+<div id="divElementCountDisplay"></div>
 
 {% endblock %}
 {% block scripts %}
@@ -98,7 +112,8 @@
         });
         $.get("/" + type + "_list/?" + strValues, function (data) {
                  $("#divElementList").empty();
-                 $("#divElementList").append(data);
+            $("#divElementList").append(data);
+           $("#divElementCountDisplay").html(($("#divNumElements").html()));
              });
         //$("#divElementList").empty();
         //$("#divElementList").load("/element_list/?" + strValues);
