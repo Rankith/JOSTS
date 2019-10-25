@@ -50,11 +50,11 @@
     </div>
 {% else %}
     <div class="row no-gutters">
-        {% for key, value in sectionsDict.items %}
+        {% for rule in sections %}
         <div class="pr-2">
             <label id="lblS{{forloop.counter}}" class="search-button">
-                <input type="checkbox" id="chkS{{forloop.counter}}" value="{{key}}" class="check-search" data-search="rule__section" onchange="SearchChange(this)">
-                <div class="search-button value-button"><div style="text-transform:uppercase">{{value}}</div></div>
+                <input type="checkbox" id="chkS{{forloop.counter}}" value="{{rule.section}}" class="check-search" data-search="rule__section" onchange="SearchChange(this)">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{rule.search_display}}</div></div>
             </label>
         </div>
         {% endfor %}

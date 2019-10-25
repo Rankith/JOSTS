@@ -53,6 +53,12 @@ def elements(request):
     #elements = ElementText.objects.filter(language="EN")
     #vals = Element.objects.order_by('letter_value').values('letter_value').distinct()
     #groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
+    #Element.objects.filter(event="V").filter(letter_value='A').update(letter_value='')
+    #Element.objects.filter(event="V").filter(letter_value_9='A').update(letter_value_9='')
+    #Element.objects.filter(event="V").filter(letter_value_8='A').update(letter_value_8='')
+    #Element.objects.filter(event="V").filter(letter_value_67='A').update(letter_value_67='')
+    #Rule.objects.filter(section="Appendix 12").update(display_order=112,search_display='A12')
+    #Rule.objects.filter(section="Appendix 7").update(display_order=107,search_display='A7')
     context = {
         'type':'element',
         }
@@ -151,10 +157,10 @@ def rule(request):
     return render(request, 'app/element.html',context=context)
 
 def rule_search(request):
-    sections = Rule.objects.order_by('section').values('section').distinct()
+    sections = Rule.objects.order_by('display_order','search_display','section').values('section','display_order','search_display').distinct()
     sectionDict = {}
-    for section in sections:
-        sectionDict[section['section']] = section['section'].split(" ")[1];
+    #for section in sections:
+    #    sectionDict[section['section']] = section['search_];
     context = {
         'sections':sections,
         'sectionsDict': sectionDict,
@@ -171,7 +177,7 @@ def rule_list(request):
             kwargs = {'{0}'.format(k): i}
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
-    rules = RuleText.objects.filter(query).order_by('rule__section')
+    rules = RuleText.objects.filter(query).order_by('rule__display_order')
    
     context = {
         'rules': rules,
