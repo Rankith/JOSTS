@@ -1,10 +1,25 @@
 ﻿
-{% load staticfiles %} 
-{% for rule in rules %}
-    {% if forloop.first %}<div class="row">{% endif %}
-    <div class="col-12" onclick="ElementClick({{rule.id}})" style="cursor:pointer" >
-       {{rule.cue}}
+{% load staticfiles %}
+    <div class="card bg-dark">
+        {% for rule in rules %}
+            {% ifchanged rule.rule.section %}
+                {% if not forloop.first %}
+                    </ul>
+                    </div>
+                {% endif %}
+                <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}">
+                    {{rule.rule.section}}
+                </div>
+                    <div id="detail-{{forloop.counter}}" class="panel-collapse collapse show">
+                        <ul class="list-group">
+            {% endifchanged %}
+                         <li class="list-group-item bg-secondary" onclick="ElementClick({{rule.id}})" style="cursor:pointer" >
+                            {{rule.cue}}
+                        </li>
+           
+        {% endfor %}
+                </ul>
+        </div>
     </div>
-    {% if forloop.last %}</div>{% endif %}
-{% endfor %}
+
 <div id="divNumElements" style="display:none">{{num_rules}}</div>

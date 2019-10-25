@@ -171,7 +171,7 @@ def rule_list(request):
             kwargs = {'{0}'.format(k): i}
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
-    rules = RuleText.objects.filter(query)
+    rules = RuleText.objects.filter(query).order_by('rule__section')
    
     context = {
         'rules': rules,
