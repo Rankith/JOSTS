@@ -341,4 +341,4 @@ healthchecksdb
 /JOSTS/env
 /JOSTS/env1
 db.sqlite3
-settings.py
+JOSTS/JOSTS/settings.py
