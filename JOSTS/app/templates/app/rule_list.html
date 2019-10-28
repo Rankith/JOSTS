@@ -1,6 +1,6 @@
 ﻿
 {% load staticfiles %}
-    <div class="card bg-dark">
+    <div class="card rules-section-header">
         {% for rule in rules %}
             {% ifchanged rule.rule.section %}
                 {% if not forloop.first %}
@@ -13,14 +13,14 @@
                     <div id="detail-{{forloop.counter}}" class="collapse show">
                         <ul class="list-group">
             {% endifchanged %}
-                             <li class="list-group-item bg-secondary" style="cursor:pointer" >
+                             <li class="list-group-item rules-cue" style="cursor:pointer" >
                                  <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
                                     {{rule.cue}}
                                  </div>
                                 
                             </li>
                              <div id="answer-{{forloop.counter}}" class="collapse" data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
-                                     <div class="list-group-item bg-white text-dark">
+                                     <div class="list-group-item rules-response">
                                         {{rule.response}}
                                      </div>
                                  </div>
