@@ -5,10 +5,13 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
+import re
+from binascii import a2b_base64
+from django.http import HttpResponse
 
 def home(request):
     """Renders the home page."""
@@ -61,6 +64,8 @@ def elements(request):
     #Rule.objects.filter(section="Appendix 7").update(display_order=107,search_display='A7')
     context = {
         'type':'element',
+        'search_type':'element',
+        'list_type':'element',
         }
     return render(request, 'app/elements_fixed.html',context=context)
 
@@ -139,6 +144,8 @@ def element_list(request):
 def rules(request):
     context = {
         'type':'rule',
+         'search_type':'rule',
+        'list_type':'rule',
         }
     return render(request, 'app/elements_fixed.html',context=context)
 
@@ -184,3 +191,42 @@ def rule_list(request):
         'num_rules': str(len(rules)) + " Rules",
         }
     return render(request, 'app/rule_list.html',context=context)
+
+#shorthand
+def shorthand_training(request):
+    context = {
+        'type':'shorthand_trainer',
+        'search_type':'element',
+        'list_type':'element',
+        }
+    return render(request, 'app/elements_fixed.html',context=context)
+
+def shorthand_trainer(request):
+    idIn = request.GET.get('id')
+    element = ElementText.objects.filter(id=idIn)
+    userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
+    if (len(userNote) > 0):
+        userNote = userNote[0].note;
+    else:
+        userNote = '';
+    context = {
+        'lang_elements': element[0],
+        'user_note': userNote,
+        }
+    return render(request, 'app/shorthand_trainer.html',context=context)
+
+def save_record_image(request):
+    datauri = request.GET.get('data','')
+    imgstr = re.search(r'base64,(.*)', datauri).group(1)
+    binary_data = a2b_base64(imgstr)
+    output = open('media/drawnimages/' + request.GET.get('disc','') + '/' + request.GET.get('event','') + '/' + request.GET.get('name','') + '.png', 'wb')
+    output.write(binary_data)
+    output.close()
+
+    d = DrawnImage(name=request.GET.get('name','') + '.png', label=request.GET.get('label',''),event=request.GET.get('event',''))
+    d.save()
+
+    return HttpResponse(status=201)
+    #canvasData = request.GET.get('data','').strip('data:image/png;base64,')
+    #im = Image.open(canvasData)
+    #im.save('test.png')

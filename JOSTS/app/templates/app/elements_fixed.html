@@ -35,9 +35,12 @@
 {% block scripts %}
     <script type="text/javascript">
     var type = '{{type}}';
+    var search_type = '{{search_type}}';
+    var list_type = '{{list_type}}';
     </script>
 <script type="text/javascript">
-         $(document).ready(function () {
+    $(document).ready(function () {
+        
               $(window).resize(SetPadding);
               SetListHeight;
               $('#sidebarCollapse').on('click', function () {
@@ -60,7 +63,7 @@
                 // hide overlay
                // $('.overlay').removeClass('active');
              });
-             $.get("/" + type + "_search/", function (data) {
+             $.get("/" + search_type + "_search/", function (data) {
                  $("#divSearchArea").empty();
                  $("#divSearchArea").append(data);
                  LoadLastSelections();

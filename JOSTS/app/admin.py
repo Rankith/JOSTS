@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -29,6 +29,12 @@ class RuleTextAdmin(ImportExportModelAdmin):
     list_editable = ('cue','response','additional_info','rule_description','specific_deduction','cat0','cat1','cat2','cat3','cat4')
     list_search = ('cue','response','additional_info','rule_description')
 
+class DrawnImageAdmin(admin.ModelAdmin):
+    list_display = ('id','name','label','event')
+    list_editable = ('name','label','event')
+    list_search = ('name','label','event')
+    list_filter = ('event',)
+
 
 
 admin.site.register(Element,ElementAdmin)
@@ -37,3 +43,4 @@ admin.site.register(Rule,RuleAdmin)
 admin.site.register(RuleText,RuleTextAdmin)
 admin.site.register(Video)
 admin.site.register(UserNote,UserNoteAdmin)
+admin.site.register(DrawnImage,DrawnImageAdmin)

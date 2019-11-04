@@ -104,13 +104,14 @@
         CreateSearchParams();
     }
     function CreateSearchParams() {
+        
         var strValues = "";
         $(".check-search:checkbox:checked").each(function (i) {
             if ($(this).parent().is(":visible"))
                 strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
             //console.log($(this).attr("data-search") + " : " + $(this).val());
         });
-        $.get("/" + type + "_list/?" + strValues, function (data) {
+        $.get("/" + list_type + "_list/?" + strValues, function (data) {
                  $("#divElementList").empty();
             $("#divElementList").append(data);
            $("#divElementCountDisplay").html(($("#divNumElements").html()));

@@ -1,0 +1,398 @@
+﻿{% block content %}
+{% load staticfiles %}
+
+<div class="text-center detail-background rounded-top">
+    <div class="row no-gutters image-background">
+        <div class="col" onclick="CloseElement()">
+            <div class="h5">&nbsp;</div>
+            <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImage" name="ShorthandTrainingImage" style="max-height: 300px; width: 300px; display: inline; background-color:white" alt="Shorthand Training Guide">
+            <input type="hidden" value="{{lang_elements.element.image_url}}" id="hdnName" />
+            <input type="hidden" value="{{lang_elements.element.event}}" id="hdnEvent" />
+        </div>
+        <div class="col">
+            <div style="width:300px;margin:auto">
+                <div class="h5">Draw Here</div>
+                <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:300;width:300px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
+                <canvas id="can" width="300" height="300"></canvas>
+                <img id="canvasimg" style="display:none;">
+                <table class="w-100" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="center"> <a href="#" onclick="CheckImage()" id="btnDone" class="font-weight-bold">Done</a></td>
+                        <td align="center"> <a href="#" onclick="erase();" class="font-weight-bold">Clear</a></td>
+                    </tr>
+                </table>
+                <div class="col text-white">
+                    <table class="w-100">
+                        <tr>
+                            <td align="right" class="w-50">
+                                <label id="lblTrace" class="switch">
+                                    <input type="checkbox" id="chkTrace" value="Trace">
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
+                            <td style="vertical-align:top" align="left">
+                                <label for="chkTrace" style="margin-bottom:0 !important">Trace</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col text-white">
+                    <table class="w-100">
+                        <tr>
+                            <td align="right" class="w-50">
+                                <label id="lblSave" class="switch">
+                                    <input type="checkbox" id="chkSave" value="Trace">
+                                    <span class="slider round"></span>
+                                </label>
+                            </td>
+                            <td style="vertical-align:top" align="left">
+                                <label for="chkSave" style="margin-bottom:0 !important">Save</label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row no-gutters">
+        <div class="col"><div class="text-center text-white">{{lang_elements.id_number_text}}</div></div>
+        <div class="col"><div class="text-center text-white">{{lang_elements.element.letter_value}} = {{lang_elements.element.value}}</div></div>
+       
+       <!-- <div class="col text-white">
+            <table class="w-100">
+                <tr>
+                    <td align="right">
+                        <label id="lblAdditionalInfo" class="switch" style="display:none">
+                            <input type="checkbox" id="chkAdditionalInfo">
+                            <span class="slider round"></span>
+                        </label></td>
+                    <td style="vertical-align:top"  align="left">
+                        <label for="chkAdditionalInfo" style="margin-bottom:0 !important">INFO&nbsp;</label>
+                    </td>
+                </tr>
+            </table>
+        </div>-->
+        <div class="col text-white">
+            <table class="w-100">
+                <tr>
+                    <td align="right">
+                        <label id="lblYourNote" class="switch" style="display:none">
+                            <input type="checkbox" id="chkYourNote">
+                            <span class="slider round"></span>
+                        </label></td>
+                    <td style="vertical-align:top" align="left">
+                         <label for="chkYourNote" style="margin-bottom:0 !important">NOTES&nbsp;</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    if (localStorage.trace) {
+        $('#chkTrace').prop("checked", localStorage.trace == 1)
+    }
+    $('#chkTrace').change(function() {
+        localStorage.trace = this.checked ? 1 : 0
+        ResetWithTrace();
+    });
+
+     if (localStorage.save) {
+        $('#chkSave').prop("checked", localStorage.save == 1)
+    }
+    $('#chkSave').change(function() {
+        localStorage.save = this.checked ? 1 : 0
+       
+    });
+
+   var canvas, ctx, flag = false,
+        prevX = 0,
+        currX = 0,
+        prevY = 0,
+        currY = 0,
+        dot_flag = false;
+    var x="black";
+    var y = 4;
+
+    var clickX = new Array();
+    var clickY = new Array();
+    var clickDrag = new Array();
+    var paint;
+
+    function save() {
+        document.getElementById("canvasimg").style.border = "2px solid";
+        var dataURL = canvas.toDataURL();
+        document.getElementById("canvasimg").src = dataURL;
+        document.getElementById("canvasimg").style.display = "inline";
+    }
+    function erase() {
+        $("#ShorthandTrainingResult").text("");
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, w, h);
+        document.getElementById("canvasimg").style.display = "none";
+        if (document.getElementById('chkTrace').checked)
+        {
+  	        ctx.globalAlpha=0.5;
+  	        ctx.drawImage(document.getElementById("ShorthandTrainingImageTrace"),0,0,ctx.canvas.width,ctx.canvas.height);
+  	        ctx.globalAlpha=1;
+        }
+        clickX = new Array();
+        clickY = new Array();
+        clickDrag = new Array();
+    }
+
+    function addClick(x, y, dragging)
+    {
+
+      clickX.push(x);
+      clickY.push(y);
+      clickDrag.push(dragging);
+     //txtSkillText.value = "x: " + x + " | y: " + y;
+    }
+
+    function redraw(trace){
+	    //console.log("trace: " + trace);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clears the canvas
+      //if (fill)
+      //{
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      if (trace)
+      {
+  	    ctx.globalAlpha=0.5;
+  	    ctx.drawImage(document.getElementById("ShorthandTrainingImageTrace"),0,0,ctx.canvas.width,ctx.canvas.height);
+  	    ctx.globalAlpha=1;
+      }
+    //}
+      //ctx.strokeStyle = "#df4b26";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = 5;
+			
+      for(var i=0; i < clickX.length; i++) {		
+        ctx.beginPath();
+        if(clickDrag[i] && i){
+          ctx.moveTo(clickX[i-1], clickY[i-1]);
+         }else{
+           ctx.moveTo(clickX[i]-1, clickY[i]);
+         }
+         ctx.lineTo(clickX[i], clickY[i]);
+         ctx.closePath();
+         ctx.stroke();
+      }
+    }
+    function point(x, y){
+      ctx.beginPath();
+      ctx.arc(x, y, 1, 0, 2 * Math.PI, true);
+      ctx.fill();
+      console.log("drew circle");
+    }
+    function redrawLast(trace)
+    {
+	    //for(var i=clickX.length-1; i < clickX.length; i++) {	
+		      ctx.lineJoin = "round";
+      ctx.lineWidth = 5;
+      //check last several back and make bigger
+     /* if (clickX[i] == clickX[i-1] == clickX[i-2] == clickX[i-3] == clickX[i-4] == clickX[i-5])
+      {
+  	    if (clickY[i] == clickY[i-1] == clickY[i-2] == clickY[i-3] == clickY[i-4] == clickY[i-5])
+  	    {
+  		    //point(clickX[i],clickY[i]);
+
+  	    }
+
+      }*/
+
+	    var i = clickX.length - 1;	
+        ctx.beginPath();
+        if(clickDrag[i] && i){
+          ctx.moveTo(clickX[i-1], clickY[i-1]);
+         }else{
+           ctx.moveTo(clickX[i]-1, clickY[i]);
+         }
+         ctx.lineTo(clickX[i], clickY[i]);
+         ctx.closePath();
+         ctx.stroke();
+      //}
+    }
+
+    function ResetWithTrace()
+    {
+	    redraw(document.getElementById('chkTrace').checked);
+    }
+
+    function DrawInit() {
+        canvas = document.getElementById('can');
+        ctx = canvas.getContext("2d");
+        w = canvas.width;
+        h = canvas.height;
+        ctx.fillStyle = "white";
+		ctx.fillRect(0, 0, w, h);
+		$("#ShorthandTrainingResult").text("");
+		if (document.getElementById('chkTrace').checked)
+		{
+			console.log("tracing");
+		  	ctx.globalAlpha=0.5;
+		  	ctx.drawImage(document.getElementById("ShorthandTrainingImageTrace"),0,0,ctx.canvas.width,ctx.canvas.height);
+		  	ctx.globalAlpha=1;
+		}
+        clickX = new Array();
+        clickY = new Array();
+        clickDrag = new Array();
+        $('#can').mousedown(function(e){
+            var mouseX = e.pageX - canvas.getBoundingClientRect().left - window.scrollX;
+            var mouseY = e.pageY - canvas.getBoundingClientRect().top - window.scrollY;
+		
+            paint = true;
+            addClick(mouseX, mouseY);
+            redrawLast(document.getElementById('chkTrace').checked);
+        });
+
+        $('#can').mousemove(function(e){
+            if(paint){
+                addClick(e.pageX - canvas.getBoundingClientRect().left - window.scrollX, e.pageY - canvas.getBoundingClientRect().top - window.scrollY, true);
+                redrawLast(document.getElementById('chkTrace').checked);
+            }
+        });
+
+        $('#can').mouseup(function(e){
+            paint = false;
+        });
+
+        $('#can').mouseleave(function(e){
+            paint = false;
+        });
+
+        $('#can').touchend(function(e){
+	        e.preventDefault();
+          //paint = false;
+          //txtSkillText.value = paint.toString();
+        });
+
+        canvas.addEventListener("touchstart", function (e) {
+            e.preventDefault();
+            paint = true;
+            addClick(e.changedTouches[0].pageX - canvas.getBoundingClientRect().left - window.scrollX, e.changedTouches[0].pageY - canvas.getBoundingClientRect().top - window.scrollY);
+            redrawLast(document.getElementById('chkTrace').checked);
+        }, false);
+        canvas.addEventListener("touchmove", function (e) {
+            e.preventDefault();
+            if (paint)
+            {
+                addClick(e.changedTouches[0].pageX - canvas.getBoundingClientRect().left - window.scrollX, e.changedTouches[0].pageY - canvas.getBoundingClientRect().top - window.scrollY, true);
+                redrawLast(document.getElementById('chkTrace').checked);
+			}
+        }, false);
+        canvas.addEventListener("touchend", function (e) {
+            paint=false;
+        }, false);
+    }
+
+    function findxytouch(res, e)
+    {
+   	    e.preventDefault();
+   		findxy(res,e.changedTouches[0].pageX ,e.changedTouches[0].pageY );
+    }
+
+    function findxymouse(res, e)
+    {
+   		findxy(res,e.clientX ,e.clientY );
+    }
+    
+    function draw() {
+        ctx.beginPath();
+        ctx.moveTo(prevX, prevY);
+        ctx.lineTo(currX, currY);
+        //console.log("path: " + prevX + " " + currX + " " + prevY + " " + currY);
+        ctx.strokeStyle = x;
+        ctx.lineWidth = y;
+        ctx.stroke();
+        ctx.closePath();
+    }
+    
+    function findxy(res, cx,cy) {
+    	//console.log(res);
+    	ctx.lineJoin = "round";
+        if (res == 'down') {
+            prevX = currX;
+            prevY = currY;
+            currX = cx - canvas.getBoundingClientRect().left;
+            currY = cy - canvas.getBoundingClientRect().top;
+    
+            flag = true;
+            dot_flag = true;
+            if (dot_flag) {
+            	//console.log ("drawing " + x);
+                ctx.beginPath();
+                ctx.fillStyle = x;
+                ctx.fillRect(currX, currY, 2, 2);
+                ctx.closePath();
+                dot_flag = false;
+            }
+        }
+        if (res == 'up' || res == "out") {
+            flag = false;
+        }
+        if (res == 'move') {
+            if (flag) {
+                prevX = currX;
+                prevY = currY;
+                currX = cx - canvas.getBoundingClientRect().left;
+                currY = cy - canvas.getBoundingClientRect().top;
+                draw();
+            }
+        }
+    }
+    function CheckShorthandGifLoaded()
+    {
+	    console.log("CheckLoaded: " + ShorthandTrainingImage.complete + " | " + ShorthandTrainingImageTrace.complete);
+	    if (ShorthandTrainingImage.complete && ShorthandTrainingImageTrace.complete) 
+		    ShorthandGifLoaded();
+    }
+    function ShorthandGifLoaded()
+    {
+	    //$("#can").height($("#ShorthandTrainingImage").height());
+	    //document.getElementById("can").height = $("#ShorthandTrainingImage").height();
+	    $("#ShorthandTrainingText").height($("#ShorthandTrainingImage").height());
+	    DrawInit();
+    }
+
+    function CheckImage() {
+        redraw(false);
+        var dataImage = canvas.toDataURL();
+        SaveRecordImageNoData(dataImage);
+    }
+
+    function SaveRecordImageNoData(image)
+    {
+	    if (document.getElementById('chkSave').checked)
+	    {
+		    var date = new Date();
+		    //var label = ShorthandTrainingOnImage.toLowerCase();
+		    //if (ShorthandTranslate[ShorthandTrainingOnImage] != undefined)
+		    //	label = ShorthandTranslate[ShorthandTrainingOnImage].toLowerCase();
+		    //generate unique string
+		    var name = date.toLocaleString().replace(/\//g,"").replace(/ /g,"").replace(",","").replace(/:/g,"") + date.getMilliseconds();
+		    name = $("#hdnName").val() + name;
+
+		    $.ajax({
+		        url:'/save_record_image/', 
+		        type:'GET', 
+		        data:{
+		            data:image,
+		            name:name,
+		            event:document.getElementById('hdnEvent').value.toLowerCase(),
+		            disc:"womens",
+		            label:$("#hdnName").val()
+		        }
+		    });
+
+	    }
+    }
+
+    document.getElementById("ShorthandTrainingImage").addEventListener('load', CheckShorthandGifLoaded);
+    
+</script>
+
+{% endblock %}

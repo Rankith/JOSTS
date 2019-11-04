@@ -240,4 +240,7 @@ input:checked + .slider:before {
 .rule-section {
     font-size: 0.8rem;
 }
+.list-group-item {
+    padding: 0.55rem 1rem;
+}
 
