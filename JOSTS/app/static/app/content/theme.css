@@ -169,3 +169,6 @@ input:checked + .special-button {
     background-color: #ffffff !important;
     color: #343a40 !important
 }
+.rule-section {
+    color: gray;
+}

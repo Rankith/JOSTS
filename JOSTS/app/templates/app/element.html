@@ -29,7 +29,7 @@
         <div class="col"><div class="text-center text-white">{{lang_elements.id_number_text}}</div></div>
         <div class="col"><div class="text-center text-white">{{lang_elements.element.letter_value}} = {{lang_elements.element.value}}</div></div>
        
-        <div class="col text-white">
+       <!-- <div class="col text-white">
             <table class="w-100">
                 <tr>
                     <td align="right">
@@ -42,7 +42,7 @@
                     </td>
                 </tr>
             </table>
-        </div>
+        </div>-->
         <div class="col text-white">
             <table class="w-100">
                 <tr>
@@ -73,16 +73,16 @@
         this.checked ? $("#divYourNote").show() : $("#divYourNote").hide();
     });
 
-    if (localStorage.additional_info) {
+    /*if (localStorage.additional_info) {
         $('#chkAdditionalInfo').prop("checked", localStorage.additional_info == 1)
         $('#chkAdditionalInfo').prop("checked") ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
     }
     else
-        $("#divAdditionalInfo").hide();
-    $('#chkAdditionalInfo').change(function() {
+        $("#divAdditionalInfo").hide();*/
+    /*$('#chkAdditionalInfo').change(function() {
         localStorage.additional_info = this.checked ? 1 : 0
         this.checked ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
-    });
+    });*/
    
     $("#lblAdditionalInfo").show();
    $("#lblYourNote").show();

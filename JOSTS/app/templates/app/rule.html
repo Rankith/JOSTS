@@ -1,0 +1,13 @@
+﻿{% block content %}
+{% load staticfiles %}
+
+ <div class="list-group-item rules-response">
+    <pre>{{rule.response}}</pre>                                        
+    <div class="row">
+        <div class="col rule-section">
+            {{rule.rule.section}}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

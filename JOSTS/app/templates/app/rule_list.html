@@ -15,15 +15,27 @@
             {% endifchanged %}
                              <li class="list-group-item rules-cue" style="cursor:pointer" >
                                  <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
-                                    {{rule.cue}}
+                                     <pre>{{rule.cue}}</pre>
                                  </div>
                                 
                             </li>
-                             <div id="answer-{{forloop.counter}}" class="collapse" data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
-                                     <div class="list-group-item rules-response">
-                                        {{rule.response}}
-                                     </div>
-                                 </div>
+                             <div id="answer-{{forloop.counter}}" class="collapse position-relative" data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
+                                <div class="additional-info-rules" id="divAdditionalInfo">
+                                    {{rule.additional_info}}
+                                </div>
+                                <div class="list-group-item rules-response">
+                                    <div class="">
+                                        <pre>{{rule.response}}</pre>
+                                    </div>
+                                    <div class="row no-gutters">
+                                        <div class="col rule-section">
+                                            {{rule.rule.section}}
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                </div>
+                            </div>
            
         {% endfor %}
                 </ul>
@@ -31,3 +43,65 @@
     </div>
 
 <div id="divNumElements" style="display:none">{{num_rules}}</div>
+<script type="text/javascript">
+    //store checkboxes in ls and load as needed
+     if (localStorage.your_note) {
+        $('#chkYourNote').prop("checked", localStorage.your_note == 1)
+        $('#chkYourNote').prop("checked") ? $("#divYourNote").show() : $("#divYourNote").hide();
+    }
+    else
+        $("#divYourNote").hide();
+    $('#chkYourNote').change(function() {
+        localStorage.your_note = this.checked ? 1 : 0
+        this.checked ? $("#divYourNote").show() : $("#divYourNote").hide();
+    });
+
+    if (localStorage.additional_info) {
+        $('#chkAdditionalInfo').prop("checked", localStorage.additional_info == 1)
+        $('#chkAdditionalInfo').prop("checked") ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
+    }
+    else
+        $("#divAdditionalInfo").hide();
+    $('#chkAdditionalInfo').change(function() {
+        localStorage.additional_info = this.checked ? 1 : 0
+        this.checked ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
+    });
+   
+    $("#lblAdditionalInfo").show();
+   $("#lblYourNote").show();
+    //stop the notes area from closing if you click in it.
+    $("#txtUserNotes").click(function(e) {
+        e.stopPropagation();
+    });
+
+    //save the notes when done typing
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 1000;  //time in ms (5 seconds)
+
+    //on keyup, start the countdown
+    $('#txtUserNotes').keyup(function(){
+        clearTimeout(typingTimer);
+        if ($('#txtUserNotes').val()) {
+            typingTimer = setTimeout(SaveNote, doneTypingInterval);
+        }
+    });
+
+    //user is "finished typing," do something
+    function SaveNote () {
+        var note = $('#txtUserNotes').val();
+
+        $.ajax({
+            url: '{% url "update_user_note" %}',
+            data: {
+                'note': note,
+                'element': '{{lang_elements.element.id}}'
+            },
+            dataType: 'json',
+            success: function (data) {
+              if (data.is_taken) {
+                alert("A user with this username already exists.");
+              }
+            }
+      });
+    }
+</script>
