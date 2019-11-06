@@ -206,6 +206,7 @@ def shorthand_trainer(request):
     idIn = request.GET.get('id')
     element = ElementText.objects.filter(id=idIn)
     userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
+    count = DrawnImage.objects.filter(label=element[0].element.image_url()).count()
     if (len(userNote) > 0):
         userNote = userNote[0].note;
     else:
@@ -213,6 +214,7 @@ def shorthand_trainer(request):
     context = {
         'lang_elements': element[0],
         'user_note': userNote,
+        'count' : count
         }
     return render(request, 'app/shorthand_trainer.html',context=context)
 
@@ -227,7 +229,9 @@ def save_record_image(request):
     d = DrawnImage(name=request.POST.get('name','') + '.png', label=request.POST.get('label',''),event=request.POST.get('event',''))
     d.save()
 
-    return HttpResponse(status=201)
+    count = DrawnImage.objects.filter(label=request.POST.get('label','')).count()
+
+    return HttpResponse(count)
     #canvasData = request.GET.get('data','').strip('data:image/png;base64,')
     #im = Image.open(canvasData)
     #im.save('test.png')

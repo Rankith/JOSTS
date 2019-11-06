@@ -51,6 +51,9 @@
                         </tr>
                     </table>
                 </div>
+                <div class="col" id="divTempCount">
+                    {{count}}
+                </div>
             </div>
         </div>
     </div>
@@ -380,17 +383,20 @@
 		    var name = date.toLocaleString().replace(/\//g,"").replace(/ /g,"").replace(",","").replace(/:/g,"") + date.getMilliseconds();
 		    name = $("#hdnName").val() + name;
 
-		    $.ajax({
-		        url:'/save_record_image/', 
-		        type:'POST', 
-		        data:{
-		            data:image,
-		            name:name,
-		            event:document.getElementById('hdnEvent').value.toLowerCase(),
-		            disc:"womens",
+            $.ajax({
+                url: '/save_record_image/',
+                type: 'POST',
+                data: {
+                    data: image,
+                    name: name,
+                    event: document.getElementById('hdnEvent').value.toLowerCase(),
+                    disc: "womens",
                     label: $("#hdnName").val(),
-                    csrfmiddlewaretoken:window.CSRF_TOKEN
-		        }
+                    csrfmiddlewaretoken: window.CSRF_TOKEN
+                },
+                success: function (data) {
+                    $("#divTempCount").html(data);
+                }
 		    });
 
 	    }
