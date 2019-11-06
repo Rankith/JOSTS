@@ -220,7 +220,7 @@ def save_record_image(request):
     datauri = request.POST.get('data','')
     imgstr = re.search(r'base64,(.*)', datauri).group(1)
     binary_data = a2b_base64(imgstr)
-    output = open(settings.MEDIA_ROOT + '/drawnimages/' + request.POST.get('disc','') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
+    output = open('/' + settings.MEDIA_ROOT + '/drawnimages/' + request.POST.get('disc','') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
     output.write(binary_data)
     output.close()
 
