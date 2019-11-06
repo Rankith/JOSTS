@@ -7,6 +7,8 @@ from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from app import forms, views
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -39,4 +41,4 @@ urlpatterns = [
     path('shorthand_training/', views.shorthand_training, name='shorthand_training'),
     path('shorthand_trainer/', views.shorthand_trainer, name='shorthand_trainer'),
     path('save_record_image/', views.save_record_image, name='save_record_image'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
