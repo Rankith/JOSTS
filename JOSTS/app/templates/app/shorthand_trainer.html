@@ -90,6 +90,10 @@
 </div>
 
 <script type="text/javascript">
+    window.CSRF_TOKEN = "{{ csrf_token }}"; 
+
+</script>
+<script type="text/javascript">
     if (localStorage.trace) {
         $('#chkTrace').prop("checked", localStorage.trace == 1)
     }
@@ -378,13 +382,14 @@
 
 		    $.ajax({
 		        url:'/save_record_image/', 
-		        type:'GET', 
+		        type:'POST', 
 		        data:{
 		            data:image,
 		            name:name,
 		            event:document.getElementById('hdnEvent').value.toLowerCase(),
 		            disc:"womens",
-		            label:$("#hdnName").val()
+                    label: $("#hdnName").val(),
+                    csrfmiddlewaretoken:window.CSRF_TOKEN
 		        }
 		    });
 

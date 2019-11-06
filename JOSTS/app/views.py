@@ -131,7 +131,7 @@ def element_list(request):
             kwargs = {'{0}'.format(k): i}
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
-    elements = ElementText.objects.filter(query)
+    elements = ElementText.objects.filter(query).order_by('element__code_order')
    
     context = {
         'lang_elements': elements,
@@ -216,14 +216,14 @@ def shorthand_trainer(request):
     return render(request, 'app/shorthand_trainer.html',context=context)
 
 def save_record_image(request):
-    datauri = request.GET.get('data','')
+    datauri = request.POST.get('data','')
     imgstr = re.search(r'base64,(.*)', datauri).group(1)
     binary_data = a2b_base64(imgstr)
-    output = open('media/drawnimages/' + request.GET.get('disc','') + '/' + request.GET.get('event','') + '/' + request.GET.get('name','') + '.png', 'wb')
+    output = open('media/drawnimages/' + request.POST.get('disc','') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
     output.write(binary_data)
     output.close()
 
-    d = DrawnImage(name=request.GET.get('name','') + '.png', label=request.GET.get('label',''),event=request.GET.get('event',''))
+    d = DrawnImage(name=request.POST.get('name','') + '.png', label=request.POST.get('label',''),event=request.POST.get('event',''))
     d.save()
 
     return HttpResponse(status=201)
