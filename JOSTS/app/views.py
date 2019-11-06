@@ -12,6 +12,7 @@ from django.db.models.functions import Cast
 import re
 from binascii import a2b_base64
 from django.http import HttpResponse
+from django.conf import settings
 
 def home(request):
     """Renders the home page."""
@@ -216,12 +217,10 @@ def shorthand_trainer(request):
     return render(request, 'app/shorthand_trainer.html',context=context)
 
 def save_record_image(request):
-    d = DrawnImage(name='test', label='testl',event='fx')
-    d.save()
     datauri = request.POST.get('data','')
     imgstr = re.search(r'base64,(.*)', datauri).group(1)
     binary_data = a2b_base64(imgstr)
-    output = open('media/drawnimages/' + request.POST.get('disc','') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
+    output = open(settings.MEDIA_ROOT + '/drawnimages/' + request.POST.get('disc','') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
     output.write(binary_data)
     output.close()
 
