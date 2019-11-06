@@ -143,11 +143,11 @@ input:checked + .red-button {
 }
 
 .detail-background {
-    background-color: #1e1e3a
+    background-color: #1e1e3a;
 }
 
 .image-background {
-    background-color: #a0b4d0
+    background-color: #a0b4d0;
 }
 
 #divSearchSidebar {
@@ -156,14 +156,26 @@ input:checked + .red-button {
 }
 
 .rules-section-header {
-    background-color: #343a40 !important
+    background-color: #343a40 !important;
 }
 
 .rules-cue {
-    background-color: #6c757d !important
+    background-color: #6c757d !important;
 }
 
 .rules-response {
     background-color: #ffffff !important;
     color: #343a40 !important
+}
+
+.text-base{
+    color: #fff;
+}
+
+.text-detail {
+    color: #343a40;
+}
+
+.text-detail-bottom {
+    color: #fff
 }
