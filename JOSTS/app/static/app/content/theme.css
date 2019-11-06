@@ -179,3 +179,7 @@ input:checked + .red-button {
 .text-detail-bottom {
     color: #fff
 }
+
+.selected-list-item {
+    background-color: #1e1e3a
+}
