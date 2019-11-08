@@ -106,6 +106,21 @@
 </script>
 <script type="text/javascript">
     DrawInit();
+    if (localStorage.trace) {
+            $('#chkTrace').prop("checked", localStorage.trace == 1)
+        }
+        $('#chkTrace').change(function() {
+            localStorage.trace = this.checked ? 1 : 0
+    ResetWithTrace();
+    });
+
+ if (localStorage.save) {
+            $('#chkSave').prop("checked", localStorage.save == 1)
+        }
+        $('#chkSave').change(function() {
+            localStorage.save = this.checked ? 1 : 0
+
+        });
     function SetResult(result) {
         $("#btnDone").removeClass('ui-disabled');
         if (result.toLowerCase() == OnShorthand.toLowerCase())
