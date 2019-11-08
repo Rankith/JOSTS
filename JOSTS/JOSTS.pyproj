@@ -2471,6 +2471,9 @@
     <Content Include="app\static\app\images\wag\sym\ub850807.svg" />
     <Content Include="app\static\app\images\wag\UB_White.svg" />
     <Content Include="app\static\app\images\wag\V_White.svg" />
+    <Content Include="app\static\app\scripts\shorthand_drawing.js" />
+    <Content Include="app\templates\app\element_for_shorthand.html" />
+    <Content Include="app\templates\app\shorthand_lookup.html" />
     <Content Include="app\templates\app\shorthand_draw.html" />
     <Content Include="app\templates\app\shorthand_trainer.html" />
     <Content Include="app\templates\app\rule.html" />

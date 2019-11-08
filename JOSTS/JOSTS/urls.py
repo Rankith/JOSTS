@@ -41,4 +41,6 @@ urlpatterns = [
     path('shorthand_training/', views.shorthand_training, name='shorthand_training'),
     path('shorthand_trainer/', views.shorthand_trainer, name='shorthand_trainer'),
     path('save_record_image/', views.save_record_image, name='save_record_image'),
+    path('shorthand_lookup/', views.shorthand_lookup, name='shorthand_lookup'),
+    path('element_for_shorthand/', views.element_for_shorthand, name='element_for_shorthand'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

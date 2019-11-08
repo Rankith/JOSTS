@@ -235,3 +235,20 @@ def save_record_image(request):
     #canvasData = request.GET.get('data','').strip('data:image/png;base64,')
     #im = Image.open(canvasData)
     #im.save('test.png')
+
+def shorthand_lookup(request):
+    context = {
+        'type':'element',
+        'search_type':'element',
+        'list_type':'element',
+        }
+    return render(request, 'app/shorthand_lookup.html',context=context)
+
+def element_for_shorthand(request):
+    idIn = request.GET.get('id')
+    eventIn = request.GET.get('event')
+    element = ElementText.objects.filter(element__id_number=idIn).filter(element__event=eventIn)
+    context = {
+        'lang_elements': element[0],
+        }
+    return render(request, 'app/element_for_shorthand.html',context=context)

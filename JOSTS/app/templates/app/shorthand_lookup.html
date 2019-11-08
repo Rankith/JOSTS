@@ -22,30 +22,41 @@
     </div>
     <div id="divContentParent" class="position-relative">
     
-        <div id="divElement" class="collapse" style="cursor:pointer;position:fixed;z-index:131">
+        <div id="divElement" style="">
 
         </div>
 
-        <div class="text-white col" id="divElementList" style="min-height:100%">
-             
+        <div class="text-white col text-center" id="divShorthandLookup">
+            <div style="width:200px;margin:auto">
+                <div class="h5">Draw Here</div>
+                <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
+                <canvas id="can" width="200" height="200"></canvas>
+                <img id="canvasimg" style="display:none;">
+                <table class="w-100" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="center" class="font-weight-bold"><a href="#" onclick="CheckImage(); return false;">Done</a></td>
+                        <td align="center" class="font-weight-bold"><a href="#" onclick="erase(); return false;">Clear</a></td>
+                    </tr>
+                </table>
+                <input type="checkbox" id="chkTrace" style="display:none" >
+                <input type="checkbox" id="chkSave" style="display:none" >
+            </div>
         </div>
 
     </div>
 {% endblock %}
 {% block scripts %}
-    {% if type == 'shorthand_trainer' %}
-        <script src="{% static 'app/scripts/shorthand_drawing.js' %}"></script>
-    {% endif %}
-    <script type="text/javascript">
+<script src="{% static 'app/scripts/shorthand_drawing.js' %}"></script>
+<script type="text/javascript">
+    window.CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+<script type="text/javascript">
     var type = '{{type}}';
-    var search_type = '{{search_type}}';
-    var list_type = '{{list_type}}';
-    </script>
+    var Disc = "Womens";
+    var Event = "FX";
+</script>
 <script type="text/javascript">
     $(document).ready(function () {
-        
-              $(window).resize(SetPadding);
-              SetListHeight;
               $('#sidebarCollapse').on('click', function () {
                 // open or close navbar
                 $('#divSearchSidebar').toggleClass('active');
@@ -66,55 +77,32 @@
                 // hide overlay
                // $('.overlay').removeClass('active');
              });
-             $.get("/" + search_type + "_search/", function (data) {
+             /*$.get("/" + search_type + "_search/", function (data) {
                  $("#divSearchArea").empty();
                  $("#divSearchArea").append(data);
                  LoadLastSelections();
-             });
+             });*/
 
             if ($(window).width() >= 1200)
-                $('#sidebarCollapse').click();
+            $('#sidebarCollapse').click();
+
+        DrawInit();
 
          });
-    function CloseElement() {
-       
-        $("#divElement").collapse("hide");
-         RemoveSelected();
-        
-        //SetListHeight();
-    }
-    function RemoveSelected() {
-        $(".selected-list-item").addClass("image-background").removeClass("selected-list-item");
-    }
-    function ElementClick(idIn)
+    function DisplayElement(idIn,eventIn)
     {
-        console.log(idIn);
         //attach setting the list height to the element div finishing its animation
-        RemoveSelected();
-        $("#div" + idIn).removeClass("image-background").addClass("selected-list-item");
-        $('#divElement').on('hidden.bs.collapse', function () {
-             $("#divElement").empty();
-            SetPadding();
-        }).on('shown.bs.collapse', function() {
-            SetPadding();
-        }).on('show.bs.collapse', function() {
-            SetPadding();
-        });
-        $("#divElement").load("/" + type + "?id=" + idIn, ShowAndSetHeight);
+        $("#divElement").load("/element_for_shorthand?id=" + idIn + '&event=' + eventIn,'');
     }
-    function ShowAndSetHeight() {
-        $("#divElement").collapse("show");
-       
-    }
-    function SetPadding() {
-        console.log("Setting Padding");
-        $("#divElementList").css("padding-top", $("#divElement").height());
-        $("#divElement").width($("#divContentParent").width());
 
-        
-       
+    function SetResult(result) {
+        DisplayElement(result.replace(Event.toLowerCase(), ""), Event);
     }
-    function SetListHeight() {
+    function CheckImageError(result) {
+
+    }
+    function CheckImageBefore() {
+
     }
 
 </script>
