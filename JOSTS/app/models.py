@@ -78,6 +78,6 @@ class RuleText(models.Model):
     cat4 = models.CharField(max_length=30,blank=True,default='')
 
 class DrawnImage(models.Model):
-    name = models.TextField(max_length=255,blank=True,default='')
-    label = models.TextField(max_length=255,blank=True,default='')
-    event = models.TextField(max_length=2,blank=True,default='')
+    name = models.CharField(max_length=255,blank=True,default='')
+    label = models.CharField(max_length=255,blank=True,default='')
+    event = models.CharField(max_length=2,blank=True,default='')

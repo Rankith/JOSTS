@@ -27,12 +27,12 @@ class RuleTextAdmin(ImportExportModelAdmin):
     list_display = ('rule','cue','response','additional_info','rule_description','specific_deduction','cat0','cat1','cat2','cat3','cat4')
     list_filter = ('rule__event','rule__section')
     list_editable = ('cue','response','additional_info','rule_description','specific_deduction','cat0','cat1','cat2','cat3','cat4')
-    list_search = ('cue','response','additional_info','rule_description')
+    search_fields = ('cue','response','additional_info','rule_description')
 
 class DrawnImageAdmin(admin.ModelAdmin):
     list_display = ('id','name','label','event')
     list_editable = ('name','label','event')
-    list_search = ('name','label','event')
+    search_fields = ('name','label','event')
     list_filter = ('event',)
 
 
