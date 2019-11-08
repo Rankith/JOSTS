@@ -1,19 +1,7 @@
-﻿{% block content %}
-{% load staticfiles %}
-
-<div class="text-center detail-background rounded-top text-detail">
-    <div class="row no-gutters image-background">
-        <div class="col" onclick="CloseElement()">
-            <div class="h5">&nbsp;</div>
-            <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImage" name="ShorthandTrainingImage" style="max-height: 200px; width: 200px; display: inline; background-color:white" alt="Shorthand Training Guide">
-            <input type="hidden" value="{{lang_elements.element.image_url}}" id="hdnName" />
-            <input type="hidden" value="{{lang_elements.element.event}}" id="hdnEvent" />
-        </div>
-        <div class="col">
-            <div style="width:200px;margin:auto">
+﻿            <div style="width:300px;margin:auto">
                 <div class="h5">Draw Here</div>
-                <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
-                <canvas id="can" width="200" height="200"></canvas>
+                <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:300;width:300px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
+                <canvas id="can" width="300" height="300"></canvas>
                 <img id="canvasimg" style="display:none;">
                 <table class="w-100" border="0" cellpadding="0" cellspacing="0">
                     <tr>
@@ -21,98 +9,13 @@
                         <td align="center"  class="font-weight-bold"><a href="#" onclick="erase(); return false;">Clear</a></td>
                     </tr>
                 </table>
-                <div class="col">
-                    <table class="w-100">
-                        <tr>
-                            <td align="right" class="w-50">
-                                <label id="lblTrace" class="switch">
-                                    <input type="checkbox" id="chkTrace" value="Trace">
-                                    <span class="slider round"></span>
-                                </label>
-                            </td>
-                            <td style="vertical-align:top" align="left">
-                                <label for="chkTrace" style="margin-bottom:0 !important">Trace</label>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col">
-                    <table class="w-100">
-                        <tr>
-                            <td align="right" class="w-50">
-                                <label id="lblSave" class="switch">
-                                    <input type="checkbox" id="chkSave" value="Trace">
-                                    <span class="slider round"></span>
-                                </label>
-                            </td>
-                            <td style="vertical-align:top" align="left">
-                                <label for="chkSave" style="margin-bottom:0 !important">Save</label>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col" id="divTempCount">
-                    {{count}}
-                </div>
             </div>
-        </div>
-    </div>
-    <div class="row no-gutters text-detail-bottom">
-        <div class="col"><div class="text-center">{{lang_elements.id_number_text}}</div></div>
-        <div class="col"><div class="text-center">{{lang_elements.element.letter_value}} = {{lang_elements.element.value}}</div></div>
-       
-       <!-- <div class="col text-white">
-            <table class="w-100">
-                <tr>
-                    <td align="right">
-                        <label id="lblAdditionalInfo" class="switch" style="display:none">
-                            <input type="checkbox" id="chkAdditionalInfo">
-                            <span class="slider round"></span>
-                        </label></td>
-                    <td style="vertical-align:top"  align="left">
-                        <label for="chkAdditionalInfo" style="margin-bottom:0 !important">INFO&nbsp;</label>
-                    </td>
-                </tr>
-            </table>
-        </div>-->
-        <div class="col">
-            <table class="w-100">
-                <tr>
-                    <td align="right">
-                        <label id="lblYourNote" class="switch" style="display:none">
-                            <input type="checkbox" id="chkYourNote">
-                            <span class="slider round"></span>
-                        </label></td>
-                    <td style="vertical-align:top" align="left">
-                         <label for="chkYourNote" style="margin-bottom:0 !important">NOTES&nbsp;</label>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript">
     window.CSRF_TOKEN = "{{ csrf_token }}"; 
 
 </script>
 <script type="text/javascript">
-    if (localStorage.trace) {
-        $('#chkTrace').prop("checked", localStorage.trace == 1)
-    }
-    $('#chkTrace').change(function() {
-        localStorage.trace = this.checked ? 1 : 0
-        ResetWithTrace();
-    });
-
-     if (localStorage.save) {
-        $('#chkSave').prop("checked", localStorage.save == 1)
-    }
-    $('#chkSave').change(function() {
-        localStorage.save = this.checked ? 1 : 0
-       
-    });
-
    var canvas, ctx, flag = false,
         prevX = 0,
         currX = 0,
@@ -127,12 +30,6 @@
     var clickDrag = new Array();
     var paint;
 
-    function save() {
-        document.getElementById("canvasimg").style.border = "2px solid";
-        var dataURL = canvas.toDataURL();
-        document.getElementById("canvasimg").src = dataURL;
-        document.getElementById("canvasimg").style.display = "inline";
-    }
     function erase() {
         $("#ShorthandTrainingResult").text("");
         ctx.clearRect(0, 0, w, h);
