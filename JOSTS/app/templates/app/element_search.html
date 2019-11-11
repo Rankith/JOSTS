@@ -109,16 +109,18 @@
         
         var strValues = "";
         Event = $('.check-search-event:checkbox:checked').val();
-        $(".check-search:checkbox:checked").each(function (i) {
-            if ($(this).parent().is(":visible"))
-                strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
-            //console.log($(this).attr("data-search") + " : " + $(this).val());
-        });
-        $.get("/" + list_type + "_list/?" + strValues, function (data) {
-                 $("#divElementList").empty();
-            $("#divElementList").append(data);
-           $("#divElementCountDisplay").html(($("#divNumElements").html()));
-             });
+        if (list_type !== 'undefined') {
+            $(".check-search:checkbox:checked").each(function (i) {
+                if ($(this).parent().is(":visible"))
+                    strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+                //console.log($(this).attr("data-search") + " : " + $(this).val());
+            });
+            $.get("/" + list_type + "_list/?" + strValues, function (data) {
+                $("#divElementList").empty();
+                $("#divElementList").append(data);
+                $("#divElementCountDisplay").html(($("#divNumElements").html()));
+            });
+        }
         //$("#divElementList").empty();
         //$("#divElementList").load("/element_list/?" + strValues);
     }

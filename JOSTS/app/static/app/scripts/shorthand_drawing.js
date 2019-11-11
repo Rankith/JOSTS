@@ -249,7 +249,7 @@ function CheckImage() {
 
         },
         'beforeSend': function () {
-            CheckImageBefore();
+            CheckImageBefore(dataImage);
         },
         'error': function (data) {
             CheckImageError(data);

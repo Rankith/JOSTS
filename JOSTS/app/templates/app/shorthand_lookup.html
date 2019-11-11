@@ -2,7 +2,7 @@
 
 {% block content %}
 {% load staticfiles %}
-<div class="wrapper-sidebar">
+
     <div id="divSearchSidebar" style="overflow:auto">
         <div class="d-flex h-100">
             <div>
@@ -20,30 +20,58 @@
         </div>
         
     </div>
-    <div id="divContentParent" class="position-relative">
-    
-        <div id="divElement" style="">
+    <div id="divContentParent" class="position-relative d-flex flex-column justify-content-end">
+        <div class="row">
+            <div id="divElement" class="col">
 
-        </div>
-
-        <div class="text-white col text-center" id="divShorthandLookup">
-            <div style="width:200px;margin:auto">
-                <div class="h5">Draw Here</div>
-                <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
-                <canvas id="can" width="200" height="200"></canvas>
-                <img id="canvasimg" style="display:none;">
-                <table class="w-100" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td align="center" class="font-weight-bold"><a href="#" onclick="CheckImage(); return false;">Done</a></td>
-                        <td align="center" class="font-weight-bold"><a href="#" onclick="erase(); return false;">Clear</a></td>
-                    </tr>
-                </table>
-                <input type="checkbox" id="chkTrace" style="display:none" >
-                <input type="checkbox" id="chkSave" style="display:none" >
             </div>
         </div>
+        <div class="row">
+            <div class="col d-flex justify-content-center w-100" id="divShorthandPrevYou">
 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col d-flex justify-content-center w-100" id="divShorthandPrev">
+
+            </div>
+        </div>
+        <div class="row mt-auto">
+            <div class="text-base col text-center" id="divShorthandLookup">
+                <div style="width:200px;margin:auto">
+
+                    <div class="h5">Draw Here</div>
+                    <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
+                    <canvas id="can" width="200" height="200"></canvas>
+                    <img id="canvasimg" style="display:none;">
+                    <table class="w-100" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td align="center" class="font-weight-bold"><a href="#" onclick="CheckImage(); return false;">Done</a></td>
+                            <td align="center" class="font-weight-bold"><a href="#" onclick="erase(); return false;">Clear</a></td>
+                        </tr>
+                    </table>
+                    <input type="checkbox" id="chkTrace" style="display:none">
+                    <input type="checkbox" id="chkSave" style="display:none">
+                    <div class="col text-base">
+                        <table class="w-100">
+                            <tr>
+                                <td align="right">
+                                    <label id="lblAutoClear" class="switch">
+                                        <input type="checkbox" id="chkAutoClear">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+                                <td style="vertical-align:top" align="left">
+                                    <label for="chkAutoClear" style="margin-bottom:0 !important">Auto Clear</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'app/scripts/shorthand_drawing.js' %}"></script>
@@ -52,57 +80,89 @@
 </script>
 <script type="text/javascript">
     var type = '{{type}}';
+    var list_type='{{list_type}}';
     var Disc = "Womens";
-    var Event = "FX";
+    var OnDrawing = 1;
+    var SymbolLocation = "{% static 'app/images/wag/sym/'%}";
+    var SmallSymbolDim = 65;
+    var MaxFit = 5;
+    var SmallMode = true;
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
-              $('#sidebarCollapse').on('click', function () {
-                // open or close navbar
-                $('#divSearchSidebar').toggleClass('active');
-                // close dropdowns
-                $('.collapse.in').toggleClass('in');
-                // and also adjust aria-expanded attributes we use for the open/closed arrows
-                // in our CSS
-                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-              });
-             /* $("#divSearchSidebar").mCustomScrollbar({
-                  theme: "minimal",
-                 
-              });*/
+        $('#sidebarCollapse').on('click', function () {
+            // open or close navbar
+            $('#divSearchSidebar').toggleClass('active');
+            // close dropdowns
+            $('.collapse.in').toggleClass('in');
+            // and also adjust aria-expanded attributes we use for the open/closed arrows
+            // in our CSS
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+        /* $("#divSearchSidebar").mCustomScrollbar({
+                theme: "minimal",
 
-             $('#dismiss').on('click', function () {
-                // hide sidebar
-                $('#divSearchSidebar').removeClass('active');
-                // hide overlay
-               // $('.overlay').removeClass('active');
-             });
-             /*$.get("/" + search_type + "_search/", function (data) {
-                 $("#divSearchArea").empty();
-                 $("#divSearchArea").append(data);
-                 LoadLastSelections();
-             });*/
+            });*/
 
-            if ($(window).width() >= 1200)
+        $('#dismiss').on('click', function () {
+            // hide sidebar
+            $('#divSearchSidebar').removeClass('active');
+            // hide overlay
+            // $('.overlay').removeClass('active');
+        });
+        $.get("/shorthand_search/", function (data) {
+            $("#divSearchArea").empty();
+            $("#divSearchArea").append(data);
+            LoadLastSelections();
+        });
+
+        if ($(window).width() >= 1200) {
             $('#sidebarCollapse').click();
+        }
+
+          if ($(window).width() >= 750) {
+              SmallMode = false;
+        }
 
         DrawInit();
+        $("#divContentParent").css({ 'min-height': 'calc(100vh - ' + $(".navbar").height() + 'px - ' +  $(document.body).css("padding-top") + ' - ' + $(document.body).css("padding-bottom")});
+        MaxFit = Math.floor(($(window).width() - 60) / SmallSymbolDim);
 
-         });
-    function DisplayElement(idIn,eventIn)
-    {
+    });
+    function DisplayElement(idIn, eventIn) {
         //attach setting the list height to the element div finishing its animation
-        $("#divElement").load("/element_for_shorthand?id=" + idIn + '&event=' + eventIn,'');
+        $("#divElement").load("/element_for_shorthand?id=" + idIn + '&event=' + eventIn, '');
     }
+    function AddToList(result) {
+        var image = SymbolLocation + result + ".svg";
+        $("#divShorthandPrev").append('<div  id="divShorthandPrev' + OnDrawing + '" name="divShorthandPrev' + OnDrawing + '" style="display:inline-block;vertical-align:top;align:center"><img src="' + image + '" id="ShorthandPrev' + OnDrawing + '" name="ShorthandPrev' + OnDrawing + '" style="padding-right:5px;height:' + SmallSymbolDim + 'px;width:' + SmallSymbolDim + 'px;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;background-color:white"><br/><span  id="spanShorthandPrev' + OnDrawing + '" style="float:left;width:' + SmallSymbolDim + 'px;overflow:hidden;text-overflow: ellipsis"></span></div>');
+       
+        if (OnDrawing >= MaxFit - 1)
+            $("#divShorthandPrev" + (OnDrawing - MaxFit + 1)).remove();
+        OnDrawing++;
+        document.getElementById("divShorthandPrev").scrollLeft=document.getElementById("divShorthandPrev").scrollWidth;
 
+    }
+    function AddToListYou(image) {
+        $('#divShorthandPrevYou').append('<div  id="divShorthandPrevYou' + OnDrawing + '" name="divShorthandPrevYou' + OnDrawing + '" style="display:inline-block;vertical-align:top;align:center"><img src="' + image + '" id="ShorthandPrevYou' + OnDrawing + '" name="ShorthandPrevYou' + OnDrawing + '" style="padding-right:5px;height:' + SmallSymbolDim + 'px;width:' + SmallSymbolDim + 'px;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;background-color:white"></div>');
+        if (OnDrawing >= MaxFit - 1)
+            $("#divShorthandPrevYou" + (OnDrawing - MaxFit + 1)).remove();
+
+        document.getElementById("divShorthandPrevYou").scrollLeft=document.getElementById("divShorthandPrevYou").scrollWidth;
+    }
     function SetResult(result) {
         DisplayElement(result.replace(Event.toLowerCase(), ""), Event);
+        if ($("#chkAutoClear").prop("checked"))
+            erase();
+        if (!SmallMode)
+            AddToList(result);
     }
     function CheckImageError(result) {
 
     }
-    function CheckImageBefore() {
-
+    function CheckImageBefore(image) {
+        if (!SmallMode)
+            AddToListYou(image);
     }
 
 </script>

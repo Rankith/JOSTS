@@ -241,7 +241,7 @@ def shorthand_lookup(request):
     context = {
         'type':'element',
         'search_type':'element',
-        'list_type':'element',
+        'list_type':'shorthand',
         }
     return render(request, 'app/shorthand_lookup.html',context=context)
 
@@ -253,3 +253,25 @@ def element_for_shorthand(request):
         'lang_elements': element[0],
         }
     return render(request, 'app/element_for_shorthand.html',context=context)
+
+def shorthand_search(request):
+    vals ={}
+    groups = {}
+    ranges = {}
+    groupDict = {}
+    valueDict = {}
+    #vvals = Element.objects.filter(event="V").filter(value__gte=7.0).filter(value__lt=8.0).update(range=7)
+    #vvals = Element.objects.filter(event="V").filter(value__gte=8.0).filter(value__lt=9.0).update(range=8)
+    #vvals = Element.objects.filter(event="V").filter(value__gte=9.0).filter(value__lt=10.0).update(range=9)
+    #vvals = Element.objects.filter(event="V").filter(value__gte=10).update(range=10)
+
+    context = {
+        'vals':vals,
+        'groups': groups,
+        'groupsEvents': groupDict,
+        'valueEvents': valueDict,
+        'events': ['FX','BB','UB','V'],
+        'ranges': ranges,
+        'type':'element',
+        }
+    return render(request, 'app/element_search.html',context=context)
