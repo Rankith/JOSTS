@@ -195,7 +195,7 @@ def rule_list(request):
 
 #shorthand
 def shorthand_training(request):
-    DrawnImage.objects.filter(label__contains='bb').update(event='bb')
+    #DrawnImage.objects.filter(label__contains='bb').update(event='bb')
     context = {
         'type':'shorthand_trainer',
         'search_type':'element',
