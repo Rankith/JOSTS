@@ -75,6 +75,7 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
+    var Event = "";
     function SearchChangeEvent(el) {
         
         if (!el.checked)
@@ -87,6 +88,7 @@
             });
             ShowHideSearches();
             CreateSearchParams();
+            //Event = $(el).val();
         }
     }
 
@@ -106,6 +108,7 @@
     function CreateSearchParams() {
         
         var strValues = "";
+        Event = $('.check-search-event:checkbox:checked').val();
         $(".check-search:checkbox:checked").each(function (i) {
             if ($(this).parent().is(":visible"))
                 strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
