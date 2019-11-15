@@ -184,7 +184,16 @@ input:checked + .red-button {
 }
 
 .text-detail-bottom {
-    color: #fff
+    color: #fff;
+}
+
+.text-on-image {
+    color: #fff;
+}
+
+.additional-info {
+    background-color: yellow;
+    color: black;
 }
 
 .selected-list-item {
