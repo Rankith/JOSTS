@@ -8,7 +8,7 @@
                     </ul>
                     </div>
                 {% endif %}
-                <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}">
+                <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
                     {{rule.rule.section}} - {{rule.chapter_text}}
                 </div>
                     <div id="detail-{{forloop.counter}}" class="collapse show">

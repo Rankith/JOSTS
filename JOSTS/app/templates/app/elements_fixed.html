@@ -75,7 +75,18 @@
             if ($(window).width() >= 1200)
                 $('#sidebarCollapse').click();
 
-         });
+        $('#divSearchSidebar').on("swiperight", ToggleSearch);
+        $('#divSearchSidebar').on("swipeleft", ToggleSearch);
+
+
+       
+
+    });
+
+    function ToggleSearch() {
+        console.log("Swipe")
+        $('#sidebarCollapse').click();
+    }
     function CloseElement() {
        
         $("#divElement").collapse("hide");
