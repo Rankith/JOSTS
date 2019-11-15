@@ -71,7 +71,6 @@ input[type="checkbox"].input-validation-error {
     position: absolute;
     bottom: 1px;
     right: 0px;
-    background-color: rgb(132, 120, 120);
     opacity:0.8;
     /*border-bottom-left-radius: 0.25rem;*/
     z-index: 101;
@@ -81,8 +80,6 @@ input[type="checkbox"].input-validation-error {
     bottom: 1px;
     left: 0px;
     max-width: 40%;
-    background-color: yellow;
-    color: black;
     /*border-bottom-left-radius: 0.25rem;*/
     font-size:0.8rem;
     padding-left:0.2rem;

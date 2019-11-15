@@ -71,7 +71,6 @@ input[type="checkbox"].input-validation-error {
     position: absolute;
     bottom: 1px;
     right: 0px;
-    background-color: rgb(132, 120, 120);
     opacity:0.8;
     /*border-bottom-left-radius: 0.25rem;*/
     z-index: 101;
