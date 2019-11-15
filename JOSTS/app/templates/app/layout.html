@@ -35,6 +35,20 @@
     <div id="divMain" class="container body-content content-area-background h-100" >
 {% block content %}{% endblock %}
     </div>
+    <div class="modal fade" id="modalMain" tabindex="-1" role="dialog" aria-labelledby="modalMainTitle" aria-hidden="true">
+  <div class="modal-dialog mw-100 w-75" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalMainTitle">Lookup By Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalMainBody">
+      </div>
+    </div>
+  </div>
+</div>
 
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>

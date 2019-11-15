@@ -243,4 +243,8 @@ input:checked + .slider:before {
 .list-group-item {
     padding: 0.55rem 1rem;
 }
+.shorthand-box {
+    border: 1px solid black;
+    background-color: #fef8f4;
+}
 

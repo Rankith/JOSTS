@@ -183,3 +183,37 @@ input:checked + .red-button {
 .selected-list-item {
     background-color: #1e1e3a
 }
+
+.btn-main {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+    .btn-main:hover {
+        color: #fff;
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+
+    .btn-main:focus, .btn-main.focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-main.disabled, .btn-main:disabled {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-main:not(:disabled):not(.disabled):active, .btn-main:not(:disabled):not(.disabled).active,
+    .show > .btn-main.dropdown-toggle {
+        color: #fff;
+        background-color: #0062cc;
+        border-color: #005cbf;
+    }
+
+        .btn-main:not(:disabled):not(.disabled):active:focus, .btn-main:not(:disabled):not(.disabled).active:focus,
+        .show > .btn-main.dropdown-toggle:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+        }

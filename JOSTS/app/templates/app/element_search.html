@@ -70,6 +70,14 @@
     </div>
 </div>
 
+{% if type == 'shorthand' %}
+<div class="row no-gutters">
+    <div class="pb-2">
+        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="LoadLookup()"><h4>Find</h4></button>
+    </div>
+</div>
+{% endif %}
+
 <div id="divElementCountDisplay" style="padding-bottom:60px"></div>
 
 {% endblock %}
@@ -90,6 +98,13 @@
             CreateSearchParams();
             //Event = $(el).val();
         }
+    }
+
+    function LoadLookup() {
+          $("#modalMainBody").empty();
+         $.get("/element_lookup/?event=" + Event, function (data) {
+                $("#modalMainBody").append(data);
+            });
     }
 
     function ShowHideSearches() {

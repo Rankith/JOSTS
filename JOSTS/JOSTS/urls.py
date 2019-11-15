@@ -44,4 +44,5 @@ urlpatterns = [
     path('shorthand_lookup/', views.shorthand_lookup, name='shorthand_lookup'),
     path('shorthand_search/', views.shorthand_search, name='shorthand_search'),
     path('element_for_shorthand/', views.element_for_shorthand, name='element_for_shorthand'),
+    path('element_lookup/', views.element_lookup, name='element_lookup'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,61 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div>
+    <div class="row no-gutters justify-content-center">
+        {% for group in groups %}
+        <div class="pr-2">
+            <label id="lblG{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkG{{forloop.counter}}" value="{{group.str_grp}}" class="check-search lookup-group" onchange="LookupChange(this)">
+                <div class="search-button group-button"><div>{{group.str_grp}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% for element in elements %}
+    {% ifchanged element.str_grp %}
+    {% if not forloop.first %}
+        </div>
+</div>
+        </div>
+    {% endif %}
+    <div id="divShorthandGroup{{element.str_grp}}" style="display:none" class="row lookup-group-display">
+    {% endifchanged %}
+    {% ifchanged element.letter_value %}
+    {% ifchanged element.str_grp %}
+    {% else %}
+    </div></div>
+        {% endifchanged %}
+        <div id="divShorthandGroup{{element.str_grp}}Value{{element.letter_value}}" class="col-md-4 col-sm-6 col-12 text-center">
+            <h4 style="border-bottom:1px solid black">{{element.letter_value}}</h4>
+            <div class="row pr-2 pl-2 justify-content-center">
+        {% endifchanged %}
+    
+        <div id="divShorthand{{element.id}}" class="col-4 shorthand-box d-flex justify-content-center" style="cursor:pointer" onclick="ShorthandClick('{{element.image_url}}')">
+            <img class="img-fluid detail-sym" src="{% static 'app/images/wag/sym/'%}{{ element.image_url}}.svg" style="min-height:40px"/>
+        </div>
+    
+    
+    {% endfor %}
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+      function LookupChange(el) {
+        
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+           
+            $('.lookup-group').not(el).prop('checked', false);
+            $('.lookup-group-display').hide();
+            $("#divShorthandGroup" + $(el).val()).show();
+            //Event = $(el).val();
+        }
+        }
+    function ShorthandClick(sh) {
+        SetResult(sh.toLowerCase(), Event);
+        $("#modalMain").modal("hide")
+    }
+</script>
+{% endblock %}

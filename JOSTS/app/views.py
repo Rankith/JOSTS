@@ -105,7 +105,6 @@ def element_search(request):
     #vvals = Element.objects.filter(event="V").filter(value__gte=8.0).filter(value__lt=9.0).update(range=8)
     #vvals = Element.objects.filter(event="V").filter(value__gte=9.0).filter(value__lt=10.0).update(range=9)
     #vvals = Element.objects.filter(event="V").filter(value__gte=10).update(range=10)
-    Element.objects.filter(event="V").update(letter_value='')
     for group in groups:
         groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
         groupDict[group['str_grp']] = groupEvents
@@ -272,6 +271,22 @@ def shorthand_search(request):
         'valueEvents': valueDict,
         'events': ['FX','BB','UB','V'],
         'ranges': ranges,
-        'type':'element',
+        'type':'shorthand',
         }
     return render(request, 'app/element_search.html',context=context)
+
+def element_lookup(request):
+    eventIn = request.GET.get('event')
+    if (eventIn == "V"):
+        vals = Element.objects.order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
+    else:
+        vals = Element.objects.filter(event=eventIn).order_by('letter_value').values('letter_value').distinct()   
+    groups = Element.objects.filter(event=eventIn).order_by('str_grp').values('str_grp').distinct()
+    elements = Element.objects.filter(event=eventIn).order_by('str_grp','letter_value','code_order')
+    context = {
+        'vals':vals,
+        'groups': groups,
+        'elements': elements,
+        'event':eventIn,
+        }
+    return render(request, 'app/element_lookup.html',context=context)
