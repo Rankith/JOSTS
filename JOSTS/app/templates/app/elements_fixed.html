@@ -75,17 +75,24 @@
             if ($(window).width() >= 1200)
                 $('#sidebarCollapse').click();
 
-        $('#divSearchSidebar').on("swiperight", ToggleSearch);
-        $('#divSearchSidebar').on("swipeleft", ToggleSearch);
+        $('#divSearchSidebar').on("swiperight", ToggleSearchOut);
+        $('#divSearchSidebar').on("swipeleft", ToggleSearchIn);
 
 
        
 
     });
 
-    function ToggleSearch() {
-        console.log("Swipe")
-        $('#sidebarCollapse').click();
+    function ToggleSearchOut() {
+        if ($("#divSearchSidebar").hasClass("active"))
+        {
+        }
+        else
+            $('#sidebarCollapse').click();
+    }
+    function ToggleSearchIn() {
+        if ($("#divSearchSidebar").hasClass("active"))
+            $('#sidebarCollapse').click();
     }
     function CloseElement() {
        
