@@ -71,6 +71,8 @@ class RuleText(models.Model):
     additional_info = models.CharField(max_length=400,blank=True,default='')
     rule_description = models.CharField(max_length=400,blank=True,default='')
     specific_deduction = models.CharField(max_length=400,blank=True,default='')
+    chapter_text = models.CharField(max_length=255,blank=True,default='')
+    section_text = models.CharField(max_length=255,blank=True,default='')
     cat0 = models.CharField(max_length=30,blank=True,default='')
     cat1 = models.CharField(max_length=30,blank=True,default='')
     cat2 = models.CharField(max_length=30,blank=True,default='')
