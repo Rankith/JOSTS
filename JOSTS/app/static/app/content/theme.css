@@ -157,10 +157,17 @@ input:checked + .red-button {
 
 .rules-section-header {
     background-color: #343a40 !important;
+    color:#fff;
+}
+
+.rules-subsection-header {
+    background-color: #4c5158 !important;
+    color: #fff;
 }
 
 .rules-cue {
     background-color: #6c757d !important;
+    color: #fff;
 }
 
 .rules-response {

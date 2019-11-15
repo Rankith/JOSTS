@@ -5,14 +5,30 @@
             {% ifchanged rule.rule.section %}
                 {% if not forloop.first %}
                     </ul>
+                    </ul>
                     </div>
                 {% endif %}
                 <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}">
-                    {{rule.rule.section}}
+                    {{rule.rule.section}} - {{rule.chapter_text}}
                 </div>
                     <div id="detail-{{forloop.counter}}" class="collapse show">
                         <ul class="list-group">
                 {% endifchanged %}
+                             {% ifchanged rule.section_text %}
+                          
+                                {% ifchanged rule.rule.section %}
+                                {% else %}
+                                </ul>
+                                </div>
+                                {% endifchanged %}
+                                <li class="list-group-item rules-subsection-header" style="cursor:pointer" >
+                                    <div class=" h4" data-toggle="collapse" data-target="#detail-inner-{{forloop.counter}}">
+                                        Section {{rule.rule.rule_no}} - {{rule.section_text}}
+                                    </div>
+                                </li>
+                             <div id="detail-inner-{{forloop.counter}}" class="collapse show">
+                                <ul class="list-group">
+                            {% endifchanged %}
                              <li class="list-group-item rules-cue" style="cursor:pointer" >
                                  <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
                                      <pre>{{rule.cue}}</pre>
@@ -29,7 +45,7 @@
                                     </div>
                                     <div class="row no-gutters">
                                         <div class="col rule-section">
-                                            {{rule.rule.section}} Section {{rule.rule.rule_no}} {{rule.rule.sub_rule}}
+                                            {{rule.rule.sub_rule}}
                                         </div>
                                         
                                         
