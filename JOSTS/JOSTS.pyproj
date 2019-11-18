@@ -2471,6 +2471,7 @@
     <Content Include="app\static\app\images\wag\sym\ub850807.svg" />
     <Content Include="app\static\app\images\wag\UB_White.svg" />
     <Content Include="app\static\app\images\wag\V_White.svg" />
+    <Content Include="app\static\app\scripts\jquery.mobile-1.4.5.min.js" />
     <Content Include="app\static\app\scripts\shorthand_drawing.js" />
     <Content Include="app\templates\app\element_for_shorthand.html" />
     <Content Include="app\templates\app\element_lookup.html" />
