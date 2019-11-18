@@ -1,31 +1,96 @@
 ﻿
 {% load staticfiles %} 
-{% for element in lang_elements %}
-    {% if forloop.first %}<div class="row">{% endif %}
-    <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
-        <div class="row">
-            <div class="col">
-                <div style="height:150px" class="image-background rounded" id="div{{element.id}}">
-                    <div class="row h-100 justify-content-center align-items-center text-center">
-                        <div class="col-12 position-relative">
-                            <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
-                        </div>
-                        <div class="col-12 pb-1 " style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
-                            {{element.short_text}}
+{% if display == "image" %}
+    {% for element in lang_elements %}
+        {% if forloop.first %}<div class="row">{% endif %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
+            <div class="row">
+                <div class="col">
+                    <div style="height:150px" class="image-background rounded" id="div{{element.id}}">
+                        <div class="row h-100 justify-content-center align-items-center text-center">
+                            <div class="col-12 position-relative">
+                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                            </div>
+                            <div class="col-12 pb-1 " style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
+                                {{element.short_text}}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col"><div class="text-center">{{element.id_number_text}}</div></div>
+                <div class="col text-right"><div class="text-center">{% if element.element.letter_value == ''%}
+                                                                        {{element.element.value}}
+                                                                      {% else %}
+                                                                         {{element.element.letter_value}} = {{element.element.value}}
+                                                                       {% endif %}</div></div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col"><div class="text-center">{{element.id_number_text}}</div></div>
-            <div class="col text-right"><div class="text-center">{% if element.element.letter_value == ''%}
-                                                                    {{element.element.value}}
-                                                                  {% else %}
-                                                                     {{element.element.letter_value}} = {{element.element.value}}
-                                                                   {% endif %}</div></div>
+        {% if forloop.last %}</div>{% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if display == "shorthand" %}
+    {% for element in lang_elements %}
+        {% if forloop.first %}<div class="row">{% endif %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
+            <div class="row">
+                <div class="col">
+                    <div style="height:150px" class="image-background rounded" id="div{{element.id}}">
+                        <div class="row h-100 justify-content-center align-items-center text-center">
+                            <div class="col-12 position-relative">
+                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                            </div>
+                            <div class="col-12 pb-1 " style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
+                                {{element.short_text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><div class="text-center">{{element.id_number_text}}</div></div>
+                <div class="col text-right"><div class="text-center">{% if element.element.letter_value == ''%}
+                                                                        {{element.element.value}}
+                                                                      {% else %}
+                                                                         {{element.element.letter_value}} = {{element.element.value}}
+                                                                       {% endif %}</div></div>
+            </div>
         </div>
-    </div>
-    {% if forloop.last %}</div>{% endif %}
-{% endfor %}
+        {% if forloop.last %}</div>{% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if display == "text" %}
+    {% for element in lang_elements %}
+        {% if forloop.first %}<div class="row">{% endif %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
+            <div class="row">
+                <div class="col">
+                    <div style="height:150px" class="image-background rounded" id="div{{element.id}}">
+                        <div class="row h-100 justify-content-center align-items-center text-center">
+                            <div class="col-12 position-relative">
+                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                            </div>
+                            <div class="col-12 pb-1 " style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
+                                {{element.short_text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><div class="text-center">{{element.id_number_text}}</div></div>
+                <div class="col text-right"><div class="text-center">{% if element.element.letter_value == ''%}
+                                                                        {{element.element.value}}
+                                                                      {% else %}
+                                                                         {{element.element.letter_value}} = {{element.element.value}}
+                                                                       {% endif %}</div></div>
+            </div>
+        </div>
+        {% if forloop.last %}</div>{% endif %}
+    {% endfor %}
+{% endif %}
+
 <div id="divNumElements" style="display:none">{{num_elements}}</div>

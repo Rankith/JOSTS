@@ -124,6 +124,8 @@ def element_search(request):
 
 def element_list(request):
     dget = dict(request.GET)
+    display = dget['display'][0]
+    del dget['display']
     query = Q(language="EN")
     for k,v in dget.items():
         innerQuery = Q()
@@ -136,6 +138,7 @@ def element_list(request):
     context = {
         'lang_elements': elements,
         'num_elements': str(len(elements)) + " Elements",
+        'display': display,
         }
     return render(request, 'app/element_list.html',context=context)
 

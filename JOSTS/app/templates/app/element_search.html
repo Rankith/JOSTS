@@ -78,6 +78,31 @@
 </div>
 {% endif %}
 
+{% if type == 'element' %}
+<div class="row no-gutters">
+    <div class="pr-2">
+        <label id="lblDisplayImage" class="search-button">
+            <input type="checkbox" id="chkDisplayImage" class="check-search-display" value="Image" onchange="DisplayChange(this)">
+            <div class="search-button event-button"><div style="text-transform:uppercase">I</div></div>
+        </label>
+    </div>
+
+    <div class="pr-2">
+        <label id="lblDisplayShorthand" class="search-button">
+            <input type="checkbox" id="chkDisplayShorthand" class="check-search-display" value="Shorthand" onchange="DisplayChange(this)">
+            <div class="search-button event-button"><div style="text-transform:uppercase">S</div></div>
+        </label>
+    </div>
+
+    <div class="pr-2">
+        <label id="lblDisplayText" class="search-button">
+            <input type="checkbox" id="chkDisplayText" class="check-search-display" value="Image" onchange="DisplayChange(this)">
+            <div class="search-button event-button"><div style="text-transform:uppercase">T</div></div>
+        </label>
+    </div>
+</div>
+{% endif %}
+
 <div id="divElementCountDisplay" style="padding-bottom:60px"></div>
 
 {% endblock %}
@@ -107,6 +132,20 @@
             });
     }
 
+    function DisplayChange(el) {
+         if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-display').not(el).prop('checked', false);
+            $('.check-search-display').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            CreateSearchParams();
+            //Event = $(el).val();
+        }
+    }
+
     function ShowHideSearches() {
         ev = $('.check-search-event:checked').val();
         $('.check-search').not('.check-search-event').not('.search-' + ev).parent().hide();
@@ -130,6 +169,9 @@
                     strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
                 //console.log($(this).attr("data-search") + " : " + $(this).val());
             });
+            if (type == "element") {
+                strValues = "display=" + $('.check-search-display:checked').val() + "&";
+            }
             $.get("/" + list_type + "_list/?" + strValues, function (data) {
                 $("#divElementList").empty();
                 $("#divElementList").append(data);
@@ -154,6 +196,18 @@
             else
                 $(this).prop('checked', false);
         });
+        if (type == "element") {
+             $(".check-search-display:checkbox").each(function (i) {
+                if (localStorage.getItem(this.id) == "1")
+                    $(this).prop('checked', true);
+                else
+                    $(this).prop('checked', false);
+             });
+            if ($('.check-search-display:checked').val() == undefined) {
+                $("#chkDisplayImage").prop('checked', true);
+                 localStorage.setItem('chkDisplayImage', 1);
+            }
+        }
         if ($(".check-search-event:checkbox:checked").length == 0)
             $(".check-search:checkbox")[0].click();
         else {
