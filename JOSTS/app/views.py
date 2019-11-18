@@ -13,6 +13,7 @@ import re
 from binascii import a2b_base64
 from django.http import HttpResponse
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     """Renders the home page."""
@@ -52,7 +53,7 @@ def about(request):
         }
     )
 
-
+@login_required(login_url='/login/')
 def elements(request):
     #elements = ElementText.objects.filter(language="EN")
     #vals = Element.objects.order_by('letter_value').values('letter_value').distinct()

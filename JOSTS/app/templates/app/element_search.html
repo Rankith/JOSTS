@@ -110,7 +110,7 @@
 <script type="text/javascript">
     var Event = "";
     function SearchChangeEvent(el) {
-        console.log("SCE");
+        //console.log("SCE");
         if (!el.checked)
             $(el).prop('checked', true);
         else {
@@ -133,7 +133,7 @@
     }
 
     function DisplayChange(el) {
-        console.log("DC");
+        //console.log("DC");
          if (!el.checked)
             $(el).prop('checked', true);
         else {
@@ -157,12 +157,12 @@
         
     }
     function SearchChange(el) {
-        console.log("SC");
+        //console.log("SC");
         localStorage.setItem(el.id, el.checked ? 1 : 0);
         CreateSearchParams();
     }
     function CreateSearchParams() {
-        console.log("CSP");
+        //console.log("CSP");
         var strValues = "";
         Event = $('.check-search-event:checkbox:checked').val();
         if (list_type !== 'undefined') {
@@ -193,8 +193,8 @@
         CreateSearchParams();
         }
     function LoadLastSelections() {
-        console.log("LLS");
-        console.log(localStorage);
+        //console.log("LLS");
+        //console.log(localStorage);
         $(".check-search:checkbox").each(function (i) {
             if (localStorage.getItem(this.id) == "1")
                 $(this).prop('checked', true);

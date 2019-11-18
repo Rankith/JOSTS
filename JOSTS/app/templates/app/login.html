@@ -1,14 +1,39 @@
-{% extends "app/layout.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JRSTS</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/theme.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <script src="https://kit.fontawesome.com/36c6b5f765.js" crossorigin="anonymous"></script>
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+</head>
 
-{% block content %}
+<body class="content-area-background" style="overflow-y:scroll">
 
-<h2>{{ title }}</h2>
+<div class="navbar navbar-dark nav-background fixed-top navbar-expand-md">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a href="/" class="navbar-brand">JRSTS</a>
+            </div>
+                {% include 'app/loginpartial.html' %}
+        </div>
+    </div>
+    <div id="divMain" class="container body-content content-area-background h-100" >
+<h2 class="text-base">{{ title }}</h2>
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8 text-base">
         <section id="loginForm">
             <form action="." method="post" class="form-horizontal">
                 {% csrf_token %}
-                <h4>Use a local account to log in.</h4>
+                <h4>Login to your JRSTS account</h4>
                 <hr />
                 <div class="form-group">
                     <label for="id_username" class="col-md-2 control-label">User name</label>
@@ -28,6 +53,7 @@
                         <input type="submit" value="Log in" class="btn btn-default" />
                     </div>
                 </div>
+               
                 {% if form.errors %}
                 <p class="validation-summary-errors">Please enter a correct user name and password.</p>
                 {% endif %}
@@ -38,13 +64,19 @@
         <section id="socialLoginForm"></section>
     </div>
 </div>
-
-{% endblock %}
-
-
-{% block scripts %}
-
+        </div>
+    
     {% load staticfiles %}
+    
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+    
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript">$(document).bind("mobileinit", function(){$.extend(  $.mobile , {autoInitializePage: false})});</script>
+    <script src="{% static 'app/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
 <script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+    </body>
+</html>
 
-{% endblock %}
+
