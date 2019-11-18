@@ -1,6 +1,6 @@
 ﻿
 {% load staticfiles %} 
-{% if display == "image" %}
+{% if display == "Image" %}
     {% for element in lang_elements %}
         {% if forloop.first %}<div class="row">{% endif %}
         <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
@@ -31,7 +31,7 @@
     {% endfor %}
 {% endif %}
 
-{% if display == "shorthand" %}
+{% if display == "Shorthand" %}
     {% for element in lang_elements %}
         {% if forloop.first %}<div class="row">{% endif %}
         <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
@@ -40,7 +40,7 @@
                     <div style="height:150px" class="image-background rounded" id="div{{element.id}}">
                         <div class="row h-100 justify-content-center align-items-center text-center">
                             <div class="col-12 position-relative">
-                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                                <img class="img-fluid" src="{% static 'app/images/wag/sym/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
                             </div>
                             <div class="col-12 pb-1 " style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
                                 {{element.short_text}}
@@ -62,34 +62,37 @@
     {% endfor %}
 {% endif %}
 
-{% if display == "text" %}
+{% if display == "Text" %}
+<div class="card rules-subsection-header">
     {% for element in lang_elements %}
-        {% if forloop.first %}<div class="row">{% endif %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
-            <div class="row">
-                <div class="col">
-                    <div style="height:150px" class="image-background rounded" id="div{{element.id}}">
-                        <div class="row h-100 justify-content-center align-items-center text-center">
-                            <div class="col-12 position-relative">
-                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
-                            </div>
-                            <div class="col-12 pb-1 " style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
-                                {{element.short_text}}
-                            </div>
-                        </div>
-                    </div>
+        {% ifchanged element.element.str_grp %}
+            {% if not forloop.first %}
+                </ul>
                 </div>
+            {% endif %}
+            <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
+                Group {{element.element.str_grp}}
             </div>
-            <div class="row">
-                <div class="col"><div class="text-center">{{element.id_number_text}}</div></div>
-                <div class="col text-right"><div class="text-center">{% if element.element.letter_value == ''%}
+                <div id="detail-{{forloop.counter}}" class="collapse show">
+                    <ul class="list-group">
+        {% endifchanged %}
+                    <li class="list-group-item rules-cue" id="div{{element.id}}" style="cursor:pointer" onclick="ElementClick({{element.id}})" >
+                <div>
+                     {{element.text}}
+                </div> 
+                <div class="row no-gutters">
+                                        <div class="col rule-section">
+                                           <strong class="pr-4">{{element.id_number_text}}</strong> <strong>{% if element.element.letter_value == ''%}
                                                                         {{element.element.value}}
                                                                       {% else %}
                                                                          {{element.element.letter_value}} = {{element.element.value}}
-                                                                       {% endif %}</div></div>
-            </div>
-        </div>
-        {% if forloop.last %}</div>{% endif %}
+                                                                       {% endif %}</strong>
+                                        </div>
+                                        
+                                        
+                                    </div>
+            </li>
+        {% if forloop.last %}</ul></div></div>{% endif %}
     {% endfor %}
 {% endif %}
 

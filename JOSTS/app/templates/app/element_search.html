@@ -83,21 +83,21 @@
     <div class="pr-2">
         <label id="lblDisplayImage" class="search-button">
             <input type="checkbox" id="chkDisplayImage" class="check-search-display" value="Image" onchange="DisplayChange(this)">
-            <div class="search-button event-button"><div style="text-transform:uppercase">I</div></div>
+            <div class="search-button display-button"><div style="text-transform:uppercase">Im</div></div>
         </label>
     </div>
 
     <div class="pr-2">
         <label id="lblDisplayShorthand" class="search-button">
             <input type="checkbox" id="chkDisplayShorthand" class="check-search-display" value="Shorthand" onchange="DisplayChange(this)">
-            <div class="search-button event-button"><div style="text-transform:uppercase">S</div></div>
+            <div class="search-button display-button"><div style="text-transform:uppercase">Sy</div></div>
         </label>
     </div>
 
     <div class="pr-2">
         <label id="lblDisplayText" class="search-button">
-            <input type="checkbox" id="chkDisplayText" class="check-search-display" value="Image" onchange="DisplayChange(this)">
-            <div class="search-button event-button"><div style="text-transform:uppercase">T</div></div>
+            <input type="checkbox" id="chkDisplayText" class="check-search-display" value="Text" onchange="DisplayChange(this)">
+            <div class="search-button display-button"><div style="text-transform:uppercase">Tx</div></div>
         </label>
     </div>
 </div>
@@ -110,7 +110,7 @@
 <script type="text/javascript">
     var Event = "";
     function SearchChangeEvent(el) {
-        
+        console.log("SCE");
         if (!el.checked)
             $(el).prop('checked', true);
         else {
@@ -133,6 +133,7 @@
     }
 
     function DisplayChange(el) {
+        console.log("DC");
          if (!el.checked)
             $(el).prop('checked', true);
         else {
@@ -156,11 +157,12 @@
         
     }
     function SearchChange(el) {
+        console.log("SC");
         localStorage.setItem(el.id, el.checked ? 1 : 0);
         CreateSearchParams();
     }
     function CreateSearchParams() {
-        
+        console.log("CSP");
         var strValues = "";
         Event = $('.check-search-event:checkbox:checked').val();
         if (list_type !== 'undefined') {
@@ -170,12 +172,13 @@
                 //console.log($(this).attr("data-search") + " : " + $(this).val());
             });
             if (type == "element") {
-                strValues = "display=" + $('.check-search-display:checked').val() + "&";
+                strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
             }
             $.get("/" + list_type + "_list/?" + strValues, function (data) {
                 $("#divElementList").empty();
                 $("#divElementList").append(data);
                 $("#divElementCountDisplay").html(($("#divNumElements").html()));
+                $("#div" + SelectedElement).click();
             });
         }
         //$("#divElementList").empty();
@@ -190,6 +193,8 @@
         CreateSearchParams();
         }
     function LoadLastSelections() {
+        console.log("LLS");
+        console.log(localStorage);
         $(".check-search:checkbox").each(function (i) {
             if (localStorage.getItem(this.id) == "1")
                 $(this).prop('checked', true);

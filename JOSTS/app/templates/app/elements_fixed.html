@@ -26,7 +26,7 @@
 
         </div>
 
-        <div class="text-base col" id="divElementList" style="min-height:100%">
+        <div class="text-base col pr-0 pl-0" id="divElementList" style="min-height:100%">
              
         </div>
 
@@ -40,6 +40,7 @@
     var type = '{{type}}';
     var search_type = '{{search_type}}';
     var list_type = '{{list_type}}';
+    var SelectedElement = "";
     </script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -75,8 +76,8 @@
             if ($(window).width() >= 1200)
                 $('#sidebarCollapse').click();
 
-        //$('#divSearchSidebar').on("swiperight", ToggleSearchOut);
-        //$('#divSearchSidebar').on("swipeleft", ToggleSearchIn);
+        $('#divSearchSidebar').on("swiperight", ToggleSearchOut);
+        $('#divSearchSidebar').on("swipeleft", ToggleSearchIn);
 
 
        
@@ -102,14 +103,21 @@
         //SetListHeight();
     }
     function RemoveSelected() {
-        $(".selected-list-item").addClass("image-background").removeClass("selected-list-item");
+         if ($('.check-search-display:checked').val() == "Text")
+             $(".selected-list-item").addClass("rules-cue").removeClass("selected-list-item");
+        else
+             $(".selected-list-item").addClass("image-background").removeClass("selected-list-item");
     }
     function ElementClick(idIn)
     {
-        console.log(idIn);
+        //console.log(idIn);
         //attach setting the list height to the element div finishing its animation
+        SelectedElement = idIn;
         RemoveSelected();
-        $("#div" + idIn).removeClass("image-background").addClass("selected-list-item");
+        if ($('.check-search-display:checked').val() == "Text")
+            $("#div" + idIn).removeClass("rules-cue").addClass("selected-list-item");
+        else
+            $("#div" + idIn).removeClass("image-background").addClass("selected-list-item");
         $('#divElement').on('hidden.bs.collapse', function () {
              $("#divElement").empty();
             SetPadding();
