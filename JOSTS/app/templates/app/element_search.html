@@ -78,7 +78,7 @@
 </div>
 {% endif %}
 
-{% if type == 'element' %}
+{% if type == 'element' or type == 'shorthand_trainer' %}
 <div class="row no-gutters">
     <div class="pr-2">
         <label id="lblDisplayImage" class="search-button">
@@ -171,7 +171,7 @@
                     strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
                 //console.log($(this).attr("data-search") + " : " + $(this).val());
             });
-            if (type == "element") {
+            if (type == "element" || type == "shorthand_trainer") {
                 strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
             }
             $.get("/" + list_type + "_list/?" + strValues, function (data) {
@@ -201,7 +201,7 @@
             else
                 $(this).prop('checked', false);
         });
-        if (type == "element") {
+        if (type == "element" || type == "shorthand_trainer") {
              $(".check-search-display:checkbox").each(function (i) {
                 if (localStorage.getItem(this.id) == "1")
                     $(this).prop('checked', true);
