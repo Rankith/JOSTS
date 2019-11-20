@@ -201,9 +201,9 @@ def rule_list(request):
 @login_required(login_url='/login/')
 def shorthand_training(request):
     #DrawnImage.objects.filter(label__contains='bb').update(event='bb')
-    dupes = SymbolDuplicate.objects.all()
-    for dupe in dupes:
-        DrawnImage.objects.filter(label=dupe.symbol).update(label=dupe.replace_with)
+    #dupes = SymbolDuplicate.objects.all()
+    #for dupe in dupes:
+        #DrawnImage.objects.filter(label=dupe.symbol).update(label=dupe.replace_with)
     Element.objects.filter(event="V").filter(value__gte=7.0).filter(value__lt=8.0).update(range=7)
     context = {
         'type':'shorthand_trainer',

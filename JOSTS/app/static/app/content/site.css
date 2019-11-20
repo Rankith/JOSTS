@@ -245,3 +245,48 @@ input:checked + .slider:before {
     background-color: #fef8f4;
 }
 
+.RedSignupButton {
+    background-color: #c83737; /* Green */
+    border: solid 2px #8a1717;
+    color: white !important;
+    padding: 1vw 1vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.5vw;
+    border-radius: 24px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c83737', endColorstr='#752929'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#c83737), to(#752929)); /* for webkit browsers */
+    background: -moz-linear-gradient(top, #c83737, #752929); /* for firefox 3.6+ */
+}
+
+a.RedSignupButton:hover, a.RedSignupButton:active {
+    box-shadow: 4px 4px 10px 4px grey;
+}
+a.RedSignupButton {
+    text-decoration: none;
+}
+
+.BlueLoginButton {
+    background-color: #c83737; /* Green */
+    border: solid 2px #8a1717;
+    color: white !important;
+    padding: 1vw 1vw;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.5vw;
+    border-radius: 24px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c83737', endColorstr='#752929'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#c83737), to(#752929)); /* for webkit browsers */
+    background: -moz-linear-gradient(top, #c83737, #752929); /* for firefox 3.6+ */
+}
+
+a.BlueLoginButton:hover, a.RedSignupButton:active {
+    box-shadow: 4px 4px 10px 4px grey;
+}
+
+a.BlueLoginButton {
+    text-decoration: none;
+}
+

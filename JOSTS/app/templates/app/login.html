@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -23,20 +23,36 @@
                 </button>
                 <a href="/" class="navbar-brand">JRSTS</a>
             </div>
-                {% include 'app/loginpartial.html' %}
+               <ul class="nav navbar-nav navbar-right">
+    <li><a href="#" data-toggle="modal" data-target="#modalMain">Log in</a></li>
+</ul>
         </div>
     </div>
-    <div id="divMain" class="container body-content content-area-background h-100" >
-<h2 class="text-base">{{ title }}</h2>
-<div class="row">
-    <div class="col-md-8 text-base">
+    <div id="divMain" class="container-fluid content-area-background h-100" style="" >
+        <div style="position:relative"><img src="{% static 'app/images/wag/landing-page-top.png' %}" style="max-width:100%">
+				
+					<div style="position:absolute;left:10%;top:53%;width:33%">
+						<a href="#" onclick="btnSignUp_Click()" class="RedSignupButton">Start your FREE trial</a>
+					</div>
+			</div>
+        <div class="modal fade" id="modalMain" tabindex="-1" role="dialog" aria-labelledby="modalMainTitle" aria-hidden="true">
+  <div class="modal-dialog mw-100 w-75" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalMainTitle">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalMainBody">
+          <div class="row">
+    <div class="col-md-8">
         <section id="loginForm">
             <form action="." method="post" class="form-horizontal">
                 {% csrf_token %}
-                <h4>Login to your JRSTS account</h4>
-                <hr />
+              
                 <div class="form-group">
-                    <label for="id_username" class="col-md-2 control-label">User name</label>
+                    <label for="id_username" class="col-md-2 control-label">Email</label>
                     <div class="col-md-10">
                         {{ form.username }}
                     </div>
@@ -60,9 +76,11 @@
             </form>
         </section>
     </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm"></section>
+      </div>
     </div>
+  </div>
+</div>
+       
 </div>
         </div>
     
