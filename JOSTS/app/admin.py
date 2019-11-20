@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -35,6 +35,12 @@ class DrawnImageAdmin(admin.ModelAdmin):
     search_fields = ('name','label','event')
     list_filter = ('event',)
 
+class SymbolDuplicateAdmin(ImportExportModelAdmin):
+    list_display = ('id','symbol','replace_with','event')
+    list_editable = ('symbol','replace_with','event')
+    search_fields = ('symbol','replace_with','event')
+    list_filter = ('event',)
+
 
 
 admin.site.register(Element,ElementAdmin)
@@ -44,3 +50,4 @@ admin.site.register(RuleText,RuleTextAdmin)
 admin.site.register(Video)
 admin.site.register(UserNote,UserNoteAdmin)
 admin.site.register(DrawnImage,DrawnImageAdmin)
+admin.site.register(SymbolDuplicate,SymbolDuplicateAdmin)

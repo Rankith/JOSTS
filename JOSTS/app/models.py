@@ -83,3 +83,8 @@ class DrawnImage(models.Model):
     name = models.CharField(max_length=255,blank=True,default='')
     label = models.CharField(max_length=255,blank=True,default='')
     event = models.CharField(max_length=2,blank=True,default='')
+
+class SymbolDuplicate(models.Model):
+    symbol = models.CharField(max_length=255,blank=True,default='')
+    replace_with = models.CharField(max_length=255,blank=True,default='')
+    event = models.CharField(max_length=2,blank=True,default='')

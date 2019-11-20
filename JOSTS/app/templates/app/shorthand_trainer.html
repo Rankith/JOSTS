@@ -98,11 +98,16 @@
 {% block scripts %}
 <script type="text/javascript">
     window.CSRF_TOKEN = "{{ csrf_token }}";
+
 </script>
 <script type="text/javascript">
     var Disc = "Womens";
     //var Event = "{{lang_elements.element.event}}";
     var OnShorthand = '{{lang_elements.element.image_url}}';
+    var SymbolDuplicates = new Array();
+    {% for symbol in symbol_duplicates %}
+        SymbolDuplicates['{{symbol.symbol}}'] = '{{symbol.replace_with}}';
+    {% endfor %}
 </script>
 <script type="text/javascript">
     DrawInit();
@@ -123,7 +128,7 @@
         });
     function SetResult(result) {
         $("#btnDone").removeClass('ui-disabled');
-        if (result.toLowerCase() == OnShorthand.toLowerCase())
+        if (result.toLowerCase() == OnShorthand.toLowerCase() || result.toLowerCase() == SymbolDuplicates[ShorthandOnShorthand.toLowerCase()])
 			{
 				$("#ShorthandTrainingResult").text("Correct");
 				$("#ShorthandTrainingResult").css("color","green");

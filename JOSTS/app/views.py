@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -145,6 +145,7 @@ def element_list(request):
 
 
 #RULES
+@login_required(login_url='/login/')
 def rules(request):
     context = {
         'type':'rule',
@@ -197,6 +198,7 @@ def rule_list(request):
     return render(request, 'app/rule_list.html',context=context)
 
 #shorthand
+@login_required(login_url='/login/')
 def shorthand_training(request):
     #DrawnImage.objects.filter(label__contains='bb').update(event='bb')
     context = {
@@ -211,6 +213,7 @@ def shorthand_trainer(request):
     element = ElementText.objects.filter(id=idIn)
     userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
     count = DrawnImage.objects.filter(label=element[0].element.image_url()).count()
+    symbol_duplicates = SymbolDuplicate.objects.filter(event__iexact=element[0].element.event)
     if (len(userNote) > 0):
         userNote = userNote[0].note;
     else:
@@ -218,7 +221,8 @@ def shorthand_trainer(request):
     context = {
         'lang_elements': element[0],
         'user_note': userNote,
-        'count' : count
+        'count' : count,
+        'symbol_duplicates' : symbol_duplicates
         }
     return render(request, 'app/shorthand_trainer.html',context=context)
 
@@ -226,11 +230,14 @@ def save_record_image(request):
     datauri = request.POST.get('data','')
     imgstr = re.search(r'base64,(.*)', datauri).group(1)
     binary_data = a2b_base64(imgstr)
+    label_save = request.POST.get('label','')
     output = open('/' + settings.MEDIA_ROOT + '/drawnimages/' + request.POST.get('disc','') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
     output.write(binary_data)
     output.close()
-
-    d = DrawnImage(name=request.POST.get('name','') + '.png', label=request.POST.get('label',''),event=request.POST.get('event',''))
+    replace_with = SymbolDuplicate.objects.filter(event=request.POST.get('event',''),symbol=request.POST.get('label',''))
+    if (len(replace_with) != 0):
+        label_save = replace_with[0].replace_with
+    d = DrawnImage(name=request.POST.get('name','') + '.png', label=label_save,event=request.POST.get('event',''))
     d.save()
 
     count = DrawnImage.objects.filter(label=request.POST.get('label','')).count()
@@ -240,6 +247,7 @@ def save_record_image(request):
     #im = Image.open(canvasData)
     #im.save('test.png')
 
+@login_required(login_url='/login/')
 def shorthand_lookup(request):
     context = {
         'type':'element',
