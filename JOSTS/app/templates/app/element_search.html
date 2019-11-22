@@ -1,7 +1,16 @@
 ﻿{% block content %}
 {% load staticfiles %}
 <div class="sidebar-header">
-    <h3>Search</h3>
+   
+</div>
+
+<div class="input-group input-group-sm mb-1 mt-1">
+  <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="txtSearch">
+  <div class="input-group-append">
+     <button class="btn btn-outline-secondary" type="button" onclick="SearchClick()">
+                <i class="fa fa-search"></i>
+            </button>
+  </div>
 </div>
 <div class="row no-gutters">
     {% for event in events %}
@@ -71,11 +80,7 @@
 </div>
 
 {% if type == 'shorthand' %}
-<div class="row no-gutters">
-    <div class="pb-2">
-        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="LoadLookup()"><h4>Find</h4></button>
-    </div>
-</div>
+
 {% endif %}
 
 {% if type == 'element' or type == 'shorthand_trainer' %}
@@ -109,6 +114,14 @@
 {% block scripts %}
 <script type="text/javascript">
     var Event = "";
+
+    $('#txtSearch').keypress(function (e) {
+      if (e.which == 13) {
+          SearchClick();
+        return false;    //<---- Add this line
+      }
+    });
+
     function SearchChangeEvent(el) {
         //console.log("SCE");
         if (!el.checked)
@@ -123,13 +136,6 @@
             CreateSearchParams();
             //Event = $(el).val();
         }
-    }
-
-    function LoadLookup() {
-          $("#modalMainBody").empty();
-         $.get("/element_lookup/?event=" + Event, function (data) {
-                $("#modalMainBody").append(data);
-            });
     }
 
     function DisplayChange(el) {
@@ -156,6 +162,11 @@
             $('#VaultValues').hide();*/
         
     }
+
+    function SearchClick() {
+        CreateSearchParams();
+    }
+
     function SearchChange(el) {
         //console.log("SC");
         localStorage.setItem(el.id, el.checked ? 1 : 0);
@@ -174,6 +185,8 @@
             if (type == "element" || type == "shorthand_trainer") {
                 strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
             }
+            //if ($("#txtSearch").val() != "")
+                strValues = "search=" + $("#txtSearch").val() + "&" + strValues;
             $.get("/" + list_type + "_list/?" + strValues, function (data) {
                 $("#divElementList").empty();
                 $("#divElementList").append(data);
@@ -190,6 +203,7 @@
             $(this).removeAttr('checked');
             
         });
+        $("#txtSearch").val("");
         CreateSearchParams();
         }
     function LoadLastSelections() {

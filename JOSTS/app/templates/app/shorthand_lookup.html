@@ -37,9 +37,10 @@
             </div>
         </div>
         <div class="row mt-auto">
-            <div class="text-base col text-center" id="divShorthandLookup">
-                <div style="width:200px;margin:auto">
-
+            <div class="text-base col text-center d-flex justify-content-around" id="divShorthandLookup">
+                 <div style="width:72px"></div>
+                <div style="width:200px;">
+                   
                     <div class="h5">Draw Here</div>
                     <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
                     <canvas id="can" width="200" height="200"></canvas>
@@ -67,6 +68,9 @@
                             </tr>
                         </table>
                     </div>
+                </div>
+                <div class="align-self-center">
+                        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="LoadLookup()"><h4>Find</h4></button>
                 </div>
             </div>
         </div>
@@ -129,6 +133,12 @@
         MaxFit = Math.floor(($(window).width() - 60) / SmallSymbolDim);
 
     });
+        function LoadLookup() {
+          $("#modalMainBody").empty();
+         $.get("/element_lookup/?event=" + Event, function (data) {
+                $("#modalMainBody").append(data);
+            });
+    }
     function DisplayElement(idIn, eventIn) {
         //attach setting the list height to the element div finishing its animation
         $("#divElement").load("/element_for_shorthand?id=" + idIn + '&event=' + eventIn, '');

@@ -127,6 +127,10 @@ def element_list(request):
     dget = dict(request.GET)
     display = dget['display'][0]
     del dget['display']
+    search = dget['search'][0]
+    search = search.replace("1/2","½")
+    search = search.replace("1/4","¼")
+    del dget['search']
     query = Q(language="EN")
     for k,v in dget.items():
         innerQuery = Q()
@@ -135,7 +139,8 @@ def element_list(request):
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
     elements = ElementText.objects.filter(query).order_by('element__code_order')
-   
+    if search != "":
+        elements = elements.filter(element__usernote__note__icontains=search) | elements.filter(text__icontains=search) | elements.filter(short_text__icontains=search) | elements.filter(named__icontains=search) | elements.filter(additional_info__icontains=search)
     context = {
         'lang_elements': elements,
         'num_elements': str(len(elements)) + " Elements",
@@ -182,6 +187,10 @@ def rule_search(request):
 
 def rule_list(request):
     dget = dict(request.GET)
+    search = dget['search'][0]
+    search = search.replace("1/2","½")
+    search = search.replace("1/4","¼")
+    del dget['search']
     query = Q()
     for k,v in dget.items():
         innerQuery = Q()
@@ -190,7 +199,8 @@ def rule_list(request):
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
     rules = RuleText.objects.filter(query).order_by('rule__display_order')
-   
+    if search != "":
+        rules = rules.filter(cue__icontains=search) | rules.filter(response__icontains=search) | rules.filter(rule_description__icontains=search) | rules.filter(specific_deduction__icontains=search) | rules.filter(additional_info__icontains=search)
     context = {
         'rules': rules,
         'num_rules': str(len(rules)) + " Rules",
@@ -294,11 +304,11 @@ def shorthand_search(request):
 def element_lookup(request):
     eventIn = request.GET.get('event')
     if (eventIn == "V"):
-        vals = Element.objects.order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
+        vals = Element.objects.order_by('element__range').values('element__range').exclude(range='').annotate(int_order=Cast('element__range',IntegerField())).order_by('int_order').distinct()
     else:
         vals = Element.objects.filter(event=eventIn).order_by('letter_value').values('letter_value').distinct()   
     groups = Element.objects.filter(event=eventIn).order_by('str_grp').values('str_grp').distinct()
-    elements = Element.objects.filter(event=eventIn).order_by('str_grp','letter_value','code_order')
+    elements = ElementText.objects.filter(element__event=eventIn,language="EN").order_by('element__str_grp','element__letter_value','element__code_order')
     context = {
         'vals':vals,
         'groups': groups,
