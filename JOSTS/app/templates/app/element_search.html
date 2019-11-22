@@ -3,8 +3,8 @@
 <div class="sidebar-header">
    
 </div>
-
-<div class="input-group input-group-sm mb-1 mt-1">
+{% if type == 'element' %}
+<div class="input-group input-group-sm mt-1" id="divSearch">
   <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="txtSearch">
   <div class="input-group-append">
      <button class="btn btn-outline-secondary" type="button" onclick="SearchClick()">
@@ -12,7 +12,9 @@
             </button>
   </div>
 </div>
-<div class="row no-gutters">
+{% endif %}
+
+<div class="row no-gutters pt-2">
     {% for event in events %}
     <div class="col">
         <label id="lblE{{event}}" class="search-button">
