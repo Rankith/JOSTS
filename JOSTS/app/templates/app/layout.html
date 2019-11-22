@@ -56,7 +56,19 @@
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script type="text/javascript">$(document).bind("mobileinit", function(){$.extend(  $.mobile , {autoInitializePage: false})});</script>
+    <script type="text/javascript">$(document).bind("mobileinit", function () { $.extend($.mobile, { autoInitializePage: false }) });
+        //crazy veiwport stuff for drawing
+        let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+    // We listen to the resize event
+    window.addEventListener('resize', () => {
+          // We execute the same script as before
+          let vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
+    </script>
     <script src="{% static 'app/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
 {% block scripts %}{% endblock %}
 

@@ -36,7 +36,7 @@
         <div class="row mt-auto">
             <div class="text-base col text-center d-flex justify-content-around" id="divShorthandLookup">
                   <div class="align-self-center">
-                        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="LoadLookup()"><h4>Find</h4></button>
+                        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="LoadLookup()"><h5 class="mb-1 mt-1">Find</h5></button>
                 </div>
                 <div style="width:200px;">
                    
@@ -70,7 +70,7 @@
                 </div>
                 
                 <div class="align-self-center">
-                        <button type="button" class="btn btn-main"  onclick="CheckImage(); return false;"><h4>Done</h4></button>
+                        <button type="button" class="btn btn-main"  onclick="CheckImage(); return false;"><h5 class="mb-1 mt-1">Done</h5></button>
                 </div>
             </div>
         </div>
@@ -137,7 +137,7 @@
         });
 
         DrawInit();
-        $("#divContentParent").css({ 'min-height': 'calc(100vh - ' + $(".navbar").height() + 'px - ' +  $(document.body).css("padding-top") + ' - ' + $(document.body).css("padding-bottom")});
+        $("#divContentParent").css({ 'min-height': 'calc(var(--vh, 1vh) * 100 - ' + $(".navbar").height() + 'px - ' +  $(document.body).css("padding-top") + ' - ' + $(document.body).css("padding-bottom")});
         MaxFit = Math.floor(($(window).width() - 60) / SmallSymbolDim);
 
     });
