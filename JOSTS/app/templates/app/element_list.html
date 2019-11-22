@@ -34,15 +34,15 @@
 {% if display == "Shorthand" %}
     {% for element in lang_elements %}
         {% if forloop.first %}<div class="row">{% endif %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:140px;cursor:pointer" >
             <div class="row">
                 <div class="col">
-                    <div style="height:150px" class="image-background rounded" id="div{{element.id}}">
+                    <div style="height:120px" class="image-background rounded" id="div{{element.id}}">
                         <div class="row h-100 justify-content-center align-items-center text-center">
                             <div class="col-12 position-relative">
-                                <img class="img-fluid" src="{% static 'app/images/wag/sym/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                                <img class="img-fluid" src="{% static 'app/images/wag/sym/'%}{{ element.element.image_url}}.svg"  style="max-height:120px;overflow:hidden"/>
                             </div>
-                            <div class="col-12 pb-1 " style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
+                            <div class="col-12 pb-1 align-self-end" style=" line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
                                 {{element.short_text}}
                             </div>
                         </div>
