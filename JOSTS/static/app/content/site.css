@@ -85,7 +85,6 @@ input[type="checkbox"].input-validation-error {
     padding-left:0.2rem;
     padding-right:0.2rem;
     z-index:101;
-    transition: width 0.5s, height 0.5s;
 }
 .additional-info-small{
     width:12px;

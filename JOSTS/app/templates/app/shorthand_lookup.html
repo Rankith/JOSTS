@@ -35,7 +35,9 @@
         </div>
         <div class="row mt-auto">
             <div class="text-base col text-center d-flex justify-content-around" id="divShorthandLookup">
-                 <div style="width:72px"></div>
+                  <div class="align-self-center">
+                        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="LoadLookup()"><h4>Find</h4></button>
+                </div>
                 <div style="width:200px;">
                    
                     <div class="h5">Draw Here</div>
@@ -44,7 +46,7 @@
                     <img id="canvasimg" style="display:none;">
                     <table class="w-100" border="0" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td align="center" class="font-weight-bold"><a href="#" onclick="CheckImage(); return false;">Done</a></td>
+
                             <td align="center" class="font-weight-bold"><a href="#" onclick="erase(); return false;">Clear</a></td>
                         </tr>
                     </table>
@@ -66,8 +68,9 @@
                         </table>
                     </div>
                 </div>
+                
                 <div class="align-self-center">
-                        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="LoadLookup()"><h4>Find</h4></button>
+                        <button type="button" class="btn btn-main"  onclick="CheckImage(); return false;"><h4>Done</h4></button>
                 </div>
             </div>
         </div>
