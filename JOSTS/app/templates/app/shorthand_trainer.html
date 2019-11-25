@@ -3,12 +3,13 @@
 
 <div class="text-center detail-background rounded-top text-detail">
     <div class="row no-gutters image-background">
-        <div class="col" onclick="CloseElement()">
+       
+        <!--<div class="col" onclick="CloseElement()">
             <div class="h5">&nbsp;</div>
             <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImage" name="ShorthandTrainingImage" style="max-height: 200px; width: 200px; display: inline; background-color:white" alt="Shorthand Training Guide">
             <input type="hidden" value="{{lang_elements.element.image_url}}" id="hdnName" />
             <input type="hidden" value="{{lang_elements.element.event}}" id="hdnEvent" />
-        </div>
+        </div>-->
         <div class="col">
             <div style="width:200px;margin:auto">
                 <div class="h5">Draw Here</div>
@@ -36,7 +37,7 @@
                         </tr>
                     </table>
                 </div>
-                <div class="col">
+                <div class="col" id="divSave" style="display:none">
                     <table class="w-100">
                         <tr>
                             <td align="right" class="w-50">
@@ -52,7 +53,7 @@
                     </table>
                 </div>
                 <div class="col" id="ShorthandTrainingResult">&nbsp;</div>
-                <div class="col" id="divTempCount">
+                <div class="col" id="divTempCount" style="display:none">
                     {{count}}
                 </div>
             </div>
@@ -111,21 +112,33 @@
 </script>
 <script type="text/javascript">
     DrawInit();
-    if (localStorage.trace) {
-            $('#chkTrace').prop("checked", localStorage.trace == 1)
+    document.getElementById('divMain').onkeydown = function (e) {
+        if (e.shiftKey && e.keyCode == 56) {
+            $("#divSave").show();
+            $("#divTempCount").show();
         }
-        $('#chkTrace').change(function() {
-            localStorage.trace = this.checked ? 1 : 0
-    ResetWithTrace();
-    });
+    }
+      $('#chkTrace').change(function() {
+        localStorage.trace = this.checked ? 1 : 0
+        ResetWithTrace();
+      });
+    //first time trace setup
+    if (localStorage.trace == undefined)
+        localStorage.trace = 1;
+    if (localStorage.trace) {
+        $('#chkTrace').prop("checked", localStorage.trace == 1)
+        if (localStorage.trace == 1)
+             ResetWithTrace();
+        }
+      
 
- if (localStorage.save) {
+ /*if (localStorage.save) {
             $('#chkSave').prop("checked", localStorage.save == 1)
         }
         $('#chkSave').change(function() {
             localStorage.save = this.checked ? 1 : 0
 
-        });
+        });*/
     function SetResult(result) {
         $("#btnDone").removeClass('ui-disabled');
         if (result.toLowerCase() == OnShorthand.toLowerCase() || result.toLowerCase() == SymbolDuplicates[ShorthandOnShorthand.toLowerCase()])
