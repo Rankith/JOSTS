@@ -8,6 +8,9 @@
                <div class="detail-top-left">{{lang_elements.named}}</div>
                 <div class="detail-top-right"><img class="img-fluid detail-sym" src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg"/></div>
                 <div class="additional-info" id="divAdditionalInfo">
+                    <button id="btnAdditionalInfoClose" type="button" class="close" aria-label="Close" style="font-size:0.8rem;display:none">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     {{lang_elements.additional_info}}
                 </div>
                 <div id="divYourNote" class="your-note">
@@ -61,6 +64,7 @@
 </div>
 
 <script type="text/javascript">
+    var AdditionalInfo = "{{lang_elements.additional_info}}";
     //store checkboxes in ls and load as needed
      if (localStorage.your_note) {
         $('#chkYourNote').prop("checked", localStorage.your_note == 1)
@@ -126,6 +130,9 @@
     var InfoHolder = "";
     var InfoH = "";
     var InfoW = "";
+
+    if (AdditionalInfo != "")
+        $("#btnAdditionalInfoClose").show();
 
     $("#divAdditionalInfo").click(function(e) {
         ToggleInfo();
