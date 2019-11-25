@@ -23,14 +23,29 @@
 
             </div>
         </div>
-        <div class="row">
-            <div class="col d-flex justify-content-center w-100" id="divShorthandPrevYou">
+        <div id="divHistoryHolder" class="d-flex justify-content-center">
+            <button id="btnHistory" type="button" class="btn btn-main mt-2"  data-toggle="modal" data-target="#modalMain"  style="display:none" onclick="LoadHistory()">History</button>
+            <div id="divHistoryArea">
+                <div id="divHistoryDrawings">
+                    <div class="row">
+                        <div class="col d-flex justify-content-center w-100" id="divShorthandPrevYou">
 
-            </div>
-        </div>
-        <div class="row">
-            <div class="col d-flex justify-content-center w-100" id="divShorthandPrev">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex justify-content-center w-100" id="divShorthandPrev">
 
+                        </div>
+                    </div>
+                </div>
+                 <div class="row d-flex justify-content-center pt-2">
+                    <div class="pr-2" id="divClearHistory">
+                        <button id="btnClearList" type="button" class="btn btn-main" style="display:none" onclick="ClearList(); return false;">Clear List</button>
+                    </div>
+                     <div  class="pl-2" id="divClearHistory">
+                        <button type="button" id="btnClearLast" class="btn btn-main" style="display:none" onclick="ClearLast(); return false;">Clear Last</button>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row mt-auto">
@@ -123,9 +138,16 @@
         if ($(window).width() >= 1200) {
             $('#sidebarCollapse').click();
         }
-
-          if ($(window).width() >= 750) {
-              SmallMode = false;
+        MaxFit = Math.floor(($(window).width() - 60) / SmallSymbolDim);
+        if ($(window).width() >= 750) {
+            SmallMode = false;
+        }
+        else {
+            $("#modalBodyArea2").empty().append($("#divHistoryArea"));
+            $("#btnHistory").show();
+            $(".modal-dialog").removeClass("mw-100").removeClass("w-75");
+            MaxFit = 20
+            $("#divHistoryDrawings").css("overflow", "auto");
         }
 
          if (localStorage.shorthand_auto_clear) {
@@ -138,14 +160,24 @@
 
         DrawInit();
         $("#divContentParent").css({ 'min-height': 'calc(var(--vh, 1vh) * 100 - ' + $(".navbar").height() + 'px - ' +  $(document.body).css("padding-top") + ' - ' + $(document.body).css("padding-bottom")});
-        MaxFit = Math.floor(($(window).width() - 60) / SmallSymbolDim);
+        
 
     });
-        function LoadLookup() {
-          $("#modalMainBody").empty();
-         $.get("/element_lookup/?event=" + Event, function (data) {
-                $("#modalMainBody").append(data);
-            });
+    function LoadLookup() {
+        $("#modalMainTitle").html("Lookup By Group");
+        $("#modalBodyArea2").hide();
+        $("#modalBodyArea1").empty();
+        $.get("/element_lookup/?event=" + Event, function (data) {
+            $("#modalBodyArea1").append(data);
+        });
+        $("#modalBodyArea1").show();
+    }
+    function LoadHistory() {
+        $("#modalMainTitle").html("History");
+        $("#modalBodyArea1").hide();
+        $("#modalBodyArea2").show();
+        document.getElementById("divHistoryDrawings").scrollLeft = document.getElementById("divHistoryDrawings").scrollWidth;
+        
     }
     function DisplayElement(idIn, eventIn) {
         //attach setting the list height to the element div finishing its animation
@@ -165,22 +197,45 @@
         $('#divShorthandPrevYou').append('<div  id="divShorthandPrevYou' + OnDrawing + '" name="divShorthandPrevYou' + OnDrawing + '" style="display:inline-block;vertical-align:top;align:center"><img src="' + image + '" id="ShorthandPrevYou' + OnDrawing + '" name="ShorthandPrevYou' + OnDrawing + '" style="padding-right:5px;height:' + SmallSymbolDim + 'px;width:' + SmallSymbolDim + 'px;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;background-color:white"></div>');
         if (OnDrawing >= MaxFit - 1)
             $("#divShorthandPrevYou" + (OnDrawing - MaxFit + 1)).remove();
-
+        CheckAndHideHistoryButtons();
         document.getElementById("divShorthandPrevYou").scrollLeft=document.getElementById("divShorthandPrevYou").scrollWidth;
     }
     function SetResult(result) {
         DisplayElement(result.replace(Event.toLowerCase(), ""), Event);
         if ($("#chkAutoClear").prop("checked"))
             erase();
-        if (!SmallMode)
+        //if (!SmallMode)
             AddToList(result);
     }
     function CheckImageError(result) {
 
     }
     function CheckImageBefore(image) {
-        if (!SmallMode)
+        //if (!SmallMode)
             AddToListYou(image);
+    }
+
+    function ClearList() {
+        $('#divShorthandPrevYou').empty();
+        $('#divShorthandPrev').empty();
+        CheckAndHideHistoryButtons();
+    }
+    function ClearLast() {
+        $('#divShorthandPrevYou' + (OnDrawing - 1)).remove();
+        $('#divShorthandPrev' + (OnDrawing - 1)).remove();
+        OnDrawing--;
+        CheckAndHideHistoryButtons();
+        }
+
+    function CheckAndHideHistoryButtons() {
+        if ($('#divShorthandPrevYou').has("div").length) {
+           $("#btnClearList").show();
+           $("#btnClearLast").show(); 
+        }
+        else {
+            $("#btnClearList").hide();
+            $("#btnClearLast").hide();
+        }
     }
 
 </script>
