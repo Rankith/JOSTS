@@ -1,0 +1,83 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+{% load staticfiles %}
+<div class="wrapper-sidebar">
+    <div id="divSearchSidebar" style="overflow:auto">
+        <div class="d-flex h-100">
+            <div>
+                <div id="divSearchArea" class="pl-2">
+
+                </div>
+            </div>
+            <div id="sidebarCollapse" class="sidebar-collapse">
+                <i class="fas fa-ellipsis-v fa-2x"></i>
+            </div>
+        </div>
+
+    </div>
+    <div id="divContentParent" class="position-relative">
+        <h3 class="text-base" >Setup your quiz on the left</h3>
+
+    </div>
+    {% endblock %}
+    {% block scripts %}
+    <script type="text/javascript">
+    var type = '{{type}}';
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                // open or close navbar
+                $('#divSearchSidebar').toggleClass('active');
+                // close dropdowns
+                $('.collapse.in').toggleClass('in');
+                // and also adjust aria-expanded attributes we use for the open/closed arrows
+                // in our CSS
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+            /* $("#divSearchSidebar").mCustomScrollbar({
+                 theme: "minimal",
+
+             });*/
+
+            $('#dismiss').on('click', function () {
+                // hide sidebar
+                $('#divSearchSidebar').removeClass('active');
+                // hide overlay
+                // $('.overlay').removeClass('active');
+            });
+            $.get("/quiz_setup/", function (data) {
+                $("#divSearchArea").empty();
+                $("#divSearchArea").append(data);
+                LoadLastSelections();
+            });
+
+            //always start expanded for quiz
+            $('#sidebarCollapse').click();
+
+            $('#divSearchSidebar').on("swiperight", ToggleSearchOut);
+            $('#divSearchSidebar').on("swipeleft", ToggleSearchIn);
+
+            $('#divSearchSidebar').on('mousedown touchstart', 'input[type=text]',
+                function (e) {
+                    e.stopPropagation();
+                });
+
+
+        });
+
+        function ToggleSearchOut() {
+            if ($("#divSearchSidebar").hasClass("active")) {
+            }
+            else
+                $('#sidebarCollapse').click();
+        }
+        function ToggleSearchIn() {
+            if ($("#divSearchSidebar").hasClass("active"))
+                $('#sidebarCollapse').click();
+        }
+
+
+    </script>
+    {% endblock %}

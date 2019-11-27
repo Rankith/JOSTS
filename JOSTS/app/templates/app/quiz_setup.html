@@ -33,24 +33,9 @@
     </div>
 </div>
 
-<h5>Answer:</h5>
-<div class="row no-gutters">
-    <div class="pr-2">
-        <label id="lblDisplayImage" class="search-button">
-            <input type="checkbox" id="chkAnswerImage" checked="checked" class="check-search-display" value="Image" onchange="SetPrompt('Shorthand')">
-            <div class="search-button display-button"><div style="text-transform:uppercase">Im</div></div>
-        </label>
-    </div>
-    <div class="pr-2">
-        <label id="lblDisplayShorthand" class="search-button">
-            <input type="checkbox" id="chkAnswerShorthand" class="check-search-display" value="Shorthand" onchange="SetPrompt('Image')">
-            <div class="search-button display-button"><div style="text-transform:uppercase">Sy</div></div>
-        </label>
-    </div>
-</div>
 <div class="row no-gutters d-flex pt-4">
     <div class="ml-auto">
-        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="StartQuiz()"><h4 class="mb-1 mt-1">Start</h4></button>
+        <button type="button" class="btn btn-main"  onclick="StartQuiz()"><h4 class="mb-1 mt-1">Start</h4></button>
     </div>
 </div>
 
@@ -65,18 +50,18 @@
 
         function SetPrompt(type) {
             if (type == "Shorthand") {
-                $("#chkPromptShorthand").prop('checked', true);
+               // $("#chkPromptShorthand").prop('checked', true);
                 $("#chkAnswerShorthand").prop('checked', false);
 
                 $("#chkPromptImage").prop('checked', false);
-                $("#chkAnswerImage").prop('checked', true);
+               // $("#chkAnswerImage").prop('checked', true);
             }
             else {
                 $("#chkPromptShorthand").prop('checked', false);
-                $("#chkAnswerShorthand").prop('checked', true);
+               // $("#chkAnswerShorthand").prop('checked', true);
 
                 $("#chkPromptImage").prop('checked', true);
-                $("#chkAnswerImage").prop('checked', false);
+               // $("#chkAnswerImage").prop('checked', false);
             }
         }
         function LoadLastSelections() {
@@ -86,6 +71,29 @@
                 else
                     $(this).prop('checked', false);
             });
+            }
+    function SearchChangeEvent(el) {
+        //console.log("SCE");
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-event').not(el).prop('checked', false);
+            $('.check-search-event').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+
+            //Event = $(el).val();
         }
+    }
+
+        function StartQuiz() {
+           
+            $.get("/quiz/?event=" + $(".check-search:checkbox:checked").val(), function (data) {
+                $("#divContentParent").empty();
+                $("#divContentParent").append(data);
+            });
+        }
+    
     </script>
     {% endblock %}

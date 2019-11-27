@@ -323,11 +323,18 @@ def quiz_shorthand(request):
     context = {
         'type':'shorthand',
         }
-    return render(request, 'app/quiz.html',context=context)
+    return render(request, 'app/quiz_base.html',context=context)
 
 def quiz_setup(request):
     context = {
         'events': ['FX','BB','UB','V'],
-        'type':'shorthand',
         }
     return render(request, 'app/quiz_setup.html',context=context)
+
+def quiz(request):
+    elements = ElementText.objects.filter(element__event=request.GET.get('event')).order_by('?')
+    context = {
+        'events': ['FX','BB','UB','V'],
+        'lang_elements': elements,
+        }
+    return render(request, 'app/quiz.html',context=context)

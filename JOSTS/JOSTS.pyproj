@@ -2474,9 +2474,10 @@
     <Content Include="app\static\app\scripts\jquery.mobile-1.4.5.min.js" />
     <Content Include="app\static\app\scripts\shorthand_drawing.js" />
     <Content Include="app\templates\app\element_for_shorthand.html" />
+    <Content Include="app\templates\app\quiz.html" />
     <Content Include="app\templates\app\element_lookup.html" />
     <Content Include="app\templates\app\quiz_setup.html" />
-    <Content Include="app\templates\app\quiz.html" />
+    <Content Include="app\templates\app\quiz_base.html" />
     <Content Include="app\templates\app\shorthand_lookup.html" />
     <Content Include="app\templates\app\shorthand_draw.html" />
     <Content Include="app\templates\app\shorthand_trainer.html" />
