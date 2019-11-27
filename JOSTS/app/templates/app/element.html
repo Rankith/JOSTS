@@ -11,7 +11,8 @@
                     <button id="btnAdditionalInfoClose" type="button" class="close" aria-label="Close" style="font-size:0.8rem;display:none">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    {{lang_elements.additional_info}}
+                    <span id="spnAdditionalInfo">{{lang_elements.additional_info}}</span>
+                    <i class="fa fa-expand" aria-hidden="true" id="btnAdditionalInfoExpand"  style="display:none"></i>
                 </div>
                 <div id="divYourNote" class="your-note">
 			        <label class="text-note-header mb-0">Your Note:</label><br/>
@@ -141,26 +142,30 @@
 
     function ToggleInfo() {
         if (InfoHolder == "") {
-            InfoHolder = $("#divAdditionalInfo").html();
+            InfoHolder = $("#spnAdditionalInfo").html();
             InfoH = $("#divAdditionalInfo").height();
             InfoW = $("#divAdditionalInfo").width();
             $("#divAdditionalInfo").height(InfoH);
             $("#divAdditionalInfo").width(InfoW);
-            $("#divAdditionalInfo").html("");
+            $("#spnAdditionalInfo").hide();
+            $("#btnAdditionalInfoClose").hide();
             $("#divAdditionalInfo" ).animate({
-                height: 12,
-                width: 12
-              }, 250, function() {
+                height: 18,
+                width: 18
+            }, 250, function () {
+                    $("#btnAdditionalInfoExpand").show();
                 // Animation complete.
             });
 
         }
         else {
+            $("#btnAdditionalInfoExpand").hide();
              $("#divAdditionalInfo" ).animate({
                 height: InfoH,
                 width: InfoW
               }, 250, function() {
-                     $("#divAdditionalInfo").html(InfoHolder);
+                     $("#spnAdditionalInfo").show();
+                    $("#btnAdditionalInfoClose").show();
                      InfoHolder = "";
             });
         }
