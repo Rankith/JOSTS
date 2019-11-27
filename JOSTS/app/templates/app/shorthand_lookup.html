@@ -138,6 +138,10 @@
         if ($(window).width() >= 1200) {
             $('#sidebarCollapse').click();
         }
+         $('#divSearchSidebar').on("swiperight", ToggleSearchOut);
+            $('#divSearchSidebar').on("swipeleft", ToggleSearchIn);
+
+
         MaxFit = Math.floor(($(window).width() - 60) / SmallSymbolDim);
         if ($(window).width() >= 750) {
             SmallMode = false;
@@ -163,6 +167,16 @@
         
 
     });
+    function ToggleSearchOut() {
+            if ($("#divSearchSidebar").hasClass("active")) {
+            }
+            else
+                $('#sidebarCollapse').click();
+        }
+        function ToggleSearchIn() {
+            if ($("#divSearchSidebar").hasClass("active"))
+                $('#sidebarCollapse').click();
+        }
     function LoadLookup() {
         $("#modalMainTitle").html("Lookup By Group");
         $("#modalBodyArea2").hide();

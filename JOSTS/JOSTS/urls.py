@@ -45,4 +45,6 @@ urlpatterns = [
     path('shorthand_search/', views.shorthand_search, name='shorthand_search'),
     path('element_for_shorthand/', views.element_for_shorthand, name='element_for_shorthand'),
     path('element_lookup/', views.element_lookup, name='element_lookup'),
+    path('quiz_shorthand/', views.quiz_shorthand, name='quiz_shorthand'),
+    path('quiz_setup/', views.quiz_setup, name='quiz_setup'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

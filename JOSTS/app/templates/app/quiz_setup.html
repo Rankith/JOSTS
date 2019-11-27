@@ -1,0 +1,91 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div class="sidebar-header">
+
+</div>
+
+<div class="row no-gutters pt-2">
+    {% for event in events %}
+    <div class="col">
+        <label id="lblE{{event}}" class="search-button">
+            <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search check-search-event" data-search="element__event" onchange="SearchChangeEvent(this)">
+            <div class="search-button event-button">
+                <img class="img-fluid" src="{% static 'app/images/wag/' %}{{event}}_White.svg" />
+            </div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+<h5>Prompt:</h5>
+<div class="row no-gutters">
+    <div class="pr-2">
+        <label id="lblDisplayImage" class="search-button">
+            <input type="checkbox" id="chkPromptImage" class="check-search-display" value="Image" onchange="SetPrompt('Image')">
+            <div class="search-button display-button"><div style="text-transform:uppercase">Im</div></div>
+        </label>
+    </div>
+    <div class="pr-2">
+        <label id="lblDisplayShorthand" class="search-button">
+            <input type="checkbox" id="chkPromptShorthand" checked="checked" class="check-search-display" value="Shorthand" onchange="SetPrompt('Shorthand')">
+            <div class="search-button display-button"><div style="text-transform:uppercase">Sy</div></div>
+        </label>
+    </div>
+</div>
+
+<h5>Answer:</h5>
+<div class="row no-gutters">
+    <div class="pr-2">
+        <label id="lblDisplayImage" class="search-button">
+            <input type="checkbox" id="chkAnswerImage" checked="checked" class="check-search-display" value="Image" onchange="SetPrompt('Shorthand')">
+            <div class="search-button display-button"><div style="text-transform:uppercase">Im</div></div>
+        </label>
+    </div>
+    <div class="pr-2">
+        <label id="lblDisplayShorthand" class="search-button">
+            <input type="checkbox" id="chkAnswerShorthand" class="check-search-display" value="Shorthand" onchange="SetPrompt('Image')">
+            <div class="search-button display-button"><div style="text-transform:uppercase">Sy</div></div>
+        </label>
+    </div>
+</div>
+<div class="row no-gutters d-flex pt-4">
+    <div class="ml-auto">
+        <button type="button" class="btn btn-main" data-toggle="modal" data-target="#modalMain" onclick="StartQuiz()"><h4 class="mb-1 mt-1">Start</h4></button>
+    </div>
+</div>
+
+
+
+    <div id="divElementCountDisplay" style="padding-bottom:60px"></div>
+
+    {% endblock %}
+    {% block scripts %}
+    <script type="text/javascript">
+        var Event = "";
+
+        function SetPrompt(type) {
+            if (type == "Shorthand") {
+                $("#chkPromptShorthand").prop('checked', true);
+                $("#chkAnswerShorthand").prop('checked', false);
+
+                $("#chkPromptImage").prop('checked', false);
+                $("#chkAnswerImage").prop('checked', true);
+            }
+            else {
+                $("#chkPromptShorthand").prop('checked', false);
+                $("#chkAnswerShorthand").prop('checked', true);
+
+                $("#chkPromptImage").prop('checked', true);
+                $("#chkAnswerImage").prop('checked', false);
+            }
+        }
+        function LoadLastSelections() {
+            $(".check-search:checkbox").each(function (i) {
+                if (localStorage.getItem(this.id) == "1")
+                    $(this).prop('checked', true);
+                else
+                    $(this).prop('checked', false);
+            });
+        }
+    </script>
+    {% endblock %}

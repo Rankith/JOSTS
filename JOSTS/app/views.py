@@ -316,3 +316,18 @@ def element_lookup(request):
         'event':eventIn,
         }
     return render(request, 'app/element_lookup.html',context=context)
+
+#Quiz
+@login_required(login_url='/login/')
+def quiz_shorthand(request):
+    context = {
+        'type':'shorthand',
+        }
+    return render(request, 'app/quiz.html',context=context)
+
+def quiz_setup(request):
+    context = {
+        'events': ['FX','BB','UB','V'],
+        'type':'shorthand',
+        }
+    return render(request, 'app/quiz_setup.html',context=context)
