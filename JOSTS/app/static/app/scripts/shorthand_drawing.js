@@ -101,6 +101,7 @@ function redrawLast(trace) {
 }
 
 function ResetWithTrace() {
+    //console.log("tracing");
     redraw(document.getElementById('chkTrace').checked);
 }
 

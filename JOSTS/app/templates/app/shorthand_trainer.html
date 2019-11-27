@@ -13,7 +13,7 @@
         <div class="col">
             <div style="width:200px;margin:auto">
                 <div class="h5">Draw Here</div>
-                <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
+                <img src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" onload="TraceLoaded()" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
                 <canvas id="can" width="200" height="200"></canvas>
                 <img id="canvasimg" style="display:none;">
                 <table class="w-100" border="0" cellpadding="0" cellspacing="0">
@@ -130,7 +130,11 @@
         if (localStorage.trace == 1)
              ResetWithTrace();
         }
-      
+
+    function TraceLoaded() {
+        if (document.getElementById('chkTrace').checked)
+            ResetWithTrace();
+    }
 
  /*if (localStorage.save) {
             $('#chkSave').prop("checked", localStorage.save == 1)
@@ -141,7 +145,7 @@
         });*/
     function SetResult(result) {
         $("#btnDone").removeClass('ui-disabled');
-        if (result.toLowerCase() == OnShorthand.toLowerCase() || result.toLowerCase() == SymbolDuplicates[ShorthandOnShorthand.toLowerCase()])
+        if (result.toLowerCase() == OnShorthand.toLowerCase() || result.toLowerCase() == SymbolDuplicates[OnShorthand.toLowerCase()])
 			{
 				$("#ShorthandTrainingResult").text("Correct");
 				$("#ShorthandTrainingResult").css("color","green");
