@@ -3,7 +3,7 @@ Definition of views.
 """
 
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate
 from django.db.models import Q
@@ -14,6 +14,10 @@ from binascii import a2b_base64
 from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from .forms import SignUpForm, SubscriptionForm
+from django.contrib.auth import authenticate, login
+import stripe
 
 def home(request):
     """Renders the home page."""
@@ -52,6 +56,40 @@ def about(request):
             'year':datetime.now().year,
         }
     )
+
+def subscriptions(request):
+    if request.method == 'POST':
+        form = SubscriptionForm(request.POST)
+        if form.is_valid():
+            stripe.api_key = 'sk_test_aHg8DgoSqtGog1R8gr7qt6jt00Cei8nZ3t'
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                subscription_data={
+                    'items': [{
+                    'plan': form.cleaned_data.get('subscription'),
+                    }],
+                },
+                success_url=request.build_absolute_uri("/") + 'success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=request.build_absolute_uri(),
+            )
+            return render(request, 'app/subscriptions.html', {'form': form,'checkout_session_id': session.id})
+    else:
+        form = SubscriptionForm()
+    return render(request, 'app/subscriptions.html', {'form': form})
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(request, username=username, password=password)
+            login(request, user)
+            return redirect('/subscriptions')
+    else:
+        form = SignUpForm()
+    return render(request, 'app/signup.html', {'form': form})
 
 @login_required(login_url='/login/')
 def elements(request):

@@ -34,11 +34,14 @@
         <div style="position:relative"><img src="{% static 'app/images/wag/landing-page-top.png' %}" style="max-width:100%">
 				
 					<div style="position:absolute;left:10%;top:53%;width:33%">
-						<a href="#" onclick="btnSignUp_Click()" class="RedSignupButton">Start your FREE trial</a>
+						<a href="/signup"  class="RedSignupButton">Start your FREE trial</a>
 					</div>
 			</div>
+
+
+
         <div class="modal fade" id="modalMain" tabindex="-1" role="dialog" aria-labelledby="modalMainTitle" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog " role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modalMainTitle">Login</h5>
@@ -96,6 +99,16 @@
     <script type="text/javascript">$(document).bind("mobileinit", function(){$.extend(  $.mobile , {autoInitializePage: false})});</script>
     <script src="{% static 'app/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
 <script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+    <script type="text/javascript">
+        function btnSignUp_Click() {
+            if ($("#modalSignupBody").children().length == 0) {
+                $.get("/signup/", function (data) {
+                    $("#modalSignupBody").empty();
+                    $("#modalSignupBody").append(data);
+                });
+            }
+        }
+    </script>
     </body>
 </html>
 

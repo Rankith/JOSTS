@@ -1,0 +1,28 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+{% load staticfiles %}
+<div class="text-base d-flex justify-content-center">
+    <div>
+        <h2>JRSTS Sign Up</h2>
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+            <div class="row">
+                <div class="col">
+              {{ field.label_tag }}<br>
+              {{ field }}
+              {% if field.help_text %}
+                <small style="color: grey">{{ field.help_text }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+              {% endfor %}
+                    </div>
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-main mt-2">Sign up</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

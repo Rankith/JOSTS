@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JRSTS</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/theme.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <script src="https://kit.fontawesome.com/36c6b5f765.js" crossorigin="anonymous"></script>
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+</head>
+
+<body class="content-area-background" style="overflow-y:scroll">
+    <div class="navbar navbar-dark nav-background fixed-top navbar-expand-md">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a href="/" class="navbar-brand">JRSTS</a>
+            </div>
+            <span class="text-secondary">© 2019</span>
+            
+        </div>
+    </div>
+
+    <div id="divMain" class="container-fluid body-content content-area-background h-100" >
+{% block content %}{% endblock %}
+    </div>
+    <div class="modal fade" id="modalMain" tabindex="-1" role="dialog" aria-labelledby="modalMainTitle" aria-hidden="true">
+  <div class="modal-dialog mw-100 w-75" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalMainTitle">Lookup By Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalMainBody">
+          <div id="modalBodyArea1"></div>
+          <div id="modalBodyArea2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+    
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script type="text/javascript">$(document).bind("mobileinit", function () { $.extend($.mobile, { autoInitializePage: false }) });
+        //crazy veiwport stuff for drawing
+        let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+    // We listen to the resize event
+    window.addEventListener('resize', () => {
+          // We execute the same script as before
+          let vh = window.innerHeight * 0.01;
+          document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
+    </script>
+    <script src="{% static 'app/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

@@ -48,4 +48,6 @@ urlpatterns = [
     path('quiz_shorthand/', views.quiz_shorthand, name='quiz_shorthand'),
     path('quiz_setup/', views.quiz_setup, name='quiz_setup'),
     path('quiz/', views.quiz, name='quiz'),
+    path('signup/', views.signup, name='signup'),
+    path('subscriptions/', views.subscriptions, name='subscriptions')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

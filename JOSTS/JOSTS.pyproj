@@ -34,6 +34,9 @@
     <Compile Include="app\admin.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\backends.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
     <Compile Include="app\tests.py" />
@@ -2473,6 +2476,9 @@
     <Content Include="app\static\app\images\wag\V_White.svg" />
     <Content Include="app\static\app\scripts\jquery.mobile-1.4.5.min.js" />
     <Content Include="app\static\app\scripts\shorthand_drawing.js" />
+    <Content Include="app\templates\app\base.html" />
+    <Content Include="app\templates\app\subscriptions.html" />
+    <Content Include="app\templates\app\signup.html" />
     <Content Include="app\templates\app\element_for_shorthand.html" />
     <Content Include="app\templates\app\quiz.html" />
     <Content Include="app\templates\app\element_lookup.html" />
