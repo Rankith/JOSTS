@@ -19,6 +19,7 @@ from .forms import SignUpForm, SubscriptionForm
 from django.contrib.auth import authenticate, login
 import stripe
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
 
 def home(request):
     """Renders the home page."""
@@ -61,7 +62,7 @@ def about(request):
 @csrf_exempt
 def stripe_webhook(request):
     stripe.api_key = 'sk_test_aHg8DgoSqtGog1R8gr7qt6jt00Cei8nZ3t'
-    endpoint_secret = 'whsec_cLJSpiDXS58u5XJbbqbvpWKCSUQT7KU3'
+    endpoint_secret = 'whsec_9qOYf2NjDsbwA6UJ97NBnz4dP8EDnhHh'
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
@@ -81,8 +82,41 @@ def stripe_webhook(request):
     st.save()
     # Handle the checkout.session.completed event
     if event['type'] == 'invoice.payment_succeeded':
-        session = event['data']['object']
+        #invoice payment for subscription
 
+        session = event['data']['object']
+        line = session['lines']['data'][0]
+        sub_end = line['period']['end']
+        sub_paid = event['created']
+        sub_id = line['subscription']
+        interval = line['plan']['interval']
+
+        #sub_id='sub_GGsgPUtrAbpIAo'
+        #customer_id='cus_GGsgPUtrAbpIAo'
+        #interval='month'
+
+        sub_end = datetime.fromtimestamp(sub_end)
+        sub_paid = datetime.fromtimestamp(sub_paid)
+
+        #first check if there is an existing one
+        sub = Subscription.objects.filter(customer_id=customer_id,subscription_id=sub_id)
+        subuse = '';
+        if len(sub) > 0:
+            subuse = sub[0]
+        else:
+            #find empty customer
+            sub = Subscription.objects.filter(customer_id=customer_id,subscription_id='')
+            if len(sub) > 0:
+                subuse = sub[0]
+            else:
+                #make a new one
+                sub = Subscription.objects.filter(customer_id=customer_id)
+                subuse = Subscription(user=sub[0].user,customer_id=customer_id)
+        subuse.expires = sub_end
+        subuse.interval=interval
+        subuse.subscription_id=sub_id
+        subuse.last_payment=sub_paid
+        subuse.save()
         #handle_checkout_session(session)
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
