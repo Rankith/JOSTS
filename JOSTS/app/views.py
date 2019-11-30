@@ -170,6 +170,12 @@ def subscriptions(request):
         if form.is_valid():
             stripe.api_key = settings.STRIPE_API_KEY
             cust = Subscription.objects.filter(user=request.user.id).values("customer_id")
+            if (len(cust) == 0):
+                customer = stripe.Customer.create(
+                email=request.user.email)
+                sub = Subscription(user=request.user,customer_id=customer.id)
+                sub.save()
+                cust = Subscription.objects.filter(user=request.user.id).values("customer_id")
             session = stripe.checkout.Session.create(
                 customer=cust[0]["customer_id"],
                 payment_method_types=['card'],
