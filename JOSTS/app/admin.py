@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -41,7 +41,9 @@ class SymbolDuplicateAdmin(ImportExportModelAdmin):
     search_fields = ('symbol','replace_with','event')
     list_filter = ('event',)
 
-
+class SubscriptionTestAdmin(admin.ModelAdmin):
+    list_display = ('id','type')
+    list_filter = ('type',)
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -51,3 +53,4 @@ admin.site.register(Video)
 admin.site.register(UserNote,UserNoteAdmin)
 admin.site.register(DrawnImage,DrawnImageAdmin)
 admin.site.register(SymbolDuplicate,SymbolDuplicateAdmin)
+admin.site.register(SubscriptionTest,SubscriptionTestAdmin)

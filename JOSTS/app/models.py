@@ -88,3 +88,7 @@ class SymbolDuplicate(models.Model):
     symbol = models.CharField(max_length=255,blank=True,default='')
     replace_with = models.CharField(max_length=255,blank=True,default='')
     event = models.CharField(max_length=2,blank=True,default='')
+
+class SubscriptionTest(models.Model):
+    stripe_sent = models.TextField(blank=True,default='')
+    type = models.CharField(max_length=255,blank=True,default='')

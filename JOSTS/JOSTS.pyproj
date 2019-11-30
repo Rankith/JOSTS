@@ -5,6 +5,7 @@
     <Name>JOSTS</Name>
     <RootNamespace>JOSTS</RootNamespace>
     <InterpreterId>MSBuild|env1|$(MSBuildProjectFullPath)</InterpreterId>
+    <WebBrowserPort>5555</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>

@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -18,6 +18,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, SubscriptionForm
 from django.contrib.auth import authenticate, login
 import stripe
+from django.views.decorators.csrf import csrf_exempt
 
 def home(request):
     """Renders the home page."""
@@ -57,6 +58,40 @@ def about(request):
         }
     )
 
+@csrf_exempt
+def stripe_webhook(request):
+    stripe.api_key = 'sk_test_aHg8DgoSqtGog1R8gr7qt6jt00Cei8nZ3t'
+    endpoint_secret = 'whsec_cLJSpiDXS58u5XJbbqbvpWKCSUQT7KU3'
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+        payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    st = SubscriptionTest(type=event['type'], stripe_sent = str(event['data']['object']))
+    st.save()
+    # Handle the checkout.session.completed event
+    if event['type'] == 'invoice.payment_succeeded':
+        session = event['data']['object']
+        #handle_checkout_session(session)
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+
+        # Fulfill the purchase...
+        #handle_checkout_session(session)
+
+    return HttpResponse(status=200)
+
+@login_required(login_url='/login/')
 def subscriptions(request):
     if request.method == 'POST':
         form = SubscriptionForm(request.POST)

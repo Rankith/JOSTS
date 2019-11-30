@@ -49,5 +49,6 @@ urlpatterns = [
     path('quiz_setup/', views.quiz_setup, name='quiz_setup'),
     path('quiz/', views.quiz, name='quiz'),
     path('signup/', views.signup, name='signup'),
-    path('subscriptions/', views.subscriptions, name='subscriptions')
+    path('subscriptions/', views.subscriptions, name='subscriptions'),
+    path('stripe_webhook/', views.stripe_webhook, name='stripe_webhook')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
