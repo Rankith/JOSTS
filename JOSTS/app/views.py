@@ -110,8 +110,9 @@ def stripe_webhook(request):
         #interval='month'
 
         #now update customers default payment method to wahtever was just used
-        charge = stripe.Charge.retrieve(charge_id)
-        stripe.Customer.modify(customer_id,invoice_settings={'default_payment_method':charge["payment_method"]})
+        if (charge_id != 'null'):
+            charge = stripe.Charge.retrieve(charge_id)
+            stripe.Customer.modify(customer_id,invoice_settings={'default_payment_method':charge["payment_method"]})
 
         sub_end = datetime.fromtimestamp(sub_end)
         sub_paid = datetime.fromtimestamp(sub_paid)
