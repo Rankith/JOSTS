@@ -101,3 +101,4 @@ class Subscription(models.Model):
     expires = models.DateField(null=True,default=None)
     type = models.CharField(max_length=255,blank=True,default='')
     interval = models.CharField(max_length=15,blank=True,default='')
+    cancelled = models.BooleanField(default=False)

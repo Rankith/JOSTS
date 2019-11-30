@@ -59,10 +59,22 @@ def about(request):
         }
     )
 
+def subscription_cancel(request):
+    stripe.api_key = settings.STRIPE_API_KEY
+    sub_response = None
+    
+    try:
+        sub_response = stripe.Subscription.delete(request.GET.get('sub'))
+    except:
+        return redirect('/subscriptions/')
+
+    Subscription.objects.filter(subscription_id=request.GET.get('sub')).update(cancelled=True)
+    return redirect('/subscriptions/')
+
 @csrf_exempt
 def stripe_webhook(request):
-    stripe.api_key = 'sk_test_aHg8DgoSqtGog1R8gr7qt6jt00Cei8nZ3t'
-    endpoint_secret = 'whsec_9qOYf2NjDsbwA6UJ97NBnz4dP8EDnhHh'
+    stripe.api_key = settings.STRIPE_API_KEY
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
     payload = request.body
     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
@@ -89,7 +101,7 @@ def stripe_webhook(request):
         sub_end = line['period']['end']
         sub_paid = event['created']
         sub_id = line['subscription']
-        interval = line['plan']['interval']
+        interval = line['plan']['interval'].title()
         customer_id=session['customer']
         charge_id = session['charge']
 
@@ -135,10 +147,12 @@ def stripe_webhook(request):
 
 @login_required(login_url='/login/')
 def subscriptions(request):
+    sub = Subscription.objects.filter(user=request.user.id,expires__gte = datetime.today())
+    live_subscriptions = Subscription.objects.filter(user=request.user.id,expires__gte = datetime.today(),cancelled=False).count()
     if request.method == 'POST':
         form = SubscriptionForm(request.POST)
         if form.is_valid():
-            stripe.api_key = 'sk_test_aHg8DgoSqtGog1R8gr7qt6jt00Cei8nZ3t'
+            stripe.api_key = settings.STRIPE_API_KEY
             cust = Subscription.objects.filter(user=request.user.id).values("customer_id")
             session = stripe.checkout.Session.create(
                 customer=cust[0]["customer_id"],
@@ -148,13 +162,13 @@ def subscriptions(request):
                     'plan': form.cleaned_data.get('subscription'),
                     }],
                 },
-                success_url=request.build_absolute_uri("/") + 'success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=request.build_absolute_uri(),
+                success_url=request.build_absolute_uri("/") + 'subscriptions/?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=request.build_absolute_uri("/") + 'subscriptions/',
             )
-            return render(request, 'app/subscriptions.html', {'form': form,'checkout_session_id': session.id})
+            return render(request, 'app/subscriptions.html', {'form': form,'checkout_session_id': session.id,'subscriptions':sub,'stripe_public_key':settings.STRIPE_PUBLIC_KEY,'live_subs':  live_subscriptions})
     else:
         form = SubscriptionForm()
-    return render(request, 'app/subscriptions.html', {'form': form})
+    return render(request, 'app/subscriptions.html', {'form': form,'subscriptions':sub,'stripe_public_key':settings.STRIPE_PUBLIC_KEY,'live_subs':  live_subscriptions})
 
 def signup(request):
     if request.method == 'POST':
@@ -166,7 +180,7 @@ def signup(request):
             user = authenticate(request, username=username, password=password)
             login(request, user)
             #now create the stripe customer
-            stripe.api_key = 'sk_test_aHg8DgoSqtGog1R8gr7qt6jt00Cei8nZ3t'
+            stripe.api_key = settings.STRIPE_API_KEY
             customer = stripe.Customer.create(
                 email=form.cleaned_data.get('email'))
             sub = Subscription(user=user,customer_id=customer.id)

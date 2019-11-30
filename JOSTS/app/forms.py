@@ -30,4 +30,4 @@ class SignUpForm(UserCreationForm):
 class SubscriptionForm(forms.Form):
     CHOICES = [('plan_GGnHd74PKOQc9A','$5.00 Monthly'),
                ('plan_GGnJZIVbhRDFeG','$45.00 Yearly')]
-    subscription = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    subscription = forms.ChoiceField(choices=CHOICES, widget=forms.Select)
