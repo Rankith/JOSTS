@@ -13,7 +13,7 @@ import re
 from binascii import a2b_base64
 from django.http import HttpResponse
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm, SubscriptionForm
 from django.contrib.auth import authenticate, login
@@ -58,6 +58,19 @@ def about(request):
             'year':datetime.now().year,
         }
     )
+
+def subscription_check(user):
+    #standard subscription
+    if Subscription.objects.filter(user=user.id,expires__gte = datetime.today()).count() > 0:
+        return True
+    #super user
+    if user.is_superuser or user.is_staff:
+        return True
+    #free account
+    if Subscription.objects.filter(user=user.id,free=True).count() > 0:
+        return True
+    return False
+
 
 def subscription_cancel(request):
     stripe.api_key = settings.STRIPE_API_KEY
@@ -195,6 +208,7 @@ def signup(request):
     return render(request, 'app/signup.html', {'form': form})
 
 @login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
 def elements(request):
     #elements = ElementText.objects.filter(language="EN")
     #vals = Element.objects.order_by('letter_value').values('letter_value').distinct()
@@ -292,6 +306,7 @@ def element_list(request):
 
 #RULES
 @login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
 def rules(request):
     context = {
         'type':'rule',
@@ -350,6 +365,7 @@ def rule_list(request):
 
 #shorthand
 @login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
 def shorthand_training(request):
     #DrawnImage.objects.filter(label__contains='bb').update(event='bb')
     #dupes = SymbolDuplicate.objects.all()
@@ -403,6 +419,7 @@ def save_record_image(request):
     #im.save('test.png')
 
 @login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
 def shorthand_lookup(request):
     context = {
         'type':'element',
@@ -460,6 +477,7 @@ def element_lookup(request):
 
 #Quiz
 @login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
 def quiz_shorthand(request):
     context = {
         'type':'shorthand',

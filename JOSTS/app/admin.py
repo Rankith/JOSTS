@@ -46,9 +46,9 @@ class SubscriptionTestAdmin(admin.ModelAdmin):
     list_filter = ('type',)
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('id','user','customer_id','subscription_id','expires','interval','type')
+    list_display = ('id','user','customer_id','subscription_id','expires','interval','type','cancelled','free')
     search_fields = ('user','customer_id','subscription_id','type')
-    list_filter = ('type','interval')
+    list_filter = ('type','interval','cancelled','free')
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
