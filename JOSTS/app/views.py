@@ -90,6 +90,7 @@ def stripe_webhook(request):
         sub_paid = event['created']
         sub_id = line['subscription']
         interval = line['plan']['interval']
+        customer_id=session['customer']
 
         #sub_id='sub_GGsgPUtrAbpIAo'
         #customer_id='cus_GGsgPUtrAbpIAo'
