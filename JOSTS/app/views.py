@@ -161,6 +161,7 @@ def subscriptions(request):
                     'items': [{
                     'plan': form.cleaned_data.get('subscription'),
                     }],
+                    'trial_from_plan':'true',
                 },
                 success_url=request.build_absolute_uri("/") + 'subscriptions/?session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=request.build_absolute_uri("/") + 'subscriptions/',
