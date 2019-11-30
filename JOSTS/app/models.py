@@ -92,3 +92,11 @@ class SymbolDuplicate(models.Model):
 class SubscriptionTest(models.Model):
     stripe_sent = models.TextField(blank=True,default='')
     type = models.CharField(max_length=255,blank=True,default='')
+
+class Subscription(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)
+    customer_id = models.CharField(blank=True,default='',max_length=255)
+    subscription_id = models.CharField(blank=True,default='',max_length=255)
+    last_payment = models.DateField(null=True,default=None)
+    expires = models.DateField(null=True,default=None)
+    type = models.CharField(max_length=255,blank=True,default='')

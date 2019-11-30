@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -82,6 +82,7 @@ def stripe_webhook(request):
     # Handle the checkout.session.completed event
     if event['type'] == 'invoice.payment_succeeded':
         session = event['data']['object']
+
         #handle_checkout_session(session)
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
@@ -97,7 +98,9 @@ def subscriptions(request):
         form = SubscriptionForm(request.POST)
         if form.is_valid():
             stripe.api_key = 'sk_test_aHg8DgoSqtGog1R8gr7qt6jt00Cei8nZ3t'
+            cust = Subscription.objects.filter(user=request.user.id).values("customer_id")
             session = stripe.checkout.Session.create(
+                customer=cust[0]["customer_id"],
                 payment_method_types=['card'],
                 subscription_data={
                     'items': [{
@@ -121,6 +124,12 @@ def signup(request):
             password = form.cleaned_data.get('password1')
             user = authenticate(request, username=username, password=password)
             login(request, user)
+            #now create the stripe customer
+            stripe.api_key = 'sk_test_aHg8DgoSqtGog1R8gr7qt6jt00Cei8nZ3t'
+            customer = stripe.Customer.create(
+                email=form.cleaned_data.get('email'))
+            sub = Subscription(user=user,customer_id=customer.id)
+            sub.save()
             return redirect('/subscriptions')
     else:
         form = SignUpForm()
