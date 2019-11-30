@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 class EmailOrUsernameModelBackend(object):
     """
@@ -16,6 +17,8 @@ class EmailOrUsernameModelBackend(object):
             if user.check_password(password):
                 return user
         except User.DoesNotExist:
+            return None
+        except:
             return None
 
     def get_user(self, username):
