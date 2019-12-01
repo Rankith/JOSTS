@@ -103,3 +103,11 @@ class Subscription(models.Model):
     interval = models.CharField(max_length=15,blank=True,default='')
     cancelled = models.BooleanField(default=False)
     free = models.BooleanField(default=False)
+
+class SubscriptionSetup(models.Model):
+    display_text = models.CharField(max_length=255,blank=True,default='')
+    stripe_plan_id = models.CharField(max_length=255,blank=True,default='')
+    type = models.CharField(max_length=10,blank=True,default='')
+    interval = models.CharField(max_length=10,blank=True,default='')
+    def __str__(self):
+       return str(self.display_text)

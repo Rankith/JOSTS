@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -181,7 +181,7 @@ def subscriptions(request):
                 payment_method_types=['card'],
                 subscription_data={
                     'items': [{
-                    'plan': form.cleaned_data.get('subscription'),
+                    'plan': form.cleaned_data.get('subscription').stripe_plan_id,
                     }],
                     'trial_from_plan':'true',
                 },

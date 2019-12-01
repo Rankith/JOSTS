@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -50,6 +50,11 @@ class SubscriptionAdmin(admin.ModelAdmin):
     search_fields = ('user','customer_id','subscription_id','type')
     list_filter = ('type','interval','cancelled','free')
 
+class SubscriptionSetupAdmin(admin.ModelAdmin):
+    list_display = ('id','display_text','stripe_plan_id','type','interval')
+    list_editable = ('display_text','stripe_plan_id','type','interval')
+    list_filter = ('type','interval')
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
@@ -59,3 +64,4 @@ admin.site.register(UserNote,UserNoteAdmin)
 admin.site.register(DrawnImage,DrawnImageAdmin)
 admin.site.register(SymbolDuplicate,SymbolDuplicateAdmin)
 admin.site.register(Subscription,SubscriptionAdmin)
+admin.site.register(SubscriptionSetup,SubscriptionSetupAdmin)
