@@ -6,6 +6,7 @@ from datetime import datetime
 from django.urls import path
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import views as auth_views
 from app import forms, views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -51,5 +52,10 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('stripe_webhook/', views.stripe_webhook, name='stripe_webhook'),
-    path('cancel/', views.subscription_cancel, name='cancel')
+    path('cancel/', views.subscription_cancel, name='cancel'),
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

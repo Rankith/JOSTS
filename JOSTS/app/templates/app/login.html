@@ -22,7 +22,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <a href="/" class="navbar-brand">JRSTS</a>
-                <span class="footer-copyright">&copy; 2019</span>
+                <span class="text-secondary">&copy; 2019</span>
             </div>
                <ul class="nav navbar-nav navbar-right">
     <li><a href="#" data-toggle="modal" data-target="#modalMain">Log in</a></li>
@@ -68,12 +68,14 @@
                         {{ form.password }}
                     </div>
                 </div>
+               
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="hidden" name="next" value="/" />
-                        <input type="submit" value="Log in" class="btn btn-default" />
+                        <input type="submit" value="Log in" class="btn btn-main" />
                     </div>
                 </div>
+                 <div><a href="{% url 'password_reset' %}">Forgot Password?</a></div>
                
                 {% if form.errors %}
                 <p class="validation-summary-errors">Please enter a correct user name and password.</p>
