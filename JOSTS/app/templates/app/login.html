@@ -11,9 +11,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
     <script src="https://kit.fontawesome.com/36c6b5f765.js" crossorigin="anonymous"></script>
     <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <style>
+        @media screen and (min-width: 601px) {
+          .header-t-1 {
+            
+          }
+          .header-t-2 {
+            
+          }
+        }
+         @media screen and (max-width: 600px) {
+          .header-t-1 {
+            font-size: 1.5rem
+          }
+          .header-t-2 {
+            font-size: 1.0rem
+          }
+        }
+    </style>
 </head>
 
-<body class="content-area-background" style="overflow-y:scroll">
+<body class="" style="overflow-y:scroll">
 
 <div class="navbar navbar-dark nav-background fixed-top navbar-expand-md">
         <div class="container-fluid">
@@ -36,18 +54,18 @@
                 <img class="img-fluid" src="{% static 'app/images/wag/jrsts-lndng-lgo.png' %}" />
             </div>
             <div class="col-md-8 col-sm-12 text-center d-flex flex-column justify-content-center">
-                <h1 style="color:#2e2e5a" class="font-weight-bold">JUNIOR SPORTS TRAINING SYSTEMS</h1>
-                <div class="row d-flex justify-content-center pt-2" style="color:#2e2e5a">
-                    <div><h5>FOR JUDGES</h5></div>
-                     <div class="pl-3"><h5>FOR GYMNASTS</h5></div>
-                     <div class="pl-3"><h5>FOR COACHES</h5></div>
-                     <div class="pl-3"><h5>FOR MEDIA</h5></div>
-                     <div class="pl-3"><h5>FOR FANS</h5></div>
+                <h1 style="color:#2e2e5a" class="font-weight-bold header-t-1">JUNIOR SPORTS TRAINING SYSTEMS</h1>
+                <div class="row d-flex justify-content-center pt-2 header-t-2" style="color:#2e2e5a">
+                    <div><h5 class="header-t-2">FOR JUDGES</h5></div>
+                     <div class="pl-3"><h5 class="header-t-2">FOR GYMNASTS</h5></div>
+                     <div class="pl-3"><h5 class="header-t-2">FOR COACHES</h5></div>
+                     <div class="pl-3"><h5 class="header-t-2">FOR MEDIA</h5></div>
+                     <div class="pl-3"><h5 class="header-t-2">FOR FANS</h5></div>
                 </div>
             </div>
         </div>
          <div class="row">
-             <div class="col-md-4 col-sm-12 pt-4">
+             <div class="col-md-4 col-sm-12 pt-2">
                  <div class="d-flex flex-column justify-content-center" style="border-radius:3rem;">
                      <div class="card" style="border-radius:2rem">
                           <img class="img-fluid" src="{% static 'app/images/wag/jrsts-lndng-sbscrptn.png' %}" />
@@ -66,10 +84,6 @@
                 <img class="img-fluid" src="{% static 'app/images/wag/jrsts-lndng-rbbns.png' %}" />
             </div>
         </div>
-
-
-
-
 
         <div class="modal fade" id="modalMain" tabindex="-1" role="dialog" aria-labelledby="modalMainTitle" aria-hidden="true">
   <div class="modal-dialog " role="document">
