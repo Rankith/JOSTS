@@ -71,6 +71,7 @@
     <Folder Include="JOSTS\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\content\nouislider.min.css" />
     <Content Include="app\static\app\content\theme.css" />
     <Content Include="app\static\app\images\wag\elements\.gitignore" />
     <Content Include="app\static\app\images\wag\elements\bb250601.svg" />
@@ -2477,6 +2478,7 @@
     <Content Include="app\static\app\images\wag\UB_White.svg" />
     <Content Include="app\static\app\images\wag\V_White.svg" />
     <Content Include="app\static\app\scripts\jquery.mobile-1.4.5.min.js" />
+    <Content Include="app\static\app\scripts\nouislider.min.js" />
     <Content Include="app\static\app\scripts\shorthand_drawing.js" />
     <Content Include="app\templates\app\base.html" />
     <Content Include="app\templates\registration\password_reset_subject.txt" />
