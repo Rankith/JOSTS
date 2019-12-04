@@ -395,6 +395,7 @@ def shorthand_training(request):
 
 def shorthand_trainer(request):
     idIn = request.GET.get('id')
+    value_display = request.GET.get('value_display')
     element = ElementText.objects.filter(id=idIn)
     userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
     count = DrawnImage.objects.filter(label=element[0].element.image_url()).count()
@@ -407,7 +408,8 @@ def shorthand_trainer(request):
         'lang_elements': element[0],
         'user_note': userNote,
         'count' : count,
-        'symbol_duplicates' : symbol_duplicates
+        'symbol_duplicates' : symbol_duplicates,
+        'val_display':value_display
         }
     return render(request, 'app/shorthand_trainer.html',context=context)
 
