@@ -265,7 +265,10 @@ def element_search(request):
     ranges = Element.objects.order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     groupDict = {}
     valueDict = {}
-    #vvals = Element.objects.filter(event="V").filter(value__gte=7.0).filter(value__lt=8.0).update(range=7)
+    vvals = Element.objects.filter(event="V").update(letter_value='')
+    vvals = Element.objects.filter(event="V").update(letter_value_67='')
+    vvals = Element.objects.filter(event="V").update(letter_value_8='')
+    vvals = Element.objects.filter(event="V").update(letter_value_9='')
     #vvals = Element.objects.filter(event="V").filter(value__gte=8.0).filter(value__lt=9.0).update(range=8)
     #vvals = Element.objects.filter(event="V").filter(value__gte=9.0).filter(value__lt=10.0).update(range=9)
     #vvals = Element.objects.filter(event="V").filter(value__gte=10).update(range=10)
