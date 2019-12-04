@@ -136,53 +136,55 @@
     });
 
     //range slider
-    var slider = document.getElementById("VaultSlider")
+    if (type == "element") {
+        var slider = document.getElementById("VaultSlider")
 
-    noUiSlider.create(slider, {
-    start: [7, 10.1],
-    connect: true,
-    range: {
-        'min': 7,
-        'max': 10.1
-        },
-    step: 0.1
-    });
+        noUiSlider.create(slider, {
+            start: [7, 10.1],
+            connect: true,
+            range: {
+                'min': 7,
+                'max': 10.1
+            },
+            step: 0.1
+        });
 
-    slider.noUiSlider.on('update', function (values, handle) {
-        $("#divSliderValues").html(Number(values[0]).toFixed(1) + " - " + Number(values[1]).toFixed(1));
-       
-    });
+        slider.noUiSlider.on('update', function (values, handle) {
+            $("#divSliderValues").html(Number(values[0]).toFixed(1) + " - " + Number(values[1]).toFixed(1));
 
-   slider.noUiSlider.on('end', function (values, handle) {
+        });
 
-       localStorage.VaultRange = values;
-       CreateSearchParams();
-    });
+        slider.noUiSlider.on('end', function (values, handle) {
 
-    //level slider
-    var Lslider = document.getElementById("LevelSlider");
+            localStorage.VaultRange = values;
+            CreateSearchParams();
+        });
 
-    noUiSlider.create(Lslider, {
-    start: 10,
-    connect: true,
-    range: {
-        'min': 6,
-        'max': 10
-        },
-        step: 1,
+        //level slider
+        var Lslider = document.getElementById("LevelSlider");
 
-    });
+        noUiSlider.create(Lslider, {
+            start: 10,
+            connect: true,
+            range: {
+                'min': 6,
+                'max': 10
+            },
+            step: 1,
 
-   
-    Lslider.noUiSlider.on('update', function (values, handle) {
-       $("#divLSliderValues").html("Level " + Number(values[0]).toFixed(0));
-       
-    });
+        });
 
-   Lslider.noUiSlider.on('end', function (values, handle) {
-       localStorage.VaultLevel = values;
-       CreateSearchParams();
-    });
+
+        Lslider.noUiSlider.on('update', function (values, handle) {
+            $("#divLSliderValues").html("Level " + Number(values[0]).toFixed(0));
+
+        });
+
+        Lslider.noUiSlider.on('end', function (values, handle) {
+            localStorage.VaultLevel = values;
+            CreateSearchParams();
+        });
+    }
     function ShowHideRange() {
         if (Event == "V") {
             $("#range").show();
@@ -322,11 +324,13 @@
             ShowHideSearches();
             CreateSearchParams();
         }
-        if (localStorage.VaultRange != undefined)
-            slider.noUiSlider.set([localStorage.VaultRange.split(",")[0], localStorage.VaultRange.split(",")[1]]);
-        if (localStorage.VaultLevel != undefined)
-            Lslider.noUiSlider.set(localStorage.VaultLevel);
-        ShowHideRange();
+        if (type == "element") {
+            if (localStorage.VaultRange != undefined)
+                slider.noUiSlider.set([localStorage.VaultRange.split(",")[0], localStorage.VaultRange.split(",")[1]]);
+            if (localStorage.VaultLevel != undefined)
+                Lslider.noUiSlider.set(localStorage.VaultLevel);
+            ShowHideRange();
+        }
     }
 </script>
 {% endblock %}

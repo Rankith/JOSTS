@@ -361,6 +361,8 @@ def rule_list(request):
     search = search.replace("1/2","½")
     search = search.replace("1/4","¼")
     del dget['search']
+    value_display = dget['value_display'][0]
+    del dget['value_display']
     query = Q()
     for k,v in dget.items():
         innerQuery = Q()
