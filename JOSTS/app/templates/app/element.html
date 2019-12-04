@@ -31,7 +31,34 @@
     </div>
     <div class="row no-gutters text-detail-bottom">
         <div class="col"><div class="text-center">{{lang_elements.id_number_text}}</div></div>
-        <div class="col"><div class="text-center">{{lang_elements.element.letter_value}} = {{lang_elements.element.value}}</div></div>
+        <div class="col"><div class="text-center">
+
+             {% if val_display == 'value_67' %}
+                                                    {% if lang_elements.element.letter_value_67 == ''%}
+                                                        {{lang_elements.element.value_67}}
+                                                    {% else %}
+                                                        {{lang_elements.element.letter_value_67}} = {{lang_elements.element.value_67}}
+                                                    {% endif %}
+                                                {% elif val_display == 'value_8' %}
+                                                    {% if lang_elements.element.letter_value_8 == ''%}
+                                                        {{lang_elements.element.value_8}}
+                                                    {% else %}
+                                                        {{lang_elements.element.letter_value_8}} = {{lang_elements.element.value_8}}
+                                                    {% endif %}
+                                                 {% elif val_display == 'value_9' %}
+                                                    {% if lang_elements.element.letter_value_9 == ''%}
+                                                        {{lang_elements.element.value_9}}
+                                                    {% else %}
+                                                        {{lang_elements.element.letter_value_9}} = {{lang_elements.element.value_9}}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if lang_elements.element.letter_value == ''%}
+                                                        {{lang_elements.element.value}}
+                                                    {% else %}
+                                                        {{lang_elements.element.letter_value}} = {{lang_elements.element.value}}
+                                                    {% endif %}
+                                                {% endif %}
+             </div></div>
        
        <!-- <div class="col text-white">
             <table class="w-100">

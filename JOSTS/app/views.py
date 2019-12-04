@@ -234,6 +234,7 @@ def elements(request):
 
 def element(request):
     idIn = request.GET.get('id')
+    value_display = request.GET.get('value_display')
     element = ElementText.objects.filter(id=idIn)
     userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
     if (len(userNote) > 0):
@@ -243,6 +244,7 @@ def element(request):
     context = {
         'lang_elements': element[0],
         'user_note': userNote,
+        'val_display': value_display,
         }
     return render(request, 'app/element.html',context=context)
 
@@ -292,6 +294,8 @@ def element_list(request):
     search = search.replace("1/2","½")
     search = search.replace("1/4","¼")
     del dget['search']
+    value_display = dget['value_display'][0]
+    del dget['value_display']
     query = Q(language="EN")
     for k,v in dget.items():
         innerQuery = Q()
@@ -306,6 +310,7 @@ def element_list(request):
         'lang_elements': elements,
         'num_elements': str(len(elements)) + " Elements",
         'display': display,
+        'val_display': value_display,
         }
     return render(request, 'app/element_list.html',context=context)
 

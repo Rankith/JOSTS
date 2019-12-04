@@ -129,7 +129,7 @@
         }).on('show.bs.collapse', function() {
             SetPadding();
         });
-        $("#divElement").load("/" + type + "?id=" + idIn, ShowAndSetHeight);
+        $("#divElement").load("/" + type + "?id=" + idIn + "&value_display="+ValueDisplay, ShowAndSetHeight);
     }
     function ShowAndSetHeight() {
         $("#divElement").collapse("show");

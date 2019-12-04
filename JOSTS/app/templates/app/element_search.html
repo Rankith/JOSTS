@@ -49,24 +49,23 @@
         {% endfor %}
     </div>
 
-    <div class="row no-gutters" id="range">
-        <div class="col-12">
+    <div class="row no-gutters pt-2 pb-2" id="range">
+        <div class="col-12 pr-3 pl-3">
             <div id="VaultSlider"></div>
         </div>
-        <div class="col-12" id="divSliderValues">
+        <div class="col-12 text-center" id="divSliderValues" style="font-size:1.4rem">
            
         </div>
     </div>
 
-    <div class="row no-gutters" id="ranges">
-        {% for value in ranges %}
-        <div class="pr-2">
-            <label id="lblVV{{forloop.counter}}" class="search-button">
-                <input type="checkbox" id="chkVV{{forloop.counter}}" value="{{value.range}}" class="check-search search-V" data-search="element__range" onchange="SearchChange(this)">
-                <div class="search-button value-button"><div style="text-transform:uppercase">{{value.range}}</div></div>
-            </label>
+    <div class="row no-gutters" id="levels">
+        <div class="col-12 pr-3 pl-3">
+            <div id="LevelSlider"></div>
         </div>
-        {% endfor %}
+        <div class="col-12 text-center" id="divLSliderValues" style="font-size:1.4rem">
+           
+        </div>
+      
     </div>
 {% else %}
     <div class="row no-gutters">
@@ -127,6 +126,7 @@
 {% block scripts %}
 <script type="text/javascript">
     var Event = "";
+    var ValueDisplay = "value";
 
     $('#txtSearch').keypress(function (e) {
       if (e.which == 13) {
@@ -135,6 +135,7 @@
       }
     });
 
+    //range slider
     var slider = document.getElementById("VaultSlider")
 
     noUiSlider.create(slider, {
@@ -152,13 +153,45 @@
        
     });
 
-   
+   slider.noUiSlider.on('end', function (values, handle) {
 
+       localStorage.VaultRange = values;
+       CreateSearchParams();
+    });
+
+    //level slider
+    var Lslider = document.getElementById("LevelSlider");
+
+    noUiSlider.create(Lslider, {
+    start: 10,
+    connect: true,
+    range: {
+        'min': 6,
+        'max': 10
+        },
+        step: 1,
+
+    });
+
+   
+    Lslider.noUiSlider.on('update', function (values, handle) {
+       $("#divLSliderValues").html("Level " + Number(values[0]).toFixed(0));
+       
+    });
+
+   Lslider.noUiSlider.on('end', function (values, handle) {
+       localStorage.VaultLevel = values;
+       CreateSearchParams();
+    });
     function ShowHideRange() {
-        if (Event == "V")
+        if (Event == "V") {
             $("#range").show();
-        else
+            $("#levels").show();
+        }
+        else {
             $("#range").hide();
+            $("#levels").hide();
+        }
     }
 
     function SearchChangeEvent(el) {
@@ -222,11 +255,26 @@
                     strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
                 //console.log($(this).attr("data-search") + " : " + $(this).val());
             });
+            if (Event == "V") {
+                var vValue = "value_" + Lslider.noUiSlider.get()[0];
+                if (vValue == "value_6" || vValue == "value_7")
+                    vValue = "value_67"
+                if (vValue == "value_1")
+                    vValue = "value";
+                ValueDisplay = vValue;
+                vValue = "element__" + vValue;
+                strValues = vValue + "__gte=" + slider.noUiSlider.get()[0] + "&" + vValue + "__lte=" + slider.noUiSlider.get()[1] + "&" + strValues;
+                
+            }
+            else
+                 ValueDisplay = "value";
+            strValues = "value_display=" + ValueDisplay + "&" + strValues;
             if (type == "element" || type == "shorthand_trainer") {
                 strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
             }
             //if ($("#txtSearch").val() != "")
-                strValues = "search=" + $("#txtSearch").val() + "&" + strValues;
+            strValues = "search=" + $("#txtSearch").val() + "&" + strValues;
+            
             $.get("/" + list_type + "_list/?" + strValues, function (data) {
                 $("#divElementList").empty();
                 $("#divElementList").append(data);
@@ -249,6 +297,7 @@
     function LoadLastSelections() {
         //console.log("LLS");
         //console.log(localStorage);
+
         $(".check-search:checkbox").each(function (i) {
             if (localStorage.getItem(this.id) == "1")
                 $(this).prop('checked', true);
@@ -273,7 +322,11 @@
             ShowHideSearches();
             CreateSearchParams();
         }
-         ShowHideRange();
+        if (localStorage.VaultRange != undefined)
+            slider.noUiSlider.set([localStorage.VaultRange.split(",")[0], localStorage.VaultRange.split(",")[1]]);
+        if (localStorage.VaultLevel != undefined)
+            Lslider.noUiSlider.set(localStorage.VaultLevel);
+        ShowHideRange();
     }
 </script>
 {% endblock %}
