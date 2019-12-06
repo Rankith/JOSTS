@@ -522,5 +522,6 @@ def quiz(request):
     context = {
         'events': ['FX','BB','UB','V'],
         'lang_elements': elements,
+        'prompt_type': request.GET.get('prompt')
         }
     return render(request, 'app/quiz.html',context=context)

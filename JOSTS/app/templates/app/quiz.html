@@ -1,4 +1,40 @@
 ﻿{% load staticfiles %}
+<div class="row no-gutters">
+    <div class="col-6 pt-2 d-flex align-items-center justify-content-center">
+        <div style="height:170px" class="image-background rounded w-75" id="divPrompt">
+            <div class="row h-100 justify-content-center align-items-center text-center">
+                <div class="col-12 position-relative">
+                    <img id="imgPrompt" class="img-fluid" style="max-height:150px;overflow:hidden" />
+                </div>
+                {% if prompt_type == "Image" %}
+                    <div id="divPromptText" class="col-12 pb-1 img-text-below">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 h-100">
+        <div class="row">
+            {% for i in '1234'|make_list %}
+                <div class="col-12 pt-2">
+                    <div id="divAnswerContainer{{forloop.counter}}" onclick="AnswerClick({{forloop.counter}})" class="image-background rounded quiz-border-neutral" style="cursor: pointer">
+                        <div class="row h-100 justify-content-center align-items-center text-center">
+                            <div class="col-12 position-relative">
+                                <img id="imgAnswer{{forloop.counter}}" class="img-fluid" style="max-height:120px;overflow:hidden" />
+                            </div>
+                                <div id="divAnswer{{forloop.counter}}Text" class="col-12 pb-1 align-self-end img-text-below">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            
+        </div>
+    </div>
+</div>
+
 {% block scripts %}
 <script type="text/javascript">
     var NumElements = {{lang_elements|length}};
@@ -10,69 +46,101 @@
     {% endfor %}
     var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
     var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
+    var PromptType = '{{prompt_type}}'
+    if (PromptType == "Shorthand")
+    {
+        var PromptBaseURL = SymbolBaseURL;
+        var AnswerBaseURL = ImageBaseURL;
+    }
+    else
+    {
+        var PromptBaseURL = ImageBaseURL;
+        var AnswerBaseURL = SymbolBaseURL;
+    }
+    var AnswerLoc = -1;
+    var OnElement = 0;
+    var Answered = false;
+    var Correct = 0;
+    var Wrong = 0;
     
 </script>
+<script type="text/javascript">
+    PopulateQuiz(0);
+
+    if (PromptType == "Image" || window.innerWidth < 600) {
+        $("#divAnswer1Text").remove();
+        $("#divAnswer2Text").remove();
+        $("#divAnswer3Text").remove();
+        $("#divAnswer4Text").remove();
+    }
+
+    function PopulateQuiz(which){
+        $("#imgPrompt").attr('src', PromptBaseURL + Elements[which] + ".svg")
+        AnswerLoc = GenerateAnswerLocation();
+        console.log(which);
+        console.log(Elements[which]);
+        console.log(AnswerLoc);
+        var TempAnswer;
+        for (var i = 1; i <= 4; i++) {
+            if (i != AnswerLoc) {
+                TempAnswer = GenerateRandomAnswer(which)
+                $("#imgAnswer" + i).attr('src', AnswerBaseURL + Elements[TempAnswer] + ".svg")
+                if (PromptType == "Shorthand")
+                    $("#divAnswer" + i + "Text").html(ElementShortText[TempAnswer]);
+            }
+        }
+        $("#imgAnswer" + AnswerLoc).attr('src', AnswerBaseURL + Elements[which] + ".svg")
+        if (PromptType == "Shorthand")
+            $("#divAnswer" + AnswerLoc + "Text").html(ElementShortText[which]);
+        else
+            $("#divPromptText").html(ElementShortText[which]);
+  
+    }
+
+    function AnswerClick(which) {
+        if (Answered == false) {
+            Answered = true;
+            if (which == AnswerLoc)
+                AnswerCorrect();
+            else
+                AnswerWrong(which);
+        }  
+    }
+
+    function AnswerCorrect() {
+        Correct++;
+        $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
+        setTimeout(QuizNext, 2000);
+    }
+
+    function AnswerWrong(which) {
+        Wrong++;
+        $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
+        $("#divAnswerContainer" + which).addClass("quiz-border-wrong").removeClass("quiz-border-neutral");
+        setTimeout(QuizNext, 2000);
+    }
+
+    function QuizNext() {
+        Answered = false;
+        for (var i = 1; i <= 4; i++) 
+            $("#divAnswerContainer" + i).addClass("quiz-border-neutral").removeClass("quiz-border-correct").removeClass("quiz-border-wrong");
+        OnElement++;
+        PopulateQuiz(OnElement);
+    }
+
+    function GenerateRandomAnswer(which) {
+        var QuizA = Math.floor((Math.random() * NumElements));
+        //make sure its not the correct answer!
+        if (QuizA == which) {
+            QuizA = QuizA + 1;
+            if (QuizA > NumElements) {
+                QuizA = 0;
+            }
+        }
+        return QuizA;
+    }
+    function GenerateAnswerLocation() {
+        return Math.floor((Math.random() * 4) + 1);
+    }
+</script>
 {% endblock %}
-
-<div class="row">
-    <div class="col-6 pt-2">
-        <div style="height:150px" class="image-background rounded" id="divPrompt">
-            <div class="row h-100 justify-content-center align-items-center text-center">
-                <div class="col-12 position-relative">
-                    <img id="imgPrompt" class="img-fluid" style="max-height:150px;overflow:hidden" />
-                </div>
-                <div id="divPromptText" class="col-12 pb-1" style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-6">
-        <div class="row">
-            <div class="col-6 pt-2">
-                <div style="height:120px" class="image-background rounded">
-                    <div class="row h-100 justify-content-center align-items-center text-center">
-                        <div class="col-12 position-relative">
-                            <img id="imgAnswer1" class="img-fluid" style="max-height:120px;overflow:hidden" />
-                        </div>
-                        <div id="divAnswer1Text" class="col-12 pb-1 align-self-end" style=" line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 pt-2">
-                <div style="height:120px" class="image-background rounded">
-                    <div class="row h-100 justify-content-center align-items-center text-center">
-                        <div class="col-12 position-relative">
-                            <img id="imgAnswer2" class="img-fluid" style="max-height:120px;overflow:hidden" />
-                        </div>
-                        <div id="divAnswer2Text" class="col-12 pb-1 align-self-end" style=" line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 pt-2 ">
-                <div style="height:120px" class="image-background rounded">
-                    <div class="row h-100 justify-content-center align-items-center text-center">
-                        <div class="col-12 position-relative">
-                            <img id="imgAnswer3" class="img-fluid" style="max-height:120px;overflow:hidden" />
-                        </div>
-                        <div id="divAnswer3Text" class="col-12 pb-1 align-self-end" style=" line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 pt-2">
-                <div style="height:120px" class="image-background rounded">
-                    <div class="row h-100 justify-content-center align-items-center text-center">
-                        <div class="col-12 position-relative">
-                            <img id="imgAnswer4" class="img-fluid" style="max-height:120px;overflow:hidden" />
-                        </div>
-                        <div id="divAnswer4Text" class="col-12 pb-1 align-self-end" style=" line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>

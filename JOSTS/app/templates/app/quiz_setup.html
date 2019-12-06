@@ -46,32 +46,34 @@
     {% endblock %}
     {% block scripts %}
     <script type="text/javascript">
-        var Event = "";
+    var Event = "";
+    var PromptTypeSetup = "Shorthand";
 
-        function SetPrompt(type) {
-            if (type == "Shorthand") {
-               // $("#chkPromptShorthand").prop('checked', true);
-                $("#chkAnswerShorthand").prop('checked', false);
+    function SetPrompt(typeIn) {
+        PromptTypeSetup = typeIn;
+        if (typeIn == "Shorthand") {
+            // $("#chkPromptShorthand").prop('checked', true);
+            $("#chkAnswerShorthand").prop('checked', false);
 
-                $("#chkPromptImage").prop('checked', false);
-               // $("#chkAnswerImage").prop('checked', true);
-            }
-            else {
-                $("#chkPromptShorthand").prop('checked', false);
-               // $("#chkAnswerShorthand").prop('checked', true);
-
-                $("#chkPromptImage").prop('checked', true);
-               // $("#chkAnswerImage").prop('checked', false);
-            }
+            $("#chkPromptImage").prop('checked', false);
+            // $("#chkAnswerImage").prop('checked', true);
         }
-        function LoadLastSelections() {
-            $(".check-search:checkbox").each(function (i) {
-                if (localStorage.getItem(this.id) == "1")
-                    $(this).prop('checked', true);
-                else
-                    $(this).prop('checked', false);
-            });
-            }
+        else {
+            $("#chkPromptShorthand").prop('checked', false);
+            // $("#chkAnswerShorthand").prop('checked', true);
+
+            $("#chkPromptImage").prop('checked', true);
+            // $("#chkAnswerImage").prop('checked', false);
+        }
+    }
+    function LoadLastSelections() {
+        $(".check-search:checkbox").each(function (i) {
+            if (localStorage.getItem(this.id) == "1")
+                $(this).prop('checked', true);
+            else
+                $(this).prop('checked', false);
+        });
+        }
     function SearchChangeEvent(el) {
         //console.log("SCE");
         if (!el.checked)
@@ -87,13 +89,13 @@
         }
     }
 
-        function StartQuiz() {
-           
-            $.get("/quiz/?event=" + $(".check-search:checkbox:checked").val(), function (data) {
-                $("#divContentParent").empty();
-                $("#divContentParent").append(data);
-            });
-        }
+    function StartQuiz() {
+        $.get("/quiz/?event=" + $(".check-search:checkbox:checked").val() + "&prompt=" + PromptTypeSetup, function (data) {
+            $("#divContentParent").empty();
+            $("#divContentParent").append(data);
+            $('#sidebarCollapse').click();
+        });
+    }
     
     </script>
     {% endblock %}
