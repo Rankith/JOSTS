@@ -31,7 +31,9 @@
                             {% endifchanged %}
                              <li class="list-group-item rules-cue" style="cursor:pointer" >
                                  <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
+                                     {% autoescape off %}
                                      <pre>{{rule.cue}}</pre>
+                                     {% endautoescape %}
                                  </div>
                                 
                             </li>
@@ -41,7 +43,9 @@
                                 </div>
                                 <div class="list-group-item rules-response">
                                     <div class="">
+                                        {% autoescape off %}
                                         <pre>{{rule.response}}</pre>
+                                        {% endautoescape %}
                                     </div>
                                     <div class="row no-gutters">
                                         <div class="col rule-section">
