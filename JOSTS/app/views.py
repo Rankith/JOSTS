@@ -285,7 +285,7 @@ def element_search(request):
         'valueEvents': valueDict,
         'events': ['FX','BB','UB','V'],
         'ranges': ranges,
-        'type':'element',
+        'search_type':'element',
         }
     return render(request, 'app/element_search.html',context=context)
 
@@ -351,7 +351,7 @@ def rule_search(request):
     context = {
         'sections':sections,
         'sectionsDict': sectionDict,
-        'type': 'rule',
+        'search_type': 'rule',
         }
     return render(request, 'app/element_search.html',context=context)
 
@@ -473,7 +473,7 @@ def shorthand_search(request):
         'valueEvents': valueDict,
         'events': ['FX','BB','UB','V'],
         'ranges': ranges,
-        'type':'shorthand',
+        'search_type':'shorthand',
         }
     return render(request, 'app/element_search.html',context=context)
 

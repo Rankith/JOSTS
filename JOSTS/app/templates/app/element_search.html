@@ -3,7 +3,7 @@
 <div class="sidebar-header">
    
 </div>
-{% if type == 'element' or type == 'rule' %}
+{% if search_type == 'element' or search_type == 'rule' %}
 <div class="input-group input-group-sm mt-1" id="divSearch">
   <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="txtSearch">
   <div class="input-group-append">
@@ -26,7 +26,7 @@
     </div>
     {% endfor %}
 </div>
-{% if type == 'element' %}
+{% if search_type == 'element' %}
     <div class="row no-gutters">
         {% for key, value in groupsEvents.items %}
         <div class="pr-2">
@@ -89,11 +89,11 @@
     </div>
 </div>
 
-{% if type == 'shorthand' %}
+{% if search_type == 'shorthand' %}
 
 {% endif %}
 
-{% if type == 'element' or type == 'shorthand_trainer' %}
+{% if search_type == 'element' or search_type == 'shorthand_trainer' %}
 <div class="row no-gutters">
     <div class="pr-2">
         <label id="lblDisplayImage" class="search-button">
@@ -136,7 +136,7 @@
     });
 
     //range slider
-    if (type == "element") {
+    if (search_type == "element") {
         var slider = document.getElementById("VaultSlider")
 
         noUiSlider.create(slider, {
@@ -271,7 +271,7 @@
             else
                  ValueDisplay = "value";
             strValues = "value_display=" + ValueDisplay + "&" + strValues;
-            if (type == "element" || type == "shorthand_trainer") {
+            if (search_type == "element" || type == "shorthand_trainer") {
                 strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
             }
             //if ($("#txtSearch").val() != "")
@@ -306,7 +306,7 @@
             else
                 $(this).prop('checked', false);
         });
-        if (type == "element" || type == "shorthand_trainer") {
+        if (search_type == "element" || type == "shorthand_trainer") {
              $(".check-search-display:checkbox").each(function (i) {
                 if (localStorage.getItem(this.id) == "1")
                     $(this).prop('checked', true);
@@ -324,7 +324,7 @@
             ShowHideSearches();
             CreateSearchParams();
         }
-        if (type == "element") {
+        if (search_type == "element") {
             if (localStorage.VaultRange != undefined)
                 slider.noUiSlider.set([localStorage.VaultRange.split(",")[0], localStorage.VaultRange.split(",")[1]]);
             if (localStorage.VaultLevel != undefined)
