@@ -304,6 +304,7 @@
         //console.log(localStorage);
 
         $(".check-search:checkbox").each(function (i) {
+            
             if (localStorage.getItem(this.id) == "1")
                 $(this).prop('checked', true);
             else
@@ -321,8 +322,10 @@
                  localStorage.setItem('chkDisplayImage', 1);
             }
         }
-        if ($(".check-search-event:checkbox:checked").length == 0)
-            $(".check-search:checkbox")[0].click();
+        if ($(".check-search-event:checkbox:checked").length == 0) {
+            if ($(".check-search-event:checkbox").length > 0)
+                $(".check-search-event:checkbox")[0].click();
+        }
         else {
             ShowHideSearches();
             CreateSearchParams();
