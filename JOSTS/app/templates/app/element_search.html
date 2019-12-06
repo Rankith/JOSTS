@@ -125,6 +125,9 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
+        var search_type = '{{search_type}}';
+</script>
+<script type="text/javascript">
     var Event = "";
     var ValueDisplay = "value";
 
@@ -257,7 +260,7 @@
                     strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
                 //console.log($(this).attr("data-search") + " : " + $(this).val());
             });
-            if (Event == "V") {
+            if (Event == "V" && search_type=="element") {
                 var vValue = "value_" + Lslider.noUiSlider.get()[0];
                 if (vValue == "value_6" || vValue == "value_7")
                     vValue = "value_67"

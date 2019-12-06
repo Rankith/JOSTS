@@ -450,10 +450,19 @@ def element_for_shorthand(request):
     idIn = request.GET.get('id')
     eventIn = request.GET.get('event')
     element = ElementText.objects.filter(element__id_number=idIn).filter(element__event=eventIn)
+    userNote = UserNote.objects.filter(user=request.user.id,element=element[0].element.id)
+    if (len(userNote) > 0):
+        userNote = userNote[0].note;
+    else:
+        userNote = '';
     context = {
         'lang_elements': element[0],
+        'user_note': userNote,
+        'val_display': 'value',
         }
-    return render(request, 'app/element_for_shorthand.html',context=context)
+    return render(request, 'app/element.html',context=context)
+
+   
 
 def shorthand_search(request):
     vals ={}
@@ -480,7 +489,7 @@ def shorthand_search(request):
 def element_lookup(request):
     eventIn = request.GET.get('event')
     if (eventIn == "V"):
-        vals = Element.objects.order_by('element__range').values('element__range').exclude(range='').annotate(int_order=Cast('element__range',IntegerField())).order_by('int_order').distinct()
+        vals = Element.objects.order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     else:
         vals = Element.objects.filter(event=eventIn).order_by('letter_value').values('letter_value').distinct()   
     groups = Element.objects.filter(event=eventIn).order_by('str_grp').values('str_grp').distinct()
