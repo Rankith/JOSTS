@@ -1,6 +1,6 @@
 ﻿{% load staticfiles %}
 <div class="row no-gutters">
-    <div class="col-6 pt-2 d-flex align-items-center justify-content-center">
+    <div class="col-6 pt-2 d-flex align-items-center justify-content-center flex-column">
         <div style="height:170px" class="image-background rounded w-75" id="divPrompt">
             <div class="row h-100 justify-content-center align-items-center text-center">
                 <div class="col-12 position-relative">
@@ -11,6 +11,22 @@
                     </div>
                 {% endif %}
             </div>
+        </div>
+        <div class="w-75">
+            <div class="row no-gutters">
+                <div class="text-base font-weight-bold col-4">
+                     <span id="divTotalText">Total: </span><span id="divTotalCount">0</span>
+                </div>
+                <div class="text-success font-weight-bold col-4 text-center">
+                    <span id="divCorrectCount">0</span>
+                </div>
+                <div class="text-danger font-weight-bold col-4 text-right">
+                    <span id="divWrongCount">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="w-75 pt-4 text-center">
+              <button type="button" class="btn btn-main font-weight-bold" onclick="EndQuiz()">Done</button>
         </div>
     </div>
 
@@ -33,6 +49,10 @@
             
         </div>
     </div>
+    <div id="QuizResults" style="display:none">
+        <div>You got <span id="qrCorrect"></span> of <span id="qrTotal"></span> <span id="qrPercent"></span> correct.</div>
+        <div class="pt-3"><a href="{% url "quiz_shorthand" %}"><button type="button" class="btn btn-main font-weight-bold">OK</button></a></div>
+    </div>
 </div>
 
 {% block scripts %}
@@ -40,9 +60,11 @@
     var NumElements = {{lang_elements|length}};
     var Elements = new Array();
     var ElementShortText = new Array();
+    var ElementIDs = new Array();
     {% for element in lang_elements %}
         Elements[{{ forloop.counter0 }}] = "{{ element.element.image_url}}";
         ElementShortText[{{ forloop.counter0 }}] = "{{ element.short_text}}";
+        ElementIDs[{{ forloop.counter0 }}] = "{{ element.element.id}}";
     {% endfor %}
     var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
     var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
@@ -62,6 +84,10 @@
     var Answered = false;
     var Correct = 0;
     var Wrong = 0;
+    var Total = 0;
+    var Missed = new Array();
+    var SaveUrl =  '{% url "quiz_save" %}';
+    var Event = '{{event}}';
     
 </script>
 <script type="text/javascript">
@@ -72,14 +98,12 @@
         $("#divAnswer2Text").remove();
         $("#divAnswer3Text").remove();
         $("#divAnswer4Text").remove();
+        $("#divTotalText").hide();
     }
 
     function PopulateQuiz(which){
         $("#imgPrompt").attr('src', PromptBaseURL + Elements[which] + ".svg")
         AnswerLoc = GenerateAnswerLocation();
-        console.log(which);
-        console.log(Elements[which]);
-        console.log(AnswerLoc);
         var TempAnswer;
         for (var i = 1; i <= 4; i++) {
             if (i != AnswerLoc) {
@@ -100,11 +124,19 @@
     function AnswerClick(which) {
         if (Answered == false) {
             Answered = true;
+            Total++;
             if (which == AnswerLoc)
                 AnswerCorrect();
             else
                 AnswerWrong(which);
+            UpdateStats();
         }  
+    }
+
+    function UpdateStats() {
+        $("#divTotalCount").html(Total);
+        $("#divCorrectCount").html(Correct);
+        $("#divWrongCount").html(Wrong);
     }
 
     function AnswerCorrect() {
@@ -114,6 +146,7 @@
     }
 
     function AnswerWrong(which) {
+        Missed[Wrong] = ElementIDs[OnElement];
         Wrong++;
         $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
         $("#divAnswerContainer" + which).addClass("quiz-border-wrong").removeClass("quiz-border-neutral");
@@ -142,5 +175,36 @@
     function GenerateAnswerLocation() {
         return Math.floor((Math.random() * 4) + 1);
     }
+    function EndQuiz() {
+        SaveQuiz();
+        $("#modalMainTitle").html("Quiz Results");
+        $("#modalBodyArea2").empty().append($("#QuizResults"));
+        $("#QuizResults").show();
+        $("#qrCorrect").html(Correct);
+        $("#qrTotal").html(Total);
+        $("#qrPercent").html("(" + (Correct/Total).toFixed(2) * 100 + "%)");
+        $("#modalMain").modal();
+        
+    }
+
+    function SaveQuiz() {
+        var note = $('#txtUserNotes').val();
+
+        $.ajax({
+            url: SaveUrl,
+            data: {
+                'event': Event,
+                'correct': Correct,
+                'wrong': Wrong,
+                'type': 'Shorthand',
+                'missed': Missed
+            },
+            dataType: 'json',
+            success: function (data) {
+              
+            }
+      });
+    }
 </script>
+
 {% endblock %}

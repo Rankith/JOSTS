@@ -111,3 +111,16 @@ class SubscriptionSetup(models.Model):
     interval = models.CharField(max_length=10,blank=True,default='')
     def __str__(self):
        return str(self.display_text)
+
+class QuizResult(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)
+    event = models.CharField(max_length=20,blank=True,default='')
+    date_completed = models.DateField(null=True,default=None,blank=True)
+    correct = models.IntegerField(default=0)
+    wrong = models.IntegerField(default=0)
+    def total(self):
+        return correct + wrong
+    def percent(self):
+        return correct/total
+    missed = models.ManyToManyField(Element)
+    type = models.CharField(max_length=20,blank=True,default='')

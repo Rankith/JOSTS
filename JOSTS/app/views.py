@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -520,8 +520,15 @@ def quiz_setup(request):
 def quiz(request):
     elements = ElementText.objects.filter(element__event=request.GET.get('event')).order_by('?')
     context = {
-        'events': ['FX','BB','UB','V'],
+        'event': request.GET.get('event'),
         'lang_elements': elements,
         'prompt_type': request.GET.get('prompt')
         }
     return render(request, 'app/quiz.html',context=context)
+
+def quiz_save(request):
+    QR = QuizResult(event=request.GET.get('event'),correct=request.GET.get('correct'),wrong=request.GET.get('wrong'),type=request.GET.get('type'),user=request.user,date_completed=datetime.today())
+    QR.save()
+    for miss in request.GET.getlist('missed[]'):
+        QR.missed.add(miss)
+    QR.save()

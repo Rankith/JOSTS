@@ -49,6 +49,7 @@ urlpatterns = [
     path('quiz_shorthand/', views.quiz_shorthand, name='quiz_shorthand'),
     path('quiz_setup/', views.quiz_setup, name='quiz_setup'),
     path('quiz/', views.quiz, name='quiz'),
+    path('quiz_save/', views.quiz_save, name='quiz_save'),
     path('signup/', views.signup, name='signup'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('stripe_webhook/', views.stripe_webhook, name='stripe_webhook'),

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -55,6 +55,12 @@ class SubscriptionSetupAdmin(admin.ModelAdmin):
     list_editable = ('display_text','stripe_plan_id','type','interval')
     list_filter = ('type','interval')
 
+class QuizResultAdmin(admin.ModelAdmin):
+    list_display = ('id','user','event','date_completed','correct','wrong','type')
+    list_editable = ('event','date_completed','correct','wrong','type')
+    search_fields = ('event','date_completed','type')
+    list_filter = ('event','type')
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
@@ -65,3 +71,4 @@ admin.site.register(DrawnImage,DrawnImageAdmin)
 admin.site.register(SymbolDuplicate,SymbolDuplicateAdmin)
 admin.site.register(Subscription,SubscriptionAdmin)
 admin.site.register(SubscriptionSetup,SubscriptionSetupAdmin)
+admin.site.register(QuizResult,QuizResultAdmin)
