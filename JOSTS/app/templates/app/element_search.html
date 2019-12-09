@@ -232,9 +232,11 @@
     }
 
     function ShowHideSearches() {
-        ev = $('.check-search-event:checked').val();
-        $('.check-search').not('.check-search-event').not('.search-' + ev).parent().hide();
-        $('.check-search.search-' + ev).parent().show();
+        if (search_type != "rule") {
+            ev = $('.check-search-event:checked').val();
+            $('.check-search').not('.check-search-event').not('.search-' + ev).parent().hide();
+            $('.check-search.search-' + ev).parent().show();
+        }
         /*if (ev == "V") {
             $('#Values').hide();
             $('#VaultValues').hide();*/
@@ -323,8 +325,9 @@
                  localStorage.setItem('chkDisplayImage', 1);
             }
         }
-        if ($(".check-search-event:checkbox:checked").length == 0)
-            $(".check-search:checkbox")[0].click();
+        console.log($(".check-search-event:checkbox:checked").length);
+        if ($(".check-search-event:checkbox:checked").length == 0 && $(".check-search-event:checkbox").length > 0) 
+            $(".check-search-event:checkbox")[0].click();
         else {
             ShowHideSearches();
             CreateSearchParams();
