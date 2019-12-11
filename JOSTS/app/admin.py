@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -61,6 +61,11 @@ class QuizResultAdmin(admin.ModelAdmin):
     search_fields = ('event','date_completed','type')
     list_filter = ('event','type')
 
+class ActivityLogAdmin(admin.ModelAdmin):
+    list_display = ('id','actor','action_type','action_detail','action_item','timestamp')
+    search_fields = ('actor','action_type','action_detail','action_item')
+    list_filter = ('action_type',)
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
@@ -72,3 +77,4 @@ admin.site.register(SymbolDuplicate,SymbolDuplicateAdmin)
 admin.site.register(Subscription,SubscriptionAdmin)
 admin.site.register(SubscriptionSetup,SubscriptionSetupAdmin)
 admin.site.register(QuizResult,QuizResultAdmin)
+admin.site.register(ActivityLog,ActivityLogAdmin)

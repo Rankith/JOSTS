@@ -176,7 +176,7 @@
     function GenerateRandomAnswer(which) {
         var QuizA = Math.floor((Math.random() * NumElements));
         //make sure its not the correct answer!
-        if (QuizElementIDs[QuizA] == ElementIDs[which]) {
+        if (ElementIDs[QuizA] == QuizElementIDs[which]) {
             QuizA = QuizA + 1;
             if (QuizA > NumElements) {
                 QuizA = 0;

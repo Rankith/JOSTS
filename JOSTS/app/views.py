@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -58,6 +58,10 @@ def about(request):
             'year':datetime.now().year,
         }
     )
+
+def log_activity(user,action_type,action_detail,action_item):
+    AL = ActivityLog(actor=user,action_type=action_type,action_detail=action_detail,action_item=action_item)
+    AL.save()
 
 def subscription_check(user):
     #standard subscription
@@ -246,6 +250,8 @@ def element(request):
         'user_note': userNote,
         'val_display': value_display,
         }
+    #activity log
+    log_activity(request.user,'Elements','View',str(element[0].element))
     return render(request, 'app/element.html',context=context)
 
 def update_user_note(request):
@@ -257,6 +263,8 @@ def update_user_note(request):
         defaults={'user': request.user,'element':elementInstance,'note':noteIn},
     )
     resp = {'updated':True}
+    #activity log
+    log_activity(request.user,'Elements','Update User Note',str(elementInstance))
     return JsonResponse(resp)
 
 def element_search(request):
@@ -315,6 +323,9 @@ def element_list(request):
         'display': display,
         'val_display': value_display,
         }
+
+    #activity log
+    log_activity(request.user,'Elements','List',request.GET.get('event'))
     return render(request, 'app/element_list.html',context=context)
 
 
@@ -341,6 +352,7 @@ def rule(request):
         'lang_elements': element[0],
         'user_note': userNote,
         }
+   
     return render(request, 'app/element.html',context=context)
 
 def rule_search(request):
@@ -377,6 +389,8 @@ def rule_list(request):
         'rules': rules,
         'num_rules': str(len(rules)) + " Rules",
         }
+    #activity log
+    log_activity(request.user,'Rules','View','')
     return render(request, 'app/rule_list.html',context=context)
 
 #shorthand
@@ -387,12 +401,14 @@ def shorthand_training(request):
     #dupes = SymbolDuplicate.objects.all()
     #for dupe in dupes:
         #DrawnImage.objects.filter(label=dupe.symbol).update(label=dupe.replace_with)
-    Element.objects.filter(event="V").filter(value__gte=7.0).filter(value__lt=8.0).update(range=7)
+    #Element.objects.filter(event="V").filter(value__gte=7.0).filter(value__lt=8.0).update(range=7)
     context = {
         'type':'shorthand_trainer',
         'search_type':'element',
         'list_type':'element',
         }
+     #activity log
+    log_activity(request.user,'Shorthand Training','List','')
     return render(request, 'app/elements_fixed.html',context=context)
 
 def shorthand_trainer(request):
@@ -413,6 +429,8 @@ def shorthand_trainer(request):
         'symbol_duplicates' : symbol_duplicates,
         'val_display':value_display
         }
+    #activity log
+    log_activity(request.user,'Shorthand Training','View',str(element[0].element))
     return render(request, 'app/shorthand_trainer.html',context=context)
 
 def save_record_image(request):
@@ -431,6 +449,9 @@ def save_record_image(request):
 
     count = DrawnImage.objects.filter(label=request.POST.get('label','')).count()
 
+     #activity log
+    log_activity(request.user,'Shorthand Training','Draw','')
+
     return HttpResponse(count)
     #canvasData = request.GET.get('data','').strip('data:image/png;base64,')
     #im = Image.open(canvasData)
@@ -444,6 +465,8 @@ def shorthand_lookup(request):
         'search_type':'element',
         'list_type':'shorthand',
         }
+    #activity log
+    log_activity(request.user,'Shorthand Lookup','View','')
     return render(request, 'app/shorthand_lookup.html',context=context)
 
 def element_for_shorthand(request):
@@ -460,6 +483,8 @@ def element_for_shorthand(request):
         'user_note': userNote,
         'val_display': 'value',
         }
+    #activity log
+    log_activity(request.user,'Shorthand Lookup','Draw',str(element[0].element))
     return render(request, 'app/element.html',context=context)
 
    
@@ -500,6 +525,8 @@ def element_lookup(request):
         'elements': elements,
         'event':eventIn,
         }
+    #activity log
+    log_activity(request.user,'Shorthand Lookup','Element Lookup','')
     return render(request, 'app/element_lookup.html',context=context)
 
 #Quiz
@@ -509,6 +536,8 @@ def quiz_shorthand(request):
     context = {
         'type':'shorthand',
         }
+    #activity log
+    log_activity(request.user,'Shorthand Quiz','View','')
     return render(request, 'app/quiz_base.html',context=context)
 
 def quiz_setup(request):
@@ -531,6 +560,8 @@ def quiz(request):
         'quiz': quiz,
         'prompt_type': request.GET.get('prompt')
         }
+    #activity log
+    log_activity(request.user,'Shorthand Quiz','Start','')
     return render(request, 'app/quiz.html',context=context)
 
 def quiz_save(request):
@@ -539,10 +570,14 @@ def quiz_save(request):
     for miss in request.GET.getlist('missed[]'):
         QR.missed.add(miss)
     QR.save()
+     #activity log
+    log_activity(request.user,'Shorthand Quiz','Finish','')
     return HttpResponse(status=200)
 
 def quiz_delete(request):
     QuizResult.objects.filter(id=request.GET.get('id')).delete()
+     #activity log
+    log_activity(request.user,'Shorthand Quiz','Delete','')
     return HttpResponse(status=200)
 
 def quiz_results(request):

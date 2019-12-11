@@ -124,3 +124,10 @@ class QuizResult(models.Model):
         return int(round(self.correct/(self.correct + self.wrong),2)*100)
     missed = models.ManyToManyField(Element)
     type = models.CharField(max_length=20,blank=True,default='')
+
+class ActivityLog(models.Model):
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)
+    action_type = models.CharField(max_length=50)
+    action_detail = models.CharField(max_length=50,blank=True,null=True)
+    action_item = models.CharField(max_length=50,blank=True,null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
