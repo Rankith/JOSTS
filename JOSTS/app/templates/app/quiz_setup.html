@@ -33,9 +33,11 @@
     </div>
 </div>
 
+
 <div class="row no-gutters d-flex pt-4">
+    <button type="button" class="btn btn-second" data-toggle="modal" data-target="#modalMain" onclick="QuizReview()"><h5 class="mb-1 mt-1">Results</h5></button>
     <div class="ml-auto pr-2">
-        <button type="button" class="btn btn-main"  onclick="StartQuiz()"><h4 class="mb-1 mt-1">Start</h4></button>
+        <button type="button" class="btn btn-main" onclick="StartQuiz()"><h5 class="mb-1 mt-1">Start</h5></button>
     </div>
 </div>
 
@@ -95,6 +97,15 @@
             $("#divContentParent").append(data);
             $('#sidebarCollapse').click();
         });
+            }
+
+    function QuizReview() {
+        $("#modalMainTitle").html("Quiz Results");
+        $("#modalBodyArea2").empty();
+        $.get("/quiz_results/?type=" + type + "&event=" + $(".check-search:checkbox:checked").val(), function (data) {
+            $("#modalBodyArea2").append(data);
+        });
+        $("#modalBodyArea2").show();
     }
     
     </script>

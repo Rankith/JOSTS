@@ -2481,6 +2481,7 @@
     <Content Include="app\static\app\scripts\nouislider.min.js" />
     <Content Include="app\static\app\scripts\shorthand_drawing.js" />
     <Content Include="app\templates\app\base.html" />
+    <Content Include="app\templates\app\quiz_results.html" />
     <Content Include="app\templates\registration\password_reset_subject.txt" />
     <Content Include="app\templates\registration\password_reset_email.html" />
     <Content Include="app\templates\registration\password_reset_done.html" />

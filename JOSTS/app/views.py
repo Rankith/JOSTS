@@ -518,10 +518,17 @@ def quiz_setup(request):
     return render(request, 'app/quiz_setup.html',context=context)
 
 def quiz(request):
+    missed = request.GET.get('missed',-1)
+    if missed == -1:
+        quiz = ElementText.objects.filter(element__event=request.GET.get('event')).order_by('?')
+    else:
+        quiz = ElementText.objects.filter(element__in=QuizResult.objects.filter(id=missed)[0].missed.all().values_list('id'))
+
     elements = ElementText.objects.filter(element__event=request.GET.get('event')).order_by('?')
     context = {
         'event': request.GET.get('event'),
         'lang_elements': elements,
+        'quiz': quiz,
         'prompt_type': request.GET.get('prompt')
         }
     return render(request, 'app/quiz.html',context=context)
@@ -532,3 +539,15 @@ def quiz_save(request):
     for miss in request.GET.getlist('missed[]'):
         QR.missed.add(miss)
     QR.save()
+    return HttpResponse(status=200)
+
+def quiz_delete(request):
+    QuizResult.objects.filter(id=request.GET.get('id')).delete()
+    return HttpResponse(status=200)
+
+def quiz_results(request):
+    results = QuizResult.objects.filter(user=request.user,event=request.GET.get('event'),type__iexact=request.GET.get('type')).order_by('-date_completed','-id')
+    context = {
+        'results': results
+        }
+    return render(request, 'app/quiz_results.html',context=context)

@@ -1,0 +1,78 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div style="max-height:40vh;overflow:auto">
+    {% for result in results %}
+        <div id="quiz{{result.id}}"class="row no-gutters justify-content-center quiz-row" onclick="QuizSelect('{{result.id}}')"style="cursor:pointer">
+            <div class="col-4">
+                {{result.date_completed}}
+            </div>
+            <div class="col-4">
+                {{result.type}}
+            </div>
+            <div class="col-4 d-flex">
+                <div class="pr-4">{{result.correct}}/{{result.total}}</div>
+                <div class="">{{result.percent}}%</div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="text-center pt-2">
+    <button id="btnQuizMissed" type="button" class="btn btn-main disabled" onclick="QuizMissed()"><h5 class="mb-1 mt-1">Quiz Missed Answers</h5></button>
+    <button id="btnQuizDelete" type="button" class="btn btn-main disabled" onclick="QuizDelete()"><h5 class="mb-1 mt-1">Delete Quiz</h5></button>
+</div>
+        
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    var DeleteURL =  '{% url "quiz_delete" %}';
+    var QuizURL =  '{% url "quiz" %}';
+    var MissedAnswers = Array();
+    {% for result in results %}
+        MissedAnswers[{{result.id}}] = {{result.missed.count}};
+    {% endfor %}
+</script>
+<script type="text/javascript">
+    var QuizSelected = -1
+    function QuizSelect(which) {
+        $(".quiz-row").removeClass("row-selected");
+        $("#quiz" + which).addClass("row-selected");
+        QuizSelected = which;
+        if (MissedAnswers[which] > 0)
+            $("#btnQuizMissed").removeClass("disabled");
+        else
+            $("#btnQuizMissed").addClass("disabled");
+        $("#btnQuizDelete").removeClass("disabled");
+    }
+
+    function QuizDelete() {
+        if (QuizSelected != -1) {
+            $.ajax({
+                url: DeleteURL,
+                data: {
+                    'id': QuizSelected,
+                },
+                dataType: 'json',
+                success: function (data) {
+                  
+                }
+            });
+            $("#quiz" + QuizSelected).remove();
+            QuizSelected = -1;
+            $("#btnQuizMissed").removeClass("disabled");
+            $("#btnQuizDelete").removeClass("disabled");
+        }
+    }
+
+    function QuizMissed() {
+        if (QuizSelected != -1 && MissedAnswers[QuizSelected] > 0) {
+            $.get("/quiz/?event=" + $(".check-search:checkbox:checked").val() + "&prompt=" + PromptTypeSetup + "&missed=" + QuizSelected, function (data) {
+                $("#modalMain").modal('toggle');
+                $("#divContentParent").empty();
+                $("#divContentParent").append(data);
+                $('#sidebarCollapse').click();
+            });
+        }
+    }
+
+</script>
+{% endblock %}

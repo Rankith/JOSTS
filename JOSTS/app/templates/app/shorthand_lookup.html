@@ -179,6 +179,7 @@
         }
     function LoadLookup() {
         $("#modalMainTitle").html("Lookup By Group");
+        $(".modal-dialog").addClass("mw-100").addClass("w-75");
         $("#modalBodyArea2").hide();
         $("#modalBodyArea1").empty();
         $.get("/element_lookup/?event=" + Event, function (data) {

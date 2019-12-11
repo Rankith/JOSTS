@@ -119,8 +119,8 @@ class QuizResult(models.Model):
     correct = models.IntegerField(default=0)
     wrong = models.IntegerField(default=0)
     def total(self):
-        return correct + wrong
+        return self.correct + self.wrong
     def percent(self):
-        return correct/total
+        return int(round(self.correct/(self.correct + self.wrong),2)*100)
     missed = models.ManyToManyField(Element)
     type = models.CharField(max_length=20,blank=True,default='')

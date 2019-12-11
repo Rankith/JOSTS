@@ -57,14 +57,22 @@
 
 {% block scripts %}
 <script type="text/javascript">
-    var NumElements = {{lang_elements|length}};
+    var NumElements = {{quiz|length}};
     var Elements = new Array();
     var ElementShortText = new Array();
     var ElementIDs = new Array();
+    var QuizElements = new Array();
+    var QuizElementShortText = new Array();
+    var QuizElementIDs = new Array();
     {% for element in lang_elements %}
         Elements[{{ forloop.counter0 }}] = "{{ element.element.image_url}}";
         ElementShortText[{{ forloop.counter0 }}] = "{{ element.short_text}}";
         ElementIDs[{{ forloop.counter0 }}] = "{{ element.element.id}}";
+    {% endfor %}
+    {% for q in quiz %}
+        QuizElements[{{ forloop.counter0 }}] = "{{ q.element.image_url}}";
+        QuizElementShortText[{{ forloop.counter0 }}] = "{{ q.short_text}}";
+        QuizElementIDs[{{ forloop.counter0 }}] = "{{ q.element.id}}";
     {% endfor %}
     var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
     var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
@@ -102,7 +110,7 @@
     }
 
     function PopulateQuiz(which){
-        $("#imgPrompt").attr('src', PromptBaseURL + Elements[which] + ".svg")
+        $("#imgPrompt").attr('src', PromptBaseURL + QuizElements[which] + ".svg")
         AnswerLoc = GenerateAnswerLocation();
         var TempAnswer;
         for (var i = 1; i <= 4; i++) {
@@ -113,11 +121,11 @@
                     $("#divAnswer" + i + "Text").html(ElementShortText[TempAnswer]);
             }
         }
-        $("#imgAnswer" + AnswerLoc).attr('src', AnswerBaseURL + Elements[which] + ".svg")
+        $("#imgAnswer" + AnswerLoc).attr('src', AnswerBaseURL + QuizElements[which] + ".svg")
         if (PromptType == "Shorthand")
-            $("#divAnswer" + AnswerLoc + "Text").html(ElementShortText[which]);
+            $("#divAnswer" + AnswerLoc + "Text").html(QuizElementShortText[which]);
         else
-            $("#divPromptText").html(ElementShortText[which]);
+            $("#divPromptText").html(QuizElementShortText[which]);
   
     }
 
@@ -146,7 +154,7 @@
     }
 
     function AnswerWrong(which) {
-        Missed[Wrong] = ElementIDs[OnElement];
+        Missed[Wrong] = QuizElementIDs[OnElement];
         Wrong++;
         $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
         $("#divAnswerContainer" + which).addClass("quiz-border-wrong").removeClass("quiz-border-neutral");
@@ -154,17 +162,21 @@
     }
 
     function QuizNext() {
-        Answered = false;
-        for (var i = 1; i <= 4; i++) 
-            $("#divAnswerContainer" + i).addClass("quiz-border-neutral").removeClass("quiz-border-correct").removeClass("quiz-border-wrong");
-        OnElement++;
-        PopulateQuiz(OnElement);
+        if (OnElement >= NumElements - 1)
+            EndQuiz()
+        else {
+            Answered = false;
+            for (var i = 1; i <= 4; i++)
+                $("#divAnswerContainer" + i).addClass("quiz-border-neutral").removeClass("quiz-border-correct").removeClass("quiz-border-wrong");
+            OnElement++;
+            PopulateQuiz(OnElement);
+        }
     }
 
     function GenerateRandomAnswer(which) {
         var QuizA = Math.floor((Math.random() * NumElements));
         //make sure its not the correct answer!
-        if (QuizA == which) {
+        if (QuizElementIDs[QuizA] == ElementIDs[which]) {
             QuizA = QuizA + 1;
             if (QuizA > NumElements) {
                 QuizA = 0;
@@ -204,7 +216,7 @@
             success: function (data) {
               
             }
-      });
+        });
     }
 </script>
 
