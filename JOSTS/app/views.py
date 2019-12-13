@@ -573,12 +573,12 @@ def quiz(request):
         'lang_elements': elements,
         'quiz': quiz,
         'prompt_type': request.GET.get('prompt'),
-         'vals':vals,
+        'vals':vals,
         'groups': groups
         }
     #activity log
     log_activity(request.user,request.GET.get('type','Shorthand') + ' Quiz','Start','')
-    return render(request, 'app/quiz_main_' + lower(request.GET.get('type','shorthand')) + '.html',context=context)
+    return render(request, 'app/quiz_main_' + request.GET.get('type','shorthand').lower() + '.html',context=context)
 
 def quiz_save(request):
     QR = QuizResult(event=request.GET.get('event'),correct=request.GET.get('correct'),wrong=request.GET.get('wrong'),type=request.GET.get('type'),user=request.user,date_completed=datetime.today())
