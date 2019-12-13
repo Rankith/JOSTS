@@ -3,15 +3,18 @@
 {% if display == "Image" %}
     {% for element in lang_elements %}
         {% if forloop.first %}<div class="row">{% endif %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:170px;cursor:pointer" >
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-3" onclick="ElementClick({{element.id}})" style="height:185px;cursor:pointer" >
             <div class="row">
                 <div class="col">
-                    <div style="height:150px" class="image-background rounded" id="div{{element.id}}">
-                        <div class="row h-100 justify-content-center align-items-center text-center">
-                            <div class="col-12 position-relative">
-                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:150px;overflow:hidden"/>
+                    <div style="height:172px" class="image-background rounded" id="div{{element.id}}">
+                        <div class="row justify-content-center align-items-center" style="height:140px">
+                            <div class="col text-center">
+                                <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:140px;overflow:hidden"/>
                             </div>
-                            <div class="col-12 pb-1 " style="margin-top:-2rem; line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
+                            
+                        </div>
+                        <div class="row text-center d-flex align-items-end">
+                            <div class="col-12 pb-1 " style="line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
                                 {{element.short_text}}
                             </div>
                         </div>

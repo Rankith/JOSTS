@@ -291,7 +291,7 @@ def element_search(request):
         'groups': groups,
         'groupsEvents': groupDict,
         'valueEvents': valueDict,
-        'events': ['FX','BB','UB','V'],
+        'events': ['V','UB','BB','FX'],
         'ranges': ranges,
         'search_type':'element',
         }
@@ -505,7 +505,7 @@ def shorthand_search(request):
         'groups': groups,
         'groupsEvents': groupDict,
         'valueEvents': valueDict,
-        'events': ['FX','BB','UB','V'],
+        'events': ['V','UB','BB','FX'],
         'ranges': ranges,
         'search_type':'shorthand',
         }
@@ -542,7 +542,7 @@ def quiz_shorthand(request):
 
 def quiz_setup(request):
     context = {
-        'events': ['FX','BB','UB','V'],
+        'events': ['V','UB','BB','FX'],
         }
     return render(request, 'app/quiz_setup.html',context=context)
 
