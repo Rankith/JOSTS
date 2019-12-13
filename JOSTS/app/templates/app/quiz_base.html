@@ -47,7 +47,7 @@
                 // hide overlay
                 // $('.overlay').removeClass('active');
             });
-            $.get("/quiz_setup/", function (data) {
+            $.get("/quiz_setup/?type=" + type, function (data) {
                 $("#divSearchArea").empty();
                 $("#divSearchArea").append(data);
                 LoadLastSelections();

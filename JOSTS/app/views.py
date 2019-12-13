@@ -534,15 +534,26 @@ def element_lookup(request):
 @user_passes_test(subscription_check,login_url='/subscriptions/')
 def quiz_shorthand(request):
     context = {
-        'type':'shorthand',
+        'type':'Shorthand',
         }
     #activity log
     log_activity(request.user,'Shorthand Quiz','View','')
     return render(request, 'app/quiz_base.html',context=context)
 
+@login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
+def quiz_element(request):
+    context = {
+        'type':'Element',
+        }
+    #activity log
+    log_activity(request.user,'Element Quiz','View','')
+    return render(request, 'app/quiz_base.html',context=context)
+
 def quiz_setup(request):
     context = {
         'events': ['V','UB','BB','FX'],
+        'type': request.GET.get('type')
         }
     return render(request, 'app/quiz_setup.html',context=context)
 
@@ -550,19 +561,24 @@ def quiz(request):
     missed = request.GET.get('missed',-1)
     if missed == -1:
         quiz = ElementText.objects.filter(element__event=request.GET.get('event')).order_by('?')
+        elements = quiz
     else:
         quiz = ElementText.objects.filter(element__in=QuizResult.objects.filter(id=missed)[0].missed.all().values_list('id'))
-
-    elements = ElementText.objects.filter(element__event=request.GET.get('event')).order_by('?')
+        elements = ElementText.objects.filter(element__event=request.GET.get('event'))
+    #elements = ElementText.objects.filter(element__event=request.GET.get('event'))
+    vals = Element.objects.filter(event=request.GET.get('event')).order_by('letter_value').values('letter_value').distinct()
+    groups = Element.objects.filter(event=request.GET.get('event')).order_by('str_grp').values('str_grp').distinct()
     context = {
         'event': request.GET.get('event'),
         'lang_elements': elements,
         'quiz': quiz,
-        'prompt_type': request.GET.get('prompt')
+        'prompt_type': request.GET.get('prompt'),
+         'vals':vals,
+        'groups': groups
         }
     #activity log
-    log_activity(request.user,'Shorthand Quiz','Start','')
-    return render(request, 'app/quiz.html',context=context)
+    log_activity(request.user,request.GET.get('type','Shorthand') + ' Quiz','Start','')
+    return render(request, 'app/quiz_main_' + request.GET.get('type','Shorthand') + '.html',context=context)
 
 def quiz_save(request):
     QR = QuizResult(event=request.GET.get('event'),correct=request.GET.get('correct'),wrong=request.GET.get('wrong'),type=request.GET.get('type'),user=request.user,date_completed=datetime.today())

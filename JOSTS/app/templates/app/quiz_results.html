@@ -27,8 +27,11 @@
     var DeleteURL =  '{% url "quiz_delete" %}';
     var QuizURL =  '{% url "quiz" %}';
     var MissedAnswers = Array();
+    var QuizTypes = Array();
+    var QuizTypeSelected = "";
     {% for result in results %}
         MissedAnswers[{{result.id}}] = {{result.missed.count}};
+        QuizTypes[{{result.id}}] = '{{result.type}}';
     {% endfor %}
 </script>
 <script type="text/javascript">
@@ -37,6 +40,7 @@
         $(".quiz-row").removeClass("row-selected");
         $("#quiz" + which).addClass("row-selected");
         QuizSelected = which;
+        QuizTypeSelected = QuizTypes[which];
         if (MissedAnswers[which] > 0)
             $("#btnQuizMissed").removeClass("disabled");
         else
@@ -65,7 +69,7 @@
 
     function QuizMissed() {
         if (QuizSelected != -1 && MissedAnswers[QuizSelected] > 0) {
-            $.get("/quiz/?event=" + $(".check-search:checkbox:checked").val() + "&prompt=" + PromptTypeSetup + "&missed=" + QuizSelected, function (data) {
+            $.get("/quiz/?type=" + QuizTypeSelected + "&event=" + $(".check-search:checkbox:checked").val() + "&prompt=" + PromptTypeSetup + "&missed=" + QuizSelected, function (data) {
                 $("#modalMain").modal('toggle');
                 $("#divContentParent").empty();
                 $("#divContentParent").append(data);

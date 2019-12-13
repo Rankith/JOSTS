@@ -1,0 +1,225 @@
+﻿{% load staticfiles %}
+<div class="row no-gutters">
+    <div class="col-6 pt-2 d-flex align-items-center justify-content-center flex-column">
+        <div style="height:170px" class="image-background rounded w-75" id="divPrompt">
+            <div class="row h-100 justify-content-center align-items-center text-center">
+                <div class="col-12 position-relative">
+                    <img id="imgPrompt" class="img-fluid" style="max-height:150px;overflow:hidden" />
+                </div>
+                {% if prompt_type == "Image" %}
+                    <div id="divPromptText" class="col-12 pb-1 img-text-below">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="w-75">
+            <div class="row no-gutters">
+                <div class="text-base font-weight-bold col-4">
+                     <span id="divTotalText">Total: </span><span id="divTotalCount">0</span>
+                </div>
+                <div class="text-success font-weight-bold col-4 text-center">
+                    <span id="divCorrectCount">0</span>
+                </div>
+                <div class="text-danger font-weight-bold col-4 text-right">
+                    <span id="divWrongCount">0</span>
+                </div>
+            </div>
+        </div>
+        <div class="w-75 pt-4 text-center">
+              <button type="button" class="btn btn-main font-weight-bold" onclick="EndQuiz()">Done</button>
+        </div>
+    </div>
+
+    <div class="col-6 h-100">
+        <div class="row">
+            {% for i in '1234'|make_list %}
+                <div class="col-12 pt-2">
+                    <div id="divAnswerContainer{{forloop.counter}}" onclick="AnswerClick({{forloop.counter}})" class="image-background rounded quiz-border-neutral" style="cursor: pointer">
+                        <div class="row h-100 justify-content-center align-items-center text-center">
+                            <div class="col-12 position-relative">
+                                <img id="imgAnswer{{forloop.counter}}" class="img-fluid" style="max-height:120px;overflow:hidden" />
+                            </div>
+                                <div id="divAnswer{{forloop.counter}}Text" class="col-12 pb-1 align-self-end img-text-below">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            
+            
+        </div>
+    </div>
+    <div id="QuizResults" style="display:none">
+        <div>You got <span id="qrCorrect"></span> of <span id="qrTotal"></span> <span id="qrPercent"></span> correct.</div>
+        <div class="pt-3 text-right"><a href="{% url "quiz_shorthand" %}"><button type="button" class="btn btn-main font-weight-bold">OK</button></a></div>
+    </div>
+</div>
+
+{% block scripts %}
+<script type="text/javascript">
+    var NumElements = {{quiz|length}};
+    var NumElementsTotal = {{lang_elements|length}};
+    var Elements = new Array();
+    var ElementShortText = new Array();
+    var ElementIDs = new Array();
+    var QuizElements = new Array();
+    var QuizElementShortText = new Array();
+    var QuizElementIDs = new Array();
+    {% for element in lang_elements %}
+        Elements[{{ forloop.counter0 }}] = "{{ element.element.image_url}}";
+        ElementShortText[{{ forloop.counter0 }}] = "{{ element.short_text}}";
+        ElementIDs[{{ forloop.counter0 }}] = "{{ element.element.id}}";
+    {% endfor %}
+    {% for q in quiz %}
+        QuizElements[{{ forloop.counter0 }}] = "{{ q.element.image_url}}";
+        QuizElementShortText[{{ forloop.counter0 }}] = "{{ q.short_text}}";
+        QuizElementIDs[{{ forloop.counter0 }}] = "{{ q.element.id}}";
+    {% endfor %}
+    var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
+    var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
+    var PromptType = '{{prompt_type}}'
+    if (PromptType == "Shorthand")
+    {
+        var PromptBaseURL = SymbolBaseURL;
+        var AnswerBaseURL = ImageBaseURL;
+    }
+    else
+    {
+        var PromptBaseURL = ImageBaseURL;
+        var AnswerBaseURL = SymbolBaseURL;
+    }
+    var AnswerLoc = -1;
+    var OnElement = 0;
+    var Answered = false;
+    var Correct = 0;
+    var Wrong = 0;
+    var Total = 0;
+    var Missed = new Array();
+    var SaveUrl =  '{% url "quiz_save" %}';
+    var Event = '{{event}}';
+    
+</script>
+<script type="text/javascript">
+    PopulateQuiz(0);
+
+    if (PromptType == "Image" || window.innerWidth < 600) {
+        $("#divAnswer1Text").remove();
+        $("#divAnswer2Text").remove();
+        $("#divAnswer3Text").remove();
+        $("#divAnswer4Text").remove();
+        $("#divTotalText").hide();
+    }
+
+    function PopulateQuiz(which){
+        $("#imgPrompt").attr('src', PromptBaseURL + QuizElements[which] + ".svg")
+        AnswerLoc = GenerateAnswerLocation();
+        var TempAnswer;
+        for (var i = 1; i <= 4; i++) {
+            if (i != AnswerLoc) {
+                TempAnswer = GenerateRandomAnswer(which)
+                $("#imgAnswer" + i).attr('src', AnswerBaseURL + Elements[TempAnswer] + ".svg")
+                if (PromptType == "Shorthand")
+                    $("#divAnswer" + i + "Text").html(ElementShortText[TempAnswer]);
+            }
+        }
+        $("#imgAnswer" + AnswerLoc).attr('src', AnswerBaseURL + QuizElements[which] + ".svg")
+        if (PromptType == "Shorthand")
+            $("#divAnswer" + AnswerLoc + "Text").html(QuizElementShortText[which]);
+        else
+            $("#divPromptText").html(QuizElementShortText[which]);
+  
+    }
+
+    function AnswerClick(which) {
+        if (Answered == false) {
+            Answered = true;
+            Total++;
+            if (which == AnswerLoc)
+                AnswerCorrect();
+            else
+                AnswerWrong(which);
+            UpdateStats();
+        }  
+    }
+
+    function UpdateStats() {
+        $("#divTotalCount").html(Total);
+        $("#divCorrectCount").html(Correct);
+        $("#divWrongCount").html(Wrong);
+    }
+
+    function AnswerCorrect() {
+        Correct++;
+        $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
+        setTimeout(QuizNext, 2000);
+    }
+
+    function AnswerWrong(which) {
+        Missed[Wrong] = QuizElementIDs[OnElement];
+        Wrong++;
+        $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
+        $("#divAnswerContainer" + which).addClass("quiz-border-wrong").removeClass("quiz-border-neutral");
+        setTimeout(QuizNext, 2000);
+    }
+
+    function QuizNext() {
+        if (OnElement >= NumElements - 1)
+            EndQuiz()
+        else {
+            Answered = false;
+            for (var i = 1; i <= 4; i++)
+                $("#divAnswerContainer" + i).addClass("quiz-border-neutral").removeClass("quiz-border-correct").removeClass("quiz-border-wrong");
+            OnElement++;
+            PopulateQuiz(OnElement);
+        }
+    }
+
+    function GenerateRandomAnswer(which) {
+        var QuizA = Math.floor((Math.random() * NumElementsTotal));
+        //make sure its not the correct answer!
+        if (ElementIDs[QuizA] == QuizElementIDs[which]) {
+            QuizA = QuizA + 1;
+            if (QuizA > NumElements) {
+                QuizA = 0;
+            }
+        }
+        return QuizA;
+    }
+    function GenerateAnswerLocation() {
+        return Math.floor((Math.random() * 4) + 1);
+    }
+    function EndQuiz() {
+        if (OnElement > 0) 
+            SaveQuiz();
+            
+        $("#modalMainTitle").html("Quiz Results");
+        $(".modal-dialog").removeClass("mw-100").removeClass("w-75");
+        $("#modalBodyArea2").empty().append($("#QuizResults"));
+        $("#QuizResults").show();
+        $("#qrCorrect").html(Correct);
+        $("#qrTotal").html(Total);
+        $("#modalMain").modal();
+        
+    }
+
+    function SaveQuiz() {
+        var note = $('#txtUserNotes').val();
+
+        $.ajax({
+            url: SaveUrl,
+            data: {
+                'event': Event,
+                'correct': Correct,
+                'wrong': Wrong,
+                'type': 'Shorthand',
+                'missed': Missed
+            },
+            dataType: 'json',
+            success: function (data) {
+              
+            }
+        });
+    }
+</script>
+
+{% endblock %}

@@ -47,6 +47,7 @@ urlpatterns = [
     path('element_for_shorthand/', views.element_for_shorthand, name='element_for_shorthand'),
     path('element_lookup/', views.element_lookup, name='element_lookup'),
     path('quiz_shorthand/', views.quiz_shorthand, name='quiz_shorthand'),
+    path('quiz_element/', views.quiz_element, name='quiz_element'),
     path('quiz_setup/', views.quiz_setup, name='quiz_setup'),
     path('quiz/', views.quiz, name='quiz'),
     path('quiz_save/', views.quiz_save, name='quiz_save'),

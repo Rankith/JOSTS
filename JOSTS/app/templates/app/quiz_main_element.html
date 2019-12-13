@@ -1,60 +1,56 @@
 ﻿{% load staticfiles %}
-<div class="row no-gutters">
-    <div class="col-6 pt-2 d-flex align-items-center justify-content-center flex-column">
-        <div style="height:170px" class="image-background rounded w-75" id="divPrompt">
-            <div class="row h-100 justify-content-center align-items-center text-center">
-                <div class="col-12 position-relative">
-                    <img id="imgPrompt" class="img-fluid" style="max-height:150px;overflow:hidden" />
-                </div>
-                {% if prompt_type == "Image" %}
-                    <div id="divPromptText" class="col-12 pb-1 img-text-below">
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-        <div class="w-75">
-            <div class="row no-gutters">
-                <div class="text-base font-weight-bold col-4">
-                     <span id="divTotalText">Total: </span><span id="divTotalCount">0</span>
-                </div>
-                <div class="text-success font-weight-bold col-4 text-center">
-                    <span id="divCorrectCount">0</span>
-                </div>
-                <div class="text-danger font-weight-bold col-4 text-right">
-                    <span id="divWrongCount">0</span>
-                </div>
-            </div>
-        </div>
-        <div class="w-75 pt-4 text-center">
-              <button type="button" class="btn btn-main font-weight-bold" onclick="EndQuiz()">Done</button>
-        </div>
-    </div>
-
-    <div class="col-6 h-100">
+<div class="row no-gutters justify-content-center pb-1">
+    <div class="text-center detail-background rounded-top text-detail">
         <div class="row">
-            {% for i in '1234'|make_list %}
-                <div class="col-12 pt-2">
-                    <div id="divAnswerContainer{{forloop.counter}}" onclick="AnswerClick({{forloop.counter}})" class="image-background rounded quiz-border-neutral" style="cursor: pointer">
-                        <div class="row h-100 justify-content-center align-items-center text-center">
-                            <div class="col-12 position-relative">
-                                <img id="imgAnswer{{forloop.counter}}" class="img-fluid" style="max-height:120px;overflow:hidden" />
-                            </div>
-                                <div id="divAnswer{{forloop.counter}}Text" class="col-12 pb-1 align-self-end img-text-below">
-                                </div>
+            <div class="col">
+                <div style="height:220px" class="image-background rounded position-relative">
+                    <div class="detail-top-left"></div>
+                    <div class="detail-top-right"><img class="img-fluid detail-sym" id="pShorthand"/></div>
+                    
+                    <div class="row h-100 justify-content-center align-items-center">
+                        <div class="col-12 position-relative">
+                            <img class="img-fluid detail-image" id="pImage"/>
+                        </div>
+                        <div id="pText" class="col-12 pb-1 " style="margin-top:-1rem;line-height:1.1;height:36px;overflow:hidden;">
+                            
                         </div>
                     </div>
                 </div>
-            {% endfor %}
-            
-            
+            </div>
         </div>
     </div>
-    <div id="QuizResults" style="display:none">
-        <div>You got <span id="qrCorrect"></span> of <span id="qrTotal"></span> <span id="qrPercent"></span> correct.</div>
-        <div class="pt-3 text-right"><a href="{% url "quiz_shorthand" %}"><button type="button" class="btn btn-main font-weight-bold">OK</button></a></div>
+</div>
+<div class="row">
+    <div class="col-3 text-right mt-auto mb-auto">Group: </div>
+    <div class="col-9 d-flex justify-content-start">
+        <div class="row"> 
+            {% for group in groups %}
+            <div class="pr-2">
+                <label id="lblG{{forloop.counter}}" class="search-button">
+                    <input type="checkbox" id="chkG{{forloop.counter}}" value="{{group.str_grp}}" class="check-search" onchange="SelectGroup(this)">
+                    <div class="search-button group-button"><div>{{group.str_grp}}</div></div>
+                </label>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 
+<div class="row">
+    <div class="col-3 text-right mt-auto mb-auto">Value: </div>
+    <div class="col-9 d-flex justify-content-start">
+        <div class="row">
+            {% for val in vals %}
+            <div class="pr-2">
+                <label id="lblG{{forloop.counter}}" class="search-button">
+                    <input type="checkbox" id="chkG{{forloop.counter}}" value="{{val.letter_value}}" class="check-search" onchange="SelectValue(this)">
+                    <div class="search-button value-button"><div>{{val.letter_value}}</div></div>
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% block scripts %}
 <script type="text/javascript">
     var NumElements = {{quiz|length}};
@@ -76,17 +72,7 @@
     {% endfor %}
     var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
     var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
-    var PromptType = '{{prompt_type}}'
-    if (PromptType == "Shorthand")
-    {
-        var PromptBaseURL = SymbolBaseURL;
-        var AnswerBaseURL = ImageBaseURL;
-    }
-    else
-    {
-        var PromptBaseURL = ImageBaseURL;
-        var AnswerBaseURL = SymbolBaseURL;
-    }
+   
     var AnswerLoc = -1;
     var OnElement = 0;
     var Answered = false;
@@ -101,32 +87,20 @@
 <script type="text/javascript">
     PopulateQuiz(0);
 
-    if (PromptType == "Image" || window.innerWidth < 600) {
-        $("#divAnswer1Text").remove();
-        $("#divAnswer2Text").remove();
-        $("#divAnswer3Text").remove();
-        $("#divAnswer4Text").remove();
-        $("#divTotalText").hide();
-    }
+    //PromptSetup.forEach(ShowPrompts); 
 
-    function PopulateQuiz(which){
-        $("#imgPrompt").attr('src', PromptBaseURL + QuizElements[which] + ".svg")
-        AnswerLoc = GenerateAnswerLocation();
-        var TempAnswer;
-        for (var i = 1; i <= 4; i++) {
-            if (i != AnswerLoc) {
-                TempAnswer = GenerateRandomAnswer(which)
-                $("#imgAnswer" + i).attr('src', AnswerBaseURL + Elements[TempAnswer] + ".svg")
-                if (PromptType == "Shorthand")
-                    $("#divAnswer" + i + "Text").html(ElementShortText[TempAnswer]);
-            }
-        }
-        $("#imgAnswer" + AnswerLoc).attr('src', AnswerBaseURL + QuizElements[which] + ".svg")
-        if (PromptType == "Shorthand")
-            $("#divAnswer" + AnswerLoc + "Text").html(QuizElementShortText[which]);
-        else
-            $("#divPromptText").html(QuizElementShortText[which]);
-  
+   /* function ShowPrompts(item) {
+        $("#" + item).show();
+        console.log(item);
+    }*/
+
+    function PopulateQuiz(which) {
+        if (PromptSetup["Shorthand"])
+            $("#pShorthand").attr('src', SymbolBaseURL + QuizElements[which] + ".svg");
+        if (PromptSetup["Image"])
+            $("#pImage").attr('src', ImageBaseURL + QuizElements[which] + ".svg");
+        if (PromptSetup["Text"])
+            $("#pText").html(QuizElementShortText[which]);
     }
 
     function AnswerClick(which) {
@@ -188,16 +162,16 @@
         return Math.floor((Math.random() * 4) + 1);
     }
     function EndQuiz() {
-        SaveQuiz();
+        if (OnElement > 0)
+            SaveQuiz();
+            
         $("#modalMainTitle").html("Quiz Results");
         $(".modal-dialog").removeClass("mw-100").removeClass("w-75");
         $("#modalBodyArea2").empty().append($("#QuizResults"));
         $("#QuizResults").show();
         $("#qrCorrect").html(Correct);
         $("#qrTotal").html(Total);
-        $("#qrPercent").html("(" + (Correct/Total).toFixed(2) * 100 + "%)");
         $("#modalMain").modal();
-        
     }
 
     function SaveQuiz() {
@@ -209,7 +183,7 @@
                 'event': Event,
                 'correct': Correct,
                 'wrong': Wrong,
-                'type': 'Shorthand',
+                'type': 'Element',
                 'missed': Missed
             },
             dataType: 'json',
