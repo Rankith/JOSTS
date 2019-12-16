@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from app.models import SubscriptionSetup
+from app.models import SubscriptionSetup,UnsubscribeFeedback
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -34,3 +34,17 @@ class SubscriptionForm(forms.Form):
     subs = SubscriptionSetup.objects.all()
     subscription = forms.ModelChoiceField(subs,empty_label = None)
     #subscription = forms.ChoiceField(choices=choices, widget=forms.Select)
+
+class UnsubscribeFeedbackForm(forms.ModelForm):
+    class Meta:
+        model = UnsubscribeFeedback
+        exclude=('user',)
+        labels = {
+            "expensive": "Too Expensive",
+            "dont_need": "No Longer Needed",
+            "different_features": "Does Not Have Features I Want",
+            "low_quality": "Quality Was Low",
+            "hard_to_use": "Hard To Use",
+            "other": "Other",
+            "other_details": "Other Notes",
+            }

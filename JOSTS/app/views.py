@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, SubscriptionForm
+from .forms import SignUpForm, SubscriptionForm,UnsubscribeFeedbackForm
 from django.contrib.auth import authenticate, login
 import stripe
 from django.views.decorators.csrf import csrf_exempt
@@ -86,7 +86,7 @@ def subscription_cancel(request):
         return redirect('/subscriptions/')
 
     Subscription.objects.filter(subscription_id=request.GET.get('sub')).update(cancelled=True)
-    return redirect('/subscriptions/')
+    return redirect('/unsubscribe_feedback/')
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -229,6 +229,19 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'app/signup.html', {'form': form})
+
+def unsubscribe_feedback(request):
+    if request.method == 'POST':
+        form = UnsubscribeFeedbackForm(request.POST)
+        if form.is_valid():
+            uf = form.save(commit=False)
+            uf.user = request.user
+            uf.save()
+            
+            return redirect('/subscriptions/')
+    else:
+        form = UnsubscribeFeedbackForm()
+    return render(request, 'app/unsubscribe_feedback.html', {'form': form})
 
 @login_required(login_url='/login/')
 @user_passes_test(subscription_check,login_url='/subscriptions/')

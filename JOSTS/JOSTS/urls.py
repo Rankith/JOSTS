@@ -55,6 +55,7 @@ urlpatterns = [
     path('quiz_delete/', views.quiz_delete, name='quiz_delete'),
     path('signup/', views.signup, name='signup'),
     path('subscriptions/', views.subscriptions, name='subscriptions'),
+    path('unsubscribe_feedback/', views.unsubscribe_feedback, name='unsubscribe_feedback'),
     path('stripe_webhook/', views.stripe_webhook, name='stripe_webhook'),
     path('cancel/', views.subscription_cancel, name='cancel'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),

@@ -131,3 +131,13 @@ class ActivityLog(models.Model):
     action_detail = models.CharField(max_length=50,blank=True,null=True)
     action_item = models.CharField(max_length=50,blank=True,null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class UnsubscribeFeedback(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)
+    expensive = models.BooleanField(default=False)
+    dont_need = models.BooleanField(default=False)
+    different_features = models.BooleanField(default=False)
+    low_quality = models.BooleanField(default=False)
+    hard_to_use = models.BooleanField(default=False)
+    other = models.BooleanField(default=False)
+    other_details = models.TextField(blank=True,default='')
