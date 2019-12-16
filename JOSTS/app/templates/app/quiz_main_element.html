@@ -1,18 +1,18 @@
 ﻿{% load staticfiles %}
-<div class="row no-gutters justify-content-center pb-1">
-    <div class="text-center detail-background rounded-top text-detail">
+<div class="row no-gutters justify-content-center image-background rounded">
+    <div class="text-center rounded-top text-detail">
         <div class="row">
             <div class="col">
                 <div style="height:220px" class="image-background rounded position-relative">
                     <div class="detail-top-left"></div>
-                    <div class="detail-top-right"><img class="img-fluid detail-sym" id="pShorthand"/></div>
-                    
+                    <div class="detail-top-right"><img class="img-fluid detail-sym" id="pShorthand" /></div>
+
                     <div class="row h-100 justify-content-center align-items-center">
                         <div class="col-12 position-relative">
-                            <img class="img-fluid detail-image" id="pImage"/>
+                            <img class="img-fluid detail-image" id="pImage" />
                         </div>
                         <div id="pText" class="col-12 pb-1 " style="margin-top:-1rem;line-height:1.1;height:36px;overflow:hidden;">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -20,15 +20,15 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-3 text-right mt-auto mb-auto">Group: </div>
+<div class="row pt-1" id="divGroupTest" style="display:none">
+    <div class="col-3 text-right mt-auto mb-auto text-base">Group: </div>
     <div class="col-9 d-flex justify-content-start">
-        <div class="row"> 
+        <div class="row">
             {% for group in groups %}
             <div class="pr-2">
-                <label id="lblG{{forloop.counter}}" class="search-button">
-                    <input type="checkbox" id="chkG{{forloop.counter}}" value="{{group.str_grp}}" class="check-search" onchange="SelectGroup(this)">
-                    <div class="search-button group-button"><div>{{group.str_grp}}</div></div>
+                <label id="lblG{{group.str_grp}}" class="search-button">
+                    <input type="checkbox" id="chkG{{group.str_grp}}" value="{{group.str_grp}}" class="check-search answer-group" onchange="SelectGroup(this)">
+                    <div class="search-button group-button answer-button-group"><div>{{group.str_grp}}</div></div>
                 </label>
             </div>
             {% endfor %}
@@ -36,44 +36,59 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-3 text-right mt-auto mb-auto">Value: </div>
+<div class="row pt-1" id="divValueTest" style="display:none">
+    <div class="col-3 text-right mt-auto mb-auto text-base">Value: </div>
     <div class="col-9 d-flex justify-content-start">
         <div class="row">
             {% for val in vals %}
             <div class="pr-2">
-                <label id="lblG{{forloop.counter}}" class="search-button">
-                    <input type="checkbox" id="chkG{{forloop.counter}}" value="{{val.letter_value}}" class="check-search" onchange="SelectValue(this)">
-                    <div class="search-button value-button"><div>{{val.letter_value}}</div></div>
+                <label id="lblV{{val.letter_value}}" class="search-button">
+                    <input type="checkbox" id="chkV{{val.letter_value}}" value="{{val.letter_value}}" class="check-search answer-value" onchange="SelectValue(this)">
+                    <div class="search-button value-button answer-button-value"><div>{{val.letter_value}}</div></div>
                 </label>
             </div>
             {% endfor %}
         </div>
     </div>
 </div>
+<div class="row justify-content-center">
+    <div class="row" style="width:250px">
+        <div class="text-success font-weight-bold col-6 text-right">
+            <span id="divCorrectCount">Correct: 0</span>
+        </div>
+        <div class="text-danger font-weight-bold col-6 text-left">
+            <span id="divWrongCount">Incorrect: 0</span>
+        </div>
+    </div>
+</div>
+<div class="pt-4 text-center">
+    <button type="button" class="btn btn-main font-weight-bold" onclick="EndQuiz()">Done</button>
+</div>
+<div id="QuizResults" style="display:none">
+    <div>You got <span id="qrCorrect"></span> of <span id="qrTotal"></span> <span id="qrPercent"></span> correct.</div>
+    <div class="pt-3 text-right"><a href="{% url "quiz_element" %}"><button type="button" class="btn btn-main font-weight-bold">OK</button></a></div>
+</div>
 {% block scripts %}
 <script type="text/javascript">
     var NumElements = {{quiz|length}};
-    var Elements = new Array();
-    var ElementShortText = new Array();
-    var ElementIDs = new Array();
     var QuizElements = new Array();
     var QuizElementShortText = new Array();
     var QuizElementIDs = new Array();
-    {% for element in lang_elements %}
-        Elements[{{ forloop.counter0 }}] = "{{ element.element.image_url}}";
-        ElementShortText[{{ forloop.counter0 }}] = "{{ element.short_text}}";
-        ElementIDs[{{ forloop.counter0 }}] = "{{ element.element.id}}";
-    {% endfor %}
+    var QuizElementsValues = new Array();
+    var QuizElementsGroups = new Array();
+    var NumTests = 0;
+    var GroupAnswered = false;
+    var ValueAnswered = false;
     {% for q in quiz %}
         QuizElements[{{ forloop.counter0 }}] = "{{ q.element.image_url}}";
         QuizElementShortText[{{ forloop.counter0 }}] = "{{ q.short_text}}";
         QuizElementIDs[{{ forloop.counter0 }}] = "{{ q.element.id}}";
+        QuizElementsValues[{{ forloop.counter0 }}] = "{{ q.element.letter_value}}";
+        QuizElementsGroups[{{ forloop.counter0 }}] = "{{ q.element.str_grp}}";
     {% endfor %}
     var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
     var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
-   
-    var AnswerLoc = -1;
+
     var OnElement = 0;
     var Answered = false;
     var Correct = 0;
@@ -82,19 +97,24 @@
     var Missed = new Array();
     var SaveUrl =  '{% url "quiz_save" %}';
     var Event = '{{event}}';
-    
+
 </script>
 <script type="text/javascript">
+
+    if (TestSetup["Value"]) {
+        $("#divValueTest").show();
+        NumTests++;
+    }
+    if (TestSetup["Group"]) {
+        $("#divGroupTest").show();
+        NumTests++;
+    }
+
     PopulateQuiz(0);
 
-    //PromptSetup.forEach(ShowPrompts); 
-
-   /* function ShowPrompts(item) {
-        $("#" + item).show();
-        console.log(item);
-    }*/
-
     function PopulateQuiz(which) {
+        GroupAnswered = false;
+        ValueAnswered = false;
         if (PromptSetup["Shorthand"])
             $("#pShorthand").attr('src', SymbolBaseURL + QuizElements[which] + ".svg");
         if (PromptSetup["Image"])
@@ -103,36 +123,63 @@
             $("#pText").html(QuizElementShortText[which]);
     }
 
-    function AnswerClick(which) {
+    function SelectValue(el) {
         if (Answered == false) {
-            Answered = true;
-            Total++;
-            if (which == AnswerLoc)
-                AnswerCorrect();
+            if (!el.checked)
+                $(el).prop('checked', true);
             else
-                AnswerWrong(which);
-            UpdateStats();
-        }  
+                $('.answer-value').not(el).prop('checked', false);
+            ValueAnswered = true;
+            if (NumTests == 1 || GroupAnswered)
+                CheckAnswer();
+        }
     }
 
-    function UpdateStats() {
-        $("#divTotalCount").html(Total);
-        $("#divCorrectCount").html(Correct);
-        $("#divWrongCount").html(Wrong);
+    function SelectGroup(el) {
+        if (Answered == false) {
+            if (!el.checked)
+                $(el).prop('checked', true);
+            else
+                $('.answer-group').not(el).prop('checked', false);
+            GroupAnswered = true;
+            if (NumTests == 1 || ValueAnswered)
+                CheckAnswer();
+        }
     }
 
-    function AnswerCorrect() {
-        Correct++;
-        $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
-        setTimeout(QuizNext, 2000);
-    }
+    function CheckAnswer() {
+        Answered = true;
+        var AllCorrect = true;
+        if (TestSetup["Value"]) {
+            if ($('.answer-value:checkbox:checked').val() == QuizElementsValues[OnElement])
+                $('.answer-value:checkbox:checked').next().removeClass("value-button").addClass("quiz-correct-button");
+            else {
+                $('.answer-value:checkbox:checked').next().removeClass("value-button").addClass("quiz-wrong-button");
+                $('#chkV' + QuizElementsValues[OnElement]).next().removeClass("value-button").addClass("quiz-correct-button");
+                AllCorrect = false;
+            }
+        }
+        if (TestSetup["Group"]) {
+            if ($('.answer-group:checkbox:checked').val() == QuizElementsGroups[OnElement])
+                $('.answer-group:checkbox:checked').next().removeClass("group-button").addClass("quiz-correct-button");
+            else {
+                $('.answer-group:checkbox:checked').next().removeClass("group-button").addClass("quiz-wrong-button");
+                $('#chkG' + QuizElementsGroups[OnElement]).next().removeClass("group-button").addClass("quiz-correct-button");
+                AllCorrect = false;
+            }
+        }
+        Total++;
 
-    function AnswerWrong(which) {
-        Missed[Wrong] = QuizElementIDs[OnElement];
-        Wrong++;
-        $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
-        $("#divAnswerContainer" + which).addClass("quiz-border-wrong").removeClass("quiz-border-neutral");
-        setTimeout(QuizNext, 2000);
+        if (AllCorrect) {
+            Correct++;
+            setTimeout(QuizNext, 2000);
+        }
+        else {
+            Missed[Wrong] = QuizElementIDs[OnElement];
+            Wrong++;
+            setTimeout(QuizNext, 2000);
+        }
+
     }
 
     function QuizNext() {
@@ -140,31 +187,45 @@
             EndQuiz()
         else {
             Answered = false;
-            for (var i = 1; i <= 4; i++)
-                $("#divAnswerContainer" + i).addClass("quiz-border-neutral").removeClass("quiz-border-correct").removeClass("quiz-border-wrong");
+            ResetButtons();
             OnElement++;
+            UpdateStats();
             PopulateQuiz(OnElement);
         }
     }
 
-    function GenerateRandomAnswer(which) {
-        var QuizA = Math.floor((Math.random() * NumElements));
-        //make sure its not the correct answer!
-        if (ElementIDs[QuizA] == QuizElementIDs[which]) {
-            QuizA = QuizA + 1;
-            if (QuizA > NumElements) {
-                QuizA = 0;
-            }
-        }
-        return QuizA;
+    function ResetButtons() {
+        //reset button classes
+        $('.quiz-wrong-button').each(function (i) {
+            $(this).removeClass('quiz-wrong-button');
+            if ($(this).hasClass('answer-button-value'))
+                $(this).addClass('value-button');
+            else
+                $(this).addClass('group-button');
+        });
+
+        $('.quiz-correct-button').each(function (i) {
+            $(this).removeClass('quiz-correct-button');
+            if ($(this).hasClass('answer-button-value'))
+                $(this).addClass('value-button');
+            else
+                $(this).addClass('group-button');
+        });
+
+        //uncheck em all
+        $('.answer-group').prop('checked', false);
+        $('.answer-value').prop('checked', false);
     }
-    function GenerateAnswerLocation() {
-        return Math.floor((Math.random() * 4) + 1);
+
+    function UpdateStats() {
+        $("#divCorrectCount").html("Correct: " + Correct);
+        $("#divWrongCount").html("Incorrect: " + Wrong);
     }
+
     function EndQuiz() {
         if (OnElement > 0)
             SaveQuiz();
-            
+
         $("#modalMainTitle").html("Quiz Results");
         $(".modal-dialog").removeClass("mw-100").removeClass("w-75");
         $("#modalBodyArea2").empty().append($("#QuizResults"));
@@ -175,8 +236,6 @@
     }
 
     function SaveQuiz() {
-        var note = $('#txtUserNotes').val();
-
         $.ajax({
             url: SaveUrl,
             data: {
@@ -188,7 +247,7 @@
             },
             dataType: 'json',
             success: function (data) {
-              
+
             }
         });
     }

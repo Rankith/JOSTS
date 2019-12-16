@@ -59,7 +59,7 @@
 <div class="row no-gutters">
     <div class="pr-2">
         <label id="lblTestValue" class="search-button" style="width:auto !important;">
-            <input type="checkbox" id="chkTestElementValue" class="check-search-display check-search check-search-element-test" value="Value" onchange="SetTestElement(this)">
+            <input type="checkbox" id="chkTestElementValue" checked="checked" class="check-search-display check-search check-search-element-test" value="Value" onchange="SetTestElement(this)">
             <div class="search-button display-button pl-1 pr-1" style="width:auto !important;"><div style="">Value</div></div>
         </label>
     </div>
@@ -106,7 +106,7 @@
         }  
     }
     function SetPromptElement(el) {
-        if ( $('.check-search-element-test:checkbox:checked').length == 0)
+        if ( $('.check-search-element-prompt:checkbox:checked').length == 0)
             $(el).prop('checked', true);
         localStorage.setItem(el.id, el.checked ? 1 : 0);
     }
@@ -140,6 +140,7 @@
                 });
             }
         }
+        CheckIfVault();
 
         }
     function SearchChangeEvent(el) {
@@ -152,9 +153,19 @@
             $('.check-search-event').not(el).each(function (i) {
                 localStorage.setItem(this.id, 0);
             });
-
+            CheckIfVault();
             //Event = $(el).val();
         }
+    }
+
+    function CheckIfVault() {
+        if ($(".check-search:checkbox:checked").val() == "V" && type == "Element") {
+            $("#chkTestElementGroup").prop('checked', true);
+            $("#chkTestElementValue").prop('checked', false);
+            $("#lblTestValue").hide();
+        }
+        else
+            $("#lblTestValue").show();
     }
 
     function SetQuizSettings() {

@@ -331,3 +331,11 @@ input:checked + .display-button {
     background-color: #3879d9;
     color: #FFFFFF;
 }
+.quiz-correct-button {
+    background-color: green;
+    color: #FFFFFF;
+}
+.quiz-wrong-button {
+    background-color: red;
+    color: #FFFFFF;
+}
