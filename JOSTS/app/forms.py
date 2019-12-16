@@ -23,6 +23,8 @@ class BootstrapAuthenticationForm(AuthenticationForm):
 class SignUpForm(UserCreationForm):
     username = forms.CharField(max_length=30)
     email = forms.EmailField(max_length=200)
+    subs = SubscriptionSetup.objects.all()
+    subscription = forms.ModelChoiceField(subs,empty_label = None)
 
     class Meta:
         model = User

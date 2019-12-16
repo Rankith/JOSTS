@@ -212,7 +212,20 @@ def signup(request):
                 email=form.cleaned_data.get('email'))
             sub = Subscription(user=user,customer_id=customer.id)
             sub.save()
-            return redirect('/subscriptions')
+            cust = sub.customer_id
+            session = stripe.checkout.Session.create(
+                customer=cust,
+                payment_method_types=['card'],
+                subscription_data={
+                    'items': [{
+                    'plan': form.cleaned_data.get('subscription').stripe_plan_id,
+                    }],
+                    'trial_from_plan':'true',
+                },
+                success_url=request.build_absolute_uri("/") + 'subscriptions/?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=request.build_absolute_uri("/") + 'subscriptions/',
+            )
+            return render(request, 'app/signup.html', {'form': form,'checkout_session_id': session.id,'subscriptions':sub,'stripe_public_key':settings.STRIPE_PUBLIC_KEY})
     else:
         form = SignUpForm()
     return render(request, 'app/signup.html', {'form': form})
