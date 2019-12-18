@@ -61,10 +61,21 @@ class QuizResultAdmin(admin.ModelAdmin):
     search_fields = ('event','date_completed','type')
     list_filter = ('event','type')
 
+class NormalUserFilter(admin.SimpleListFilter):
+    title = "Normal User"
+    parameter_name = 'users'
+
+    def lookups(self, request, model_admin):
+        return [('Normal User','Normal User'),]
+
+    def queryset(self, request, queryset):
+        if self.value() == "Normal User":
+            return queryset.filter(actor__is_staff=False).filter(actor__is_superuser=False)
+
 class ActivityLogAdmin(admin.ModelAdmin):
     list_display = ('id','actor','action_type','action_detail','action_item','timestamp')
     search_fields = ('actor','action_type','action_detail','action_item')
-    list_filter = ('action_type',)
+    list_filter = ('action_type',NormalUserFilter)
 
 class UnsubscribeFeedbackAdmin(admin.ModelAdmin):
     list_display = ('id','expensive','dont_need','different_features','low_quality','hard_to_use','other','other_details')
