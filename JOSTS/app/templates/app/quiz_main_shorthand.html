@@ -1,15 +1,13 @@
 ﻿{% load staticfiles %}
 <div class="row no-gutters">
-    <div class="col-6 pt-2 d-flex align-items-center justify-content-center flex-column">
-        <div style="height:170px" class="image-background rounded w-75" id="divPrompt">
+    <div class="col-md-5 col-6 pt-2 d-flex align-items-center justify-content-center flex-column pr-1">
+        <div style="height:170px" class="image-background rounded w-100" id="divPrompt">
             <div class="row h-100 justify-content-center align-items-center text-center">
                 <div class="col-12 position-relative">
                     <img id="imgPrompt" class="img-fluid" style="max-height:150px;overflow:hidden" />
                 </div>
-                {% if prompt_type == "Image" %}
-                    <div id="divPromptText" class="col-12 pb-1 img-text-below">
+                    <div id="divPromptText" class="col-12 pb-1 img-text-below" style="display:none">
                     </div>
-                {% endif %}
             </div>
         </div>
         <div class="w-75">
@@ -29,8 +27,8 @@
               <button type="button" class="btn btn-main font-weight-bold" onclick="EndQuiz()">Finish Quiz</button>
         </div>
     </div>
-
-    <div class="col-6 h-100">
+    <div id="divSwap" class="mt-auto mb-auto"> <button type="button" class="btn btn-main" onclick="SwapQuiz()"><i class="fa fa-exchange" aria-hidden="true"></i></button></div>
+    <div class="col-md-5 col-6 h-100 pl-1">
         <div class="row">
             {% for i in '1234'|make_list %}
                 <div class="col-12 pt-2">
@@ -78,16 +76,7 @@
     var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
     var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
     var PromptType = '{{prompt_type}}'
-    if (PromptType == "Shorthand")
-    {
-        var PromptBaseURL = SymbolBaseURL;
-        var AnswerBaseURL = ImageBaseURL;
-    }
-    else
-    {
-        var PromptBaseURL = ImageBaseURL;
-        var AnswerBaseURL = SymbolBaseURL;
-    }
+    
     var AnswerLoc = -1;
     var OnElement = 0;
     var Answered = false;
@@ -100,14 +89,48 @@
     
 </script>
 <script type="text/javascript">
-    PopulateQuiz(0);
+    SetQuizType();
 
-    if (PromptType == "Image" || window.innerWidth < 600) {
-        $("#divAnswer1Text").remove();
-        $("#divAnswer2Text").remove();
-        $("#divAnswer3Text").remove();
-        $("#divAnswer4Text").remove();
+   
+    if (window.innerWidth < 600) {
         $("#divTotalText").hide();
+        $("#divSwap").remove();
+    }
+
+    function SwapQuiz() {
+        if (PromptType == "Shorthand")
+            PromptType = "Image";
+        else
+            PromptType = "Shorthand";
+        SetQuizType();
+    }
+
+    function SetQuizType() {
+        if (PromptType == "Shorthand")
+        {
+            PromptBaseURL = SymbolBaseURL;
+            AnswerBaseURL = ImageBaseURL;
+            $("#divPromptText").hide();
+            if ( window.innerWidth >= 600) {
+                $("#divAnswer1Text").show();
+                $("#divAnswer2Text").show();
+                $("#divAnswer3Text").show();
+                $("#divAnswer4Text").show();
+            }
+        }
+        else
+        {
+            PromptBaseURL = ImageBaseURL;
+            AnswerBaseURL = SymbolBaseURL;
+            $("#divPromptText").show();
+             
+            $("#divAnswer1Text").hide();
+            $("#divAnswer2Text").hide();
+            $("#divAnswer3Text").hide();
+            $("#divAnswer4Text").hide();
+        
+        }
+        PopulateQuiz(OnElement);
     }
 
     function PopulateQuiz(which){
@@ -118,14 +141,14 @@
             if (i != AnswerLoc) {
                 TempAnswer = GenerateRandomAnswer(which)
                 $("#imgAnswer" + i).attr('src', AnswerBaseURL + Elements[TempAnswer] + ".svg")
-                if (PromptType == "Shorthand")
-                    $("#divAnswer" + i + "Text").html(ElementShortText[TempAnswer]);
+                //if (PromptType == "Shorthand")
+                $("#divAnswer" + i + "Text").html(ElementShortText[TempAnswer]);
             }
         }
         $("#imgAnswer" + AnswerLoc).attr('src', AnswerBaseURL + QuizElements[which] + ".svg")
-        if (PromptType == "Shorthand")
+        //if (PromptType == "Shorthand")
             $("#divAnswer" + AnswerLoc + "Text").html(QuizElementShortText[which]);
-        else
+        //else
             $("#divPromptText").html(QuizElementShortText[which]);
   
     }

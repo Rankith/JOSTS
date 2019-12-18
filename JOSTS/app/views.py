@@ -48,16 +48,7 @@ def contact(request):
 
 def about(request):
     """Renders the about page."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/about.html',
-        {
-            'title':'About',
-            'message':'Your application description page.',
-            'year':datetime.now().year,
-        }
-    )
+    return render(request,'app/about.html')
 
 def log_activity(user,action_type,action_detail,action_item):
     AL = ActivityLog(actor=user,action_type=action_type,action_detail=action_detail,action_item=action_item)

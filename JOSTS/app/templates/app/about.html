@@ -1,10 +1,37 @@
-{% extends "app/layout.html" %}
+﻿{% extends "app/layout.html" %}
 
 {% block content %}
+{% load staticfiles %}
+    <div class="text-base">
+        <h2>About</h2>
+        Copyright Sports Training Systems © 2019<br /><br />
+        <h3>New Features</h3>
+        <h5>16 Dec 19</h5>
+        <h6>Features</h6>
+        <ul>
+            <li>
+                Element Value (and/or Groups) Quiz
+                <ul>
+                    <li>Quiz Results are saved</li>
+                    <li>Missed answers can be taken in a new Quiz</li>
+                </ul>
+            </li>
+            <li>
+                Shorthand Quiz
+                <ul>
+                    <li> Shorthand Quizzes can be reversed (with the double arrow <-> in the display)</li>
+                </ul>
+            </li>
+            <li>Vault Values can be changed by Level in the Menu (slider)</li>
+        </ul>
+        <h6>Content</h6>
+        <ul>
+            <li>Chapter 6 Rules (Q&A)</li>
+        </ul>
+        <h6>Interface</h6>
+        <ul>
+            <li>Search buttons that are invoked now show as light</li>
+        </ul>
 
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
-
-<p>Use this area to provide additional information.</p>
-
+    </div>
 {% endblock %}
