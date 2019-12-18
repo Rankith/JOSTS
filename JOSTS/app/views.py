@@ -342,7 +342,7 @@ def element_list(request):
         }
 
     #activity log
-    log_activity(request.user,'Elements','List',request.GET.get('event'))
+    log_activity(request.user,'Elements','List',request.GET.get('element__event'))
     return render(request, 'app/element_list.html',context=context)
 
 

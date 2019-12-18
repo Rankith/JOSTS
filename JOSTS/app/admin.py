@@ -74,7 +74,7 @@ class NormalUserFilter(admin.SimpleListFilter):
 
 class ActivityLogAdmin(admin.ModelAdmin):
     list_display = ('id','actor','action_type','action_detail','action_item','timestamp')
-    search_fields = ('actor','action_type','action_detail','action_item')
+    search_fields = ('actor__username','actor__email','action_type','action_detail','action_item')
     list_filter = ('action_type',NormalUserFilter)
 
 class UnsubscribeFeedbackAdmin(admin.ModelAdmin):
