@@ -171,7 +171,7 @@
         if (InfoHolder == "") {
             InfoHolder = $("#spnAdditionalInfo").html();
             InfoH = $("#divAdditionalInfo").height();
-            InfoW = $("#divAdditionalInfo").outerWidth();
+            InfoW = $("#divAdditionalInfo").outerWidth() + 1;
             $("#divAdditionalInfo").height(InfoH);
             $("#divAdditionalInfo").width(InfoW);
             $("#spnAdditionalInfo").hide();
