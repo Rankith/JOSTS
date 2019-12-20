@@ -330,3 +330,9 @@ a.BlueLoginButton {
     overflow: hidden;
     font-size: .8rem
 }
+
+.card-header-custom {
+    font-size: 1.25rem;
+    padding: 0rem 1.25rem !important;
+    font-weight:bold;
+}
