@@ -7,7 +7,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}?version=1.1" />
-    <link rel="stylesheet" type="text/css" href="{% static 'app/content/theme.css' %}?version=1.1" />
+    <link rel="stylesheet" id="ThemeLink" type="text/css" href="{% static 'app/content/theme.css' %}?version=1.1" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/nouislider.min.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
     <script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script>
@@ -26,8 +26,8 @@
             <span class="text-secondary">© 2019</span>
             <div class="navbar-collapse collapse" id="navbarSupportedContent">
                 <ul class="nav navbar-nav">
-                    <li class="nav=item"><a class="nav-link" href="{% url 'elements' %}">Elements</a></li>
-                    <li class="nav=item"><a class="nav-link" href="{% url 'rules' %}">Rules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'elements' %}">Elements</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'rules' %}">Rules</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Shorthand
@@ -76,6 +76,10 @@
      <script src="{% static 'app/scripts/nouislider.min.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
+    <script type="text/javascript">
+        var ThemeLocation = "{% static 'app/content/' %}";
+        var ThemeVersion = "?version=1.1";
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript">$(document).bind("mobileinit", function () { $.extend($.mobile, { autoInitializePage: false }) });
         //crazy veiwport stuff for drawing
@@ -89,7 +93,12 @@
           let vh = window.innerHeight * 0.01;
           document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
+
+        function SetTheme(ThemeIn) {
+            $("#ThemeLink").prop('href', ThemeLocation + ThemeIn + ThemeVersion);
+        }
     </script>
+     
     <script src="{% static 'app/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
 {% block scripts %}{% endblock %}
 
