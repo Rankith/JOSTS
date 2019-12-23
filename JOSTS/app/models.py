@@ -141,3 +141,14 @@ class UnsubscribeFeedback(models.Model):
     hard_to_use = models.BooleanField(default=False)
     other = models.BooleanField(default=False)
     other_details = models.TextField(blank=True,default='')
+
+class Theme(models.Model):
+    file = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
+    def __str__(self):
+        return str(self.name)
+
+DEFAULT_THEME_ID = 1
+class UserSettings(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    theme = models.ForeignKey(Theme, on_delete=models.SET_NULL,null=True, default=DEFAULT_THEME_ID)

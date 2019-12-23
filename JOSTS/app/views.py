@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, SubscriptionForm,UnsubscribeFeedbackForm
+from .forms import SignUpForm, SubscriptionForm,UnsubscribeFeedbackForm,SettingsForm
 from django.contrib.auth import authenticate, login
 import stripe
 from django.views.decorators.csrf import csrf_exempt
@@ -220,6 +220,23 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'app/signup.html', {'form': form})
+
+@login_required(login_url='/login/')
+def user_settings(request):
+    u_settings = UserSettings.objects.filter(user=request.user.id)
+    if len(u_settings) == 0:
+        u_settings = UserSettings(user=request.user)
+    else:
+        u_settings = u_settings.first()
+    form = SettingsForm
+    if request.method == 'POST':
+        form = SettingsForm(request.POST,instance=u_settings)
+        if form.is_valid():
+            form.save()
+            return render(request, 'app/user_settings.html', {'form': form})
+    else:
+        form = SettingsForm(instance=u_settings)
+    return render(request, 'app/user_settings.html', {'form': form})
 
 def unsubscribe_feedback(request):
     if request.method == 'POST':

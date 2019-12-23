@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\nouislider.min.css" />
+    <Content Include="app\static\app\content\theme2.css" />
     <Content Include="app\static\app\content\theme.css" />
     <Content Include="app\static\app\images\wag\elements\.gitignore" />
     <Content Include="app\static\app\images\wag\elements\bb250601.svg" />
@@ -2489,6 +2490,7 @@
     <Content Include="app\templates\app\quiz_main_element.html" />
     <Content Include="app\templates\app\quiz_results.html" />
     <Content Include="app\templates\app\about.html" />
+    <Content Include="app\templates\app\user_settings.html" />
     <Content Include="app\templates\app\unsubscribe_feedback.html" />
     <Content Include="app\templates\registration\password_reset_subject.txt" />
     <Content Include="app\templates\registration\password_reset_email.html" />

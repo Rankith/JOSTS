@@ -79,6 +79,9 @@
     <script type="text/javascript">
         var ThemeLocation = "{% static 'app/content/' %}";
         var ThemeVersion = "?version=1.1";
+        var UserTheme = "{{user.usersettings.theme.file}}";
+        if (UserTheme == "")
+            UserTheme = "theme.css";
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
     <script type="text/javascript">$(document).bind("mobileinit", function () { $.extend($.mobile, { autoInitializePage: false }) });
@@ -93,6 +96,7 @@
           let vh = window.innerHeight * 0.01;
           document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
+        SetTheme(UserTheme);
 
         function SetTheme(ThemeIn) {
             $("#ThemeLink").prop('href', ThemeLocation + ThemeIn + ThemeVersion);

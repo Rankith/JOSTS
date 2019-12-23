@@ -1,0 +1,29 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+{% load staticfiles %}
+
+<div class="text-base justify-content-center">
+     Welcome {{user}}   
+    <h3>Settings:</h3>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="row">
+                <div class="col">
+                {{ field.label_tag }}<br>
+                {{ field }}
+                {% if field.help_text %}
+                <small style="color: grey">{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+                {% endfor %}
+                    </div>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-main mt-2">Save</button>
+    </form>
+</div>
+
+{% endblock %}

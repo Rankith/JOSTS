@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -80,6 +80,12 @@ class ActivityLogAdmin(admin.ModelAdmin):
 class UnsubscribeFeedbackAdmin(admin.ModelAdmin):
     list_display = ('id','expensive','dont_need','different_features','low_quality','hard_to_use','other','other_details')
 
+class ThemeAdmin(admin.ModelAdmin):
+    list_display=('name','file')
+
+class UserSettingsAdmin(admin.ModelAdmin):
+    list_display=('user','theme')
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
@@ -93,3 +99,5 @@ admin.site.register(SubscriptionSetup,SubscriptionSetupAdmin)
 admin.site.register(QuizResult,QuizResultAdmin)
 admin.site.register(ActivityLog,ActivityLogAdmin)
 admin.site.register(UnsubscribeFeedback,UnsubscribeFeedbackAdmin)
+admin.site.register(Theme,ThemeAdmin)
+admin.site.register(UserSettings,UserSettingsAdmin)
