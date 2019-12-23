@@ -138,12 +138,9 @@
 </script>
 <script type="text/javascript">
     DrawInit();
-    document.getElementById('divMain').onkeydown = function (e) {
-        if (e.shiftKey && e.keyCode == 56) {
-            $("#divSave").show();
-            $("#divTempCount").show();
-        }
-    }
+   window.addEventListener("keydown", PageKeyDown, true);
+        
+    
       $('#chkTrace').change(function() {
         localStorage.trace = this.checked ? 1 : 0
         ResetWithTrace();
@@ -160,6 +157,15 @@
     function TraceLoaded() {
         if (document.getElementById('chkTrace').checked)
             ResetWithTrace();
+    }
+
+    function PageKeyDown(e) {
+        
+        if (e.shiftKey && e.keyCode == 56) {
+            $("#divSave").show();
+            $("#divTempCount").show();
+        }
+  
     }
 
  /*if (localStorage.save) {
