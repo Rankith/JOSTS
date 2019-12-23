@@ -67,6 +67,14 @@
             </div>
         </div>
 
+        <div class="row pt-4">
+            <div class="col text-center">
+                <video id="VideoPlayer" width="80%" height="auto" controls="controls" icons="none" webkit-playsinline src="{% static 'app/videos/jrsts-landing-video.mp4' %}">
+                    <source  src="{% static 'app/videos/jrsts-landing-video.mp4' %}" type="mp4">
+                </video>
+            </div>
+        </div>
+
         <div class="modal fade" id="modalMain" tabindex="-1" role="dialog" aria-labelledby="modalMainTitle" aria-hidden="true">
   <div class="modal-dialog " role="document">
     <div class="modal-content">
@@ -129,6 +137,34 @@
     <script src="{% static 'app/scripts/jquery.mobile-1.4.5.min.js' %}"></script>
 <script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
     <script type="text/javascript">
+        $(document).ready(function() {
+            // Get media - with autoplay disabled (audio or video)
+            var media = $('video').not("[autoplay='autoplay']");
+            var tolerancePixel = 40;
+
+            function checkMedia(){
+                // Get current browser top and bottom
+                var scrollTop = $(window).scrollTop() + tolerancePixel;
+                var scrollBottom = $(window).scrollTop() + $(window).height() - tolerancePixel;
+
+                media.each(function(index, el) {
+                    var yTopMedia = $(this).offset().top;
+                    var yBottomMedia = $(this).height() + yTopMedia;
+
+                    if(scrollTop < yBottomMedia && scrollBottom > yTopMedia){ //view explaination in `In brief` section above
+                        $(this).get(0).play();
+                    } else {
+                        $(this).get(0).pause();
+                    }
+                });
+
+                //}
+            }
+            $(document).on('scroll', checkMedia);
+        });
+
+
+
         function btnSignUp_Click() {
             if ($("#modalSignupBody").children().length == 0) {
                 $.get("/signup/", function (data) {

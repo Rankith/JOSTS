@@ -67,6 +67,7 @@
     <Folder Include="app\static\app\images\wag\" />
     <Folder Include="app\static\app\images\wag\elements\" />
     <Folder Include="app\static\app\images\wag\sym\" />
+    <Folder Include="app\static\app\videos\" />
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
@@ -2483,6 +2484,7 @@
     <Content Include="app\static\app\scripts\jquery.mobile-1.4.5.min.js" />
     <Content Include="app\static\app\scripts\nouislider.min.js" />
     <Content Include="app\static\app\scripts\shorthand_drawing.js" />
+    <Content Include="app\static\app\videos\jrsts-landing-video.mp4" />
     <Content Include="app\templates\app\base.html" />
     <Content Include="app\templates\app\quiz_main_element.html" />
     <Content Include="app\templates\app\quiz_results.html" />
