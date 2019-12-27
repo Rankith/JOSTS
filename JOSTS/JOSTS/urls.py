@@ -64,4 +64,5 @@ urlpatterns = [
         auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('user_settings/', views.user_settings, name='user_settings'),
+    path('video_player/', views.video_player, name='video_player'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

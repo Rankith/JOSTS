@@ -1,0 +1,25 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div class="row">
+    <div class="col-1">
+        <button id="btnVid1" type="button" class="btn btn-main" >1</button>
+        <button id="btnVid2" type="button" class="btn btn-main" >2</button>
+    </div>
+    <div class="col-10 col-md-8">
+        <div class="embed-responsive embed-responsive-16by9">
+            <video width="640" height="480" controls>
+                <source src="{% static 'app/videos/wag/' %}{{ element.element.event }}/{{ element.element.videos.all.0.file }}.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+    <div class="col-12 col-md-3">
+        Notes Area
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+      
+</script>
+{% endblock %}

@@ -88,10 +88,19 @@
                 </tr>
             </table>
         </div>
+        {% if lang_elements.element.videos.count > 0 %}
+            {% if request.user.is_staff or request.user.is_superuser %}
+             <div class="col"><div class="text-center"><button id="btnVideo" type="button" class="btn btn-main"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold"  onclick="LoadVideo()">VIDEO</button></div></div>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 
+
+
+
 <script type="text/javascript">
+    var ElementID = {{lang_elements.id}};
     var AdditionalInfo = "{{lang_elements.additional_info}}";
     //store checkboxes in ls and load as needed
      if (localStorage.your_note) {
@@ -197,6 +206,18 @@
             });
         }
     }
+    function LoadVideo() {
+        $("#modalMainTitle").html("Video");
+        if (window.innerWidth >= 600)
+            $(".modal-dialog").addClass("mw-100").addClass("w-75");
+        $("#modalBodyArea2").hide();
+        $("#modalBodyArea1").empty();
+        $.get("/video_player/?element=" + ElementID, function (data) {
+            $("#modalBodyArea1").append(data);
+        });
+        $("#modalBodyArea1").show();
+    }
+
 </script>
 
 {% endblock %}

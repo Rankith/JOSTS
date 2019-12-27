@@ -636,3 +636,11 @@ def quiz_results(request):
         'results': results
         }
     return render(request, 'app/quiz_results.html',context=context)
+
+#Videos
+def video_player(request):
+    element = ElementText.objects.get(pk=request.GET.get('element'))
+    context = {
+        'element': element
+        }
+    return render(request, 'app/video_player.html',context=context)

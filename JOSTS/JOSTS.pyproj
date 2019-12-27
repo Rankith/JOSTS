@@ -2487,6 +2487,7 @@
     <Content Include="app\static\app\scripts\shorthand_drawing.js" />
     <Content Include="app\static\app\videos\jrsts-landing-video.mp4" />
     <Content Include="app\templates\app\base.html" />
+    <Content Include="app\templates\app\video_player.html" />
     <Content Include="app\templates\app\quiz_main_element.html" />
     <Content Include="app\templates\app\quiz_results.html" />
     <Content Include="app\templates\app\about.html" />
