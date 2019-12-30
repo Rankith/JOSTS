@@ -1,14 +1,15 @@
 ﻿{% block content %}
 {% load staticfiles %}
 <div class="row">
-    <div class="col-1">
-        <button id="btnVid1" type="button" class="btn btn-main" >1</button>
-        <button id="btnVid2" type="button" class="btn btn-main" >2</button>
+    <div class="col-12 col-md-1">
+        {% for vid in element.element.videos.all %}
+             <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" onclick="ShowVideo({{ vid.id }},'{{ vid.file }}')">{{ forloop.counter }}</button>
+        {% endfor %}
     </div>
-    <div class="col-10 col-md-8">
+    <div class="col-12 col-md-8">
         <div class="embed-responsive embed-responsive-16by9">
-            <video width="640" height="480" controls>
-                <source src="{% static 'app/videos/wag/' %}{{ element.element.event }}/{{ element.element.videos.all.0.file }}.mp4" type="video/mp4">
+            <video width="640" height="480" controls id="VideoPlayer">
+                <source src="" type="video/mp4">
             </video>
         </div>
     </div>
@@ -20,6 +21,16 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
-      
+      var SourceBase = "{% static 'app/videos/wag/' %}{{ element.element.event }}/";
+
+</script>
+<script type="text/javascript">
+    var VideoPlayer = document.getElementById("VideoPlayer");
+    function ShowVideo(idIn, fileIn) {
+        VideoPlayer.pause();
+        VideoPlayer.src = SourceBase + fileIn;
+        VideoPlayer.load();
+        VideoPlayer.play();
+    }
 </script>
 {% endblock %}

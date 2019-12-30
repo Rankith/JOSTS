@@ -214,6 +214,7 @@
         $("#modalBodyArea1").empty();
         $.get("/video_player/?element=" + ElementID, function (data) {
             $("#modalBodyArea1").append(data);
+            $("#btnVid1").click();
         });
         $("#modalBodyArea1").show();
     }
