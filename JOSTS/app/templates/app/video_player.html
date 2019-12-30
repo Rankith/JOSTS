@@ -1,7 +1,5 @@
 ﻿{% block content %}
 {% load staticfiles %}
-<script src="https://vjs.zencdn.net/7.5.5/video.js"></script>
-<link href="https://vjs.zencdn.net/7.5.5/video-js.css" rel="stylesheet" />
 <div class="row">
     <div class="col-12 col-md-1">
         {% for vid in element.element.videos.all %}
@@ -10,7 +8,7 @@
     </div>
     <div class="col-12 col-md-8">
         <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-            <video controls class="video-js vjs-big-play-centered" id="VideoPlayer">
+            <video controls  id="VideoPlayer">
                 <source src="" type="video/mp4">
             </video>
         </div>
@@ -29,7 +27,6 @@
 <script type="text/javascript">
     var VideoPlayer = document.getElementById("VideoPlayer");
     function ShowVideo(idIn, fileIn) {
-        videojs('VideoPlayer');
         VideoPlayer.pause();
         VideoPlayer.src = SourceBase + fileIn;
         VideoPlayer.load();

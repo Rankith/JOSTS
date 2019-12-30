@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -86,6 +86,18 @@ class ThemeAdmin(admin.ModelAdmin):
 class UserSettingsAdmin(admin.ModelAdmin):
     list_display=('user','theme')
 
+class RuleLinkAdmin(ImportExportModelAdmin):
+    list_display = ('id','text','rule','type','event','category_name','category_order','deduction_amount','connected_elements')
+    list_editable = ('text','type','event','category_name','category_order','deduction_amount','connected_elements')
+    search_fields = ('event','text','category_name','deduction_amount','type')
+    list_filter = ('event','type')
+
+class VideoNoteAdmin(admin.ModelAdmin):
+    list_display = ('id','video','rule_link','element_link','frame','skip_frame','color','event','cr','override_text','no_value_type','timestamp')
+    list_editable = ('frame','skip_frame','color','event','cr','override_text','no_value_type')
+    search_fields = ('event','color','video','rule_link','element_link','color','override_text')
+    list_filter = ('event','color','no_value_type')
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
@@ -101,3 +113,5 @@ admin.site.register(ActivityLog,ActivityLogAdmin)
 admin.site.register(UnsubscribeFeedback,UnsubscribeFeedbackAdmin)
 admin.site.register(Theme,ThemeAdmin)
 admin.site.register(UserSettings,UserSettingsAdmin)
+admin.site.register(RuleLink,RuleLinkAdmin)
+admin.site.register(VideoNote,VideoNoteAdmin)

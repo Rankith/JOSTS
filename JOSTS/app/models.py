@@ -152,3 +152,28 @@ DEFAULT_THEME_ID = 1
 class UserSettings(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     theme = models.ForeignKey(Theme, on_delete=models.SET_NULL,null=True, default=DEFAULT_THEME_ID)
+
+class RuleLink(models.Model):
+    text = models.CharField(max_length=255)
+    rule = models.ForeignKey(Rule, on_delete=models.SET_NULL,null=True)
+    category_name = models.CharField(max_length=40,blank=True,default='')
+    category_order = models.IntegerField(default=0)
+    deduction_amount = models.IntegerField(default=0)
+    connected_elements = models.IntegerField(default=0)
+    type = models.CharField(max_length=1,blank=True,default='')
+    event = models.CharField(max_length=2,blank=True,default='')
+    def __str__(self):
+        return self.event + " " + self.text
+
+class VideoNote(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.SET_NULL,null=True)
+    rule_link = models.ForeignKey(RuleLink, on_delete=models.SET_NULL,null=True,blank=True)
+    element_link = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True,blank=True)
+    frame = models.IntegerField(default=0)
+    skip_frame = models.BooleanField(default=False)
+    color = models.CharField(max_length=12,blank=True,default='')
+    event = models.CharField(max_length=2,blank=True,default='')
+    cr = models.CharField(max_length=6,blank=True,default='')
+    override_text = models.CharField(max_length=255,blank=True,default='')
+    no_value_type = models.CharField(max_length=25,blank=True,default='')
+    timestamp = models.DateTimeField(auto_now=True)
