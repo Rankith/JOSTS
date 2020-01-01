@@ -16,16 +16,16 @@
             <div class="col-12 col-md-4 pr-4">
                 <div class="row no-gutters">
                     <div class="col-3 text-center">
-                        <i class="fas fa-fast-backward" style="font-size:1.6rem;cursor:pointer" onclick="StepBackwardFive()"></i>
+                        <i class="fas fa-fast-backward" style="font-size:1.6rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-5);"></i>
                     </div>
                     <div class="col-3 text-center" style="padding-top:0.05rem">
-                        <i class="fas fa-step-backward" style="font-size:1.45rem;cursor:pointer" onclick="StepBackward()"></i>
+                        <i class="fas fa-step-backward" style="font-size:1.45rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-1)"></i>
                     </div>
                     <div class="col-3 text-center"  style="padding-top:0.05rem">
-                        <i class="fas fa-step-forward"  style="font-size:1.45rem;cursor:pointer" onclick="StepForward()"></i>
+                        <i class="fas fa-step-forward"  style="font-size:1.45rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(1)"></i>
                     </div>
                     <div class="col-3 text-center">
-                        <i class="fas fa-fast-forward" style="font-size:1.6rem;cursor:pointer" onclick="StepForwardFive()"></i>
+                        <i class="fas fa-fast-forward" style="font-size:1.6rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(5)"></i>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
 </script>
 <script type="text/javascript">
     var VideoPlayer = document.getElementById("VideoPlayer");
-
+    var FrameStepTimer;
     //level slider
     var SpeedSlider = document.getElementById("SpeedSlider");
 
@@ -94,30 +94,31 @@
        //
     });
 
-    function StepForward() {
+     $(document).keydown(function(event) { 
+        var key = (event.keyCode ? event.keyCode : event.which); 
+        if (key==187)//+
+		{
+			VideoStep(1);
+			VideoStepEnd();
+		}
+		else if(key==189)//-
+		{
+			VideoStep(-1);
+			VideoStep();
+		}
+    }); 
+
+    function VideoStep(amountIn) {
         VideoPlayer.pause();
         var now=VideoPlayer.currentTime;
-        VideoPlayer.currentTime=now+1/30;
-        //frameStepTimer=setTimeout("stepForward()",250);
+        VideoPlayer.currentTime=now+amountIn/30;
+        FrameStepTimer=setTimeout("VideoStep(" + amountIn + ")",250);
     }
-    function StepBackward() {
-        VideoPlayer.pause();
-        var now=VideoPlayer.currentTime;
-        VideoPlayer.currentTime=now-1/30;
-        //frameStepTimer=setTimeout("stepForward()",250);
+
+    function VideoStepEnd() {
+        clearTimeout(FrameStepTimer);
     }
-    function StepForwardFive() {
-        VideoPlayer.pause();
-        var now=VideoPlayer.currentTime;
-        VideoPlayer.currentTime=now+5/30;
-        //frameStepTimer=setTimeout("stepForward()",250);
-    }
-    function StepBackwardFive() {
-        VideoPlayer.pause();
-        var now=VideoPlayer.currentTime;
-        VideoPlayer.currentTime=now-5/30;
-        //frameStepTimer=setTimeout("stepForward()",250);
-    }
+   
 
     function ShowVideo(idIn, fileIn) {
         VideoPlayer.pause();
