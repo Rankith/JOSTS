@@ -12,6 +12,35 @@
                 <source src="" type="video/mp4">
             </video>
         </div>
+        <div class="row no-gutters pt-2">
+            <div class="col-12 col-md-4 pr-4">
+                <div class="row no-gutters">
+                    <div class="col-3 text-center">
+                        <i class="fas fa-fast-backward" style="font-size:1.6rem;cursor:pointer" onclick="StepBackwardFive()"></i>
+                    </div>
+                    <div class="col-3 text-center" style="padding-top:0.05rem">
+                        <i class="fas fa-step-backward" style="font-size:1.45rem;cursor:pointer" onclick="StepBackward()"></i>
+                    </div>
+                    <div class="col-3 text-center"  style="padding-top:0.05rem">
+                        <i class="fas fa-step-forward"  style="font-size:1.45rem;cursor:pointer" onclick="StepForward()"></i>
+                    </div>
+                    <div class="col-3 text-center">
+                        <i class="fas fa-fast-forward" style="font-size:1.6rem;cursor:pointer" onclick="StepForwardFive()"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-8">
+                <div class="row no-gutters">
+                    <div class="col-8 pt-1">
+                        <div id="SpeedSlider"></div>
+                    </div>
+                    <div class="col-4 pl-4" id="divsSpeedSliderValues">
+           
+                    </div>
+                </div>
+            </div>
+            
+        </div>
     </div>
     <div class="col-12 col-md-3">
         Notes Area
@@ -26,12 +55,80 @@
 </script>
 <script type="text/javascript">
     var VideoPlayer = document.getElementById("VideoPlayer");
+
+    //level slider
+    var SpeedSlider = document.getElementById("SpeedSlider");
+
+    noUiSlider.create(SpeedSlider, {
+        start: 1,
+        connect: [true,false],
+        range: {
+            'min': 0,
+            'max': 1.25
+        },
+        step: 0.25,
+
+    });
+
+
+    SpeedSlider.noUiSlider.on('update', function (values, handle) {
+        var SpeedDisplay = 0
+        if (values[0] == "0.00")
+            SpeedDisplay = "Stopped";
+        else if (values[0] == "0.25")
+            SpeedDisplay = "1/4";
+        else if (values[0] == "0.50")
+            SpeedDisplay = "1/2";
+        else if (values[0] == "0.75")
+            SpeedDisplay = "3/4";
+        else if (values[0] == "1.00")
+            SpeedDisplay = "Full";
+        else if (values[0] == "1.25")
+            SpeedDisplay = "125%";
+        $("#divsSpeedSliderValues").html(SpeedDisplay);
+        VideoPlayer.playbackRate = values[0];
+
+    });
+
+    Lslider.noUiSlider.on('end', function (values, handle) {
+       //
+    });
+
+    function StepForward() {
+        VideoPlayer.pause();
+        var now=VideoPlayer.currentTime;
+        VideoPlayer.currentTime=now+1/30;
+        //frameStepTimer=setTimeout("stepForward()",250);
+    }
+    function StepBackward() {
+        VideoPlayer.pause();
+        var now=VideoPlayer.currentTime;
+        VideoPlayer.currentTime=now-1/30;
+        //frameStepTimer=setTimeout("stepForward()",250);
+    }
+    function StepForwardFive() {
+        VideoPlayer.pause();
+        var now=VideoPlayer.currentTime;
+        VideoPlayer.currentTime=now+5/30;
+        //frameStepTimer=setTimeout("stepForward()",250);
+    }
+    function StepBackwardFive() {
+        VideoPlayer.pause();
+        var now=VideoPlayer.currentTime;
+        VideoPlayer.currentTime=now-5/30;
+        //frameStepTimer=setTimeout("stepForward()",250);
+    }
+
     function ShowVideo(idIn, fileIn) {
         VideoPlayer.pause();
         VideoPlayer.src = SourceBase + fileIn;
         VideoPlayer.load();
         VideoPlayer.play();
     }
+
+
+
+
 </script>
 
 {% endblock %}
