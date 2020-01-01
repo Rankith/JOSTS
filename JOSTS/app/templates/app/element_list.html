@@ -19,6 +19,12 @@
                 <div class="col">
                     <div style="height:172px" class="image-background rounded" id="div{{element.id}}">
                         <div class="row justify-content-center align-items-center" style="height:140px">
+                            <div class="position-absolute col pl-4" style="left:0px;top:0px">
+                                {% if element.element.videos.all.count > 0 %}
+                                <!--V<sub>{{ element.element.videos.all.count }}</sub>-->
+                                <i class="fas fa-play-circle"></i>&nbsp;{{ element.element.videos.all.count }}
+                                {% endif %}
+                            </div>
                             <div class="col text-center">
                                 <img class="img-fluid" src="{% static 'app/images/wag/elements/'%}{{ element.element.image_url}}.svg"  style="max-height:140px;overflow:hidden"/>
                             </div>

@@ -90,7 +90,8 @@
         </div>
         {% if lang_elements.element.videos.count > 0 %}
             {% if request.user.is_staff or request.user.is_superuser %}
-             <div class="col"><div class="text-center"><button id="btnVideo" type="button" class="btn btn-main"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold"  onclick="LoadVideo()">VIDEO</button></div></div>
+             <div class="col"><div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold"  onclick="LoadVideo()">
+                    <i class="fas fa-play-circle"></i>&nbsp;{{ lang_elements.element.videos.count }}</button></div></div>
             {% endif %}
         {% endif %}
     </div>
