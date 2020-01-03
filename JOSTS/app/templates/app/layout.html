@@ -72,12 +72,29 @@
   </div>
 </div>
 
+    <div class="modal fade" id="modalTour" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body" id="modalMainBody">
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            <img class="img-fluid" id="imgTour" />
+          <div class="text-right">
+            <button type="button" class="btn-main btn" data-dismiss="modal">Got It</button>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
      <script src="{% static 'app/scripts/nouislider.min.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
     <script type="text/javascript">
         var ThemeLocation = "{% static 'app/content/' %}";
+        var TourLocation = "{% static 'app/images/' %}";
         var ThemeVersion = "?version=1.1";
         var UserTheme = "{{user.usersettings.theme.file}}";
         if (UserTheme == "")
@@ -97,6 +114,20 @@
           document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
         SetTheme(UserTheme);
+        CheckTour("False");
+
+        function CheckTour(force) {
+            var thispage = window.location.pathname.replace(/\//g, "");
+            if (thispage == "")
+                thispage = "elements";
+            $.getJSON("/check_tour/?page=" + thispage + "&force=" + force, function (data) {
+                if (data.file != 'none') {
+                    $("#imgTour").attr("src", TourLocation + data.file);
+                    $("#modalTour").modal();
+                }
+                //console.log(data.file);
+            });
+        }
 
         function SetTheme(ThemeIn) {
             $("#ThemeLink").prop('href', ThemeLocation + ThemeIn + ThemeVersion);

@@ -344,3 +344,6 @@ db.sqlite3
 /JOSTS/JOSTS/settings.py
 /JOSTS/media
 /JOSTS/app/static/app/videos/wag/fx/testvideo1.mp4
+/JOSTS/app/static/app/images/tour-training.svg
+/JOSTS/app/static/app/images/tour-rules.svg
+/JOSTS/app/static/app/images/tour-elements.svg

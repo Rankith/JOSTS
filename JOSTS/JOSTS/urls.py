@@ -65,4 +65,6 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('user_settings/', views.user_settings, name='user_settings'),
     path('video_player/', views.video_player, name='video_player'),
+    path('video_notes_builder/', views.video_notes_builder, name='video_notes_builder'),
+    path('check_tour/', views.check_tour, name='check_tour'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

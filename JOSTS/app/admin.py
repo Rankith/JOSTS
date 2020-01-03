@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -98,6 +98,14 @@ class VideoNoteAdmin(admin.ModelAdmin):
     search_fields = ('event','color','video','rule_link','element_link','color','override_text')
     list_filter = ('event','color','no_value_type')
 
+class PageTourAdmin(admin.ModelAdmin):
+    list_display=('id','url','file')
+    list_editable=('url','file')
+
+class UserToursCompleteAdmin(admin.ModelAdmin):
+    list_display=('id','user','page')
+    search_fields = ('user','page')
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
@@ -115,3 +123,5 @@ admin.site.register(Theme,ThemeAdmin)
 admin.site.register(UserSettings,UserSettingsAdmin)
 admin.site.register(RuleLink,RuleLinkAdmin)
 admin.site.register(VideoNote,VideoNoteAdmin)
+admin.site.register(PageTour,PageTourAdmin)
+admin.site.register(UserToursComplete,UserToursCompleteAdmin)

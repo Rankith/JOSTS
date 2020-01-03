@@ -177,3 +177,13 @@ class VideoNote(models.Model):
     override_text = models.CharField(max_length=255,blank=True,default='')
     no_value_type = models.CharField(max_length=25,blank=True,default='')
     timestamp = models.DateTimeField(auto_now=True)
+
+class PageTour(models.Model):
+    url = models.CharField(max_length=255)
+    file = models.CharField(max_length=255)
+    def __str__(self):
+        return self.url
+
+class UserToursComplete(models.Model):
+    page = models.ForeignKey(PageTour, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)

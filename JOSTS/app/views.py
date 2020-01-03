@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -637,6 +637,25 @@ def quiz_results(request):
         }
     return render(request, 'app/quiz_results.html',context=context)
 
+#Tour
+def check_tour(request):
+    page = request.GET.get('page')
+    force = request.GET.get('force')
+    tour = PageTour.objects.filter(url=page)
+    resp = {'file':'none'}
+   
+    if len(tour) > 0:
+        complete = UserToursComplete.objects.filter(page = tour[0],user=request.user)
+        if len(complete) <= 0 or force == "True":
+            context = {
+                'tour': tour[0]
+            }
+            if force != "True":
+                tour_comp = UserToursComplete(page = tour[0],user=request.user)
+                tour_comp.save()
+            resp = {'file':tour[0].file}
+    return JsonResponse(resp)
+
 #Videos
 def video_player(request):
     element = ElementText.objects.get(pk=request.GET.get('element'))
@@ -644,3 +663,14 @@ def video_player(request):
         'element': element
         }
     return render(request, 'app/video_player.html',context=context)
+
+def video_notes_builder(request):
+    videos = Video.objects.filter(event='fx')
+    elements = ElementText.objects.filter(event='fx')
+    rules = RuleLink.objects.filter(event='') | RuleLink.objects.filter(event='fx')
+    context = {
+        'elements': elements,
+        'rules': rules,
+        'videos': videos,
+        }
+    return render(request, 'app/video_notes_builder.html',context=context)
