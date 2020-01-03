@@ -21,8 +21,9 @@
                         <div class="row justify-content-center align-items-center" style="height:140px">
                             <div class="position-absolute col pl-4" style="left:0px;top:0px">
                                 {% if element.element.videos.all.count > 0 %}
-                                <!--V<sub>{{ element.element.videos.all.count }}</sub>-->
-                                <i class="fas fa-play-circle"></i><sub>{{ element.element.videos.all.count }}</sub>
+                                    {% if request.user.is_staff or request.user.is_superuser %}
+                                        <i class="fas fa-play-circle"></i><sub>{{ element.element.videos.all.count }}</sub>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             <div class="col text-center">
@@ -91,7 +92,15 @@
             <div class="row">
                 <div class="col">
                     <div style="height:120px" class="image-background rounded" id="div{{element.id}}">
+                         <div class="position-absolute col pl-4" style="left:0px;top:0px">
+                                {% if element.element.videos.all.count > 0 %}
+                                    {% if request.user.is_staff or request.user.is_superuser %}
+                                        <i class="fas fa-play-circle"></i><sub>{{ element.element.videos.all.count }}</sub>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
                         <div class="row h-100 justify-content-center align-items-center text-center">
+                           
                             <div class="col-12 position-relative">
                                 <img class="img-fluid" src="{% static 'app/images/wag/sym/'%}{{ element.element.image_url}}.svg"  style="max-height:120px;overflow:hidden"/>
                             </div>
@@ -186,6 +195,13 @@
                                                 {% endif %}
                                             
                                             </strong>
+                                            <span class="pl-4" >
+                                                {% if element.element.videos.all.count > 0 %}
+                                                    {% if request.user.is_staff or request.user.is_superuser %}
+                                                        <i class="fas fa-play-circle"></i><sub>{{ element.element.videos.all.count }}</sub>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </span>
                                         </div>
                                         
                                         
