@@ -11,9 +11,20 @@
     </div>
     <div class="col-10">
         Stuff here yo
+        <video controls id="VideoPlayer" class="video-js vjs-16-9">
+            <source src="{% static 'app/videos/wag/' %}{{ element.element.event }}/{{element.element.videos.first.file}}" type="video/mp4">
+        </video>
     </div>
 </div>
 
-
-
 {% endblock %}
+{% block scripts %}
+
+<script type="text/javascript">
+    var SourceBase = "{% static 'app/videos/wag/' %}";
+   
+</script>
+<script type="text/javascript">
+    var VideoPlayer = document.getElementById("VideoPlayer");
+    var VidJSPlayer = videojs("VideoPlayer");
+</script>

@@ -2489,7 +2489,9 @@
     <Content Include="app\templates\app\base.html" />
     <Content Include="app\templates\app\video_notes_builder.html" />
     <Content Include="app\templates\app\page_tour.html" />
+    <Content Include="app\templates\app\video.html" />
     <Content Include="app\templates\app\video_player.html" />
+    <Content Include="app\static\app\scripts\video_player.js" />
     <Content Include="app\templates\app\quiz_main_element.html" />
     <Content Include="app\templates\app\quiz_results.html" />
     <Content Include="app\templates\app\about.html" />
