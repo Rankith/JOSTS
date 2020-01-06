@@ -56,7 +56,7 @@
 </script>
 <script type="text/javascript">
     var VideoPlayer = document.getElementById("VideoPlayer");
-    var VidJSPlayer;
+    var VidJSPlayer = videojs("VideoPlayer");
     var FrameStepTimer;
     //level slider
     var SpeedSlider = document.getElementById("SpeedSlider");
@@ -108,7 +108,17 @@
 			VideoStep(-1);
 			VideoStep();
 		}
-    }); 
+     }); 
+
+     VidJSPlayer.on('touchstart', function (e) {
+        if (e.target.nodeName === 'VIDEO') {
+            if (VidJSPlayer.paused()) {
+                this.play();
+            } else {
+                this.pause();
+            }
+        }
+    });
 
     function VideoStep(amountIn) {
         VideoPlayer.pause();
@@ -123,7 +133,6 @@
    
 
     function ShowVideo(idIn, fileIn) {
-        var VidJSPlayer = videojs("VideoPlayer");
         VidJSPlayer.pause();
         var vidurl = SourceBase + fileIn;
         VidJSPlayer.src({
