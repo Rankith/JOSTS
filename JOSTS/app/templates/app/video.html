@@ -1,10 +1,10 @@
 ﻿{% load staticfiles %}
   
-<div cladss="z-depth-1-half">
+
     <video controls  id="VideoPlayer" class="video-js vjs-16-9">
         <source src="{% static 'app/videos/wag/' %}{{ element.element.event }}/{{element.element.videos.first.file}}" type="video/mp4">
     </video>
-</div>
+
 <div class="row no-gutters pt-2">
     <div class="col-12 col-md-4 pr-4">
         <div class="row no-gutters">

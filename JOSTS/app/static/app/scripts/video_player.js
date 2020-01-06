@@ -36,9 +36,6 @@
 
     });
 
-    Lslider.noUiSlider.on('end', function (values, handle) {
-       //
-    });
 
      $(document).keydown(function(event) { 
         var key = (event.keyCode ? event.keyCode : event.which); 

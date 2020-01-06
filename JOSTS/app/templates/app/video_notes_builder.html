@@ -3,17 +3,23 @@
 {% block content %}
 {% load staticfiles %}
 
-<div class="row">
-    <div class="col-2">
+<div class="row text-base">
+    <div class="col-1" style="max-height:40px">
         {% for video in videos %}
-        <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }})">{{ video.id }}</div>
+        <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}')" style="cursor:pointer">{{ video.id }}</div>
         {% endfor %}
     </div>
-    <div class="col-10">
-        Stuff here yo
-        <video controls id="VideoPlayer" class="video-js vjs-16-9">
-            <source src="{% static 'app/videos/wag/' %}{{ element.element.event }}/{{element.element.videos.first.file}}" type="video/mp4">
-        </video>
+    <div class="col-8">
+        <div>
+            {% include 'app/video.html' %}
+        </div>
+        <div>
+            <select class="selectpicker">
+                {% for element in elements %}
+                <option value="{{ element.element.id }}">{{ element.short_text }}</option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
 </div>
 
@@ -21,10 +27,16 @@
 {% block scripts %}
 
 <script type="text/javascript">
-    var SourceBase = "{% static 'app/videos/wag/' %}";
-   
+    var SourceBase = "{% static 'app/videos/wag/' %}{{ event }}/";
+
 </script>
+<script src="{% static 'app/scripts/video_player.js' %}"></script>
 <script type="text/javascript">
-    var VideoPlayer = document.getElementById("VideoPlayer");
-    var VidJSPlayer = videojs("VideoPlayer");
+    $("#divMain").removeClass("container").addClass("container-fluid");
+    $("#VideoPlayer").removeClass("vjs-16-9").css("height", "480px");
+    function VideoClick(idIn, fileIn) {
+        console.log(SourceBase + fileIn);
+        ShowVideo(idIn, fileIn);
+    }
 </script>
+{% endblock %}

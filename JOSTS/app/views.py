@@ -665,12 +665,14 @@ def video_player(request):
     return render(request, 'app/video_player.html',context=context)
 
 def video_notes_builder(request):
-    videos = Video.objects.filter(event='fx')
-    elements = ElementText.objects.filter(element__event='fx')
-    rules = RuleLink.objects.filter(event='') | RuleLink.objects.filter(event='fx')
+    event = request.GET.get('event','fx')
+    videos = Video.objects.filter(event__iexact=event)
+    elements = ElementText.objects.filter(element__event__iexact=event)
+    rules = RuleLink.objects.filter(event='') | RuleLink.objects.filter(event__iexact=event)
     context = {
         'elements': elements,
         'rules': rules,
         'videos': videos,
+        'event': event,
         }
     return render(request, 'app/video_notes_builder.html',context=context)
