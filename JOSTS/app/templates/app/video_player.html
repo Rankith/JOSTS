@@ -7,9 +7,9 @@
         {% endfor %}
     </div>
     <div class="col-12 col-md-8">
-        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-            <video controls  id="VideoPlayer">
-                <source src="" type="video/mp4">
+        <div cladss="embed-responsive embed-responsive-16by9 z-depth-1-half">
+            <video controls  id="VideoPlayer" class="video-js vjs-16-9">
+                <source src="{% static 'app/videos/wag/' %}{{ element.element.event }}/{{element.element.videos.first.file}}" type="video/mp4">
             </video>
         </div>
         <div class="row no-gutters pt-2">
@@ -49,12 +49,14 @@
 
 {% endblock %}
 {% block scripts %}
+<script src="https://vjs.zencdn.net/7.6.6/video.js"></script>
 <script type="text/javascript">
       var SourceBase = "{% static 'app/videos/wag/' %}{{ element.element.event }}/";
 
 </script>
 <script type="text/javascript">
     var VideoPlayer = document.getElementById("VideoPlayer");
+    var VidJSPlayer;
     var FrameStepTimer;
     //level slider
     var SpeedSlider = document.getElementById("SpeedSlider");
@@ -121,10 +123,18 @@
    
 
     function ShowVideo(idIn, fileIn) {
-        VideoPlayer.pause();
+        var VidJSPlayer = videojs("VideoPlayer");
+        VidJSPlayer.pause();
+        var vidurl = SourceBase + fileIn;
+        VidJSPlayer.src({
+            "type": "video/mp4",
+            "src": vidurl
+        });
+        VidJSPlayer.play();
+       /* VideoPlayer.pause();
         VideoPlayer.src = SourceBase + fileIn;
         VideoPlayer.load();
-        VideoPlayer.play();
+        VideoPlayer.play();*/
     }
 
 

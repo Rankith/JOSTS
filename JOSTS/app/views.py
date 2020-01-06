@@ -666,7 +666,7 @@ def video_player(request):
 
 def video_notes_builder(request):
     videos = Video.objects.filter(event='fx')
-    elements = ElementText.objects.filter(event='fx')
+    elements = ElementText.objects.filter(element__event='fx')
     rules = RuleLink.objects.filter(event='') | RuleLink.objects.filter(event='fx')
     context = {
         'elements': elements,
