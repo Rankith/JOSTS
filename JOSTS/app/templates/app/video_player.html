@@ -1,4 +1,4 @@
-﻿{% block content %}
+{% block content %}
 {% load staticfiles %}
 <div class="row">
     <div class="col-12 col-md-1">
@@ -6,9 +6,7 @@
              <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" onclick="ShowVideo({{ vid.id }},'{{ vid.file }}')">{{ forloop.counter }}</button>
         {% endfor %}
     </div>
-    <div class="col-12 col-md-8">
-        {% include 'app/video.html' %}
-    </div>
+    <div class="col-12 col-md-8">{% include "app/video.html" %}</div>
     <div class="col-12 col-md-3">
         Notes Area
     </div>
@@ -19,7 +17,6 @@
 
 <script type="text/javascript">
       var SourceBase = "{% static 'app/videos/wag/' %}{{ element.element.event }}/";
-
 </script>
 <script src="{% static 'app/scripts/video_player.js' %}"></script>
 

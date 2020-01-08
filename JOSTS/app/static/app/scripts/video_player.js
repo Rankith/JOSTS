@@ -1,7 +1,8 @@
 ﻿
     var VideoPlayer = document.getElementById("VideoPlayer");
     var VidJSPlayer = videojs("VideoPlayer");
-    var FrameStepTimer;
+var FrameStepTimer;
+var CurFrame = 0;
     //level slider
     var SpeedSlider = document.getElementById("SpeedSlider");
 
@@ -81,5 +82,36 @@
             "src": vidurl
         });
         VidJSPlayer.play();
+}
+
+var FrameCountIntervalID = setInterval("UpdateFrame()", 100);
+
+function UpdateFrame() {
+    CurFrame = Math.round(VidJSPlayer.currentTime() * 30);
+    $("#VidFrameDisplay").html("Frame: " + CurFrame);    
+}
+
+function ShowVideoFrames() {
+    $("#VidSpeedArea").removeClass("col-md-8").addClass("col-md-5");
+    $("#VidFramesArea").addClass("col-md-3").addClass("d-flex");
+    $("#VidFramesArea").show();
+}
+
+function TextFrameJump(e) {
+    if (e.keyCode == 13) {
+        if (isNaN($("#txtFrameJump").val()))
+            $("#txtFrameJump").val("");
+        else
+            VideoFrameJump($("#txtFrameJump").val());
     }
+}
+
+function VideoFrameJump(position) {
+    VidJSPlayer.pause();
+    VidJSPlayer.currentTime(position / 30);
+    //alert("paused");
+    //var t=setTimeout("VideoPlay()",1500);
+}
+
+
 

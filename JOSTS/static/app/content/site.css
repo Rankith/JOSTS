@@ -336,3 +336,11 @@ a.BlueLoginButton {
     padding: 0rem 1.25rem !important;
     font-weight:bold;
 }
+
+.bs-searchbox > input {
+    max-width:none;
+}
+
+.div-selected {
+    background-color: #007bff;
+}
