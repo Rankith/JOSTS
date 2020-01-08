@@ -664,6 +664,7 @@ def video_player(request):
         }
     return render(request, 'app/video_player.html',context=context)
 
+@user_passes_test(lambda u: u.is_staff)
 def video_notes_builder(request):
     event = request.GET.get('event','fx')
     videos = Video.objects.filter(event__iexact=event)
