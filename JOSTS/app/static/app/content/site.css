@@ -344,3 +344,15 @@ a.BlueLoginButton {
 .div-selected {
     background-color: #007bff;
 }
+
+.col-half {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 4.1666666%;
+    flex: 0 0 4.1666666%;
+    max-width: 4.1666666%;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}

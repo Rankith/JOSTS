@@ -5,7 +5,7 @@
 
 <div class="row text-base">
     
-    <div class="col-6">
+    <div class="col-5">
         <div class="d-flex">
             <div id="divVidList" class="pr-1" style="overflow:auto;">
 
@@ -19,7 +19,7 @@
                 <div class="row pt-2">
                     <div class="col-6">
                         <div class="form-group">
-                            <select class="selectpicker form-control" data-live-search="true" data-size="8" data-header="Select an element" title="Select an element">
+                            <select class="selectpicker form-control" id="ddlElement" data-live-search="true" data-size="8" data-header="Select an element" title="Select an element">
                                 {% for element in elements %}
                                 {% ifchanged element.element.str_grp %}
                                 {% if not forloop.first %}
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <button id="btnAddElement" type="button" class="btn btn-main" onclick="">Add Element</button>
+                        <button id="btnAddElement" type="button" class="btn btn-main" onclick="AddElement_Click()">Add Element</button>
                         <button id="btnUpdateElement" type="button" class="btn btn-main" onclick="">Update Element</button>
                     </div>
                 </div>
@@ -76,6 +76,38 @@
         </div>
 
     </div>
+    <div id="divNotesEditArea" class="col-5">
+        <div id="trBase" class="d-flex no-gutters text-center">
+            <div class="col-5">
+                Item
+            </div>
+            <div class="col-1">
+                ID
+            </div>
+            <div class="col-half">
+                Val
+            </div>
+            <div class="col-half">
+                Frame
+            </div>
+            <div class="col-1">
+                CR
+            </div>
+            <div class="col-1">
+                Color
+            </div>
+            <div class="col-2">
+                No value
+            </div>
+            <div class="col-1">
+                Skip
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-2">
+        <button id="btnSave" type="button" class="btn btn-main" onclick="SaveNotes()">Save Notes</button>
+    </div>
 </div>
 
 {% endblock %}
@@ -83,29 +115,181 @@
 
 <script type="text/javascript">
     var SourceBase = "{% static 'app/videos/wag/' %}{{ event }}/";
+    var Elements = new Array();
+    token = "{{ csrf_token }}";
+    {% for element in elements %}
+    Elements[{{element.element.id}}] = {group: '{{ element.element.str_grp }}',
+                        val: '{{ element.element.letter_value }}',
+                        idtext: '{{ element.id_number_text }}',
+                        text: '{{ element.short_text }}',
+                        id: '{{element.element.id}}'};
+    {% endfor %}
 
+   
 </script>
 <script src="{% static 'app/scripts/video_player.js' %}"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        //$('.selectpicker').selectpicker();
-    });
+
+    var ChangesMade = false;
+    var SelectedRow = -1;
+    var OnRow = 0;
+    var OnVideo = -1;
+    var Notes = new Array();
+    var DataHold;
+
     $("#divMain").removeClass("container").addClass("container-fluid");
     $("#divVideoContainer").css("height", "480px");
     $("#VideoPlayer").removeClass("vjs-16-9").addClass("vjs-fill");//.css("height", "480px").css("width", "853px");
     $("#divVidList").css("height", window.innerHeight - 56);
     ShowVideoFrames();
-    function VideoClick(idIn, fileIn,el) {
 
-        //console.log(SourceBase + fileIn);
+
+    var skeleton = "<div class='d-flex no-gutters text-center notes-builder-row' onclick='TRClick(NumberRep)' id='trNumberRep'>";
+    skeleton += "<div id='divNumberRepItem' class='col-5' style='font-size:.85rem'>";
+    skeleton += "ItemRep";
+    skeleton += "</div>";
+    skeleton += "<div id='divNumberRepID' class='col-1'>";
+    skeleton += "IDRep";
+    skeleton += "</div>";
+    skeleton += "<div id='divNumberRepVal' class='col-half'>";
+    skeleton += "ValRep";
+    skeleton += "</div>";
+    skeleton += "<div id='divNumberRepFr' class='col-half'>";
+    skeleton += "FrameRep";
+    skeleton += "</div>";
+    skeleton += "<div class='col-1'>";
+    skeleton += "<input id='txtNumberRepCR' style='width:35px;height:19px' title='Enter any combination of 1 2 3 or 4'>";
+    skeleton += "</div>";
+    skeleton += "<div class='col-1'>";
+    skeleton += "<select id='ddlNumberRepColor' onchange='ddlColorChange(NumberRep)'><option value='Black'>Black</option><option value='Red'>Red</option><option value='Green'>Green</option><option value='Blue'>Blue</option><option value='Grey'>Grey</option></select>";
+    skeleton += "</div>";
+    skeleton += "<div class='col-2 pl-1'>";
+    skeleton += "<select  id='ddlNumberRepNoValueType' onchange='ddlNoValueChange(NumberRep)'><option value='no'></option><option value='repeated'>repeated</option><option value='unrated'>unrated</option><option value='unrecognized'>unrecognized</option><option value='devalue'>1 DV lower</option><option value='upvalue'>1 DV higher</option><option value='special repitition'>special rep.</option></select>";
+    skeleton += "</div>";
+    skeleton += "<div class='col-1'>";
+    skeleton += "<input type='checkbox' id='chkNumberRepSkipFrame'>";
+    skeleton += "</div>";
+    skeleton += "</div>";
+
+    function AddNotesRow(CountIn,ElementTextIn,FrameIn,ElementIDIn, ElementValueIn,CRIn = '', ColorIn='Black',NoValueIn='no',SkipIn = false) {
+        var SkelAdd = skeleton
+        SkelAdd = SkelAdd.replace(/NumberRep/g, CountIn);
+        SkelAdd = SkelAdd.replace("ItemRep", ElementTextIn);
+        SkelAdd = SkelAdd.replace("FrameRep", FrameIn);
+        SkelAdd = SkelAdd.replace("IDRep", ElementIDIn);
+        SkelAdd = SkelAdd.replace("ValRep", ElementValueIn);
+        if (OnRow == 0)
+            $("#trBase").after(SkelAdd);
+        else
+            $("#tr" + (CountIn - 1)).after(SkelAdd);
+        $("#ddl" + (CountIn) + "Color").val(ColorIn);
+        $("#ddl" + (CountIn) + "NoValueType").val(NoValueIn);
+        $("#txt" + (CountIn) + "CR").val(CRIn);
+        $("#chk" + (CountIn) + "SkipFrame").prop('checked', SkipIn);
+    }
+
+    function AddElement_Click() {
+        if ($("#ddlElement").val() != "" && OnVideo != -1)	
+            AddNewRow($("#ddlElement").val(), CurFrame,'element');
+    }
+
+    function AddNewRow(IDIn, FrameIn, TypeIn = "element") {
+        //console.log(Notes.length);
+        Notes[OnRow] = {
+            color: "Black",
+            cr: "",
+            element_link_id: IDIn,
+            frame: FrameIn,
+            id: -1,
+            no_value_type: "no",
+            override_text: "",
+            rule_link_id: null,
+            skip_frame: false
+        };
+        //console.log(Notes.length);
+        Notes.sort(function (a, b) { return a.frame - b.frame });
+        LoadNotes();
+        //OnRow++;
+    }
+
+    function TRClick(TRIn) {
+        $(".notes-builder-row").removeClass("div-selected");
+        $("#tr" + TRIn).addClass("div-selected");
+        SelectedRow = TRIn;
+    }
+
+    function VideoClick(idIn, fileIn,el) {
+        if (ChangesMade)
+	    {
+		    if (confirm('Changes not saved, are you sure you want to go to a different video?'))
+		    {
+
+		    }
+		    else
+		    {
+			    return;
+		    }
+
+	    }
+        ChangesMade = false;
+        RemoveAll();
         ShowVideo(idIn, fileIn);
         $(".video-select").removeClass("div-selected");
         $(el).addClass("div-selected");
+        OnVideo = idIn;
+        GetNotes();
+    }
+
+    function RemoveAll() {
+        for (var j = 0; j < OnRow; j++) {
+            $("#tr" + j).remove();
         }
+        OnRow = 0;
+    }
 
     function UpdateFrameCalled() {
-
         $("CurFrame").html("Frame: " + CurFrame);
+    }
+
+    function LoadNotes() {
+         RemoveAll();
+        for (var j = 0; j < Notes.length; j++) {
+            if (Notes[j].element_link_id != null) {
+                //AddElement(Elements[Notes[j].element_link_id], Notes[j].frame);
+                var el = Elements[Notes[j].element_link_id];
+                AddNotesRow(OnRow, el.text, Notes[j].frame, el.idtext, el.val, Notes[j].cr, Notes[j].color, Notes[j].no_value_type, Notes[j].skip_frame);
+                OnRow++;
+            }
+        }
+    }
+
+     function SaveNotes() {
+        $.ajax({
+            url: '/ajax/save_video_notes/',
+            data: JSON.stringify({
+                video: OnVideo,
+                notes: Notes
+            }),
+            headers: { "X-CSRFToken": token },
+            type:'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'text',
+            success: function (data) {
+              if (data.is_taken) {
+               
+              }
+            }
+      });
+    }
+
+     function GetNotes () {
+        $.ajax({
+            url: '/get_video_notes/?video=' + OnVideo,
+            success: function (data) {
+                Notes = data.notes;
+                LoadNotes();
+            }
+      });
     }
 </script>
 {% endblock %}

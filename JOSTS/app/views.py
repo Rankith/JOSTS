@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -20,6 +20,7 @@ from django.contrib.auth import authenticate, login
 import stripe
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
+import json
 
 def home(request):
     """Renders the home page."""
@@ -677,3 +678,16 @@ def video_notes_builder(request):
         'event': event,
         }
     return render(request, 'app/video_notes_builder.html',context=context)
+
+def get_video_notes(request):
+    video = request.GET.get('video')
+    notes = VideoNote.objects.filter(video=video).order_by('frame').values()
+    return JsonResponse({'notes': list(notes)})
+
+def save_video_notes(request):
+    data = json.loads(request.body)
+
+    resp = {'updated':True}
+    #activity log
+    log_activity(request.user,'Elements','Update User Note',str(elementInstance))
+    return JsonResponse(resp)
