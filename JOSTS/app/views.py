@@ -687,7 +687,12 @@ def get_video_notes(request):
 def save_video_notes(request):
     data = json.loads(request.body)
 
+    VideoNote.objects.filter(video=data["video"]).delete()
+    for note in data["notes"]:
+        vn = VideoNote(**note)
+        vn.save()
+
     resp = {'updated':True}
     #activity log
-    log_activity(request.user,'Elements','Update User Note',str(elementInstance))
+
     return JsonResponse(resp)

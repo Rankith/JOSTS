@@ -37,14 +37,14 @@
                     </div>
                     <div class="col-6">
                         <button id="btnAddElement" type="button" class="btn btn-main" onclick="AddElement_Click()">Add Element</button>
-                        <button id="btnUpdateElement" type="button" class="btn btn-main" onclick="">Update Element</button>
+                        <button id="btnUpdateElement" type="button" class="btn btn-main" onclick="UpdateElement_Click()">Update Element</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <select class="selectpicker form-control" data-live-search="true" data-size="8" data-header="Select a deduction" title="Select a deduction">
+                            <select class="selectpicker form-control" id="ddlRule" data-live-search="true" data-size="8" data-header="Select a deduction" title="Select a deduction">
                                 {% for rule in rules %}
 
                                 <option value="{{ rule.id }}" data-subtext="{{ rule.deduction_amount }}">{{ rule.text }}</option>
@@ -54,15 +54,15 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <button id="btnAddDeduction" type="button" class="btn btn-main" onclick="">Add Deduction</button>
-                        <button id="btnUpdateDeduction" type="button" class="btn btn-main" onclick="">Update Deduction</button>
+                        <button id="btnAddDeduction" type="button" class="btn btn-main" onclick="AddRule_Click()">Add Deduction</button>
+                        <button id="btnUpdateDeduction" type="button" class="btn btn-main" onclick="UpdateRule_Click()">Update Deduction</button>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <select class="selectpicker form-control" data-live-search="true" data-size="8" data-header="Select an unrated element" title="Select an unrated element">
+                            <select class="selectpicker form-control" id="ddlUnrated" data-live-search="true" data-size="8" data-header="Select an unrated element" title="Select an unrated element">
                                 
                             </select>
                         </div>
@@ -77,7 +77,7 @@
 
     </div>
     <div id="divNotesEditArea" class="col-5">
-        <div id="trBase" class="d-flex no-gutters text-center">
+        <div id="trBase" class="d-flex no-gutters text-center mt-1">
             <div class="col-5">
                 Item
             </div>
@@ -106,6 +106,9 @@
         
     </div>
     <div class="col-2">
+        <button id="btnUpdateFrame" type="button" class="btn btn-main mt-2" onclick="UpdateFrame_Click()">Update Frame</button><br/>
+        <button id="btnDuplicate" type="button" class="btn btn-main mt-2" onclick="Duplicate()">Duplicate</button><br />
+        <button id="btnRemove" type="button" class="btn btn-main mt-2" onclick="Remove()">Remove</button><br /><br/>
         <button id="btnSave" type="button" class="btn btn-main" onclick="SaveNotes()">Save Notes</button>
     </div>
 </div>
@@ -116,6 +119,7 @@
 <script type="text/javascript">
     var SourceBase = "{% static 'app/videos/wag/' %}{{ event }}/";
     var Elements = new Array();
+    var Rules = new Array();
     token = "{{ csrf_token }}";
     {% for element in elements %}
     Elements[{{element.element.id}}] = {group: '{{ element.element.str_grp }}',
@@ -123,6 +127,13 @@
                         idtext: '{{ element.id_number_text }}',
                         text: '{{ element.short_text }}',
                         id: '{{element.element.id}}'};
+    {% endfor %}
+    {% for rule in rules %}
+    Rules[{{rule.id}}] = {rule: '{{ rule.rule }}',
+                        text: '{{ rule.text }}',
+                        deduction_amount: '{{ rule.deduction_amount }}',
+                        connected_elements: '{{ rule.connected_elements }}',
+                        id: '{{rule.id}}'};
     {% endfor %}
 
    
@@ -158,7 +169,7 @@
     skeleton += "FrameRep";
     skeleton += "</div>";
     skeleton += "<div class='col-1'>";
-    skeleton += "<input id='txtNumberRepCR' style='width:35px;height:19px' title='Enter any combination of 1 2 3 or 4'>";
+    skeleton += "<input id='txtNumberRepCR' style='width:35px;height:19px' onkeyup='CRKeyUp(event,NumberRep)' title='Enter any combination of 1 2 3 or 4'>";
     skeleton += "</div>";
     skeleton += "<div class='col-1'>";
     skeleton += "<select id='ddlNumberRepColor' onchange='ddlColorChange(NumberRep)'><option value='Black'>Black</option><option value='Red'>Red</option><option value='Green'>Green</option><option value='Blue'>Blue</option><option value='Grey'>Grey</option></select>";
@@ -167,7 +178,7 @@
     skeleton += "<select  id='ddlNumberRepNoValueType' onchange='ddlNoValueChange(NumberRep)'><option value='no'></option><option value='repeated'>repeated</option><option value='unrated'>unrated</option><option value='unrecognized'>unrecognized</option><option value='devalue'>1 DV lower</option><option value='upvalue'>1 DV higher</option><option value='special repitition'>special rep.</option></select>";
     skeleton += "</div>";
     skeleton += "<div class='col-1'>";
-    skeleton += "<input type='checkbox' id='chkNumberRepSkipFrame'>";
+    skeleton += "<input type='checkbox' onclick='chkSkipFrameClick(NumberRep)' id='chkNumberRepSkipFrame'>";
     skeleton += "</div>";
     skeleton += "</div>";
 
@@ -189,25 +200,133 @@
     }
 
     function AddElement_Click() {
-        if ($("#ddlElement").val() != "" && OnVideo != -1)	
-            AddNewRow($("#ddlElement").val(), CurFrame,'element');
+        if ($("#ddlElement").val() != "" && OnVideo != -1) {
+            ChangesMade = true;
+            AddNewRow($("#ddlElement").val(), CurFrame, 'element');
+        }
+    }
+
+    function UpdateElement_Click() {
+        if (SelectedRow != -1 && $("#ddlElement").val() != "" && OnVideo != -1) {
+            ChangesMade = true;
+            Notes[SelectedRow].element_link_id = $("#ddlElement").val();
+            $("#div" + SelectedRow + "Item").html(Elements[$("#ddlElement").val()].text);
+            $("#div" + SelectedRow + "ID").html(Elements[$("#ddlElement").val()].idtext);
+            $("#div" + SelectedRow + "Val").html(Elements[$("#ddlElement").val()].val);
+        }
+    }
+
+    function UpdateRule_Click() {
+        if (SelectedRow != -1 && $("#ddlRule").val() != "" && OnVideo != -1) {
+            ChangesMade = true;
+            Notes[SelectedRow].element_link_id = $("#ddlRule").val();
+            $("#div" + SelectedRow + "Item").html(Rules[$("#ddlRule").val()].text);
+            $("#div" + SelectedRow + "ID").html('-');
+            $("#div" + SelectedRow + "Val").html('-');
+        }
+    }
+
+    function CRKeyUp(e, crIn) {
+        Notes[crIn].cr = $("#txt" + crIn + "CR").val();
+        ChangesMade = true;
+    }
+
+    function ddlColorChange(rowIn) {
+        Notes[rowIn].color = $("#ddl" + rowIn + "Color").val();
+        ChangesMade = true;
+    }
+
+    function ddlNoValueChange(rowIn) {
+        Notes[rowIn].no_value_type = $("#ddl" + rowIn + "NoValueType").val();
+        ChangesMade = true;
+    }
+
+    function chkSkipFrameClick(rowIn) {
+        Notes[rowIn].skip_frame = $("#chk" + rowIn + "SkipFrame").prop('checked');
+        ChangesMade = true;
+    }
+
+    function Remove() {
+        if (SelectedRow != -1) {
+            ChangesMade = true;
+            Notes.splice(SelectedRow, 1);
+            var SelectedTemp = SelectedRow;
+            LoadNotes();
+            if (SelectedTemp < OnRow)
+                TRClick(SelectedTemp);
+            else
+                TRClick(OnRow - 1);
+        }
+    }
+
+    function SortNotes() {
+        Notes.sort(function (a, b) { return a.frame - b.frame });
+    }
+
+    function Duplicate() {
+        if (SelectedRow != -1) {
+            ChangesMade = true;
+            Notes[OnRow] = jQuery.extend({}, Notes[SelectedRow]);
+            var SelectedTemp = SelectedRow;
+            SortNotes();
+            LoadNotes();
+            TRClick(SelectedTemp);
+        }
+    }
+
+    function UpdateFrame_Click() {
+        if (SelectedRow != -1) {
+            ChangesMade = true;
+            var FrameHold = CurFrame;
+            Notes[SelectedRow].frame = FrameHold;
+            SortNotes();
+            LoadNotes();
+            for (var j = 0; j < Notes.length; j++) {
+                if (Notes[j].frame == FrameHold) {
+                    TRClick(j);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    function AddRule_Click() {
+        if ($("#ddlRule").val() != "" && OnVideo != -1) {
+            ChangesMade = true;
+            AddNewRow($("#ddlRule").val(), CurFrame, 'rule');
+        }
     }
 
     function AddNewRow(IDIn, FrameIn, TypeIn = "element") {
+        if (TypeIn == "element") {
+            Notes[OnRow] = {
+                color: "Black",
+                cr: "",
+                element_link_id: IDIn,
+                frame: FrameIn,
+                no_value_type: "no",
+                override_text: "",
+                rule_link_id: null,
+                skip_frame: false,
+                video_id: OnVideo
+            };
+        }
+        else if (TypeIn == "rule") {
+            Notes[OnRow] = {
+                color: "Black",
+                cr: "",
+                element_link_id: null,
+                frame: FrameIn,
+                no_value_type: "no",
+                override_text: "",
+                rule_link_id: IDIn,
+                skip_frame: false,
+                video_id: OnVideo
+            };
+        }
         //console.log(Notes.length);
-        Notes[OnRow] = {
-            color: "Black",
-            cr: "",
-            element_link_id: IDIn,
-            frame: FrameIn,
-            id: -1,
-            no_value_type: "no",
-            override_text: "",
-            rule_link_id: null,
-            skip_frame: false
-        };
-        //console.log(Notes.length);
-        Notes.sort(function (a, b) { return a.frame - b.frame });
+        SortNotes();
         LoadNotes();
         //OnRow++;
     }
@@ -223,7 +342,7 @@
 	    {
 		    if (confirm('Changes not saved, are you sure you want to go to a different video?'))
 		    {
-
+                ChangesMade = false;
 		    }
 		    else
 		    {
@@ -252,14 +371,25 @@
     }
 
     function LoadNotes() {
-         RemoveAll();
+        SelectedRow = -1;
+        RemoveAll();
         for (var j = 0; j < Notes.length; j++) {
+            delete Notes[j].timestamp;
+            delete Notes[j].id;
             if (Notes[j].element_link_id != null) {
                 //AddElement(Elements[Notes[j].element_link_id], Notes[j].frame);
                 var el = Elements[Notes[j].element_link_id];
                 AddNotesRow(OnRow, el.text, Notes[j].frame, el.idtext, el.val, Notes[j].cr, Notes[j].color, Notes[j].no_value_type, Notes[j].skip_frame);
-                OnRow++;
+                
             }
+            else if (Notes[j].rule_link_id != null) {
+                console.log(j);
+                //AddElement(Elements[Notes[j].element_link_id], Notes[j].frame);
+                var rl = Rules[Notes[j].rule_link_id];
+                AddNotesRow(OnRow, rl.text, Notes[j].frame, '-', '-', Notes[j].cr, Notes[j].color, Notes[j].no_value_type, Notes[j].skip_frame);
+               
+            }
+            OnRow++;
         }
     }
 
@@ -275,9 +405,8 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'text',
             success: function (data) {
-              if (data.is_taken) {
-               
-              }
+                alert("Video Notes Updated");
+                ChangesMade = false;
             }
       });
     }
