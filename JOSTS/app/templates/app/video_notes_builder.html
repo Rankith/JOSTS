@@ -109,7 +109,10 @@
         <button id="btnUpdateFrame" type="button" class="btn btn-main mt-2" onclick="UpdateFrame_Click()">Update Frame</button><br/>
         <button id="btnDuplicate" type="button" class="btn btn-main mt-2" onclick="Duplicate()">Duplicate</button><br />
         <button id="btnRemove" type="button" class="btn btn-main mt-2" onclick="Remove()">Remove</button><br /><br/>
-        <button id="btnSave" type="button" class="btn btn-main" onclick="SaveNotes()">Save Notes</button>
+        <button id="btnSave" type="button" class="btn btn-main" onclick="SaveNotes_Click()">Save Notes</button><br/><br/>
+        <button id="btnPreview" type="button" class="btn btn-main" onclick="UpdatePreview_Click()">Update Preview</button><br/><br/>
+        <div id="divNotesArea">
+        </div>
     </div>
 </div>
 
@@ -175,7 +178,7 @@
     skeleton += "<select id='ddlNumberRepColor' onchange='ddlColorChange(NumberRep)'><option value='Black'>Black</option><option value='Red'>Red</option><option value='Green'>Green</option><option value='Blue'>Blue</option><option value='Grey'>Grey</option></select>";
     skeleton += "</div>";
     skeleton += "<div class='col-2 pl-1'>";
-    skeleton += "<select  id='ddlNumberRepNoValueType' onchange='ddlNoValueChange(NumberRep)'><option value='no'></option><option value='repeated'>repeated</option><option value='unrated'>unrated</option><option value='unrecognized'>unrecognized</option><option value='devalue'>1 DV lower</option><option value='upvalue'>1 DV higher</option><option value='special repitition'>special rep.</option></select>";
+    skeleton += "<select  id='ddlNumberRepNoValueType' onchange='ddlNoValueChange(NumberRep)'><option value='no'></option><option value='repeat'>repeat</option><option value='unrated'>unrated</option><option value='unrecognized'>unrecognized</option><option value='devalue'>1 DV lower</option><option value='upvalue'>1 DV higher</option><option value='special repitition'>special rep.</option></select>";
     skeleton += "</div>";
     skeleton += "<div class='col-1'>";
     skeleton += "<input type='checkbox' onclick='chkSkipFrameClick(NumberRep)' id='chkNumberRepSkipFrame'>";
@@ -357,6 +360,7 @@
         $(el).addClass("div-selected");
         OnVideo = idIn;
         GetNotes();
+        PreviewNotesVideo();
     }
 
     function RemoveAll() {
@@ -392,7 +396,10 @@
             OnRow++;
         }
     }
-
+    function SaveNotes_Click() {
+        SaveNotes()
+        
+    }
      function SaveNotes() {
         $.ajax({
             url: '/ajax/save_video_notes/',
@@ -407,6 +414,27 @@
             success: function (data) {
                 alert("Video Notes Updated");
                 ChangesMade = false;
+                PreviewNotesVideo();
+            }
+      });
+    }
+
+         function SaveNotesForPreview() {
+        $.ajax({
+            url: '/ajax/save_video_notes/',
+            data: JSON.stringify({
+                video: 'temp',
+                notes: Notes
+            }),
+            headers: { "X-CSRFToken": token },
+            type:'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'text',
+            success: function (data) {
+                $.get("/video_notes/?video=temp", function (data) {
+                $("#divNotesArea").empty();
+                $("#divNotesArea").append(data);
+            });
             }
       });
     }
@@ -419,6 +447,22 @@
                 LoadNotes();
             }
       });
+    }
+
+    function UpdatePreview_Click()
+    {
+        PreviewNotesData();
+    }
+
+    function PreviewNotesData() {
+        SaveNotesForPreview();
+    }
+
+    function PreviewNotesVideo() {
+         $.get('/video_notes/?video=' + OnVideo, function (data) {
+                $("#divNotesArea").empty();
+                $("#divNotesArea").append(data);
+            });
     }
 </script>
 {% endblock %}

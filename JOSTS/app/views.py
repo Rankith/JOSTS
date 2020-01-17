@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -687,12 +687,32 @@ def get_video_notes(request):
 def save_video_notes(request):
     data = json.loads(request.body)
 
-    VideoNote.objects.filter(video=data["video"]).delete()
-    for note in data["notes"]:
-        vn = VideoNote(**note)
-        vn.save()
+    if data["video"] == 'temp':
+        VideoNoteTemp.objects.all().delete()
+        for note in data["notes"]:
+            vn = VideoNoteTemp(**note)
+            vn.save()
+    else:
+        VideoNote.objects.filter(video=data["video"]).delete()
+        for note in data["notes"]:
+            vn = VideoNote(**note)
+            vn.save()
 
     resp = {'updated':True}
     #activity log
 
     return JsonResponse(resp)
+
+def video_notes(request):
+    video = request.GET.get('video','')
+    if video == 'temp':
+        notes = VideoNoteTemp.objects.all().order_by('frame')
+    else:
+        notes = VideoNote.objects.filter(video=video).order_by('frame')
+
+
+    context = {
+        'notes':notes
+        }
+
+    return render(request, 'app/video_notes.html',context=context)

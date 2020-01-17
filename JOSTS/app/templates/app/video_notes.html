@@ -1,0 +1,50 @@
+{% block content %}
+{% load staticfiles %}
+
+        <div id="NotesTitleD" class="font-weight-bold">D-Jury</div>
+        <div id="NotesD" style="border:1px solid black;font-size:0.8rem" class="p-1">
+        {% for note in notes %}    
+            {% if note.element_link != None %}
+            <div id="vn{{note.frame}}" class="video-note-line" onclick="VideoNoteClick({{note.frame}})">
+                • {{note.element_link.elementtext_set.all.first.short_text}} ({{note.element_link.letter_value}} value, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+            </div>
+            
+            {% endif %}
+        {% endfor %}
+        </div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    var Frames = new Array();
+     {% for note in notes %}   
+    Frames[{{forloop.counter0}}] = {{note.frame}};
+    {% endfor %}
+</script>
+<script type="text/javascript">
+    function VideoNoteClick(frameIn) {
+        VideoFrameJump(frameIn);
+    }
+    function HighlightNote(frameIn) {
+        var highest = -1;
+        for (var i = 0; i < Frames.length; i++) {
+            if (Frames[i] > frameIn) {
+                if (i > 0)
+                    highest = Frames[i - 1];
+                else
+                    highest = -2;
+                break;
+            }
+        }
+        if (highest == -1)//not set means its last one
+            highest = Frames[Frames.length - 1];
+        $(".video-note-line").removeClass("video-note-selected");
+        if (highest != -2) {//-2 means its none
+            
+            $("#vn" + highest).addClass("video-note-selected");
+        }
+        //console.log(highest);
+    }
+</script>
+
+{% endblock %}

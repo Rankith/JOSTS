@@ -67,6 +67,7 @@ urlpatterns = [
     path('video_player/', views.video_player, name='video_player'),
     path('video_notes_builder/', views.video_notes_builder, name='video_notes_builder'),
     path('get_video_notes/', views.get_video_notes, name='get_video_notes'),
+    path('video_notes/', views.video_notes, name='video_notes'),
     path('ajax/save_video_notes/', views.save_video_notes, name='save_video_notes'),
     path('check_tour/', views.check_tour, name='check_tour'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

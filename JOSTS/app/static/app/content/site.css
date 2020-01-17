@@ -356,3 +356,12 @@ a.BlueLoginButton {
     padding-right: 15px;
     padding-left: 15px;
 }
+
+.video-note-line {
+    font-weight:500;
+}
+
+.video-note-selected {
+    background-color: #3879d9;
+    color: #FFFFFF;
+}

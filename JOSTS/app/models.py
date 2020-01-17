@@ -178,6 +178,19 @@ class VideoNote(models.Model):
     no_value_type = models.CharField(max_length=25,blank=True,default='')
     timestamp = models.DateTimeField(auto_now=True)
 
+class VideoNoteTemp(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.SET_NULL,null=True)
+    rule_link = models.ForeignKey(RuleLink, on_delete=models.SET_NULL,null=True,blank=True)
+    element_link = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True,blank=True)
+    frame = models.IntegerField(default=0)
+    skip_frame = models.BooleanField(default=False)
+    color = models.CharField(max_length=12,blank=True,default='')
+    event = models.CharField(max_length=2,blank=True,default='')
+    cr = models.CharField(max_length=6,blank=True,default='')
+    override_text = models.CharField(max_length=255,blank=True,default='')
+    no_value_type = models.CharField(max_length=25,blank=True,default='')
+    timestamp = models.DateTimeField(auto_now=True)
+
 class PageTour(models.Model):
     url = models.CharField(max_length=255)
     file = models.CharField(max_length=255)

@@ -88,7 +88,8 @@ var FrameCountIntervalID = setInterval("UpdateFrame()", 100);
 
 function UpdateFrame() {
     CurFrame = Math.round(VidJSPlayer.currentTime() * 30);
-    $("#VidFrameDisplay").html("Frame: " + CurFrame);    
+    $("#VidFrameDisplay").html("Frame: " + CurFrame);  
+    HighlightNote(CurFrame);
 }
 
 function ShowVideoFrames() {
@@ -109,6 +110,7 @@ function TextFrameJump(e) {
 function VideoFrameJump(position) {
     VidJSPlayer.pause();
     VidJSPlayer.currentTime(position / 30);
+   
     //alert("paused");
     //var t=setTimeout("VideoPlay()",1500);
 }
