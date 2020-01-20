@@ -32,6 +32,8 @@ class Element(models.Model):
     value_67 = models.DecimalField(max_digits=3,default='',blank=True,decimal_places=1)
     bonus_67 = models.DecimalField(max_digits=3,default=0.0,blank=True,decimal_places=1)
     range = models.CharField(max_length=25,default='',blank=True)
+    up_value_letter = models.CharField(max_length=2,default='',blank=True)
+    down_value_letter = models.CharField(max_length=2,default='',blank=True)
     show_exercise_builder = models.BooleanField(default=False)
     videos = models.ManyToManyField(Video,blank=True)
     video_jump = models.CharField(max_length=255,blank=True)

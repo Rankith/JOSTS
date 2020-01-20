@@ -1,23 +1,43 @@
 {% block content %}
 {% load staticfiles %}
 
-        <div id="NotesTitleD" class="font-weight-bold">D-Jury</div>
-        <div id="NotesD" style="border:1px solid black;font-size:0.8rem" class="p-1">
-        {% for note in notes %}    
-            {% if note.element_link != None %}
-            <div id="vn{{note.frame}}" class="video-note-line" onclick="VideoNoteClick({{note.frame}})">
-                • {{note.element_link.elementtext_set.all.first.short_text}} ({{note.element_link.letter_value}} value, element {{note.element_link.elementtext_set.all.first.id_number_text}})
-            </div>
-            
-            {% endif %}
-        {% endfor %}
-        </div>
+<div id="NotesTitleD" class="font-weight-bold">D-Jury</div>
+<div id="NotesD" style="border:1px solid black;font-size:0.8rem" class="p-1">
+    {% for note in notes %}
+    {% if note.element_link != None %}
+    <div id="vn{{note.frame}}" class="video-note-line video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
+        • {{note.element_link.elementtext_set.all.first.short_text}}
+        {% if note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'unrecognized' or note.no_value_type == 'special repitition' %}
+            (no value, {{note.no_value_type}} element {{note.element_link.elementtext_set.all.first.id_number_text}})
+        {% elif note.no_value_type == 'upvalue' %}
+            (<span class="video-note-upvalue">{{note.element_link.up_value_letter}} value</span>, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+        {% elif note.no_value_type == 'devalue' %}
+            (<span class="video-note-devalue">{{note.element_link.down_value_letter}} value</span>, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+        {% else %}
+            ({{note.element_link.letter_value}} value, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+        {% endif %}
+    </div>
+
+    {% endif %}
+    {% endfor %}
+</div>
+<div id="NotesTitleE" class="font-weight-bold">E-Jury</div>
+<div id="NotesE" style="border:1px solid black;font-size:0.8rem" class="p-1">
+    {% for note in notes %}
+    {% if note.element_link != None %}
+    <div>
+        • {{note.element_link.elementtext_set.all.first.short_text}}
+    </div>
+
+    {% endif %}
+    {% endfor %}
+</div>
 
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
     var Frames = new Array();
-     {% for note in notes %}   
+     {% for note in notes %}
     Frames[{{forloop.counter0}}] = {{note.frame}};
     {% endfor %}
 </script>
@@ -40,7 +60,7 @@
             highest = Frames[Frames.length - 1];
         $(".video-note-line").removeClass("video-note-selected");
         if (highest != -2) {//-2 means its none
-            
+
             $("#vn" + highest).addClass("video-note-selected");
         }
         //console.log(highest);

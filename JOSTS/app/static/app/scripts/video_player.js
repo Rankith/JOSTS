@@ -82,6 +82,10 @@ var CurFrame = 0;
             "src": vidurl
         });
         VidJSPlayer.play();
+        $.get('/video_notes/?video=' + idIn, function (data) {
+            $("#divNotesArea").empty();
+            $("#divNotesArea").append(data);
+        });
 }
 
 var FrameCountIntervalID = setInterval("UpdateFrame()", 100);

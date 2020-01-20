@@ -365,3 +365,22 @@ a.BlueLoginButton {
     background-color: #3879d9;
     color: #FFFFFF;
 }
+
+.video-note-color-Grey {
+    color: grey;
+}
+.video-note-color-Red {
+    color: red;
+}
+.video-note-color-Green {
+    color: green;
+}
+.video-note-color-Blue {
+    color: blue;
+}
+.video-note-upvalue {
+    color: green;
+}
+.video-note-devaule {
+    color: red;
+}
