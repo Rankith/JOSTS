@@ -37,25 +37,25 @@
                                                     {% if lang_elements.element.letter_value_67 == ''%}
                                                         {{lang_elements.element.value_67}}
                                                     {% else %}
-                                                        {{lang_elements.element.letter_value_67}} = {{lang_elements.element.value_67}}
+                                                        {{lang_elements.element.letter_value_67}} = {{lang_elements.element.value_67}}{% if lang_elements.element.bonus_67 > 0 %}+{{lang_elements.element.bonus_67}} {% endif %}
                                                     {% endif %}
                                                 {% elif val_display == 'value_8' %}
                                                     {% if lang_elements.element.letter_value_8 == ''%}
                                                         {{lang_elements.element.value_8}}
                                                     {% else %}
-                                                        {{lang_elements.element.letter_value_8}} = {{lang_elements.element.value_8}}
+                                                        {{lang_elements.element.letter_value_8}} = {{lang_elements.element.value_8}}{% if lang_elements.element.bonus_9 > 0 %}+{{lang_elements.element.bonus_9}} {% endif %}
                                                     {% endif %}
                                                  {% elif val_display == 'value_9' %}
                                                     {% if lang_elements.element.letter_value_9 == ''%}
                                                         {{lang_elements.element.value_9}}
                                                     {% else %}
-                                                        {{lang_elements.element.letter_value_9}} = {{lang_elements.element.value_9}}
+                                                        {{lang_elements.element.letter_value_9}} = {{lang_elements.element.value_9}}{% if lang_elements.element.bonus_8 > 0 %}+{{lang_elements.element.bonus_8}} {% endif %}
                                                     {% endif %}
                                                 {% else %}
                                                     {% if lang_elements.element.letter_value == ''%}
                                                         {{lang_elements.element.value}}
                                                     {% else %}
-                                                        {{lang_elements.element.letter_value}} = {{lang_elements.element.value}}
+                                                        {{lang_elements.element.letter_value}} = {{lang_elements.element.value}}{% if lang_elements.element.bonus > 0 %}+{{lang_elements.element.bonus}} {% endif %}
                                                     {% endif %}
                                                 {% endif %}
              </div></div>
