@@ -5,19 +5,27 @@
 <div id="NotesD" style="border:1px solid black;font-size:0.8rem" class="p-1">
     {% for note in notes %}
     {% if note.element_link != None %}
-    <div id="vn{{note.frame}}" class="video-note-line video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
-        • {{note.element_link.elementtext_set.all.first.short_text}}
-        {% if note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'unrecognized' or note.no_value_type == 'special repitition' %}
-            (no value, {{note.no_value_type}} element {{note.element_link.elementtext_set.all.first.id_number_text}})
-        {% elif note.no_value_type == 'upvalue' %}
-            (<span class="video-note-upvalue">{{note.element_link.up_value_letter}} value</span>, element {{note.element_link.elementtext_set.all.first.id_number_text}})
-        {% elif note.no_value_type == 'devalue' %}
-            (<span class="video-note-devalue">{{note.element_link.down_value_letter}} value</span>, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+        {% if note.skip_frame == False %}
+        <div id="vn{{note.frame}}" class="video-note-line video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
         {% else %}
-            ({{note.element_link.letter_value}} value, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+        <div>
         {% endif %}
-    </div>
-
+            • {{note.element_link.elementtext_set.all.first.short_text}}
+            {% if note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'unrecognized' or note.no_value_type == 'special repitition' %}
+                (no value, {{note.no_value_type}} element {{note.element_link.elementtext_set.all.first.id_number_text}})
+            {% elif note.no_value_type == 'upvalue' %}
+                (<span class="video-note-upvalue">{{note.element_link.up_value_letter}} value</span>, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+            {% elif note.no_value_type == 'devalue' %}
+                (<span class="video-note-devalue">{{note.element_link.down_value_letter}} value</span>, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+            {% else %}
+                ({{note.element_link.letter_value}} value, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+            {% endif %}
+        </div>
+      
+    {% elif note.rule_link.type == "D" %}
+        <div>
+            {{note.rule_link.text}}
+        </div>
     {% endif %}
     {% endfor %}
 </div>
@@ -28,7 +36,14 @@
     <div>
         • {{note.element_link.elementtext_set.all.first.short_text}}
     </div>
-
+    {% elif note.rule_link.type == "E" %}
+        {% if note.skip_frame == False %}
+        <div id="vn{{note.frame}}" class="video-note-line video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
+        {% else %}
+        <div>
+        {% endif %}
+             {{note.rule_link.text}}
+        </div>
     {% endif %}
     {% endfor %}
 </div>
@@ -37,9 +52,14 @@
 {% block scripts %}
 <script type="text/javascript">
     var Frames = new Array();
-     {% for note in notes %}
-    Frames[{{forloop.counter0}}] = {{note.frame}};
+    {% for note in notes %}
+        {% if note.skip_frame == False and note.rule_link.type != "D" %}
+            Frames[{{forloop.counter0}}] = {{note.frame}};
+        {% endif %}
     {% endfor %}
+    Frames = Frames.filter(function (el) {
+  return el != null;
+});
 </script>
 <script type="text/javascript">
     function VideoNoteClick(frameIn) {
