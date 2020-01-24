@@ -378,7 +378,7 @@ def element_list(request):
         query.add(innerQuery,Q.AND)
     elements = ElementText.objects.filter(query).order_by('element__code_order')
     if search != "":
-        elements = elements.filter(element__usernote__note__icontains=search) | elements.filter(text__icontains=search) | elements.filter(short_text__icontains=search) | elements.filter(named__icontains=search) | elements.filter(additional_info__icontains=search)
+        elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
     context = {
         'lang_elements': elements,
         'num_elements': str(len(elements)) + " Elements",

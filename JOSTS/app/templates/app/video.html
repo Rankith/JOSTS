@@ -7,22 +7,23 @@
 <div class="row no-gutters pt-2">
     <div class="col-12 col-md-4 pr-4">
         <div class="row no-gutters">
-            <div class="col-3 text-center">
-                <i class="fas fa-fast-backward" style="font-size:1.6rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-5);"></i>
+            <div class="col-2 text-center">
+                <i class="fas fa-fast-backward" style="font-size:1.6rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-5);" title="-5 Frames"></i>
             </div>
-            <div class="col-3 text-center" style="padding-top:0.05rem">
-                <i class="fas fa-step-backward" style="font-size:1.45rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-1)"></i>
+            <div class="col-2 text-center" style="padding-top:0.05rem">
+                <i class="fas fa-step-backward" style="font-size:1.45rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-1)" title="-1 Frame"></i>
             </div>
-            <div class="col-3 text-center" style="padding-top:0.05rem">
-                <i class="fas fa-step-forward" style="font-size:1.45rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(1)"></i>
+            <div id="VidFrameDisplay" class="col-2 text-center" style="width:40px">0</div>
+            <div class="col-2 text-center" style="padding-top:0.05rem">
+                <i class="fas fa-step-forward" style="font-size:1.45rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(1)" title="+1 Frame"></i>
             </div>
-            <div class="col-3 text-center">
-                <i class="fas fa-fast-forward" style="font-size:1.6rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(5)"></i>
+            <div class="col-2 text-center">
+                <i class="fas fa-fast-forward" style="font-size:1.6rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(5)" title="+5 Frames"></i>
             </div>
         </div>
     </div>
     <div id="VidFramesArea" class="" style="display:none">
-        <div id="VidFrameDisplay" class="pr-4" style="width:120px">Frame: 0</div><input id="txtFrameJump" style="width:40px;display:inline" onkeypress="TextFrameJump(event)" />
+        <input id="txtFrameJump" style="width:40px;display:inline" onkeypress="TextFrameJump(event)" />
     </div>
     <div id="VidSpeedArea" class="col-12 col-md-8">
         <div class="row no-gutters">

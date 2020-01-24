@@ -23,13 +23,13 @@ var CurFrame = 0;
         if (values[0] == "0.00")
             SpeedDisplay = "Stopped";
         else if (values[0] == "0.25")
-            SpeedDisplay = "1/4";
+            SpeedDisplay = "25%";
         else if (values[0] == "0.50")
-            SpeedDisplay = "1/2";
+            SpeedDisplay = "50%";
         else if (values[0] == "0.75")
-            SpeedDisplay = "3/4";
+            SpeedDisplay = "75%";
         else if (values[0] == "1.00")
-            SpeedDisplay = "Full";
+            SpeedDisplay = "100%";
         else if (values[0] == "1.25")
             SpeedDisplay = "125%";
         $("#divsSpeedSliderValues").html(SpeedDisplay);
@@ -92,7 +92,7 @@ var FrameCountIntervalID = setInterval("UpdateFrame()", 100);
 
 function UpdateFrame() {
     CurFrame = Math.round(VidJSPlayer.currentTime() * 30);
-    $("#VidFrameDisplay").html("Frame: " + CurFrame);  
+    $("#VidFrameDisplay").html(CurFrame);  
     HighlightNote(CurFrame);
 }
 
