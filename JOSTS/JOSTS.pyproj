@@ -78,6 +78,7 @@
     <Content Include="app\static\app\content\nouislider.min.css" />
     <Content Include="app\static\app\content\theme2.css" />
     <Content Include="app\static\app\content\theme.css" />
+    <Content Include="app\static\app\images\redstripe.svg" />
     <Content Include="app\static\app\images\wag\elements\.gitignore" />
     <Content Include="app\static\app\images\wag\elements\bb250601.svg" />
     <Content Include="app\static\app\images\wag\elements\bb250602.svg" />

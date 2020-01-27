@@ -85,6 +85,7 @@ var CurFrame = 0;
         $.get('/video_notes/?video=' + idIn, function (data) {
             $("#divNotesArea").empty();
             $("#divNotesArea").append(data);
+            $("#divHud").detach().appendTo("#VidHudArea");
         });
 }
 
