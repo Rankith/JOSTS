@@ -47,27 +47,29 @@
     {% endif %}
     {% endfor %}
 </div>
-<div id="divHud" style="">
-    <div id="divHudElements" class="row no-gutters">
-    {% for note in notes %}
-    {% if note.element_link != None %}
-        {% if not forloop.first %}
-        </div></div>
-        {% endif %}
-        <div id="divHud{{note.frame}}" style="position:relative">
-            {% if note.no_value_type == 'unrecognized' or note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'special repitition' %}
-            <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}redstripe.svg" style="position:absolute;height:100px;top:0px">
+<div style="display:none">
+    <div id="divHud">
+        <div id="divHudElements" class="row no-gutters">
+        {% for note in notes %}
+        {% if note.element_link != None %}
+            {% if not forloop.first %}
+            </div></div>
             {% endif %}
-            <div class="text-center">A</div>
-            <div class="text-center" style="max-height:62px"><img class="img-fluid detail-sym" src="{% static 'app/images/wag/sym/'%}{{ note.element_link.image_url}}.svg"/></div>
-            <div class="text-center" style="font-size:0.6rem">
-    {% elif note.rule_link != None %}
-        {% if note.rule_link.deduction_amount > 0 %}
-            0.{{note.rule_link.deduction_amount}}&nbsp;
+            <div id="divHud{{note.frame}}" frame="{{note.frame}}" style="position:relative" class="HudContainer">
+                {% if note.no_value_type == 'unrecognized' or note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'special repitition' %}
+                <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}redstripe.svg" style="position:absolute;height:100px;top:0px">
+                {% endif %}
+                <div class="text-center">A</div>
+                <div class="text-center" style="max-height:62px"><img class="img-fluid detail-sym" src="{% static 'app/images/wag/sym/'%}{{ note.element_link.image_url}}.svg"/></div>
+                <div class="text-center" style="font-size:0.6rem">
+        {% elif note.rule_link != None %}
+            {% if note.rule_link.deduction_amount > 0 %}
+                0.{{note.rule_link.deduction_amount}}&nbsp;
+            {% endif %}
         {% endif %}
-    {% endif %}
-    {% endfor %}
-        </div></div>
+        {% endfor %}
+            </div></div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -80,6 +82,15 @@
         {% endif %}
     {% endfor %}
     Frames = Frames.filter(function (el) {
+  return el != null;
+});
+     var FramesHUD = new Array();
+    {% for note in notes %}
+        {% if note.element_link != None %}
+            FramesHUD[{{forloop.counter0}}] = {{note.frame}};
+        {% endif %}
+    {% endfor %}
+      FramesHUD = FramesHUD.filter(function (el) {
   return el != null;
 });
 </script>
@@ -102,9 +113,21 @@
             highest = Frames[Frames.length - 1];
         $(".video-note-line").removeClass("video-note-selected");
         if (highest != -2) {//-2 means its none
-
             $("#vn" + highest).addClass("video-note-selected");
         }
+
+        /*var MaxHUDShow = -1;
+        for (var i = 0; i < FramesHUD.length; i++) {
+            if (FramesHUD[i] < frameIn) {
+              $("#divHud" + FramesHUD[i])
+            }
+        }*/
+         $('.HudContainer').filter(function () {
+            return $(this).attr("frame") > frameIn;
+        }).hide();
+        $('.HudContainer').filter(function () {
+            return $(this).attr("frame") <= frameIn;
+        }).show();
         //console.log(highest);
     }
 </script>
