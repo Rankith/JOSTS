@@ -1,5 +1,12 @@
-﻿
-    var VideoPlayer = document.getElementById("VideoPlayer");
+﻿try {
+    VidJSPlayer.dispose();
+    clearInterval(FrameCountIntervalID);
+}
+catch(err)
+{
+
+}
+var VideoPlayer = document.getElementById("VideoPlayer");
     var VidJSPlayer = videojs("VideoPlayer");
 var FrameStepTimer;
 var CurFrame = 0;
