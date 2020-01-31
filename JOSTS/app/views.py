@@ -703,6 +703,7 @@ def video_notes_builder(request):
         'rules': rules,
         'videos': videos,
         'event': event,
+        'events': ['V','UB','BB','FX'],
         }
     return render(request, 'app/video_notes_builder.html',context=context)
 
