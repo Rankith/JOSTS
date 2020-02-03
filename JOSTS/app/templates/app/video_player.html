@@ -2,8 +2,8 @@
 {% load staticfiles %}
 <div class="row">
     <div class="col-12 col-md-1">
-        {% for vid in element.element.videos.all %}
-             <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" onclick="ShowVideo({{ vid.id }},'{{ vid.file }}')">{{ forloop.counter }}</button>
+        {% for vid in element.element.videolink_set.all %}
+             <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}})">{{ forloop.counter }}</button>
         {% endfor %}
     </div>
     <div class="col-12 col-md-8">{% include "app/video.html" %}</div>

@@ -10,7 +10,7 @@
             <div id="divVidList" class="pr-1" style="overflow:auto;">
 
                 {% for video in videos %}
-                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this)" style="cursor:pointer" class="video-select">{{ video.id }}</div>
+                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{vid.video.fps}})" style="cursor:pointer" class="video-select">{{ video.id }}</div>
                 {% endfor %}
                
             </div>
@@ -353,7 +353,7 @@
         SelectedRow = TRIn;
     }
 
-    function VideoClick(idIn, fileIn,el) {
+    function VideoClick(idIn, fileIn,el,FPSIn = 25) {
         if (ChangesMade)
 	    {
 		    if (confirm('Changes not saved, are you sure you want to go to a different video?'))
@@ -365,7 +365,9 @@
 			    return;
 		    }
 
-	    }
+        }
+        VidFPS = FPSIn;
+        $("#divVidFramesSeconds").html("1 sec = " + VidFPS + " frames");
         ChangesMade = false;
         RemoveAll();
         ShowVideo(idIn, fileIn);

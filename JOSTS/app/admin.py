@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -106,11 +106,19 @@ class UserToursCompleteAdmin(admin.ModelAdmin):
     list_display=('id','user','page')
     search_fields = ('user','page')
 
+class VideoLinkAdmin(admin.ModelAdmin):
+    list_display=('id','video','element','order','frame_jump')
+    list_editable=('video','element','order','frame_jump')
+
+class VideoAdmin(admin.ModelAdmin):
+    list_display=('id','event','file','fps','approved', 'approved_johanna')
+    list_editable=('event','file','fps','approved', 'approved_johanna')
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
 admin.site.register(RuleText,RuleTextAdmin)
-admin.site.register(Video)
+admin.site.register(VideoAdmin,Video)
 admin.site.register(UserNote,UserNoteAdmin)
 admin.site.register(DrawnImage,DrawnImageAdmin)
 admin.site.register(SymbolDuplicate,SymbolDuplicateAdmin)
@@ -123,5 +131,6 @@ admin.site.register(Theme,ThemeAdmin)
 admin.site.register(UserSettings,UserSettingsAdmin)
 admin.site.register(RuleLink,RuleLinkAdmin)
 admin.site.register(VideoNote,VideoNoteAdmin)
+admin.site.register(VideoLink,VideoLinkAdmin)
 admin.site.register(PageTour,PageTourAdmin)
 admin.site.register(UserToursComplete,UserToursCompleteAdmin)

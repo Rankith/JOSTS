@@ -9,6 +9,7 @@ from django.conf import settings
 class Video(models.Model):
     event = models.CharField(max_length=2)
     file = models.CharField(max_length=255)
+    fps = models.IntegerField(default=25)
     approved = models.BooleanField(default=False)
     approved_johanna = models.BooleanField(default=False)
     def __str__(self):
@@ -37,10 +38,19 @@ class Element(models.Model):
     show_exercise_builder = models.BooleanField(default=False)
     videos = models.ManyToManyField(Video,blank=True)
     video_jump = models.CharField(max_length=255,blank=True)
+
     def __str__(self):
         return self.event + " " + str(self.id_number)
     def image_url(self):
         return self.event.lower() + self.id_number.replace(".","")
+
+class VideoLink(models.Model):
+    video = models.ForeignKey(Video,on_delete=models.CASCADE)
+    element = models.ForeignKey(Element,on_delete=models.CASCADE)
+    order = models.IntegerField(default=1)
+    frame_jump = models.IntegerField(default=0)
+    class Meta:
+        ordering = ['order']
 
 class ElementText(models.Model):
     element = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True)

@@ -10,6 +10,7 @@ var VideoPlayer = document.getElementById("VideoPlayer");
     var VidJSPlayer = videojs("VideoPlayer");
 var FrameStepTimer;
 var CurFrame = 0;
+var VidFPS = 25;
     //level slider
     var SpeedSlider = document.getElementById("SpeedSlider");
 
@@ -72,7 +73,7 @@ var CurFrame = 0;
     function VideoStep(amountIn) {
         VideoPlayer.pause();
         var now=VideoPlayer.currentTime;
-        VideoPlayer.currentTime=now+amountIn/30;
+        VideoPlayer.currentTime = now + amountIn / VidFPS;
         FrameStepTimer=setTimeout("VideoStep(" + amountIn + ")",250);
     }
 
@@ -81,9 +82,10 @@ var CurFrame = 0;
     }
    
 
-    function ShowVideo(idIn, fileIn) {
+    function ShowVideo(idIn, fileIn, FPSIn = 25) {
         VidJSPlayer.pause();
         var vidurl = SourceBase + fileIn;
+        VidFPS = FPSIn;
         VidJSPlayer.src({
             "type": "video/mp4",
             "src": vidurl
@@ -99,7 +101,7 @@ var CurFrame = 0;
 var FrameCountIntervalID = setInterval("UpdateFrame()", 100);
 
 function UpdateFrame() {
-    CurFrame = Math.round(VidJSPlayer.currentTime() * 30);
+    CurFrame = Math.round(VidJSPlayer.currentTime() * VidFPS);
     $("#VidFrameDisplay").html(CurFrame);  
     HighlightNote(CurFrame);
 }
@@ -121,7 +123,7 @@ function TextFrameJump(e) {
 
 function VideoFrameJump(position) {
     VidJSPlayer.pause();
-    VidJSPlayer.currentTime(position / 30);
+    VidJSPlayer.currentTime(position / VidFPS);
    
     //alert("paused");
     //var t=setTimeout("VideoPlay()",1500);

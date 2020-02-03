@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
