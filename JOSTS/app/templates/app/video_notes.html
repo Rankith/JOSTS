@@ -6,7 +6,7 @@
     {% for note in notes %}
     {% if note.element_link != None %}
         {% if note.skip_frame == False %}
-        <div id="vn{{note.frame}}" class="video-note-line video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
+        <div id="vn{{note.frame}}" class="video-note-line d-note video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
         {% else %}
         <div>
         {% endif %}
@@ -38,7 +38,7 @@
     </div>
     {% elif note.rule_link.type == "E" %}
         {% if note.skip_frame == False %}
-        <div id="vn{{note.frame}}" class="video-note-line video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
+        <div id="vnE{{note.frame}}" class="video-note-line e-note video-note-color-{{note.color}}" onclick="VideoNoteClickE({{note.frame}})">
         {% else %}
         <div>
         {% endif %}
@@ -93,10 +93,23 @@
       FramesHUD = FramesHUD.filter(function (el) {
   return el != null;
 });
+
+     var FramesE = new Array();
+    {% for note in notes %}
+        {% if note.skip_frame == False and note.rule_link.type == 'E' %}
+            FramesE[{{forloop.counter0}}] = {{note.frame}};
+        {% endif %}
+    {% endfor %}
+    FramesE = FramesE.filter(function (el) {
+  return el != null;
+});
 </script>
 <script type="text/javascript">
     function VideoNoteClick(frameIn) {
         VideoFrameJump(frameIn);
+    }
+    function VideoNoteClickE(frameIn) {
+        VideoFrameJumpPause(frameIn);
     }
     function HighlightNote(frameIn) {
         var highest = -1;
@@ -111,9 +124,26 @@
         }
         if (highest == -1)//not set means its last one
             highest = Frames[Frames.length - 1];
-        $(".video-note-line").removeClass("video-note-selected");
+        $(".d-note").removeClass("video-note-selected");
         if (highest != -2) {//-2 means its none
             $("#vn" + highest).addClass("video-note-selected");
+        }
+
+         highest = -1;
+        for (var i = 0; i < FramesE.length; i++) {
+            if (FramesE[i] > frameIn) {
+                if (i > 0)
+                    highest = FramesE[i - 1];
+                else
+                    highest = -2;
+                break;
+            }
+        }
+        if (highest == -1)//not set means its last one
+            highest = FramesE[Frames.length - 1];
+        $(".e-note").removeClass("video-note-selected");
+        if (highest != -2) {//-2 means its none
+            $("#vnE" + highest).addClass("video-note-selected");
         }
 
         /*var MaxHUDShow = -1;

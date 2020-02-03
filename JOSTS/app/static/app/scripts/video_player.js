@@ -117,8 +117,12 @@ function TextFrameJump(e) {
         if (isNaN($("#txtFrameJump").val()))
             $("#txtFrameJump").val("");
         else
-            VideoFrameJump($("#txtFrameJump").val());
+            VideoFrameJumpPause($("#txtFrameJump").val());
     }
+}
+
+function VideoPlay() {
+    VidJSPlayer.play();
 }
 
 function VideoFrameJump(position) {
@@ -126,7 +130,12 @@ function VideoFrameJump(position) {
     VidJSPlayer.currentTime(position / VidFPS);
    
     //alert("paused");
-    //var t=setTimeout("VideoPlay()",1500);
+    var t=setTimeout("VideoPlay()",1500);
+}
+
+function VideoFrameJumpPause(position) {
+    VidJSPlayer.pause();
+    VidJSPlayer.currentTime(position / VidFPS);
 }
 
 

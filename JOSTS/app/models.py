@@ -36,8 +36,6 @@ class Element(models.Model):
     up_value_letter = models.CharField(max_length=2,default='',blank=True)
     down_value_letter = models.CharField(max_length=2,default='',blank=True)
     show_exercise_builder = models.BooleanField(default=False)
-    videos = models.ManyToManyField(Video,blank=True)
-    video_jump = models.CharField(max_length=255,blank=True)
 
     def __str__(self):
         return self.event + " " + str(self.id_number)
