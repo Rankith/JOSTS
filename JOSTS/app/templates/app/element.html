@@ -207,13 +207,13 @@
             });
         }
     }
-    function LoadVideo() {
+    function LoadVideo(EditMode = false) {
         $("#modalMainTitle").html("Video");
         if (window.innerWidth >= 600)
             $(".modal-dialog").addClass("mw-100").addClass("w-75");
         $("#modalBodyArea2").hide();
         $("#modalBodyArea1").empty();
-        $.get("/video_player/?element=" + ElementID, function (data) {
+        $.get("/video_player/?element=" + ElementID + "&editmode=" + EditMode, function (data) {
             $("#modalBodyArea1").append(data);
             $("#btnVid1").click();
         });

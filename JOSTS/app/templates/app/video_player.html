@@ -1,14 +1,36 @@
 {% block content %}
 {% load staticfiles %}
-<div class="row">
-    <div class="col-12 col-md-1">
-        {% for vid in element.element.videolink_set.all %}
-             <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}})">{{ forloop.counter }}</button>
-        {% endfor %}
+<div class="row no-gutters">
+    <div class="col-12 col-md-1" >
+        {% if editable and editmode == "true" %}
+            <div id="divVideosInList">
+                {% for vid in element.element.videolink_set.all %}<button id="btnVid{{ vid.video.id }}" type="button" class="btn btn-main mb-2 vid-in-list mr-1" onclick="EditModeShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},this)">{{ vid.video.id }}</button>{% endfor %}
+            </div>
+            <div style="max-height:500px;overflow:auto">Related Videos
+            <div id="divVideosNotInList">
+                {% for vid in potential %}<button id="btnVid{{ vid.id }}" type="button" class="btn btn-main mb-2 vid-not-in-list mr-1" onclick="EditModeShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},this)">{{ vid.id }}</button>{% endfor %}
+            </div>
+        </div>
+        {% else %}
+            {% for vid in element.element.videolink_set.all %}
+                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}})">{{ forloop.counter }}</button>
+            {% endfor %}
+            {% if editable %}
+                <br/>
+                <button id="btnVidEdit" type="button" class="btn btn-main mb-2" onclick="LoadVideo(true)">Edit</button>
+            {% endif %}
+        {% endif %}
     </div>
-    <div class="col-12 col-md-8">{% include "app/video.html" %}</div>
+    <div class="col-12 col-md-8">
+    {% if editable and editmode == "true" %}
+        <div id="divEditArea">
+            <button id="btnAddVideo" onclick="AddVideo()" class="btn btn-main mb-2" style="display:none">Add Video</button>
+            <button id="btnRemoveVideo" onclick="RemoveVideo()" class="btn btn-main mb-2" style="display:none">Remove Video</button> 
+        </div>
+    {% endif %}
+    {% include "app/video.html" %}</div>
     <div class="col-12 col-md-3">
-        <div id="divNotesArea">
+        <div id="divNotesArea" class="pl-2">
         </div>
     </div>
 </div>
@@ -18,8 +40,37 @@
 
 <script type="text/javascript">
       var SourceBase = "{% static 'app/videos/wag/' %}{{ element.element.event|lower }}/";
+    var VidSelected = -1;
 </script>
 <script src="{% static 'app/scripts/video_player.js' %}?v=1.1"></script>
+<script type="text/javascript">
+    function EditModeShowVideo(idIn, fileIn, FPSIn = 25,el) {
+        if ($(el).hasClass('vid-in-list')) {
+            $("#btnAddVideo").hide();
+            $("#btnRemoveVideo").show();
+        }
+        else {
+            $("#btnAddVideo").show();
+            $("#btnRemoveVideo").hide();
+        }
+        VidSelected = idIn;
+        ShowVideo(idIn, fileIn, FPSIn);
+    }
 
+    function AddVideo() {
+        $("#btnVid" + VidSelected).removeClass("vid-not-in-list").addClass('vid-in-list');
+        var BtnHolder = $("#btnVid" + VidSelected).detach();
+        $("#divVideosInList").append(BtnHolder);
+        $("#btnAddVideo").hide();
+        $("#btnRemoveVideo").show();
+    }
+    function RemoveVideo() {
+        $("#btnVid" + VidSelected).addClass("vid-not-in-list").removeClass('vid-in-list');
+        var BtnHolder = $("#btnVid" + VidSelected).detach();
+        $("#divVideosNotInList").append(BtnHolder);
+        $("#btnAddVideo").show();
+        $("#btnRemoveVideo").hide();
+    }
+</script>
 
 {% endblock %}

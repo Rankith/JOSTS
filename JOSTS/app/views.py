@@ -687,8 +687,13 @@ def check_tour(request):
 #Videos
 def video_player(request):
     element = ElementText.objects.get(pk=request.GET.get('element'))
+    potential_videos = Video.objects.filter(id__in=VideoNote.objects.filter(element_link=element.element).values_list('video').distinct())
+    potential_videos = potential_videos.exclude(id__in=element.element.videolink_set.all().values_list('video'))
     context = {
-        'element': element
+        'element': element,
+        'editable': request.user.is_staff,
+        'editmode': request.GET.get('editmode'),
+        'potential': potential_videos
         }
     return render(request, 'app/video_player.html',context=context)
 
