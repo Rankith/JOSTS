@@ -129,7 +129,7 @@
             $("#vn" + highest).addClass("video-note-selected");
         }
 
-         highest = -1;
+        highest = -1;
         for (var i = 0; i < FramesE.length; i++) {
             if (FramesE[i] > frameIn) {
                 if (i > 0)
@@ -140,7 +140,7 @@
             }
         }
         if (highest == -1)//not set means its last one
-            highest = FramesE[Frames.length - 1];
+            highest = FramesE[FramesE.length - 1];
         $(".e-note").removeClass("video-note-selected");
         if (highest != -2) {//-2 means its none
             $("#vnE" + highest).addClass("video-note-selected");
