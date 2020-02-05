@@ -749,3 +749,17 @@ def video_notes(request):
         }
 
     return render(request, 'app/video_notes.html',context=context)
+
+def update_video_links(request):
+    data = json.loads(request.body)
+    counter = 1;
+    VideoLink.objects.filter(element=data["element"]).delete()
+    for vid in data["videos"].split(','):
+        vl = VideoLink(element_id=data["element"],video_id=vid,order=counter)
+        vl.save()
+        counter += 1
+
+    resp = {'updated':True}
+    #activity log
+
+    return JsonResponse(resp)
