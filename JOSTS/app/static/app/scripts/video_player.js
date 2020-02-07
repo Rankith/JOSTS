@@ -96,6 +96,8 @@ var VidFPS = 25;
             $("#divNotesArea").append(data);
             $("#divHud").detach().appendTo("#VidHudArea");
         });
+
+        $("#divVidFramesSeconds").html("1 sec = " + VidFPS + "");
 }
 
 var FrameCountIntervalID = setInterval("UpdateFrame()", 100);
@@ -107,9 +109,10 @@ function UpdateFrame() {
 }
 
 function ShowVideoFrames() {
-    $("#VidSpeedArea").removeClass("col-md-8").addClass("col-md-5");
-    $("#VidFramesArea").addClass("col-md-3").addClass("d-flex");
-    $("#VidFramesArea").show();
+    $("#VidFramesArea").css("display", "inline");
+    //$("#VidSpeedArea").removeClass("col-md-8").addClass("col-md-5");
+    //$("#VidFramesArea").addClass("col-md-3").addClass("d-flex");
+    //$("#VidFramesArea").show();
 }
 
 function TextFrameJump(e) {

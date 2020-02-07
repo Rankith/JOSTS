@@ -49,7 +49,7 @@
 </div>
 <div style="display:none">
     <div id="divHud">
-        <div id="divHudElements" class="row no-gutters">
+        <div id="divHudElements" class="no-gutters" style="max-height:120px;overflow-x:auto;white-space:nowrap">
         {% for note in notes %}
         {% if note.element_link != None %}
             {% if not forloop.first %}
@@ -157,7 +157,8 @@
         }).hide();
         $('.HudContainer').filter(function () {
             return $(this).attr("frame") <= frameIn;
-        }).show();
+        }).css("display","inline-block")
+        $("#divHudElements").scrollLeft(100000);
         //console.log(highest);
     }
 </script>
