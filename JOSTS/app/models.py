@@ -6,7 +6,14 @@ from django.db import models
 from django.conf import settings
 
 # Create your models here.
+class Disc(models.Model):
+    display_name = models.CharField(max_length=10)
+    folder_name = models.CharField(max_length=10)
+    def __str__(self):
+       return self.display_name
+
 class Video(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     event = models.CharField(max_length=2)
     file = models.CharField(max_length=255)
     fps = models.IntegerField(default=25)
@@ -16,6 +23,7 @@ class Video(models.Model):
         return self.event + " " + self.file
 
 class Element(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     event = models.CharField(max_length=2)
     str_grp = models.IntegerField(default=0)
     code_order = models.IntegerField(default=0)
@@ -68,6 +76,7 @@ class UserNote(models.Model):
     note = models.CharField(max_length=400,blank=True,default='')
 
 class Rule(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     event = models.CharField(max_length=20,blank=True,default='')
     rule_id = models.CharField(max_length=30,blank=True,default='')
     section = models.CharField(max_length=30,blank=True,default='')
@@ -94,11 +103,13 @@ class RuleText(models.Model):
     cat4 = models.CharField(max_length=30,blank=True,default='')
 
 class DrawnImage(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     name = models.CharField(max_length=255,blank=True,default='')
     label = models.CharField(max_length=255,blank=True,default='')
     event = models.CharField(max_length=2,blank=True,default='')
 
 class SymbolDuplicate(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     symbol = models.CharField(max_length=255,blank=True,default='')
     replace_with = models.CharField(max_length=255,blank=True,default='')
     event = models.CharField(max_length=2,blank=True,default='')
@@ -127,6 +138,7 @@ class SubscriptionSetup(models.Model):
        return str(self.display_text)
 
 class QuizResult(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)
     event = models.CharField(max_length=20,blank=True,default='')
     date_completed = models.DateField(null=True,default=None,blank=True)
@@ -140,6 +152,7 @@ class QuizResult(models.Model):
     type = models.CharField(max_length=20,blank=True,default='')
 
 class ActivityLog(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     actor = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)
     action_type = models.CharField(max_length=50)
     action_detail = models.CharField(max_length=50,blank=True,null=True)
