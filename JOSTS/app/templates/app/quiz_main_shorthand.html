@@ -73,8 +73,8 @@
         QuizElementShortText[{{ forloop.counter0 }}] = "{{ q.short_text}}";
         QuizElementIDs[{{ forloop.counter0 }}] = "{{ q.element.id}}";
     {% endfor %}
-    var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
-    var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
+    var ImageBaseURL = "{% static 'app/images/'%}{{request.session.disc_path}}/elements/";
+    var SymbolBaseURL = "{% static 'app/images/'%}{{request.session.disc_path}}/sym/";
     var PromptType = '{{prompt_type}}'
     
     var AnswerLoc = -1;

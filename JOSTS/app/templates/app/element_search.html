@@ -20,7 +20,7 @@
         <label id="lblE{{event}}" class="search-button">
             <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search check-search-event" data-search="element__event" onchange="SearchChangeEvent(this)">
             <div class="search-button event-button">
-                <img class="img-fluid" src="{% static 'app/images/wag/' %}{{event}}_White.svg" />
+                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/{{event}}_White.svg" />
             </div>
         </label>
     </div>

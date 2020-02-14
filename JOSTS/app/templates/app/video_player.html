@@ -39,7 +39,7 @@
 {% block scripts %}
 
 <script type="text/javascript">
-      var SourceBase = "{% static 'app/videos/wag/' %}{{ element.element.event|lower }}/";
+      var SourceBase = "{% static 'app/videos/' %}{{request.session.disc_path}}/{{ element.element.event|lower }}/";
     var VidSelected = -1;
     var ElementOn = "{{element.element.id}}";
     token = "{{ csrf_token }}";

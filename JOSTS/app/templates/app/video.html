@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <div id="divVideoContainer">
     <video controls id="VideoPlayer" class="video-js vjs-16-9">
-        <source src="{% static 'app/videos/wag/' %}{{ element.element.event|lower }}/{{element.element.videos.first.file}}" type="video/mp4">
+        <source src="{% static 'app/videos/' %}{{request.session.disc_path}}/{{ element.element.event|lower }}/{{element.element.videos.first.file}}" type="video/mp4">
     </video>
 </div>
 <div class="row no-gutters pt-2">

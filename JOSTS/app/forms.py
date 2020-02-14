@@ -7,7 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from app.models import SubscriptionSetup,UnsubscribeFeedback,UserSettings,Theme
+from app.models import SubscriptionSetup,UnsubscribeFeedback,UserSettings,Theme,Disc
 
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
@@ -56,3 +56,11 @@ class UnsubscribeFeedbackForm(forms.ModelForm):
             "other": "Other",
             "other_details": "Other Notes",
             }
+
+class LoginForm(AuthenticationForm):
+    discs = Disc.objects.all()
+    disc = forms.ModelChoiceField(discs,empty_label = None)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')

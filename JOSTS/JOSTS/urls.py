@@ -10,6 +10,7 @@ from django.contrib.auth import views as auth_views
 from app import forms, views
 from django.conf import settings
 from django.conf.urls.static import static
+from app.models import Disc
 
 
 urlpatterns = [
@@ -18,18 +19,20 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('elements/', views.elements, name='elements'),
     path('element/', views.element, name='element'),
-    path('login/',
-         LoginView.as_view
-         (
-             template_name='app/login.html',
-             authentication_form=forms.BootstrapAuthenticationForm,
-             extra_context=
-             {
-                 'title': 'Log in',
-                 'year' : datetime.now().year,
-             }
-         ),
-         name='login'),
+    path('login/', views.loginview, name='loginview'),
+   # path('login/',
+    #     LoginView.as_view
+    #     (
+    #         template_name='app/login.html',
+    #         authentication_form=forms.BootstrapAuthenticationForm,
+    #         extra_context=
+    #         {
+    #             'discs': Disc.objects.all(),
+    #             'title': 'Log in',
+    #             'year' : datetime.now().year,
+    #         }
+    #     ),
+    #     name='login'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),
     path('ajax/update_user_note', views.update_user_note, name='update_user_note'),

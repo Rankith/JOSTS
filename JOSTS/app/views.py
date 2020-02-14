@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, SubscriptionForm,UnsubscribeFeedbackForm,SettingsForm
+from .forms import SignUpForm, SubscriptionForm,UnsubscribeFeedbackForm,SettingsForm,LoginForm
 from django.contrib.auth import authenticate, login
 import stripe
 from django.views.decorators.csrf import csrf_exempt
@@ -222,6 +222,25 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'app/signup.html', {'form': form})
 
+def loginview(request):
+    if request.method == 'POST':
+        login_form = LoginForm(data=request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data.get('username')
+            raw_password = login_form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=raw_password)
+            login(request, user)
+            request.session['disc'] = login_form.cleaned_data.get('disc').id;
+            request.session['disc_path'] = login_form.cleaned_data.get('disc').folder_name;
+            return redirect('elements')
+    else:
+        login_form = LoginForm()
+
+    context = {
+        'form': login_form,
+    }
+    return render(request, 'app/login.html', context)
+
 @login_required(login_url='/login/')
 def user_settings(request):
     u_settings = UserSettings.objects.filter(user=request.user.id)
@@ -264,6 +283,13 @@ def elements(request):
     #Element.objects.filter(event="V").filter(letter_value_67='A').update(letter_value_67='')
     #Rule.objects.filter(section="Appendix 12").update(display_order=112,search_display='A12')
     #Rule.objects.filter(section="Appendix 7").update(display_order=107,search_display='A7')
+    Element.objects.filter(disc__isnull=True).update(disc=1)
+    Rule.objects.filter(disc__isnull=True).update(disc=1)
+    Video.objects.filter(disc__isnull=True).update(disc=1)
+    DrawnImage.objects.filter(disc__isnull=True).update(disc=1)
+    SymbolDuplicate.objects.filter(disc__isnull=True).update(disc=1)
+    QuizResult.objects.filter(disc__isnull=True).update(disc=1)
+    ActivityLog.objects.filter(disc__isnull=True).update(disc=1)
     context = {
         'type':'element',
         'search_type':'element',

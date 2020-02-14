@@ -86,8 +86,8 @@
         QuizElementsValues[{{ forloop.counter0 }}] = "{{ q.element.letter_value}}";
         QuizElementsGroups[{{ forloop.counter0 }}] = "{{ q.element.str_grp}}";
     {% endfor %}
-    var ImageBaseURL = "{% static 'app/images/wag/elements/'%}";
-    var SymbolBaseURL = "{% static 'app/images/wag/sym/'%}";
+    var ImageBaseURL = "{% static 'app/images/'%}{{request.session.disc_path}}/elements/";
+    var SymbolBaseURL = "{% static 'app/images/'%}{{request.session.disc_path}}/sym/";
 
     var OnElement = 0;
     var Answered = false;

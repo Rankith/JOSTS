@@ -32,7 +32,7 @@
         {% endifchanged %}
     
         <div id="divShorthand{{element.element.id}}" class="col-4 shorthand-box justify-content-center" style="cursor:pointer" onclick="ShorthandClick('{{element.element.image_url}}')">
-            <img class="img-fluid detail-sym" src="{% static 'app/images/wag/sym/'%}{{ element.element.image_url}}.svg" style="min-height:40px"/>
+            <img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ element.element.image_url}}.svg" style="min-height:40px"/>
             <br/>
             <!--span class="font-weight-bold">{{element.element.letter_value}}</span>-->
             {{element.id_number_text}}

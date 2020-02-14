@@ -6,7 +6,7 @@
         <div class="col">
             <div style="height:220px" class="image-background rounded position-relative">
                <div class="detail-top-left">{{lang_elements.named}}</div>
-                <div class="detail-top-right"><img class="img-fluid detail-sym" src="{% static 'app/images/wag/sym/'%}{{ lang_elements.element.image_url}}.svg"/></div>
+                <div class="detail-top-right"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ lang_elements.element.image_url}}.svg"/></div>
                 <div class="additional-info" id="divAdditionalInfo">
                     <button id="btnAdditionalInfoClose" type="button" class="close" aria-label="Close" style="font-size:0.8rem;display:none">
                         <span aria-hidden="true">&times;</span>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="row h-100 justify-content-center align-items-center">
                     <div class="col-12 position-relative">
-                        <img class="img-fluid detail-image" src="{% static 'app/images/wag/elements/'%}{{ lang_elements.element.image_url}}.svg"/>
+                        <img class="img-fluid detail-image" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{ lang_elements.element.image_url}}.svg"/>
                     </div>
                     <div class="col-12 pb-1 " style="margin-top:-1rem;line-height:1.1;height:36px;overflow:hidden">
                         {{lang_elements.text}}

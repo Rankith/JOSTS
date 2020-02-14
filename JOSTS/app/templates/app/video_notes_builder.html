@@ -133,7 +133,7 @@
 {% block scripts %}
 
 <script type="text/javascript">
-    var SourceBase = "{% static 'app/videos/wag/' %}{{ event }}/";
+    var SourceBase = "{% static 'app/videos/'%}{{request.session.disc_path}}/{{ event }}/";
     var Elements = new Array();
     var Rules = new Array();
     token = "{{ csrf_token }}";
