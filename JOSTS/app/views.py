@@ -283,13 +283,14 @@ def elements(request):
     #Element.objects.filter(event="V").filter(letter_value_67='A').update(letter_value_67='')
     #Rule.objects.filter(section="Appendix 12").update(display_order=112,search_display='A12')
     #Rule.objects.filter(section="Appendix 7").update(display_order=107,search_display='A7')
-    Element.objects.filter(disc__isnull=True).update(disc=1)
-    Rule.objects.filter(disc__isnull=True).update(disc=1)
-    Video.objects.filter(disc__isnull=True).update(disc=1)
-    DrawnImage.objects.filter(disc__isnull=True).update(disc=1)
-    SymbolDuplicate.objects.filter(disc__isnull=True).update(disc=1)
-    QuizResult.objects.filter(disc__isnull=True).update(disc=1)
-    ActivityLog.objects.filter(disc__isnull=True).update(disc=1)
+
+    #Element.objects.filter(disc__isnull=True).update(disc=1)
+    #Rule.objects.filter(disc__isnull=True).update(disc=1)
+    #Video.objects.filter(disc__isnull=True).update(disc=1)
+    #DrawnImage.objects.filter(disc__isnull=True).update(disc=1)
+    #SymbolDuplicate.objects.filter(disc__isnull=True).update(disc=1)
+    #QuizResult.objects.filter(disc__isnull=True).update(disc=1)
+    #ActivityLog.objects.filter(disc__isnull=True).update(disc=1)
     context = {
         'type':'element',
         'search_type':'element',
