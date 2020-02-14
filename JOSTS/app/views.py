@@ -51,8 +51,8 @@ def about(request):
     """Renders the about page."""
     return render(request,'app/about.html')
 
-def log_activity(user,action_type,action_detail,action_item):
-    AL = ActivityLog(actor=user,action_type=action_type,action_detail=action_detail,action_item=action_item)
+def log_activity(request,action_type,action_detail,action_item):
+    AL = ActivityLog(disc_id=request.session.get('disc',1),actor=request.user,action_type=action_type,action_detail=action_detail,action_item=action_item)
     AL.save()
 
 def subscription_check(user):
@@ -313,7 +313,7 @@ def element(request):
         'val_display': value_display,
         }
     #activity log
-    log_activity(request.user,'Elements','View',str(element[0].element))
+    log_activity(request,'Elements','View',str(element[0].element))
     return render(request, 'app/element.html',context=context)
 
 def update_user_note(request):
@@ -326,7 +326,7 @@ def update_user_note(request):
     )
     resp = {'updated':True}
     #activity log
-    log_activity(request.user,'Elements','Update User Note',str(elementInstance))
+    log_activity(request,'Elements','Update User Note',str(elementInstance))
     return JsonResponse(resp)
 
 def element_search(request):
@@ -414,7 +414,7 @@ def element_list(request):
         }
 
     #activity log
-    log_activity(request.user,'Elements','List',request.GET.get('element__event'))
+    log_activity(request,'Elements','List',request.GET.get('element__event'))
     return render(request, 'app/element_list.html',context=context)
 
 
@@ -479,7 +479,7 @@ def rule_list(request):
         'num_rules': str(len(rules)) + " Rules",
         }
     #activity log
-    log_activity(request.user,'Rules','View','')
+    log_activity(request,'Rules','View','')
     return render(request, 'app/rule_list.html',context=context)
 
 #shorthand
@@ -497,7 +497,7 @@ def shorthand_training(request):
         'list_type':'element',
         }
      #activity log
-    log_activity(request.user,'Shorthand Training','List','')
+    log_activity(request,'Shorthand Training','List','')
     return render(request, 'app/elements_fixed.html',context=context)
 
 def shorthand_trainer(request):
@@ -519,7 +519,7 @@ def shorthand_trainer(request):
         'val_display':value_display
         }
     #activity log
-    log_activity(request.user,'Shorthand Training','View',str(element[0].element))
+    log_activity(request,'Shorthand Training','View',str(element[0].element))
     return render(request, 'app/shorthand_trainer.html',context=context)
 
 def save_record_image(request):
@@ -539,7 +539,7 @@ def save_record_image(request):
     count = DrawnImage.objects.filter(label=request.POST.get('label','')).count()
 
      #activity log
-    log_activity(request.user,'Shorthand Training','Draw','')
+    log_activity(request,'Shorthand Training','Draw','')
 
     return HttpResponse(count)
     #canvasData = request.GET.get('data','').strip('data:image/png;base64,')
@@ -555,7 +555,7 @@ def shorthand_lookup(request):
         'list_type':'shorthand',
         }
     #activity log
-    log_activity(request.user,'Shorthand Lookup','View','')
+    log_activity(request,'Shorthand Lookup','View','')
     return render(request, 'app/shorthand_lookup.html',context=context)
 
 def element_for_shorthand(request):
@@ -573,7 +573,7 @@ def element_for_shorthand(request):
         'val_display': 'value',
         }
     #activity log
-    log_activity(request.user,'Shorthand Lookup','Draw',str(element[0].element))
+    log_activity(request,'Shorthand Lookup','Draw',str(element[0].element))
     return render(request, 'app/element.html',context=context)
 
    
@@ -615,7 +615,7 @@ def element_lookup(request):
         'event':eventIn,
         }
     #activity log
-    log_activity(request.user,'Shorthand Lookup','Element Lookup','')
+    log_activity(request,'Shorthand Lookup','Element Lookup','')
     return render(request, 'app/element_lookup.html',context=context)
 
 #Quiz
@@ -626,7 +626,7 @@ def quiz_shorthand(request):
         'type':'Shorthand',
         }
     #activity log
-    log_activity(request.user,'Shorthand Quiz','View','')
+    log_activity(request,'Shorthand Quiz','View','')
     return render(request, 'app/quiz_base.html',context=context)
 
 @login_required(login_url='/login/')
@@ -636,7 +636,7 @@ def quiz_element(request):
         'type':'Element',
         }
     #activity log
-    log_activity(request.user,'Element Quiz','View','')
+    log_activity(request,'Element Quiz','View','')
     return render(request, 'app/quiz_base.html',context=context)
 
 def quiz_setup(request):
@@ -666,7 +666,7 @@ def quiz(request):
         'groups': groups
         }
     #activity log
-    log_activity(request.user,request.GET.get('type','Shorthand') + ' Quiz','Start','')
+    log_activity(request,request.GET.get('type','Shorthand') + ' Quiz','Start','')
     return render(request, 'app/quiz_main_' + request.GET.get('type','shorthand').lower() + '.html',context=context)
 
 def quiz_save(request):
@@ -676,13 +676,13 @@ def quiz_save(request):
         QR.missed.add(miss)
     QR.save()
      #activity log
-    log_activity(request.user,'Shorthand Quiz','Finish','')
+    log_activity(request,'Shorthand Quiz','Finish','')
     return HttpResponse(status=200)
 
 def quiz_delete(request):
     QuizResult.objects.filter(id=request.GET.get('id')).delete()
      #activity log
-    log_activity(request.user,'Shorthand Quiz','Delete','')
+    log_activity(request,'Shorthand Quiz','Delete','')
     return HttpResponse(status=200)
 
 def quiz_results(request):
