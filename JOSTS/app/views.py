@@ -565,7 +565,7 @@ def shorthand_lookup(request):
 def element_for_shorthand(request):
     idIn = request.GET.get('id')
     eventIn = request.GET.get('event')
-    element = ElementText.objects.filter(element__id_number=idIn).filter(element__event=eventIn)
+    element = ElementText.objects.filter(element__id_number=idIn).filter(element__event=eventIn).filter(element__disc=request.session.get('disc',1))
     userNote = UserNote.objects.filter(user=request.user.id,element=element[0].element.id)
     if (len(userNote) > 0):
         userNote = userNote[0].note;
@@ -607,11 +607,11 @@ def shorthand_search(request):
 def element_lookup(request):
     eventIn = request.GET.get('event')
     if (eventIn == "V"):
-        vals = Element.objects.order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
+        vals = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     else:
-        vals = Element.objects.filter(event=eventIn).order_by('letter_value').values('letter_value').distinct()   
-    groups = Element.objects.filter(event=eventIn).order_by('str_grp').values('str_grp').distinct()
-    elements = ElementText.objects.filter(element__event=eventIn,language="EN").order_by('element__str_grp','element__letter_value','element__code_order')
+        vals = Element.objects.filter(disc=request.session.get('disc',1)).filter(event=eventIn).order_by('letter_value').values('letter_value').distinct()   
+    groups = Element.objects.filter(disc=request.session.get('disc',1)).filter(event=eventIn).order_by('str_grp').values('str_grp').distinct()
+    elements = ElementText.objects.filter(element__disc=request.session.get('disc',1)).filter(element__event=eventIn,language="EN").order_by('element__str_grp','element__letter_value','element__code_order')
     context = {
         'vals':vals,
         'groups': groups,
@@ -653,14 +653,14 @@ def quiz_setup(request):
 def quiz(request):
     missed = request.GET.get('missed',-1)
     if missed == -1:
-        quiz = ElementText.objects.filter(element__event=request.GET.get('event')).order_by('?')
+        quiz = ElementText.objects.filter(element__event=request.GET.get('event'),element__disc=request.session.get('disc',1)).order_by('?')
         elements = quiz
     else:
         quiz = ElementText.objects.filter(element__in=QuizResult.objects.filter(id=missed)[0].missed.all().values_list('id'))
-        elements = ElementText.objects.filter(element__event=request.GET.get('event'))
+        elements = ElementText.objects.filter(element__event=request.GET.get('event'),element__disc=request.session.get('disc',1))
     #elements = ElementText.objects.filter(element__event=request.GET.get('event'))
-    vals = Element.objects.filter(event=request.GET.get('event')).order_by('letter_value').values('letter_value').distinct()
-    groups = Element.objects.filter(event=request.GET.get('event')).order_by('str_grp').values('str_grp').distinct()
+    vals = Element.objects.filter(event=request.GET.get('event')).filter(disc=request.session.get('disc',1)).order_by('letter_value').values('letter_value').distinct()
+    groups = Element.objects.filter(event=request.GET.get('event')).filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
     context = {
         'event': request.GET.get('event'),
         'lang_elements': elements,
@@ -674,7 +674,7 @@ def quiz(request):
     return render(request, 'app/quiz_main_' + request.GET.get('type','shorthand').lower() + '.html',context=context)
 
 def quiz_save(request):
-    QR = QuizResult(event=request.GET.get('event'),correct=request.GET.get('correct'),wrong=request.GET.get('wrong'),type=request.GET.get('type'),user=request.user,date_completed=datetime.today())
+    QR = QuizResult(event=request.GET.get('event'),correct=request.GET.get('correct'),wrong=request.GET.get('wrong'),type=request.GET.get('type'),user=request.user,date_completed=datetime.today(),disc_id=request.session.get('disc',1))
     QR.save()
     for miss in request.GET.getlist('missed[]'):
         QR.missed.add(miss)
@@ -690,7 +690,7 @@ def quiz_delete(request):
     return HttpResponse(status=200)
 
 def quiz_results(request):
-    results = QuizResult.objects.filter(user=request.user,event=request.GET.get('event'),type__iexact=request.GET.get('type')).order_by('-date_completed','-id')
+    results = QuizResult.objects.filter(user=request.user,event=request.GET.get('event'),type__iexact=request.GET.get('type'),disc=request.session.get('disc',1)).order_by('-date_completed','-id')
     context = {
         'results': results
         }
@@ -731,9 +731,9 @@ def video_player(request):
 @user_passes_test(lambda u: u.is_staff)
 def video_notes_builder(request):
     event = request.GET.get('event','fx')
-    videos = Video.objects.filter(event__iexact=event)
-    elements = ElementText.objects.filter(element__event__iexact=event).order_by('element__code_order')
-    rules = RuleLink.objects.filter(event='') | RuleLink.objects.filter(event__iexact=event)
+    videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
+    elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__code_order')
+    rules = RuleLink.objects.filter(event='',rule__disc=request.session.get('disc',1)) | RuleLink.objects.filter(event__iexact=event,rule__disc=request.session.get('disc',1))
     context = {
         'elements': elements,
         'rules': rules,
