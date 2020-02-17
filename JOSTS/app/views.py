@@ -330,9 +330,9 @@ def update_user_note(request):
     return JsonResponse(resp)
 
 def element_search(request):
-    vals = Element.objects.exclude(event="V").order_by('letter_value').values('letter_value').distinct()
-    groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
-    ranges = Element.objects.order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
+    vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
+    groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
+    ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     groupDict = {}
     valueDict = {}
     #vvals = Element.objects.filter(letter_value='A').update(down_value_letter='A')
@@ -406,6 +406,7 @@ def element_list(request):
     elements = ElementText.objects.filter(query).order_by('element__code_order')
     if search != "":
         elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
+    elements = elements.filter(element__disc=request.session.get('disc',1))
     context = {
         'lang_elements': elements,
         'num_elements': str(len(elements)) + " Elements",
@@ -430,6 +431,7 @@ def rules(request):
     return render(request, 'app/elements_fixed.html',context=context)
 
 def rule(request):
+    #not used
     idIn = request.GET.get('id')
     element = ElementText.objects.filter(id=idIn)
     userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
@@ -445,7 +447,7 @@ def rule(request):
     return render(request, 'app/element.html',context=context)
 
 def rule_search(request):
-    sections = Rule.objects.order_by('display_order','search_display','section').values('section','display_order','search_display').distinct()
+    sections = Rule.objects.filter(disc=request.session.get('disc',1)).order_by('display_order','search_display','section').values('section','display_order','search_display').distinct()
     sectionDict = {}
     #for section in sections:
     #    sectionDict[section['section']] = section['search_];
@@ -474,6 +476,7 @@ def rule_list(request):
     rules = RuleText.objects.filter(query).order_by('rule__display_order')
     if search != "":
         rules = rules.filter(cue__icontains=search) | rules.filter(response__icontains=search) | rules.filter(rule_description__icontains=search) | rules.filter(specific_deduction__icontains=search) | rules.filter(additional_info__icontains=search)
+    rules = rules.filter(rule__disc=request.session.get('disc',1))
     context = {
         'rules': rules,
         'num_rules': str(len(rules)) + " Rules",
@@ -527,13 +530,13 @@ def save_record_image(request):
     imgstr = re.search(r'base64,(.*)', datauri).group(1)
     binary_data = a2b_base64(imgstr)
     label_save = request.POST.get('label','')
-    output = open('/' + settings.MEDIA_ROOT + '/drawnimages/' + request.POST.get('disc','') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
+    output = open('/' + settings.MEDIA_ROOT + '/drawnimages/' + request.session.get('disc_path','wag') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
     output.write(binary_data)
     output.close()
-    replace_with = SymbolDuplicate.objects.filter(event=request.POST.get('event',''),symbol=request.POST.get('label',''))
+    replace_with = SymbolDuplicate.objects.filter(event=request.POST.get('event',''),symbol=request.POST.get('label',''),disc=request.session.get('disc',1))
     if (len(replace_with) != 0):
         label_save = replace_with[0].replace_with
-    d = DrawnImage(name=request.POST.get('name','') + '.png', label=label_save,event=request.POST.get('event',''))
+    d = DrawnImage(name=request.POST.get('name','') + '.png', label=label_save,event=request.POST.get('event',''),disc=request.session.get('disc',1))
     d.save()
 
     count = DrawnImage.objects.filter(label=request.POST.get('label','')).count()
