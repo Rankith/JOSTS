@@ -12,6 +12,8 @@
         </div>-->
         <div class="col">
             <div style="width:200px;margin:auto">
+                <input type="hidden" value="{{lang_elements.element.image_url}}" id="hdnName" />
+            <input type="hidden" value="{{lang_elements.element.event}}" id="hdnEvent" />
                 <div class="h5">Draw Here</div>
                 <img src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" onload="TraceLoaded()" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
                 <canvas id="can" width="200" height="200"></canvas>
