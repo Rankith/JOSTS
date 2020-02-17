@@ -232,6 +232,8 @@ def loginview(request):
             login(request, user)
             request.session['disc'] = login_form.cleaned_data.get('disc').id;
             request.session['disc_path'] = login_form.cleaned_data.get('disc').folder_name;
+            request.session['disc_full_name'] = login_form.cleaned_data.get('disc').full_name;
+            request.session['disc_events'] = login_form.cleaned_data.get('disc').event_list;
             return redirect('elements')
     else:
         login_form = LoginForm()
@@ -369,6 +371,8 @@ def element_search(request):
     #vvals = Element.objects.filter(event="V").filter(value__gte=8.0).filter(value__lt=9.0).update(range=8)
     #vvals = Element.objects.filter(event="V").filter(value__gte=9.0).filter(value__lt=10.0).update(range=9)
     #vvals = Element.objects.filter(event="V").filter(value__gte=10).update(range=10)
+
+    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
     for group in groups:
         groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
         groupDict[group['str_grp']] = groupEvents
@@ -380,7 +384,7 @@ def element_search(request):
         'groups': groups,
         'groupsEvents': groupDict,
         'valueEvents': valueDict,
-        'events': ['V','UB','BB','FX'],
+        'events': events,
         'ranges': ranges,
         'search_type':'element',
         }
@@ -592,13 +596,13 @@ def shorthand_search(request):
     #vvals = Element.objects.filter(event="V").filter(value__gte=8.0).filter(value__lt=9.0).update(range=8)
     #vvals = Element.objects.filter(event="V").filter(value__gte=9.0).filter(value__lt=10.0).update(range=9)
     #vvals = Element.objects.filter(event="V").filter(value__gte=10).update(range=10)
-
+    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
     context = {
         'vals':vals,
         'groups': groups,
         'groupsEvents': groupDict,
         'valueEvents': valueDict,
-        'events': ['V','UB','BB','FX'],
+        'events': events,
         'ranges': ranges,
         'search_type':'shorthand',
         }
@@ -644,8 +648,9 @@ def quiz_element(request):
     return render(request, 'app/quiz_base.html',context=context)
 
 def quiz_setup(request):
+    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
     context = {
-        'events': ['V','UB','BB','FX'],
+        'events':events,
         'type': request.GET.get('type')
         }
     return render(request, 'app/quiz_setup.html',context=context)
@@ -734,12 +739,13 @@ def video_notes_builder(request):
     videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__code_order')
     rules = RuleLink.objects.filter(event='',rule__disc=request.session.get('disc',1)) | RuleLink.objects.filter(event__iexact=event,rule__disc=request.session.get('disc',1))
+    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
     context = {
         'elements': elements,
         'rules': rules,
         'videos': videos,
         'event': event,
-        'events': ['V','UB','BB','FX'],
+        'events': events,
         }
     return render(request, 'app/video_notes_builder.html',context=context)
 

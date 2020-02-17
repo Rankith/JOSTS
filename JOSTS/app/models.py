@@ -9,6 +9,8 @@ from django.conf import settings
 class Disc(models.Model):
     display_name = models.CharField(max_length=10)
     folder_name = models.CharField(max_length=10)
+    full_name = models.CharField(max_length=25,default='Womens')
+    event_list = models.CharField(max_length=255,default='V,UB,BB,FX')
     def __str__(self):
        return self.display_name
 

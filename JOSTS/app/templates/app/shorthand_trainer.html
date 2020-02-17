@@ -127,19 +127,11 @@
 {% block scripts %}
 <script type="text/javascript">
     window.CSRF_TOKEN = "{{ csrf_token }}";
-    var Disc = "{{request.session.disc_path}}";
+    var Disc = "{{request.session.disc_full_name}}";
 </script>
 <script type="text/javascript">
-    if (Disc == "wag")
-        Disc == "Womens";
-    else if (Disc == "mag")
-        Disc == "Mens";
-    else if (Disc == "tra")
-        Disc == "Trampoline";
-    else if (Disc == "rhy")
-        Disc == "Rhythmic";
-    else
-        Disc == "Womens";
+    if (Disc == "")
+        Disc = "Womens";
     //var Event = "{{lang_elements.element.event}}";
     var OnShorthand = '{{lang_elements.element.image_url}}';
     var SymbolDuplicates = new Array();
