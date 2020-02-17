@@ -530,16 +530,17 @@ def save_record_image(request):
     imgstr = re.search(r'base64,(.*)', datauri).group(1)
     binary_data = a2b_base64(imgstr)
     label_save = request.POST.get('label','')
+    #remove the first '/' below to test local saving
     output = open('/' + settings.MEDIA_ROOT + '/drawnimages/' + request.session.get('disc_path','wag') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
     output.write(binary_data)
     output.close()
     replace_with = SymbolDuplicate.objects.filter(event=request.POST.get('event',''),symbol=request.POST.get('label',''),disc=request.session.get('disc',1))
     if (len(replace_with) != 0):
         label_save = replace_with[0].replace_with
-    d = DrawnImage(name=request.POST.get('name','') + '.png', label=label_save,event=request.POST.get('event',''),disc=request.session.get('disc',1))
+    d = DrawnImage(name=request.POST.get('name','') + '.png', label=label_save,event=request.POST.get('event',''),disc_id=request.session.get('disc',1))
     d.save()
 
-    count = DrawnImage.objects.filter(label=request.POST.get('label','')).count()
+    count = DrawnImage.objects.filter(disc=request.session.get('disc',1),label=request.POST.get('label','')).count()
 
      #activity log
     log_activity(request,'Shorthand Training','Draw','')
