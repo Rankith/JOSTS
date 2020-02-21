@@ -21,6 +21,7 @@ class Video(models.Model):
     fps = models.IntegerField(default=25)
     approved = models.BooleanField(default=False)
     approved_johanna = models.BooleanField(default=False)
+    old_id = models.IntegerField(null=True,default=None)
     def __str__(self):
         return self.event + " " + self.file
 
@@ -34,18 +35,19 @@ class Element(models.Model):
     value = models.DecimalField(max_digits=3,default='',blank=True,decimal_places=1)
     bonus = models.DecimalField(max_digits=3,default=0.0,blank=True,decimal_places=1)
     letter_value_9 = models.CharField(max_length=2,default='',blank=True)
-    value_9 = models.DecimalField(max_digits=3,default='',blank=True,decimal_places=1)
+    value_9 = models.DecimalField(max_digits=3,default=0.0,blank=True,decimal_places=1)
     bonus_9 = models.DecimalField(max_digits=3,default=0.0,blank=True,decimal_places=1)
     letter_value_8 = models.CharField(max_length=2,default='',blank=True)
-    value_8 = models.DecimalField(max_digits=3,default='',blank=True,decimal_places=1)
+    value_8 = models.DecimalField(max_digits=3,default=0.0,blank=True,decimal_places=1)
     bonus_8 = models.DecimalField(max_digits=3,default=0.0,blank=True,decimal_places=1)
     letter_value_67 = models.CharField(max_length=2,default='',blank=True)
-    value_67 = models.DecimalField(max_digits=3,default='',blank=True,decimal_places=1)
+    value_67 = models.DecimalField(max_digits=3,default=0.0,blank=True,decimal_places=1)
     bonus_67 = models.DecimalField(max_digits=3,default=0.0,blank=True,decimal_places=1)
     range = models.CharField(max_length=25,default='',blank=True)
     up_value_letter = models.CharField(max_length=2,default='',blank=True)
     down_value_letter = models.CharField(max_length=2,default='',blank=True)
     show_exercise_builder = models.BooleanField(default=False)
+    old_id = models.IntegerField(null=True,default=None)
 
     def __str__(self):
         return self.event + " " + str(self.id_number)
@@ -195,7 +197,7 @@ class RuleLink(models.Model):
         return self.event + " " + self.text
 
 class VideoNote(models.Model):
-    video = models.ForeignKey(Video, on_delete=models.SET_NULL,null=True)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE,null=True)
     rule_link = models.ForeignKey(RuleLink, on_delete=models.SET_NULL,null=True,blank=True)
     element_link = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True,blank=True)
     frame = models.IntegerField(default=0)

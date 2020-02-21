@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -21,6 +21,7 @@ import stripe
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 import json
+import mysql.connector
 
 def home(request):
     """Renders the home page."""
@@ -407,7 +408,7 @@ def element_list(request):
             kwargs = {'{0}'.format(k): i}
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
-    elements = ElementText.objects.filter(query).order_by('element__code_order')
+    elements = ElementText.objects.filter(query).order_by('element__code_order').order_by('element__str_grp')
     if search != "":
         elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
     elements = elements.filter(element__disc=request.session.get('disc',1))
@@ -800,3 +801,83 @@ def update_video_links(request):
     #activity log
 
     return JsonResponse(resp)
+
+def import_from_fig(request):
+    response = "";
+    type = request.GET.get('type','')
+    disc = request.GET.get('disc','')
+    db = request.GET.get('db','')
+    un = request.GET.get('user','')
+    pw = request.GET.get('pw','')
+    try:
+        cnx = mysql.connector.connect(user=un, password=pw, host='212.147.112.242',database=db,port='8083')
+    except mysql.connector.Error as err:
+         return JsonResponse({'result':err})
+
+    cursor = cnx.cursor()
+    discipline = Disc.objects.filter(folder_name=disc)
+    if discipline.exists():
+        #delete for that disc
+        discid = discipline[0].id
+        if 'element' in type:
+            ElementText.objects.filter(element__disc_id=discid).delete()
+            Element.objects.filter(disc_id=discid).delete()
+            
+
+            #elements
+            query="Select DISTINCT main.event,main.strgrp,main.codeorder,main.`id number`, main.value, main.range, `id text`,shorttext,text,named,hold,`author's comments`,1dvlower,1dvhigher,internalid FROM Main INNER JOIN EnglishSkills ON Main.Event = EnglishSkills.Event AND Main.StrGrp = EnglishSkills.StrGrp AND Main.CodeOrder = EnglishSkills.CodeOrder"
+            cursor.execute(query)
+
+            for (event,strgrp,codeorder,idnum,value,rng,idtext,shorttext,text,named,hold,additional,downvalue,upvalue,oldid) in cursor:
+                if downvalue == None:
+                    downvalue = ''
+                if upvalue == None:
+                    upvalue = ''
+                if rng == None:
+                    rng = ''
+                el = Element(disc_id=discid,event=event,str_grp=strgrp,code_order=codeorder,id_number=idnum,letter_value=value[:1],value=value[-3:],up_value_letter=upvalue,down_value_letter=downvalue,range=rng,old_id=oldid)
+                el.save()
+                if hold == None:
+                    hold = ''
+                if additional == None:
+                    additional=''
+                if shorttext == None:
+                    shorttext = ''
+                if named == None:
+                    named = ''
+                et = ElementText(element=el, text=text,short_text=shorttext,named=named,additional_info=additional,hold_text=hold,id_number_text=idtext)
+                et.save()
+
+            response +=  " | elements created: " + str(Element.objects.filter(disc_id=discid).count())
+
+        if 'video' in type:
+            Video.objects.filter(disc_id=discid).delete()
+
+            query="Select VideoID,Event,File,FPS,Approved,JohannaApproved From VideosEnglish order by event"
+            cursor.execute(query)
+            for (id,event,file,fps,approved,approvedJ) in cursor:
+                vid = Video(disc_id=discid,old_id=id,event=event,file=file,fps=fps,approved=approved,approved_johanna=approvedJ)
+                vid.save()
+
+            response +=  " | videos created: " + str(Video.objects.filter(disc_id=discid).count())
+
+        if 'vidlinks' in type:
+            #video links
+            VideoLink.objects.filter(video__disc_id=discid).delete()
+            query="Select file,videojump,internalid FROM Main where file is not null and file <> ''"
+            cursor.execute(query)
+
+            for (file,videojump,id) in cursor:
+                element_ref = Element.objects.filter(old_id=id).first()
+                order=0
+                for link,jump in zip(file.split(','),videojump.split(',')):
+                    try:
+                        vl = VideoLink(video=Video.objects.filter(old_id=link).first(),element=element_ref,frame_jump=jump,order=order)
+                        vl.save()
+                    except:
+                        errored = "video link missed"
+                    order = order + 1
+
+            response +=  " | videos linked: " + str(VideoLink.objects.filter(video__disc_id=discid).count())
+
+    return JsonResponse({'result':response})

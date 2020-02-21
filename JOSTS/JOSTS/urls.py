@@ -74,4 +74,5 @@ urlpatterns = [
     path('ajax/update_video_links/', views.update_video_links, name='update_video_links'),
     path('ajax/save_video_notes/', views.save_video_notes, name='save_video_notes'),
     path('check_tour/', views.check_tour, name='check_tour'),
+    path('fig_import/', views.import_from_fig, name='fig_import'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
