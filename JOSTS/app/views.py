@@ -823,7 +823,6 @@ def import_from_fig(request):
             ElementText.objects.filter(element__disc_id=discid).delete()
             Element.objects.filter(disc_id=discid).delete()
             
-
             #elements
             query="Select DISTINCT main.event,main.strgrp,main.codeorder,main.`id number`, main.value, main.range, `id text`,shorttext,text,named,hold,`author's comments`,1dvlower,1dvhigher,internalid FROM Main INNER JOIN EnglishSkills ON Main.Event = EnglishSkills.Event AND Main.StrGrp = EnglishSkills.StrGrp AND Main.CodeOrder = EnglishSkills.CodeOrder"
             cursor.execute(query)
@@ -879,5 +878,75 @@ def import_from_fig(request):
                     order = order + 1
 
             response +=  " | videos linked: " + str(VideoLink.objects.filter(video__disc_id=discid).count())
+
+        if 'rules' in type:
+            #video links
+            RuleText.objects.filter(rule__disc_id=discid).delete()
+            Rule.objects.filter(disc_id=discid).delete()
+            #elements
+            query="Select DISTINCT qresp.question,RuleID,ArtEvt,RuleNo, SubRule, cue, response,ruledescription,`author's comments`,specificdeduction,cat0,cat1,cat2,cat3,cat4 FROM `qresp` INNER JOIN `qrespenglish` on `qresp`.question = `qrespenglish`.question ORDER BY `qresp`.`Question`"
+            cursor.execute(query)
+            order = 0
+            last_rule = ""
+            rule_no_order = 0
+            last_art = ""
+
+            for (oldid,ruleid,artevt,ruleno,subrule,cue,response,ruledesc,additionalinfo,specificdeduction,cat0,cat1,cat2,cat3,cat4) in cursor:
+                if ruleno == None:
+                    ruleno = ''
+                if subrule == None:
+                    subrule = ''
+                if cat0 == None:
+                    cat0 = ''
+                if cat1 == None:
+                    cat1 = ''
+                if cat2 == None:
+                    cat2 = ''
+                if cat3 == None:
+                    cat3 = ''
+                if cat4 == None:
+                    cat4 = ''
+                if additionalinfo == None:
+                    additionalinfo=''
+                if last_rule != ruleid:
+                    order = order + 1
+                    rule_no_order = 0
+                if artevt != last_art:
+                    rule_no_order = rule_no_order + 1
+                last_art = artevt
+                last_rule = ruleid
+                response = response.replace("777","")
+
+                cue = cue[4:]
+
+                rl = Rule(disc_id=discid,event=ruleid,rule_id=ruleid,section=ruleid,rule_no=rule_no_order,search_display=ruleid[:2],display_order=(order*10),old_id=oldid,sub_rule=(ruleid + "." + rule_no + "." + subrule))
+                rl.save()
+                rt = RuleText(rule=rl,cue=cue,response=response,additional_info=additionalinfo,rule_description=ruledesc,specific_deduction=specificdeduction,cat0=cat0,cat1=cat1,cat2=cat2,cat3=cat3,cat4=cat4,section_text=artevt,chapter_text=ruleid)
+                rt.save()
+
+            response +=  " | rules added: " + str(Rule.objects.filter(disc_id=discid).count())
+
+        if 'rulelinks' in type:
+            #rule links
+            RuleLink.objects.filter(disc_id=discid).delete()
+            RuleLink.objects.filter(disc=None).delete()
+            query="Select text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event FROM rulelinksenglishconversion where rulelink is not null"
+            cursor.execute(query)
+
+            for (text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event) in cursor:
+                if event == None:
+                    event = ''
+                if deductionamount == '' or deductionamount == ' ' or deductionamount == None:
+                    deductionamount = 0
+                rl = RuleLink(disc_id=discid,text=text,category_name=categoryname,category_order=categoryorder,deduction_amount=deductionamount,connected_elements=connectedelements,type=type,event=event)
+                rl.save();
+                for link in rulelink.split(','):
+                    #try:
+                    rl.rule.add(Rule.objects.filter(old_id=link).first())
+                    #except:
+
+                rl.save();
+
+            response +=  " | rules linked: " + str(RuleLink.objects.filter(video__disc_id=discid).count())
 
     return JsonResponse({'result':response})

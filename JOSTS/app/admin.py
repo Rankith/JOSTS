@@ -87,9 +87,9 @@ class UserSettingsAdmin(admin.ModelAdmin):
     list_display=('user','theme')
 
 class RuleLinkAdmin(ImportExportModelAdmin):
-    list_display = ('id','text','rule','type','event','category_name','category_order','deduction_amount','connected_elements')
+    list_display = ('id','text','type','event','category_name','category_order','deduction_amount','connected_elements')
     list_editable = ('text','type','event','category_name','category_order','deduction_amount','connected_elements')
-    search_fields = ('event','text','category_name','deduction_amount','type')
+    search_fields = ('event','text','category_name','deduction_amount','type','rule')
     list_filter = ('event','type')
 
 class VideoNoteAdmin(admin.ModelAdmin):

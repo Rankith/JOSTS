@@ -88,6 +88,8 @@ class Rule(models.Model):
     sub_rule = models.CharField(max_length=30,blank=True,default='')
     display_order = models.IntegerField(default=100)
     search_display = models.CharField(max_length=4,default='1')
+    old_id = models.IntegerField(null=True,default=None)
+
     def __str__(self):
         return str(self.id)
 
@@ -185,8 +187,9 @@ class UserSettings(models.Model):
     theme = models.ForeignKey(Theme, on_delete=models.SET_NULL,null=True, default=DEFAULT_THEME_ID)
 
 class RuleLink(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     text = models.CharField(max_length=255)
-    rule = models.ForeignKey(Rule, on_delete=models.SET_NULL,null=True)
+    rule = models.ManyToManyField(Rule)
     category_name = models.CharField(max_length=40,blank=True,default='')
     category_order = models.IntegerField(default=0)
     deduction_amount = models.IntegerField(default=0)
