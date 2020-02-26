@@ -54,6 +54,12 @@ class Element(models.Model):
     def image_url(self):
         return self.event.lower() + self.id_number.replace(".","")
 
+class UnratedElement(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
+    event = models.CharField(max_length=2)
+    name = models.CharField(max_length=255)
+    old_id = models.IntegerField(null=True,default=None)
+
 class VideoLink(models.Model):
     video = models.ForeignKey(Video,on_delete=models.CASCADE)
     element = models.ForeignKey(Element,on_delete=models.CASCADE)
@@ -196,6 +202,7 @@ class RuleLink(models.Model):
     connected_elements = models.IntegerField(default=0)
     type = models.CharField(max_length=1,blank=True,default='')
     event = models.CharField(max_length=2,blank=True,default='')
+    old_id = models.IntegerField(null=True,default=None)
     def __str__(self):
         return self.event + " " + self.text
 
@@ -203,6 +210,7 @@ class VideoNote(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE,null=True)
     rule_link = models.ForeignKey(RuleLink, on_delete=models.SET_NULL,null=True,blank=True)
     element_link = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True,blank=True)
+    unrated_link = models.ForeignKey(UnratedElement, on_delete=models.SET_NULL,null=True,blank=True)
     frame = models.IntegerField(default=0)
     skip_frame = models.BooleanField(default=False)
     color = models.CharField(max_length=12,blank=True,default='')

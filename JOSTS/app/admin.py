@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, Disc
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, Disc, UnratedElement
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -95,7 +95,7 @@ class RuleLinkAdmin(ImportExportModelAdmin):
 class VideoNoteAdmin(admin.ModelAdmin):
     list_display = ('id','video','rule_link','element_link','frame','skip_frame','color','event','cr','override_text','no_value_type','timestamp')
     list_editable = ('frame','skip_frame','color','event','cr','override_text','no_value_type')
-    search_fields = ('event','color','video','rule_link','element_link','color','override_text')
+    search_fields = ('event','color','video__id','rule_link__id','element_link__id','color','override_text')
     list_filter = ('video__disc','event','color','no_value_type')
 
 class PageTourAdmin(admin.ModelAdmin):
@@ -135,3 +135,4 @@ admin.site.register(VideoLink,VideoLinkAdmin)
 admin.site.register(PageTour,PageTourAdmin)
 admin.site.register(UserToursComplete,UserToursCompleteAdmin)
 admin.site.register(Disc)
+admin.site.register(UnratedElement)

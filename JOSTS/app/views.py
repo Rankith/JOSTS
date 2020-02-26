@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -819,7 +819,7 @@ def import_from_fig(request):
     if discipline.exists():
         #delete for that disc
         discid = discipline[0].id
-        if 'element' in type:
+        if 'element' in type or type=='all':
             ElementText.objects.filter(element__disc_id=discid).delete()
             Element.objects.filter(disc_id=discid).delete()
             
@@ -844,12 +844,25 @@ def import_from_fig(request):
                     shorttext = ''
                 if named == None:
                     named = ''
+                if shorttext == '':
+                    shorttext = text
                 et = ElementText(element=el, text=text,short_text=shorttext,named=named,additional_info=additional,hold_text=hold,id_number_text=idtext)
                 et.save()
 
             response +=  " | elements created: " + str(Element.objects.filter(disc_id=discid).count())
+        
+        if 'unrated' in type or type=='all':
+            UnratedElement.objects.filter(disc_id=discid).delete()
 
-        if 'video' in type:
+            query="Select id,event,name From extraskillsenglish order by event"
+            cursor.execute(query)
+            for (id,event,name) in cursor:
+                ue = UnratedElement(disc_id=discid,old_id=id,event=event,name=name)
+                ue.save()
+
+            response +=  " | unrated created: " + str(UnratedElement.objects.filter(disc_id=discid).count())
+
+        if 'video' in type or type=='all':
             Video.objects.filter(disc_id=discid).delete()
 
             query="Select VideoID,Event,File,FPS,Approved,JohannaApproved From VideosEnglish order by event"
@@ -860,8 +873,8 @@ def import_from_fig(request):
 
             response +=  " | videos created: " + str(Video.objects.filter(disc_id=discid).count())
 
-        if 'vidlinks' in type:
-            #video links
+        if 'vidlinks' in type or type=='all':
+            #video links elements
             VideoLink.objects.filter(video__disc_id=discid).delete()
             query="Select file,videojump,internalid FROM Main where file is not null and file <> ''"
             cursor.execute(query)
@@ -879,11 +892,10 @@ def import_from_fig(request):
 
             response +=  " | videos linked: " + str(VideoLink.objects.filter(video__disc_id=discid).count())
 
-        if 'rules' in type:
-            #video links
+        if 'rules' in type or type=='all':
+            #rules
             RuleText.objects.filter(rule__disc_id=discid).delete()
             Rule.objects.filter(disc_id=discid).delete()
-            #elements
             query="Select DISTINCT qresp.question,RuleID,ArtEvt,RuleNo, SubRule, cue, response,ruledescription,`author's comments`,specificdeduction,cat0,cat1,cat2,cat3,cat4 FROM `qresp` INNER JOIN `qrespenglish` on `qresp`.question = `qrespenglish`.question ORDER BY `qresp`.`Question`"
             cursor.execute(query)
             order = 0
@@ -926,19 +938,21 @@ def import_from_fig(request):
 
             response +=  " | rules added: " + str(Rule.objects.filter(disc_id=discid).count())
 
-        if 'rulelinks' in type:
+        if 'rulelinks' in type or type=='all':
             #rule links
             RuleLink.objects.filter(disc_id=discid).delete()
             RuleLink.objects.filter(disc=None).delete()
-            query="Select text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event FROM rulelinksenglishconversion where rulelink is not null"
+            query="Select text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event,id FROM rulelinksenglishconversion where rulelink is not null"
             cursor.execute(query)
 
-            for (text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event) in cursor:
+            for (text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event,id) in cursor:
                 if event == None:
                     event = ''
                 if deductionamount == '' or deductionamount == ' ' or deductionamount == None:
                     deductionamount = 0
-                rl = RuleLink(disc_id=discid,text=text,category_name=categoryname,category_order=categoryorder,deduction_amount=deductionamount,connected_elements=connectedelements,type=type,event=event)
+                elif '.' in deductionamount:
+                    deductionamount = deductionamount.replace('.','')
+                rl = RuleLink(disc_id=discid,text=text,category_name=categoryname,category_order=categoryorder,deduction_amount=deductionamount,connected_elements=connectedelements,type=type,event=event,old_id=id)
                 rl.save();
                 for link in rulelink.split(','):
                     #try:
@@ -947,6 +961,52 @@ def import_from_fig(request):
 
                 rl.save();
 
-            response +=  " | rules linked: " + str(RuleLink.objects.filter(video__disc_id=discid).count())
+            response +=  " | rules linked: " + str(RuleLink.objects.filter(disc_id=discid).count())
+
+        if 'vidnotes' in type or type=='all':
+            #rule links
+            VideoNote.objects.filter(video__disc_id=discid).delete()
+            query="Select videoid,type,color,linkid,frame,Event,type,event,cr,overridetext,novaluetype,skipframe FROM videonotes order by videoid"
+            cursor.execute(query)
+            lastvid = ""
+
+            for (videoid,type,color,linkid,frame,Event,type,event,cr,overridetext,novaluetype,skipframe) in cursor:
+                if cr == None:
+                    cr = ''
+                if overridetext == None:
+                    overridetext = ''
+                if novaluetype == None:
+                    novaluetype = ''
+                if color == None:
+                    color = ''
+                if skipframe == None or skipframe == '' or skipframe == '0' or skipframe == 0:
+                    skipframe = False
+                else:
+                    skipframe = True
+                if color == '9':
+                    color = ''
+                elif color == 'b':
+                    color = 'Blue'
+                elif color == 'r':
+                    color = 'Red'
+
+                event = event.upper()
+                
+                if lastvid != videoid:
+                    lastvid = videoid
+                    video_ref = Video.objects.filter(old_id=videoid).first()
+                vn = VideoNote(video=video_ref,frame=frame,skip_frame=skipframe,color=color,event=event,cr=cr,override_text=overridetext,no_value_type=novaluetype)
+                if type.lower() == "skill" and novaluetype.lower() == "unrated":
+                    ul = UnratedElement.objects.filter(old_id=linkid).first()
+                    vn.unrated_link = ul
+                if type == 'E' or type == 'D':
+                    rl = RuleLink.objects.filter(old_id=linkid).first()
+                    vn.rule_link = rl
+                else:
+                    el = Element.objects.filter(old_id=linkid).first()
+                    vn.element_link = el
+                vn.save();
+
+            response +=  " | video notes created: " + str(VideoNote.objects.filter(video__disc_id=discid).count())
 
     return JsonResponse({'result':response})
