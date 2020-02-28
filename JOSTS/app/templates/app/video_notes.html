@@ -61,7 +61,7 @@
                 {% endif %}
                 <div class="text-center">{{note.element_link.letter_value}}</div>
                 <div class="text-center" style="max-height:62px"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ note.element_link.image_url}}.svg"/></div>
-                <div class="text-center" style="font-size:0.6rem">
+                <div class="text-center" style="font-size:0.6rem">&nbsp;
         {% elif note.rule_link != None %}
             {% if note.rule_link.deduction_amount > 0 %}
                 0.{{note.rule_link.deduction_amount}}&nbsp;
