@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -237,12 +237,14 @@ def loginview(request):
             request.session['disc_path'] = login_form.cleaned_data.get('disc').folder_name;
             request.session['disc_full_name'] = login_form.cleaned_data.get('disc').full_name;
             request.session['disc_events'] = login_form.cleaned_data.get('disc').event_list;
+            request.session['version_name'] = VersionSettings.objects.first().name
             return redirect('elements')
     else:
         login_form = LoginForm()
 
     context = {
         'form': login_form,
+        'main_title': VersionSettings.objects.first().name
     }
     return render(request, 'app/login.html', context)
 

@@ -242,3 +242,6 @@ class PageTour(models.Model):
 class UserToursComplete(models.Model):
     page = models.ForeignKey(PageTour, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.SET_NULL,null=True)
+
+class VersionSettings(models.Model):
+    name = models.CharField(max_length=30)
