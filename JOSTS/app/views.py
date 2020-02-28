@@ -340,7 +340,7 @@ def element_search(request):
     ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     groupDict = {}
     valueDict = {}
-    Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
+    #Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
 
     #vvals = Element.objects.filter(letter_value='A').update(down_value_letter='A')
     #vvals = Element.objects.filter(letter_value='B').update(down_value_letter='A')
