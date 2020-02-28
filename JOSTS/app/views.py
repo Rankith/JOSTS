@@ -22,6 +22,8 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 import json
 import mysql.connector
+from django.db.models import Value
+from django.db.models.functions import Replace
 
 def home(request):
     """Renders the home page."""
@@ -338,6 +340,8 @@ def element_search(request):
     ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     groupDict = {}
     valueDict = {}
+    Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
+
     #vvals = Element.objects.filter(letter_value='A').update(down_value_letter='A')
     #vvals = Element.objects.filter(letter_value='B').update(down_value_letter='A')
     #vvals = Element.objects.filter(letter_value='C').update(down_value_letter='B')
@@ -869,6 +873,7 @@ def import_from_fig(request):
             query="Select VideoID,Event,File,FPS,Approved,JohannaApproved From VideosEnglish order by event"
             cursor.execute(query)
             for (id,event,file,fps,approved,approvedJ) in cursor:
+                file = file.replace(".mov",".mp4")
                 vid = Video(disc_id=discid,old_id=id,event=event,file=file,fps=fps,approved=approved,approved_johanna=approvedJ)
                 vid.save()
 
