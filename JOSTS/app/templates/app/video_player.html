@@ -13,7 +13,7 @@
         </div>
         {% else %}
             {% for vid in element.element.videolink_set.all %}
-                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main  col-4 mb-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}})">{{ forloop.counter }}</button>
+                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main  col-4 mb-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}')">{{ forloop.counter }}</button>
             {% endfor %}
             {% if editable %}
                 <br/>
@@ -42,6 +42,13 @@
       var SourceBase = "{% static 'app/videos/' %}{{request.session.disc_path}}/{{ element.element.event|lower }}/";
     var VidSelected = -1;
     var ElementOn = "{{element.element.id}}";
+    var DiscP = "{{request.session.disc_path}}";
+    var EventP = "{{ element.element.event }}";
+    if (DiscP == "mag")
+        DiscP = "Mens";
+    else
+        DiscP = "Womens";
+
     token = "{{ csrf_token }}";
 </script>
 <script src="{% static 'app/scripts/video_player.js' %}?v=1.1"></script>

@@ -82,9 +82,14 @@ var VidFPS = 25;
     }
    
 
-    function ShowVideo(idIn, fileIn, FPSIn = 25) {
+    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID) {
         VidJSPlayer.pause();
-        var vidurl = SourceBase + fileIn;
+        var vidurl;
+        if (oldID != '') {
+            vidurl = "https://web-sts.com/" + DiscP + "/VideoFiles/" + EventP + "/" + fileIn;
+        }
+        else
+            vidurl = SourceBase + fileIn;
         VidFPS = FPSIn;
         VidJSPlayer.src({
             "type": "video/mp4",
