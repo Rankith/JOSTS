@@ -802,6 +802,7 @@ def update_video_links(request):
 
     return JsonResponse(resp)
 
+@user_passes_test(lambda u: u.is_staff)
 def import_from_fig(request):
     response = "";
     type = request.GET.get('type','')
@@ -903,7 +904,7 @@ def import_from_fig(request):
             rule_no_order = 0
             last_art = ""
 
-            for (oldid,ruleid,artevt,ruleno,subrule,cue,response,ruledesc,additionalinfo,specificdeduction,cat0,cat1,cat2,cat3,cat4) in cursor:
+            for (oldid,ruleid,artevt,ruleno,subrule,cue,answer,ruledesc,additionalinfo,specificdeduction,cat0,cat1,cat2,cat3,cat4) in cursor:
                 if ruleno == None:
                     ruleno = ''
                 if subrule == None:
@@ -927,13 +928,13 @@ def import_from_fig(request):
                     rule_no_order = rule_no_order + 1
                 last_art = artevt
                 last_rule = ruleid
-                response = response.replace("777","")
+                answer = answer.replace("777","")
 
                 cue = cue[4:]
 
-                rl = Rule(disc_id=discid,event=ruleid,rule_id=ruleid,section=ruleid,rule_no=rule_no_order,search_display=ruleid[:2],display_order=(order*10),old_id=oldid,sub_rule=(ruleid + "." + rule_no + "." + subrule))
+                rl = Rule(disc_id=discid,event=ruleid,rule_id=ruleid,section=ruleid,rule_no=rule_no_order,search_display=ruleid[:2],display_order=(order*10),old_id=oldid,sub_rule=(ruleid + "." + ruleno + "." + subrule))
                 rl.save()
-                rt = RuleText(rule=rl,cue=cue,response=response,additional_info=additionalinfo,rule_description=ruledesc,specific_deduction=specificdeduction,cat0=cat0,cat1=cat1,cat2=cat2,cat3=cat3,cat4=cat4,section_text=artevt,chapter_text=ruleid)
+                rt = RuleText(rule=rl,cue=cue,response=answer,additional_info=additionalinfo,rule_description=ruledesc,specific_deduction=specificdeduction,cat0=cat0,cat1=cat1,cat2=cat2,cat3=cat3,cat4=cat4,section_text=artevt,chapter_text=ruleid)
                 rt.save()
 
             response +=  " | rules added: " + str(Rule.objects.filter(disc_id=discid).count())
