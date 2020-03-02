@@ -343,7 +343,7 @@ def element_search(request):
     groupDict = {}
     valueDict = {}
     #Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
-    RuleLink.objects.update(type=Left('type',1))
+    #RuleLink.objects.update(type=Left('type',1))
     #vvals = Element.objects.filter(letter_value='A').update(down_value_letter='A')
     #vvals = Element.objects.filter(letter_value='B').update(down_value_letter='A')
     #vvals = Element.objects.filter(letter_value='C').update(down_value_letter='B')
