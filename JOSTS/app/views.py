@@ -23,7 +23,7 @@ from datetime import datetime
 import json
 import mysql.connector
 from django.db.models import Value
-from django.db.models.functions import Replace
+from django.db.models.functions import Replace,Left
 
 def home(request):
     """Renders the home page."""
@@ -343,7 +343,7 @@ def element_search(request):
     groupDict = {}
     valueDict = {}
     #Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
-
+    RuleLink.objects.update(type=Left('type',1))
     #vvals = Element.objects.filter(letter_value='A').update(down_value_letter='A')
     #vvals = Element.objects.filter(letter_value='B').update(down_value_letter='A')
     #vvals = Element.objects.filter(letter_value='C').update(down_value_letter='B')
@@ -745,8 +745,9 @@ def video_player(request):
 def video_notes_builder(request):
     event = request.GET.get('event','fx')
     videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
+    unrated = UnratedElement.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).order_by('id')
     elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__code_order')
-    rules = RuleLink.objects.filter(event='',rule__disc=request.session.get('disc',1)) | RuleLink.objects.filter(event__iexact=event,rule__disc=request.session.get('disc',1))
+    rules = RuleLink.objects.filter(event='',disc=request.session.get('disc',1)) | RuleLink.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     events=request.session.get('disc_events','V,UB,BB,FX').split(",")
     context = {
         'elements': elements,
@@ -754,6 +755,7 @@ def video_notes_builder(request):
         'videos': videos,
         'event': event,
         'events': events,
+        'unrateds': unrated,
         }
     return render(request, 'app/video_notes_builder.html',context=context)
 
@@ -961,7 +963,7 @@ def import_from_fig(request):
                     deductionamount = 0
                 elif '.' in deductionamount:
                     deductionamount = deductionamount.replace('.','')
-                rl = RuleLink(disc_id=discid,text=text,category_name=categoryname,category_order=categoryorder,deduction_amount=deductionamount,connected_elements=connectedelements,type=type,event=event,old_id=id)
+                rl = RuleLink(disc_id=discid,text=text,category_name=categoryname,category_order=categoryorder,deduction_amount=deductionamount,connected_elements=connectedelements,type=type[:1].upper(),event=event,old_id=id)
                 rl.save();
                 for link in rulelink.split(','):
                     #try:

@@ -21,7 +21,15 @@
                 ({{note.element_link.letter_value}} value, element {{note.element_link.elementtext_set.all.first.id_number_text}})
             {% endif %}
         </div>
-      
+     {% elif note.unrated_link != None %}
+        {% if note.skip_frame == False %}
+        <div id="vn{{note.frame}}" class="video-note-line d-note video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
+        {% else %}
+        <div>
+        {% endif %}
+            • {{note.unrated_link.name}}
+                (no value, {{note.no_value_type}} element {{note.element_link.elementtext_set.all.first.id_number_text}})
+        </div>      
     {% elif note.rule_link.type == "D" %}
         <div>
             {{note.rule_link.text}}

@@ -135,6 +135,7 @@
 <script type="text/javascript">
     var SourceBase = "{% static 'app/videos/'%}{{request.session.disc_path}}/{{ event }}/";
     var Elements = new Array();
+    var Unrated = new Array();
     var DiscP = "{{request.session.disc_path}}";
     var Rules = new Array();
     var EventP = "{{ event }}";
@@ -145,6 +146,10 @@
                         idtext: '{{ element.id_number_text }}',
                         text: '{{ element.short_text }}',
                         id: '{{element.element.id}}'};
+    {% endfor %}
+    {% for unrated in unrateds %}
+    Unrated[{{unrated.id}}] = {name: '{{ unrated.name }}',
+                        id: '{{unrated.id}}'};
     {% endfor %}
     {% for rule in rules %}
     Rules[{{rule.id}}] = {rule: '{{ rule.rule }}',
@@ -406,6 +411,7 @@
             if (Notes[j].element_link_id != null) {
                 //AddElement(Elements[Notes[j].element_link_id], Notes[j].frame);
                 var el = Elements[Notes[j].element_link_id];
+                console.log("Element: " + Notes[j].element_link_id);
                 AddNotesRow(OnRow, el.text, Notes[j].frame, el.idtext, el.val, Notes[j].cr, Notes[j].color, Notes[j].no_value_type, Notes[j].skip_frame);
                 
             }
@@ -414,6 +420,13 @@
                 //AddElement(Elements[Notes[j].element_link_id], Notes[j].frame);
                 var rl = Rules[Notes[j].rule_link_id];
                 AddNotesRow(OnRow, rl.text, Notes[j].frame, '-', '-', Notes[j].cr, Notes[j].color, Notes[j].no_value_type, Notes[j].skip_frame);
+               
+            }
+            else if (Notes[j].unrated_link_id != null) {
+                console.log(j);
+                //AddElement(Elements[Notes[j].element_link_id], Notes[j].frame);
+                var ur = Unrated[Notes[j].unrated_link_id];
+                AddNotesRow(OnRow, ur.name, Notes[j].frame, '-', '-', Notes[j].cr, Notes[j].color, Notes[j].no_value_type, Notes[j].skip_frame);
                
             }
             OnRow++;
