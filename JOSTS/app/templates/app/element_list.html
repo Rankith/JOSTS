@@ -93,9 +93,9 @@
                 <div class="col">
                     <div style="height:120px" class="image-background rounded" id="div{{element.id}}">
                          <div class="position-absolute col pl-4" style="left:0px;top:0px">
-                                {% if element.element.videos.all.count > 0 %}
+                                 {% if element.element.videolink_set.all.count > 0 %}
                                     {% if request.user.is_staff or request.user.is_superuser %}
-                                        <i class="fas fa-play-circle"></i><sub>{{ element.element.videos.all.count }}</sub>
+                                        <i class="fas fa-play-circle"></i><sub>{{ element.element.videolink_set.all.count }}</sub>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -196,9 +196,9 @@
                                             
                                             </strong>
                                             <span class="pl-4" >
-                                                {% if element.element.videos.all.count > 0 %}
+                                                {% if element.element.videolink_set.all.count > 0 %}
                                                     {% if request.user.is_staff or request.user.is_superuser %}
-                                                        <i class="fas fa-play-circle"></i><sub>{{ element.element.videos.all.count }}</sub>
+                                                        <i class="fas fa-play-circle"></i><sub>{{ element.element.videolink_set.all.count }}</sub>
                                                     {% endif %}
                                                 {% endif %}
                                             </span>

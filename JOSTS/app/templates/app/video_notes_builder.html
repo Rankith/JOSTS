@@ -113,7 +113,7 @@
                             <label id="lblE{{ev}}" class="search-button">
                                 <input type="checkbox" id="chkE{{ev}}" value="{{ev}}" class="check-search check-search-event" data-search="element__event" {% if ev|lower == event %} checked="checked" {% endif %} onchange="ChangeEvent(this)">
                                 <div class="search-button event-button">
-                                    <img class="img-fluid" src="{% static 'app/images/wag/' %}{{ev}}_White.svg" />
+                                    <img class="img-fluid" src="{% static 'app/images/' %}{{request.session.disc_path}}/{{ev}}_White.svg" />
                                 </div>
                             </label>
                         </div>
@@ -135,7 +135,9 @@
 <script type="text/javascript">
     var SourceBase = "{% static 'app/videos/'%}{{request.session.disc_path}}/{{ event }}/";
     var Elements = new Array();
+    var DiscP = "{{request.session.disc_path}}";
     var Rules = new Array();
+    var EventP = "{{ event }}";
     token = "{{ csrf_token }}";
     {% for element in elements %}
     Elements[{{element.element.id}}] = {group: '{{ element.element.str_grp }}',
@@ -151,6 +153,12 @@
                         connected_elements: '{{ rule.connected_elements }}',
                         id: '{{rule.id}}'};
     {% endfor %}
+    if (DiscP == "mag")
+        DiscP = "Mens";
+    else
+        DiscP = "Womens";
+
+    token = "{{ csrf_token }}";
 
    
 </script>
