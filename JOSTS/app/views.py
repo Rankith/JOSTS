@@ -1004,11 +1004,13 @@ def import_from_fig(request):
                 if lastvid != videoid:
                     lastvid = videoid
                     video_ref = Video.objects.filter(old_id=videoid,disc_id=discid).first()
+                if videoid == 584:
+                    lastvid = videoid
                 vn = VideoNote(video=video_ref,frame=frame,skip_frame=skipframe,color=color,event=event,cr=cr,override_text=overridetext,no_value_type=novaluetype)
                 if type.lower() == "element" and novaluetype.lower() == "unrated":
                     ul = UnratedElement.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.unrated_link = ul
-                if type == 'E' or type == 'D':
+                elif type == 'E' or type == 'D':
                     rl = RuleLink.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.rule_link = rl
                 else:
