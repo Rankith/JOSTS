@@ -23,7 +23,7 @@
                                 {% endifchanged %}
                                 <li class="list-group-item rules-subsection-header" style="cursor:pointer" >
                                     <div class=" h4" data-toggle="collapse" data-target="#detail-inner-{{forloop.counter}}">
-                                        Section {{rule.rule.rule_no}} - {{rule.section_text}}
+                                        {{section_header}} {{rule.rule.rule_no}} - {{rule.section_text}}
                                     </div>
                                 </li>
                              <div id="detail-inner-{{forloop.counter}}" class="collapse show">

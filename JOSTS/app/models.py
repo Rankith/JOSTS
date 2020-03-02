@@ -245,3 +245,4 @@ class UserToursComplete(models.Model):
 
 class VersionSettings(models.Model):
     name = models.CharField(max_length=30)
+    rule_sub_header = models.CharField(max_length=30,blank=True,default='Section')

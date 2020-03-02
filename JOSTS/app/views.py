@@ -491,6 +491,7 @@ def rule_list(request):
     context = {
         'rules': rules,
         'num_rules': str(len(rules)) + " Rules",
+        'section_header' : VersionSettings.objects.first().rule_sub_header,
         }
     #activity log
     log_activity(request,'Rules','View','')
@@ -939,7 +940,7 @@ def import_from_fig(request):
 
                 cue = cue[4:]
 
-                rl = Rule(disc_id=discid,event=ruleid,rule_id=ruleid,section=ruleid,rule_no=rule_no_order,search_display=ruleid[:2],display_order=(order*10),old_id=oldid,sub_rule=(ruleid + "." + ruleno + "." + subrule))
+                rl = Rule(disc_id=discid,event=ruleid,rule_id=ruleid,section=ruleid,rule_no=artevt,search_display=ruleid[:2].replace('A','S'),display_order=(order*10),old_id=oldid,sub_rule=(ruleid + "." + ruleno + "." + subrule))
                 rl.save()
                 rt = RuleText(rule=rl,cue=cue,response=answer,additional_info=additionalinfo,rule_description=ruledesc,specific_deduction=specificdeduction,cat0=cat0,cat1=cat1,cat2=cat2,cat3=cat3,cat4=cat4,section_text=artevt,chapter_text=ruleid)
                 rt.save()
