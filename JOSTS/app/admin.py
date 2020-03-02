@@ -111,8 +111,9 @@ class VideoLinkAdmin(admin.ModelAdmin):
     list_editable=('video','element','order','frame_jump')
 
 class VideoAdmin(admin.ModelAdmin):
-    list_display=('id','disc','event','file','fps','approved', 'approved_johanna')
+    list_display=('id','disc','event','file','fps','approved', 'approved_johanna','old_id')
     list_editable=('disc','event','file','fps','approved', 'approved_johanna')
+    search_fields = ('file','old_id')
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)

@@ -889,11 +889,11 @@ def import_from_fig(request):
             cursor.execute(query)
 
             for (file,videojump,id) in cursor:
-                element_ref = Element.objects.filter(old_id=id).first()
+                element_ref = Element.objects.filter(old_id=id,disc_id=discid).first()
                 order=0
                 for link,jump in zip(file.split(','),videojump.split(',')):
                     try:
-                        vl = VideoLink(video=Video.objects.filter(old_id=link).first(),element=element_ref,frame_jump=jump,order=order)
+                        vl = VideoLink(video=Video.objects.filter(old_id=link,disc_id=discid).first(),element=element_ref,frame_jump=jump,order=order)
                         vl.save()
                     except:
                         errored = "video link missed"
@@ -965,7 +965,7 @@ def import_from_fig(request):
                 rl.save();
                 for link in rulelink.split(','):
                     #try:
-                    rl.rule.add(Rule.objects.filter(old_id=link).first())
+                    rl.rule.add(Rule.objects.filter(old_id=link,disc_id=discid).first())
                     #except:
 
                 rl.save();
@@ -1003,16 +1003,16 @@ def import_from_fig(request):
                 
                 if lastvid != videoid:
                     lastvid = videoid
-                    video_ref = Video.objects.filter(old_id=videoid).first()
+                    video_ref = Video.objects.filter(old_id=videoid,disc_id=discid).first()
                 vn = VideoNote(video=video_ref,frame=frame,skip_frame=skipframe,color=color,event=event,cr=cr,override_text=overridetext,no_value_type=novaluetype)
-                if type.lower() == "skill" and novaluetype.lower() == "unrated":
-                    ul = UnratedElement.objects.filter(old_id=linkid).first()
+                if type.lower() == "element" and novaluetype.lower() == "unrated":
+                    ul = UnratedElement.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.unrated_link = ul
                 if type == 'E' or type == 'D':
-                    rl = RuleLink.objects.filter(old_id=linkid).first()
+                    rl = RuleLink.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.rule_link = rl
                 else:
-                    el = Element.objects.filter(old_id=linkid).first()
+                    el = Element.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.element_link = el
                 vn.save();
 
