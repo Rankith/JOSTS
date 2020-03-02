@@ -36,7 +36,7 @@
     <div>
         • {{note.element_link.elementtext_set.all.first.short_text}}
     </div>
-    {% elif note.rule_link.type == "E" %}
+    {% elif note.rule_link.type|upper == "E" %}
         {% if note.skip_frame == False %}
         <div id="vnE{{note.frame}}" class="video-note-line e-note video-note-color-{{note.color}}" onclick="VideoNoteClickE({{note.frame}})">
         {% else %}
