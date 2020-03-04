@@ -4,16 +4,16 @@
     <div class="col-12 col-md-1" >
         {% if editable and editmode == "true" %}
             <div id="divVideosInList" class="sortable">
-                     {% for vid in element.element.videolink_set.all %}<button id="btnVid{{ vid.video.id }}" type="button" class="btn btn-main mb-2 col-4 vid-in-list mr-2 vid-edit" videoid="{{ vid.video.id}}" onclick="EditModeShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},this)">{{ vid.video.id }}</button>{% endfor %}
+                     {% for vid in element.element.videolink_set.all %}<button id="btnVid{{ vid.video.id }}" type="button" class="btn btn-main mb-2 col-4 vid-in-list mr-2 vid-edit" videoid="{{ vid.video.id}}" onclick="EditModeShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.video.id }}</button>{% endfor %}
             </div>
             <div style="max-height:500px;overflow:auto">Related Videos
             <div id="divVideosNotInList">
-                {% for vid in potential %}<button id="btnVid{{ vid.id }}" type="button" draggable="true" class="btn btn-main mb-2 col-4 vid-not-in-list mr-2 vid-edit" videoid="{{ vid.id}}" onclick="EditModeShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},this)">{{ vid.id }}</button>{% endfor %}
+                {% for vid in potential %}<button id="btnVid{{ vid.id }}" type="button" draggable="true" class="btn btn-main mb-2 col-4 vid-not-in-list mr-2 vid-edit" videoid="{{ vid.id}}" onclick="EditModeShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.id }}</button>{% endfor %}
             </div>
         </div>
         {% else %}
             {% for vid in element.element.videolink_set.all %}
-                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main  col-4 mb-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}')">{{ forloop.counter }}</button>
+                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main  col-4 mb-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{element.element.id}})">{{ forloop.counter }}</button>
             {% endfor %}
             {% if editable %}
                 <br/>
@@ -39,22 +39,26 @@
 {% block scripts %}
 
 <script type="text/javascript">
-      var SourceBase = "{% static 'app/videos/' %}{{request.session.disc_path}}/{{ element.element.event|lower }}/";
+    var SourceBase = "{% static 'app/videos/' %}{{request.session.disc_path}}/{{ element.element.event|lower }}/";
     var VidSelected = -1;
     var ElementOn = "{{element.element.id}}";
     var DiscP = "{{request.session.disc_path}}";
     var EventP = "{{ element.element.event }}";
+    var ElementShortText = "{{element.short_text}}";
+    var ElementIDText = "{{element.id_number_text}}";
     if (DiscP == "mag")
         DiscP = "Mens";
     else
         DiscP = "Womens";
 
     token = "{{ csrf_token }}";
+
+    $("#divVideoElement").html(ElementIDText + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ElementShortText);
 </script>
 <script src="{% static 'app/scripts/video_player.js' %}?v=1.1"></script>
 <script src="{% static 'app/scripts/sortable.min.js' %}?v=1.1"></script>
 <script type="text/javascript">
-    function EditModeShowVideo(idIn, fileIn, FPSIn = 25,el) {
+    function EditModeShowVideo(idIn, fileIn, FPSIn = 25,el,old,elID=-1) {
         if ($(el).hasClass('vid-in-list')) {
             $("#btnAddVideo").hide();
             $("#btnRemoveVideo").show();
@@ -66,7 +70,7 @@
         $(".vid-edit").removeClass("value-button");
         $(el).addClass("value-button");
         VidSelected = idIn;
-        ShowVideo(idIn, fileIn, FPSIn);
+        ShowVideo(idIn, fileIn, FPSIn,old,elID);
         Sortable.create(divVideosInList, {onEnd: SortEnd});
 
     }

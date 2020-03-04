@@ -11,6 +11,7 @@ var VideoPlayer = document.getElementById("VideoPlayer");
 var FrameStepTimer;
 var CurFrame = 0;
 var VidFPS = 25;
+var EJump = 0;
     //level slider
     var SpeedSlider = document.getElementById("SpeedSlider");
 
@@ -82,7 +83,7 @@ var VidFPS = 25;
     }
    
 
-    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID) {
+    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1) {
         VidJSPlayer.pause();
         var vidurl;
         if (oldID != '') {
@@ -96,13 +97,18 @@ var VidFPS = 25;
             "src": vidurl
         });
         VidJSPlayer.play();
-        $.get('/video_notes/?video=' + idIn, function (data) {
+        $.get('/video_notes/?video=' + idIn + '&element=' + elementJump, function (data) {
             $("#divNotesArea").empty();
             $("#divNotesArea").append(data);
             $("#divHud").detach().appendTo("#VidHudArea");
         });
 
         $("#divVidFramesSeconds").html("1 sec = " + VidFPS + "");
+}
+
+function JumpToElement() {
+    if (ElementJump != -1)
+        VideoFrameJumpPause(ElementJump);
 }
 
 var FrameCountIntervalID = setInterval("UpdateFrame()", 100);

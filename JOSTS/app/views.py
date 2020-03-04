@@ -414,7 +414,7 @@ def element_list(request):
             kwargs = {'{0}'.format(k): i}
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
-    elements = ElementText.objects.filter(query).order_by('element__code_order').order_by('element__str_grp')
+    elements = ElementText.objects.filter(query).order_by('element__str_grp','element__code_order')
     if search != "":
         elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
     elements = elements.filter(element__disc=request.session.get('disc',1))
@@ -789,9 +789,15 @@ def video_notes(request):
         notes = VideoNoteTemp.objects.all().order_by('frame')
     else:
         notes = VideoNote.objects.filter(video=video).order_by('frame')
-
+    element = request.GET.get('element',-1)
+    frame_jump = -1
+    if element != -1:
+        jnote = notes.filter(element_link__id = element)
+        if len(jnote) >= 1:
+            frame_jump = jnote[0].frame
 
     context = {
+        'elementjump':frame_jump,
         'notes':notes
         }
 

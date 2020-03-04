@@ -84,6 +84,7 @@
 {% block scripts %}
 <script type="text/javascript">
     var Frames = new Array();
+    var ElementJump = {{elementjump}};
     {% for note in notes %}
         {% if note.skip_frame == False and note.element_link != None %}
             Frames[{{forloop.counter0}}] = {{note.frame}};
