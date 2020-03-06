@@ -855,6 +855,7 @@ def import_from_fig(request):
                     upvalue = ''
                 if rng == None:
                     rng = ''
+                value = value.replace("points","")
                 el = Element(disc_id=discid,event=event,str_grp=strgrp,code_order=codeorder,id_number=idnum,letter_value=value[:1],value=value[-3:],up_value_letter=upvalue,down_value_letter=downvalue,range=rng,old_id=oldid)
                 el.save()
                 if hold == None:
@@ -964,7 +965,7 @@ def import_from_fig(request):
             #rule links
             RuleLink.objects.filter(disc_id=discid).delete()
             RuleLink.objects.filter(disc=None).delete()
-            query="Select text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event,id FROM rulelinksenglishconversion where rulelink is not null"
+            query="Select text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event,id FROM rulelinksenglishconversion where rulelink is not null and categoryname is not null and categoryorder is not null"
             cursor.execute(query)
 
             for (text,rulelink,categoryname,categoryorder,deductionamount,connectedelements,type,event,id) in cursor:
@@ -977,9 +978,9 @@ def import_from_fig(request):
                 rl = RuleLink(disc_id=discid,text=text,category_name=categoryname,category_order=categoryorder,deduction_amount=deductionamount,connected_elements=connectedelements,type=type[:1].upper(),event=event,old_id=id)
                 rl.save();
                 for link in rulelink.split(','):
-                    #try:
-                    rl.rule.add(Rule.objects.filter(old_id=link,disc_id=discid).first())
-                    #except:
+                    rule = Rule.objects.filter(old_id=link,disc_id=discid).first()
+                    if rule:
+                        rl.rule.add(Rule.objects.filter(old_id=link,disc_id=discid).first())
 
                 rl.save();
 
