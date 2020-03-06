@@ -246,3 +246,10 @@ class UserToursComplete(models.Model):
 class VersionSettings(models.Model):
     name = models.CharField(max_length=30)
     rule_sub_header = models.CharField(max_length=30,blank=True,default='Section')
+    drawing_prefix = models.CharField(max_length=5,blank=True,default='')
+
+class StructureGroup(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.CASCADE,null=True)
+    event = models.CharField(max_length=2,blank=True,default='')
+    group = models.IntegerField(default=0)
+    name = models.CharField(max_length=50,blank=True,default='')

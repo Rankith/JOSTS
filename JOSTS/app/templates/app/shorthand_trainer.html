@@ -134,6 +134,7 @@
         Disc = "Womens";
     //var Event = "{{lang_elements.element.event}}";
     var OnShorthand = '{{lang_elements.element.image_url}}';
+    var drawing_prefix = '{{drawing_prefix}}';
     var SymbolDuplicates = new Array();
     {% for symbol in symbol_duplicates %}
         SymbolDuplicates['{{symbol.symbol}}'] = '{{symbol.replace_with}}';

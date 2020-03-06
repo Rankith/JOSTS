@@ -5,7 +5,7 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -407,6 +407,7 @@ def element_list(request):
     del dget['search']
     value_display = dget['value_display'][0]
     del dget['value_display']
+    event = dget['element__event']
     query = Q(language="EN")
     for k,v in dget.items():
         innerQuery = Q()
@@ -418,11 +419,13 @@ def element_list(request):
     if search != "":
         elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
     elements = elements.filter(element__disc=request.session.get('disc',1))
+    groups = StructureGroup.objects.filter(disc_id=request.session.get('disc',1),event=event[0]).order_by('group')
     context = {
         'lang_elements': elements,
         'num_elements': str(len(elements)) + " Elements",
         'display': display,
         'val_display': value_display,
+        'groups':groups,
         }
 
     #activity log
@@ -531,7 +534,8 @@ def shorthand_trainer(request):
         'user_note': userNote,
         'count' : count,
         'symbol_duplicates' : symbol_duplicates,
-        'val_display':value_display
+        'val_display':value_display,
+        'drawing_prefix':VersionSettings.objects.first().drawing_prefix
         }
     #activity log
     log_activity(request,'Shorthand Training','View',str(element[0].element))
@@ -569,6 +573,7 @@ def shorthand_lookup(request):
         'type':'element',
         'search_type':'element',
         'list_type':'shorthand',
+        'drawing_prefix':VersionSettings.objects.first().drawing_prefix
         }
     #activity log
     log_activity(request,'Shorthand Lookup','View','')

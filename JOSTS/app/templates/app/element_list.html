@@ -8,7 +8,7 @@
             {% endif %}
             <div class="card rules-subsection-header">
                 <div class="card-header card-header-custom" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
-                    Group {{element.element.str_grp}}
+                    Group {{element.element.str_grp}} - {% for g in groups %}{% if g.group == element.element.str_grp %}{{g.name}}{% endif %} {% endfor %}
                 </div>
             </div>
             <div id="detail-{{forloop.counter}}" class="collapse show">

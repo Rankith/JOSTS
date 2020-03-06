@@ -97,10 +97,14 @@
 <script src="{% static 'app/scripts/shorthand_drawing.js' %}"></script>
 <script type="text/javascript">
     window.CSRF_TOKEN = "{{ csrf_token }}";
+     var Disc = "{{request.session.disc_full_name}}";
 </script>
 <script type="text/javascript">
+     if (Disc == "")
+        Disc = "Womens";
     var type = '{{type}}';
     var list_type='{{list_type}}';
+    var drawing_prefix = '{{drawing_prefix}}';
     var Disc = "Womens";
     var OnDrawing = 1;
     var SymbolLocation = "{% static 'app/images/'%}{{request.session.disc_path}}/sym/";

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, Disc, UnratedElement, VersionSettings
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, Disc, UnratedElement, VersionSettings,StructureGroup
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -115,6 +115,12 @@ class VideoAdmin(admin.ModelAdmin):
     list_editable=('disc','event','file','fps','approved', 'approved_johanna')
     search_fields = ('file','old_id')
 
+class StructureGroupAdmin(admin.ModelAdmin):
+    list_display=('id', 'disc','event','group','name')
+    list_editable=('disc','event','group','name')
+    list_filter = ('disc','event')
+
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
@@ -138,3 +144,4 @@ admin.site.register(UserToursComplete,UserToursCompleteAdmin)
 admin.site.register(Disc)
 admin.site.register(UnratedElement)
 admin.site.register(VersionSettings)
+admin.site.register(StructureGroup,StructureGroupAdmin)
