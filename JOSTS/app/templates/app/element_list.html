@@ -148,6 +148,77 @@
 {% endif %}
 
 {% if display == "Text" %}
+    {% for element in lang_elements %}
+       {% ifchanged element.element.str_grp %}
+            {% if not forloop.first %}
+                </div></div>
+            {% endif %}
+            <div class="card rules-subsection-header">
+                <div class="card-header card-header-custom" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
+                    Group {{element.element.str_grp}} - {% for g in groups %}{% if g.group == element.element.str_grp %}{{g.name}}{% endif %} {% endfor %}
+                </div>
+            </div>
+            <div id="detail-{{forloop.counter}}" class="collapse show">
+            <div class="row">
+        {% endifchanged %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-2 mb-1" onclick="ElementClick({{element.id}})" style="height:100px;cursor:pointer" >
+            <div class="row">
+                <div class="col">
+                    <div style="height:80px" class="image-background rounded" id="div{{element.id}}">
+                         <div class="position-absolute col pl-4" style="left:0px;top:0px">
+                                 {% if element.element.videolink_set.all.count > 0 %}
+                                    {% if request.user.is_staff or request.user.is_superuser %}
+                                        <i class="fas fa-play-circle"></i><sub>{{ element.element.videolink_set.all.count }}</sub>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        <div class="d-flex justify-content-center align-items-center h-100" style="line-height:1.1;font-size:.8rem">
+                           
+                           
+                            <div class="text-center pl-2 pr-2">
+                                {{element.short_text}}</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><div class="text-center">{{element.id_number_text}}</div></div>
+                <div class="col text-right"><div class="text-center">
+                                               
+                                                 {% if val_display == 'value_67' %}
+                                                    {% if element.element.letter_value_67 == ''%}
+                                                        {{element.element.value_67}}
+                                                    {% else %}
+                                                        {{element.element.letter_value_67}} = {{element.element.value_67}} {% if element.element.bonus_67 > 0 %} + {{element.element.bonus_67}} {% endif %}
+                                                    {% endif %}
+                                                {% elif val_display == 'value_8' %}
+                                                    {% if element.element.letter_value_8 == ''%}
+                                                        {{element.element.value_8}}
+                                                    {% else %}
+                                                        {{element.element.letter_value_8}} = {{element.element.value_8}} {% if element.element.bonus_9 > 0 %} + {{element.element.bonus_9}} {% endif %}
+                                                    {% endif %}
+                                                 {% elif val_display == 'value_9' %}
+                                                    {% if element.element.letter_value_9 == ''%}
+                                                        {{element.element.value_9}}
+                                                    {% else %}
+                                                        {{element.element.letter_value_9}} = {{element.element.value_9}} {% if element.element.bonus_8 > 0 %} + {{element.element.bonus_8}} {% endif %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if element.element.letter_value == ''%}
+                                                        {{element.element.value}}
+                                                    {% else %}
+                                                        {{element.element.letter_value}} = {{element.element.value}} {% if element.element.bonus > 0 %} + {{element.element.bonus}} {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                      </div></div>
+            </div>
+        </div>
+        {% if forloop.last %}</div></div>{% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if display == "OldText" %}
 <div class="card rules-subsection-header">
     {% for element in lang_elements %}
         {% ifchanged element.element.str_grp %}

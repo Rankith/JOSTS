@@ -3,11 +3,11 @@
     {% csrf_token %}
     <ul class="nav navbar-nav ml-auto">
         <!--<li class="nav-item"><span class="navbar-brand">Hello {{ user.username }}!</span></li>-->
-        <li class="nav-item"><a class="nav-link" onclick="CheckTour('True')" href="#">Help</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="mailto:gymjudgehills@gmail.com">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'subscriptions' %}">Account</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'user_settings' %}">Settings</a></li>
+        <li class="nav-item"><a class="nav-link {% if "settings" in request.path %}active{% endif %}" href="{% url 'user_settings' %}">Settings</a></li>
+        <li class="nav-item"><a class="nav-link {% if "help" in request.path %}active{% endif %}" onclick="CheckTour('True')" href="#">Help</a></li>
+        <li class="nav-item"><a class="nav-link {% if "about" in request.path %}active{% endif %}" href="{% url 'about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link {% if "contact" in request.path %}active{% endif %}" href="mailto:gymjudgehills@gmail.com">Contact</a></li>
+        <li class="nav-item"><a class="nav-link {% if "subscriptions" in request.path %}active{% endif %}" href="{% url 'subscriptions' %}">Account</a></li>
         <li class="nav-item"><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
 </form>
