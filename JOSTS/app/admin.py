@@ -1,5 +1,7 @@
 from django.contrib import admin
-from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, Disc, UnratedElement, VersionSettings,StructureGroup
+from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, \
+    SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
+    Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -120,6 +122,26 @@ class StructureGroupAdmin(admin.ModelAdmin):
     list_editable=('disc','event','group','name')
     list_filter = ('disc','event')
 
+class CompetitionTypeAdmin(admin.ModelAdmin):
+    list_display=('id', 'disc','name','short_name')
+    list_editable=( 'disc','name','short_name')
+    list_filter = ('disc',)
+
+class CompetitionAdmin(admin.ModelAdmin):
+    list_display=('id', 'disc','type','year','name','short_name')
+    list_editable=( 'disc','type','year','name','short_name')
+    list_filter = ('disc','type','year')
+
+class CompetitionGroupAdmin(admin.ModelAdmin):
+    list_display=('id', 'competition','name','short_name')
+    list_editable=( 'competition','name','short_name')
+    list_filter = ('competition',)
+
+class CompetitionVideoAdmin(admin.ModelAdmin):
+    list_display=('id', 'competition_group','video','name')
+    list_editable=( 'competition_group','video','name')
+    list_filter = ('competition_group',)
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -145,3 +167,7 @@ admin.site.register(Disc)
 admin.site.register(UnratedElement)
 admin.site.register(VersionSettings)
 admin.site.register(StructureGroup,StructureGroupAdmin)
+admin.site.register(CompetitionType,CompetitionTypeAdmin)
+admin.site.register(Competition,CompetitionAdmin)
+admin.site.register(CompetitionGroup,CompetitionGroupAdmin)
+admin.site.register(CompetitionVideo,CompetitionVideoAdmin)

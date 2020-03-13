@@ -253,3 +253,25 @@ class StructureGroup(models.Model):
     event = models.CharField(max_length=2,blank=True,default='')
     group = models.IntegerField(default=0)
     name = models.CharField(max_length=50,blank=True,default='')
+
+class CompetitionType(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
+    name = models.CharField(max_length=50)
+    short_name = models.CharField(max_length=3)
+
+class Competition(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
+    type = models.ForeignKey(CompetitionType, on_delete=models.SET_NULL,null=True)
+    year = models.CharField(max_length=4)
+    short_name = models.CharField(max_length=3,blank=True, default='')
+    name = models.CharField(max_length=50)
+
+class CompetitionGroup(models.Model):
+    competition = models.ForeignKey(Competition, on_delete=models.SET_NULL,null=True)
+    name = models.CharField(max_length=255)
+    short_name = models.CharField(max_length=3)
+
+class CompetitionVideo(models.Model):
+    competition_group = models.ForeignKey(CompetitionGroup, on_delete=models.SET_NULL,null=True)
+    video = models.ForeignKey(Video,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)

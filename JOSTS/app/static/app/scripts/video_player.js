@@ -86,7 +86,7 @@ var EJump = 0;
     function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1) {
         VidJSPlayer.pause();
         var vidurl;
-        if (oldID != '') {
+        if (oldID != '' && oldID !='None') {
             vidurl = "https://web-sts.com/" + DiscP + "/VideoFiles/" + EventP + "/" + fileIn;
         }
         else
