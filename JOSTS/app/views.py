@@ -394,6 +394,9 @@ def element_search(request):
         'events': events,
         'ranges': ranges,
         'search_type':'element',
+        'vault_low':Disc.objects.filter(id=request.session.get('disc',1)).first().vault_range_low,
+        'vault_high':Disc.objects.filter(id=request.session.get('disc',1)).first().vault_range_high,
+        'vault_slider':VersionSettings.objects.first().use_level_slider
         }
     return render(request, 'app/element_search.html',context=context)
 

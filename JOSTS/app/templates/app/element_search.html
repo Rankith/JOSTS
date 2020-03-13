@@ -126,6 +126,9 @@
 {% block scripts %}
 <script type="text/javascript">
         var search_type = '{{search_type}}';
+    var vaultlow = {{vault_low}};
+    var vaulthigh = {{vault_high}};
+    var vaultslider = "{{vault_slider}}";
 </script>
 <script type="text/javascript">
     var Event = "";
@@ -143,11 +146,11 @@
         var slider = document.getElementById("VaultSlider")
 
         noUiSlider.create(slider, {
-            start: [7, 10.1],
+            start: [vaultlow, vaulthigh],
             connect: true,
             range: {
-                'min': 7,
-                'max': 10.1
+                'min': vaultlow,
+                'max': vaulthigh
             },
             step: 0.1
         });
@@ -177,7 +180,7 @@
 
         });
 
-
+        
         Lslider.noUiSlider.on('update', function (values, handle) {
             $("#divLSliderValues").html("Level " + Number(values[0]).toFixed(0));
 
@@ -187,6 +190,9 @@
             localStorage.VaultLevel = values;
             CreateSearchParams();
         });
+
+        $("#LevelSlider").hide();
+        $("#divLSliderValues").hide();
     }
     function ShowHideRange() {
         if (Event == "V") {

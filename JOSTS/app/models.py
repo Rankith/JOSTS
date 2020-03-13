@@ -11,6 +11,8 @@ class Disc(models.Model):
     folder_name = models.CharField(max_length=10)
     full_name = models.CharField(max_length=25,default='Womens')
     event_list = models.CharField(max_length=255,default='V,UB,BB,FX')
+    vault_range_low = models.DecimalField(max_digits=3,default=7.0,decimal_places=1)
+    vault_range_high = models.DecimalField(max_digits=3,default=10.1,decimal_places=1)
     def __str__(self):
        return self.display_name
 
@@ -247,6 +249,7 @@ class VersionSettings(models.Model):
     name = models.CharField(max_length=30)
     rule_sub_header = models.CharField(max_length=30,blank=True,default='Section')
     drawing_prefix = models.CharField(max_length=5,blank=True,default='')
+    use_level_slider = models.BooleanField(default=True)
 
 class StructureGroup(models.Model):
     disc = models.ForeignKey(Disc, on_delete=models.CASCADE,null=True)
