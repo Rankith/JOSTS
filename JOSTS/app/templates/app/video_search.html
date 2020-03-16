@@ -1,0 +1,218 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div class="sidebar-header">
+   
+</div>
+<div class="input-group input-group-sm mt-1" id="divSearch">
+  <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="txtSearch">
+  <div class="input-group-append">
+     <button class="btn btn-outline-secondary" type="button" onclick="SearchClick()">
+                <i class="fas fa-search"></i>
+            </button>
+  </div>
+</div>
+
+<div class="row no-gutters pt-2">
+    {% for event in events %}
+    <div class="col">
+        <label id="lblE{{event}}" class="search-button">
+            <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search check-search-event" data-search="video__event__iexact" onchange="SearchChangeEvent(this)">
+            <div class="search-button event-button">
+                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/{{event}}_White.svg" />
+            </div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row no-gutters pt-2">
+    {% for type in types %}
+    <div class="pr-2">
+        <label id="lblCompT{{type.short_name}}" class="search-button">
+            <input type="checkbox" id="chkE{{type.short_name}}" value="{{type.short_name}}" class="check-search check-search-type" data-search="competition_group__competition__type__short_name" onchange="SearchChangeType(this)">
+            <div class="search-button value-button"><div style="text-transform:uppercase">{{type.short_name}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+
+    <div class="row no-gutters">
+        {% for key, value in compsByType.items %}
+        <div class="pr-2">
+            <label id="lblCompC{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkG{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="competition_group__competition__short_name" onchange="SearchChange(this)">
+                <div class="search-button group-button"><div>{{key}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row no-gutters" id="Values">
+        {% for key, value in groupsByType.items %}
+        <div class="pr-2">
+            <label id="lblCompG{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkV{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="competition_group__short_name" onchange="SearchChange(this)">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{key}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+<div class="row no-gutters">
+    <div class="pr-2">
+        <label id="lblReset" class="search-button">
+
+            <div class="search-button red-button" onclick="SearchReset()"><div style="text-transform:uppercase"><i class="fas fa-undo"></i></div></div>
+        </label>
+    </div>
+</div>
+
+<div id="divElementCountDisplay" style="padding-bottom:60px"></div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+        var search_type = '{{search_type}}';
+</script>
+<script type="text/javascript">
+    var Event = "";
+    var ValueDisplay = "value";
+
+    $('#txtSearch').keypress(function (e) {
+      if (e.which == 13) {
+          SearchClick();
+        return false;    //<---- Add this line
+      }
+    });  
+
+    function SearchChangeEvent(el) {
+        //console.log("SCE");
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-event').not(el).prop('checked', false);
+            $('.check-search-event').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            //ShowHideSearches();
+            CreateSearchParams();
+            //Event = $(el).val();
+        }
+    }
+
+      function SearchChangeType(el) {
+
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            ShowHideSearches();
+            CreateSearchParams();
+    }
+
+    function ShowHideSearches() {
+        if (search_type != "rule") {
+            var ty;
+            if ($('.check-search-type:checked').length > 0)
+                ty = ".check-search-type:checked";
+            else
+                ty = ".check-search-type";
+            $('.check-search').not('.check-search-type').not('.check-search-event').parent().hide();
+            $(ty).each(function (i) {
+                console.log($(this).val());
+                //$('.check-search').not('.check-search-type').not('.check-search-event').not('.search-' + $(this).val()).parent().hide();
+                $('.check-search.search-' + $(this).val()).parent().show();
+            });
+            //console.log(ty);
+        }
+        /*if (ev == "V") {
+            $('#Values').hide();
+            $('#VaultValues').hide();*/
+        
+    }
+
+    function SearchClick() {
+        CreateSearchParams();
+    }
+
+    function SearchChange(el) {
+        //console.log("SC");
+        localStorage.setItem(el.id, el.checked ? 1 : 0);
+        CreateSearchParams();
+    }
+    function CreateSearchParams() {
+        //console.log("CSP");
+        var strValues = "";
+        Event = $('.check-search-event:checkbox:checked').val();
+        if (list_type !== 'undefined') {
+            $(".check-search:checkbox:checked").each(function (i) {
+                if ($(this).parent().is(":visible"))
+                    strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+                //console.log($(this).attr("data-search") + " : " + $(this).val());
+            });
+            if (Event == "V" && search_type=="element") {
+                var vValue = "value_" + Lslider.noUiSlider.get()[0];
+                if (vValue == "value_6" || vValue == "value_7")
+                    vValue = "value_67"
+                if (vValue == "value_1")
+                    vValue = "value";
+                ValueDisplay = vValue;
+                vValue = "element__" + vValue;
+                strValues = vValue + "__gte=" + slider.noUiSlider.get()[0] + "&" + vValue + "__lte=" + slider.noUiSlider.get()[1] + "&" + strValues;
+                
+            }
+            else
+                 ValueDisplay = "value";
+            strValues = "value_display=" + ValueDisplay + "&" + strValues;
+            if (search_type == "element" || type == "shorthand_trainer") {
+                strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
+            }
+            //if ($("#txtSearch").val() != "")
+            strValues = "search=" + $("#txtSearch").val() + "&" + strValues;
+            
+            $.get("/" + list_type + "_list/?" + strValues, function (data) {
+                $("#divElementList").empty();
+                $("#divElementList").append(data);
+                $("#divElementCountDisplay").html(($("#divNumElements").html()));
+                $("#div" + SelectedElement).click();
+            });
+        }
+        //$("#divElementList").empty();
+        //$("#divElementList").load("/element_list/?" + strValues);
+    }
+    function SearchReset() {
+        $(".check-search:checkbox:checked:not(.check-search-event)").each(function (i) {
+            //localStorage.setItem(this.id, 0);
+            $(this).removeAttr('checked');
+            
+        });
+        $("#txtSearch").val("");
+        CreateSearchParams();
+        }
+    function LoadLastSelections() {
+        //console.log("LLS");
+        //console.log(localStorage);
+
+        $(".check-search:checkbox").each(function (i) {
+            console.log(this.id);
+             console.log(localStorage.getItem(this.id));
+            if (localStorage.getItem(this.id) == "1")
+                $(this).prop('checked', true);
+            else
+                $(this).prop('checked', false);
+        });
+        $(".check-search-display:checkbox").each(function (i) {
+            if (localStorage.getItem(this.id) == "1")
+                $(this).prop('checked', true);
+            else
+                $(this).prop('checked', false);
+            });
+
+        if ($(".check-search-event:checkbox:checked").length == 0 && $(".check-search-event:checkbox").length > 0) 
+            $(".check-search-event:checkbox")[0].click();
+        else {
+            ShowHideSearches();
+            CreateSearchParams();
+        }
+    }
+</script>
+{% endblock %}

@@ -5,7 +5,10 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
-from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult,ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup
+from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
+    ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
+    Competition,CompetitionType,CompetitionGroup,CompetitionVideo
+    
 from django.db.models import Q
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
@@ -1038,3 +1041,68 @@ def import_from_fig(request):
             response +=  " | video notes created: " + str(VideoNote.objects.filter(video__disc_id=discid).count())
 
     return JsonResponse({'result':response})
+
+
+#Competition Videos
+@login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
+def comp_videos(request):
+    context = {
+        'type':'comp',
+         'search_type':'comp',
+        'list_type':'comp',
+        }
+    return render(request, 'app/elements_fixed.html',context=context)
+
+def comp_search(request):
+    types = CompetitionType.objects.filter(disc=request.session.get('disc',1)).order_by('display_order').distinct()
+    comps = Competition.objects.filter(type__disc=request.session.get('disc',1)).order_by('short_name').values('short_name').distinct()
+    groups = CompetitionGroup.objects.filter(competition__type__disc=request.session.get('disc',1)).order_by('short_name').values('short_name').distinct()
+    compsDict = {}
+    groupsDict = {}
+
+    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+    for comp in comps:
+        compTypes = "search-" + " search-".join(str(types['type__short_name']) for types in Competition.objects.filter(short_name = comp['short_name']).values('type__short_name').distinct())
+        compsDict[comp['short_name']] = compTypes
+    for group in groups:
+        groupTypes = "search-" + " search-".join(str(types['competition__type__short_name']) for types in CompetitionGroup.objects.filter(short_name = group['short_name']).values('competition__type__short_name').distinct())
+        groupsDict[group['short_name']] = groupTypes
+    context = {
+        'types':types,
+        'comps': comps,
+        'groups': groups,
+        'compsByType': compsDict,
+        'groupsByType': groupsDict,
+        'events': events,
+        'search_type':'comp',
+        }
+    return render(request, 'app/video_search.html',context=context)
+
+
+def comp_list(request):
+    dget = dict(request.GET)
+    search = dget['search'][0]
+    search = search.replace("1/2","½")
+    search = search.replace("1/4","¼")
+    del dget['search']
+    value_display = dget['value_display'][0]
+    del dget['value_display']
+    query = Q()
+    for k,v in dget.items():
+        innerQuery = Q()
+        for i in v:
+            kwargs = {'{0}'.format(k): i}
+            innerQuery.add(Q(**kwargs), Q.OR)
+        query.add(innerQuery,Q.AND)
+    videos = CompetitionVideo.objects.filter(query).order_by('competition_group__competition__year','competition_group__competition__name','competition_group__short_name','name')
+    if search != "":
+        videos = videos.filter(name__icontains=search)
+    videos = videos.filter(competition_group__competition__type__disc_id=request.session.get('disc',1))
+    context = {
+        'videos': videos,
+        'num_videos': str(len(videos)) + " Videos",
+        }
+    #activity log
+    log_activity(request,'Competition Videos','View','')
+    return render(request, 'app/video_list.html',context=context)

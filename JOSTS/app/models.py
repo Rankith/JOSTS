@@ -261,6 +261,9 @@ class CompetitionType(models.Model):
     disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     name = models.CharField(max_length=50)
     short_name = models.CharField(max_length=3)
+    display_order = models.IntegerField(default=1)
+    def __str__(self):
+        return self.short_name
 
 class Competition(models.Model):
     disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
@@ -268,11 +271,15 @@ class Competition(models.Model):
     year = models.CharField(max_length=4)
     short_name = models.CharField(max_length=3,blank=True, default='')
     name = models.CharField(max_length=50)
+    def __str__(self):
+        return self.name
 
 class CompetitionGroup(models.Model):
     competition = models.ForeignKey(Competition, on_delete=models.SET_NULL,null=True)
     name = models.CharField(max_length=255)
     short_name = models.CharField(max_length=3)
+    def __str__(self):
+        return self.short_name + " " + self.competition.name
 
 class CompetitionVideo(models.Model):
     competition_group = models.ForeignKey(CompetitionGroup, on_delete=models.SET_NULL,null=True)

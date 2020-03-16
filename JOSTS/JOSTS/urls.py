@@ -75,4 +75,7 @@ urlpatterns = [
     path('ajax/save_video_notes/', views.save_video_notes, name='save_video_notes'),
     path('check_tour/', views.check_tour, name='check_tour'),
     path('fig_import/', views.import_from_fig, name='fig_import'),
+    path('competition_videos/', views.comp_videos, name='competition_videos'),
+    path('comp_search/', views.comp_search, name='comp_search'),
+    path('comp_list/', views.comp_list, name='comp_list'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
