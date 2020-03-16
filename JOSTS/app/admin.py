@@ -114,6 +114,7 @@ class VideoLinkAdmin(admin.ModelAdmin):
 
 class VideoAdmin(admin.ModelAdmin):
     list_display=('id','disc','event','file','fps','approved', 'approved_johanna','old_id')
+    list_filter = ('disc','event')
     list_editable=('disc','event','file','fps','approved', 'approved_johanna')
     search_fields = ('file','old_id')
 
