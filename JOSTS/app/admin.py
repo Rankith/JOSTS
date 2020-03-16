@@ -112,7 +112,7 @@ class VideoLinkAdmin(admin.ModelAdmin):
     list_display=('id','video','element','order','frame_jump')
     list_editable=('video','element','order','frame_jump')
 
-class VideoAdmin(admin.ModelAdmin):
+class VideoAdmin(ImportExportModelAdmin):
     list_display=('id','disc','event','file','fps','approved', 'approved_johanna','old_id')
     list_filter = ('disc','event')
     list_editable=('disc','event','file','fps','approved', 'approved_johanna')
@@ -138,7 +138,7 @@ class CompetitionGroupAdmin(admin.ModelAdmin):
     list_editable=( 'competition','name','short_name')
     list_filter = ('competition',)
 
-class CompetitionVideoAdmin(admin.ModelAdmin):
+class CompetitionVideoAdmin(ImportExportModelAdmin):
     list_display=('id', 'competition_group','video','name')
     list_editable=( 'competition_group','video','name')
     list_filter = ('competition_group',)
