@@ -129,9 +129,9 @@ class CompetitionTypeAdmin(admin.ModelAdmin):
     list_filter = ('disc',)
 
 class CompetitionAdmin(admin.ModelAdmin):
-    list_display=('id', 'disc','type','year','name','short_name')
-    list_editable=( 'disc','type','year','name','short_name')
-    list_filter = ('disc','type','year')
+    list_display=('id','type','year','name','short_name')
+    list_editable=( 'type','year','name','short_name')
+    list_filter = ('type__disc','type','year')
 
 class CompetitionGroupAdmin(admin.ModelAdmin):
     list_display=('id', 'competition','name','short_name')
