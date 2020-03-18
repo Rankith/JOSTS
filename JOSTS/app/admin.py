@@ -140,7 +140,7 @@ class CompetitionGroupAdmin(admin.ModelAdmin):
 
 class CompetitionVideoAdmin(ImportExportModelAdmin):
     list_display=('id', 'competition_group','video','name')
-    list_editable=( 'competition_group','video','name')
+    list_editable=('name',)
     list_filter = ('competition_group',)
 
 

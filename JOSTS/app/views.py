@@ -294,6 +294,8 @@ def elements(request):
     #Rule.objects.filter(section="Appendix 12").update(display_order=112,search_display='A12')
     #Rule.objects.filter(section="Appendix 7").update(display_order=107,search_display='A7')
 
+    Video.objects.filter(disc=None).delete()
+
     #Element.objects.filter(disc__isnull=True).update(disc=1)
     #Rule.objects.filter(disc__isnull=True).update(disc=1)
     #Video.objects.filter(disc__isnull=True).update(disc=1)
