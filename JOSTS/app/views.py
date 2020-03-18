@@ -294,8 +294,6 @@ def elements(request):
     #Rule.objects.filter(section="Appendix 12").update(display_order=112,search_display='A12')
     #Rule.objects.filter(section="Appendix 7").update(display_order=107,search_display='A7')
 
-    Video.objects.filter(disc=None).delete()
-
     #Element.objects.filter(disc__isnull=True).update(disc=1)
     #Rule.objects.filter(disc__isnull=True).update(disc=1)
     #Video.objects.filter(disc__isnull=True).update(disc=1)
@@ -1106,5 +1104,13 @@ def comp_list(request):
         'num_videos': str(len(videos)) + " Videos",
         }
     #activity log
-    log_activity(request,'Competition Videos','View','')
+    log_activity(request,'Competition Videos','List','')
     return render(request, 'app/video_list.html',context=context)
+
+def comp_video(request):
+    vid = CompetitionVideo.objects.get(pk=request.GET.get('compvid'))
+    context = {
+        'video': vid,
+        }
+    log_activity(request,'Competition Videos','View',str(vid))
+    return render(request, 'app/video_single.html',context=context)

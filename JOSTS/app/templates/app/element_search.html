@@ -126,9 +126,11 @@
 {% block scripts %}
 <script type="text/javascript">
         var search_type = '{{search_type}}';
-    var vaultlow = {{vault_low}};
-    var vaulthigh = {{vault_high}};
-    var vaultslider = "{{vault_slider}}";
+    {% if search_type != "rule" %}
+        var vaultlow = {{vault_low}};
+        var vaulthigh = {{vault_high}};
+        var vaultslider = "{{vault_slider}}";
+    {% endif %}
 </script>
 <script type="text/javascript">
     var Event = "";

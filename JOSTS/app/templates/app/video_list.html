@@ -21,7 +21,7 @@
                                 </ul>
                                 </div>
                                 {% endifchanged %}
-                                <li class="list-group-item rules-subsection-header" style="cursor:pointer" >
+                                <li class="list-group-item rules-subsection-header" style="cursor:pointer">
                                     <div class=" h4" data-toggle="collapse" data-target="#detail-inner-{{forloop.counter}}">
                                         Competition {{vid.competition_group.short_name|slice:"-1:"}} - {{vid.competition_group.name}}
                                     </div>
@@ -29,7 +29,7 @@
                              <div id="detail-inner-{{forloop.counter}}" class="collapse show">
                                 <ul class="list-group">
                             {% endifchanged %}
-                             <li class="list-group-item rules-cue" style="cursor:pointer" >
+                             <li class="list-group-item rules-cue" style="cursor:pointer" onclick="ShowCompVid('{{vid.id}}')" id="div{{vid.id}}">
                                      {% autoescape off %}
                                      {{vid.name}}
                                      {% endautoescape %}
@@ -102,5 +102,36 @@
               }
             }
       });
+    }
+</script>
+<script type="text/javascript">
+     function RemoveSelected() {
+
+             $(".selected-list-item").addClass("rules-cue").removeClass("selected-list-item");
+
+    }
+     function ShowCompVid(idIn)
+    {
+        //console.log(idIn);
+        //attach setting the list height to the element div finishing its animation
+        SelectedElement = idIn;
+        RemoveSelected();
+            $("#div" + idIn).removeClass("rules-cue").addClass("selected-list-item");
+
+        $('#divElement').on('hidden.bs.collapse', function () {
+             $("#divElement").empty();
+            SetPadding();
+        }).on('shown.bs.collapse', function() {
+            SetPadding();
+        }).on('show.bs.collapse', function() {
+            SetPadding();
+        });
+        $("#divElement").load("/comp_video/?compvid=" + idIn, VidLoaded);
+    }
+    //after loaded it calls this to set heights and load the vid
+    function VidLoaded() {
+        ShowAndSetHeight();
+        VidLoad();//on video_single.html
+        ShowAndSetHeight();
     }
 </script>

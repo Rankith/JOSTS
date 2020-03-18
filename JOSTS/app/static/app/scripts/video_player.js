@@ -83,11 +83,15 @@ var EJump = 0;
     }
    
 
-    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1) {
+    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1, extrapath='') {
         VidJSPlayer.pause();
         var vidurl;
-        if (oldID != '' && oldID !='None') {
-            vidurl = "https://web-sts.com/" + DiscP + "/VideoFiles/" + EventP + "/" + fileIn;
+        console.log(extrapath);
+        if (oldID != '' && oldID != 'None') {
+            if (extrapath == '')
+                vidurl = "https://web-sts.com/" + DiscP + "/VideoFiles/" + EventP + "/" + fileIn;
+            else
+                vidurl = "https://web-sts.com/" + DiscP + "/VideoFiles/" + extrapath + "/" + fileIn;
         }
         else
             vidurl = SourceBase + fileIn;

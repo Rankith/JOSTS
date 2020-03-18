@@ -2490,6 +2490,7 @@
     <Content Include="app\static\app\videos\jrsts-landing-video.mp4" />
     <Content Include="app\templates\app\base.html" />
     <Content Include="app\templates\app\video_list.html" />
+    <Content Include="app\templates\app\video_single.html" />
     <Content Include="app\templates\app\video_search.html" />
     <Content Include="app\templates\app\video_notes.html" />
     <Content Include="app\templates\app\video_notes_builder.html" />

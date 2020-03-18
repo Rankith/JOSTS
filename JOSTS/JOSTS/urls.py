@@ -78,4 +78,5 @@ urlpatterns = [
     path('competition_videos/', views.comp_videos, name='competition_videos'),
     path('comp_search/', views.comp_search, name='comp_search'),
     path('comp_list/', views.comp_list, name='comp_list'),
+    path('comp_video/', views.comp_video, name='comp_video'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
