@@ -112,7 +112,7 @@ var EJump = 0;
 
 function JumpToElement() {
     if (ElementJump != -1)
-        VideoFrameJumpPause(ElementJump);
+        VideoFrameJump(ElementJump);
 }
 
 var FrameCountIntervalID = setInterval("UpdateFrame()", 100);
