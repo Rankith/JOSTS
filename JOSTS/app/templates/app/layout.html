@@ -17,7 +17,7 @@
 </head>
 
 <body class="content-area-background" style="">
-    <div class="navbar navbar-dark nav-background fixed-top navbar-expand-md">
+    <div class="navbar navbar-dark nav-background fixed-top navbar-expand-lg">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,8 +35,8 @@
                           Shorthand
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'shorthand_training' %}">Training</a>
-                          <a class="dropdown-item" href="{% url 'shorthand_lookup' %}">Lookup</a>
+                          <a class="dropdown-item {% if "shorthand_training" in request.path %}active{% endif %}" href="{% url 'shorthand_training' %}">Training</a>
+                          <a class="dropdown-item {% if "shorthand_lookup" in request.path %}active{% endif %}" href="{% url 'shorthand_lookup' %}">Lookup</a>
                         </div>
                     </li>
                      <li class="nav-item dropdown">
@@ -44,11 +44,13 @@
                           Quiz
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{% url 'quiz_element' %}">Element</a>
-                          <a class="dropdown-item" href="{% url 'quiz_shorthand' %}">Shorthand</a>
+                          <a class="dropdown-item {% if "quiz_element" in request.path %}active{% endif %}" href="{% url 'quiz_element' %}">Element</a>
+                          <a class="dropdown-item {% if "quiz_shorthand" in request.path %}active{% endif %}" href="{% url 'quiz_shorthand' %}">Shorthand</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link {% if "competition_videos" in request.path %}active{% endif %}" href="{% url 'competition_videos' %}">Competition Videos</a></li>
+                    {% if SHOW_COMPETITION_VIDEOS %}
+                        <li class="nav-item"><a class="nav-link {% if "competition_videos" in request.path %}active{% endif %}" href="{% url 'competition_videos' %}">Competition Videos</a></li>
+                    {% endif %}
                 </ul>
                 {% include 'app/loginpartial.html' %}
             </div>
