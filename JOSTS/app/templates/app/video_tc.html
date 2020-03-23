@@ -1,12 +1,13 @@
 
 {% load staticfiles %}
 
-<div class="row text-base" onclick="CloseElement()">
+<div class="row ">
+   
     <div class="col-12">
-        <div class="d-flex justify-content-center comp-video-background">
+         
+        <div class="d-flex justify-content-center">
                 
                 <div class="col-12 col-md-8" id="VidHoldForClick">
-                    <div class="text-center h5">{{video.year}} {{video.type}}-Jury {{video.video.event}} {{video.name}}</div>
                     {% include "app/video.html" %}
                 </div>
                 <div class="col-12 col-md-4"  id="VidHoldForClick2">
@@ -36,7 +37,7 @@
 
     token = "{{ csrf_token }}";
     
-    
+    $("#divVideoElement").html("{{video.year}} {{video.type}}-Jury {{video.video.event}} {{video.name}}");
    
 </script>
 <script type="text/javascript">

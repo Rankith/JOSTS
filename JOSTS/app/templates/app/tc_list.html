@@ -30,7 +30,7 @@
                              <div id="detail-inner-{{forloop.counter}}" class="collapse show">
                                 <ul class="list-group">
                             {% endifchanged %}
-                             <li class="list-group-item rules-cue" style="cursor:pointer" onclick="ShowVid('{{vid.id}}')" id="div{{vid.id}}">
+                             <li class="list-group-item rules-cue" style="cursor:pointer" onclick="ShowVid('{{vid.id}}')" data-toggle="modal" data-target="#modalMain" id="div{{vid.id}}">
                                      {% autoescape off %}
                                      {{vid.name}}
                                      {% endautoescape %}
@@ -116,10 +116,21 @@
         //console.log(idIn);
         //attach setting the list height to the element div finishing its animation
         SelectedElement = idIn;
-        RemoveSelected();
-            $("#div" + idIn).removeClass("rules-cue").addClass("selected-list-item");
+        //RemoveSelected();
+        // $("#div" + idIn).removeClass("rules-cue").addClass("selected-list-item");
 
-        $('#divElement').on('hidden.bs.collapse', function () {
+         $("#modalMainTitle").html("");
+         if (window.innerWidth >= 600)
+             $(".modal-dialog").addClass("mw-100").addClass("w-75");
+         $("#modalBodyArea2").hide();
+         $("#modalBodyArea1").empty();
+         $.get("/tc_video/?tcid=" + idIn, function (data) {
+             $("#modalBodyArea1").append(data);
+             VidLoaded();
+         });
+         $("#modalBodyArea1").show();
+
+        /*$('#divElement').on('hidden.bs.collapse', function () {
              $("#divElement").empty();
             SetPadding();
         }).on('shown.bs.collapse', function() {
@@ -127,7 +138,7 @@
         }).on('show.bs.collapse', function() {
             SetPadding();
         });
-        $("#divElement").load("/tc_video/?tcid=" + idIn, VidLoaded);
+        $("#divElement").load("/tc_video/?tcid=" + idIn, VidLoaded);*/
     }
     //after loaded it calls this to set heights and load the vid
     function VidLoaded() {
