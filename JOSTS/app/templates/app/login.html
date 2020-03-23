@@ -76,10 +76,10 @@
         </div>
 
         <div class="modal fade" id="modalMain" tabindex="-1" role="dialog" aria-labelledby="modalMainTitle" aria-hidden="true">
-  <div class="modal-dialog " role="document">
+  <div class="modal-dialog " role="document" style="max-width:300px">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalMainTitle">Login</h5>
+        <h5 class="modal-title font-weight-bold" id="modalMainTitle">{{main_title|upper}} Login</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -92,13 +92,13 @@
                 {% csrf_token %}
               
                 <div class="form-group">
-                    <label for="id_username" class="col-md-2 control-label">Email</label>
+                    <label for="id_username" class="col-md-2 control-label font-weight-bold">Email</label>
                     <div class="col-md-10">
                         {{ form.username }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="id_password" class="col-md-2 control-label">Password</label>
+                    <label for="id_password" class="col-md-2 control-label font-weight-bold">Password</label>
                     <div class="col-md-10">
                         {{ form.password }}
                     </div>
