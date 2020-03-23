@@ -108,7 +108,7 @@ input[type="checkbox"].input-validation-error {
     overflow: hidden;
 }
 .detail-sym {
-    max-height: 62px;
+    max-height: 40px;
     overflow: hidden;
 }
 

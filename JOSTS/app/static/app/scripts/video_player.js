@@ -108,6 +108,14 @@ var EJump = 0;
             if (hide != '') {
                 $("#NotesTitle" + hide).hide();
                 $("#Notes" + hide).hide();
+                if (hide == "D")
+                    $("#NotesE").css("max-height", $("#divVideoContainer").height() + 150).css("overflow", "auto");
+                else
+                    $("#NotesD").css("max-height", $("#divVideoContainer").height() + 150).css("overflow", "auto");
+            }
+            else {
+                $("#NotesE").css("max-height", ($("#divVideoContainer").height() + 150) / 2).css("overflow", "auto");
+                $("#NotesD").css("max-height", ($("#divVideoContainer").height() + 150) / 2).css("overflow", "auto");
             }
         });
 

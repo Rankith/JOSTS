@@ -13,7 +13,7 @@
                 </div> 
 </div>
 
-<script src="{% static 'app/scripts/video_player.js' %}?v=1.4"></script>
+<script src="{% static 'app/scripts/video_player.js' %}?v=1.5"></script>
 <script type="text/javascript">
     var SourceBase = "{% static 'app/videos/'%}{{request.session.disc_path}}/{{ video.video.event }}/";
     var DiscP = "{{request.session.disc_path}}";
@@ -50,12 +50,15 @@
     $("#NotesTitleE").hide();
     $("#NotesE").hide();
     console.log("Hide E");
+    $("#NotesD").css("max-height", $("#divVideoContainer").height() + 150).css("overflow", "auto");
+
     }
     else
     {
      $("#NotesTitleD").hide();
     $("#NotesD").hide();
     console.log("Hide D");
+    $("#NotesE").css("max-height", $("#divVideoContainer").height() + 150).css("overflow", "auto");
     }
      $("#btnVidElement").hide();
     }
