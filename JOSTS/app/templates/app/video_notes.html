@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 <div id="NotesTitleD" class="font-weight-bold">D-Jury</div>
-<div id="NotesD" style="border:1px solid black;font-size:0.8rem" class="p-1">
+<div id="NotesD" style="border:1px solid black;font-size:0.8rem;max-height:500px;overflow:auto" class="p-1">
     {% for note in notes %}
     {% if note.element_link != None %}
         {% if note.skip_frame == False %}
@@ -38,7 +38,7 @@
     {% endfor %}
 </div>
 <div id="NotesTitleE" class="font-weight-bold">E-Jury</div>
-<div id="NotesE" style="border:1px solid black;font-size:0.8rem" class="p-1">
+<div id="NotesE" style="border:1px solid black;font-size:0.8rem;max-height:500px;overflow:auto" class="p-1">
     {% for note in notes %}
     {% if note.element_link != None %}
     <div>
