@@ -65,10 +65,10 @@
             {% endif %}
             <div id="divHud{{note.frame}}" frame="{{note.frame}}" style="position:relative;cursor:pointer" class="HudContainer" onclick="VideoNoteClick({{note.frame}})">
                 {% if note.no_value_type == 'unrecognized' or note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'special repitition' %}
-                <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}redstripe.svg" style="position:absolute;height:100px;top:0px">
+                <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}redstripe.svg" style="position:absolute;height:70px;top:0px">
                 {% endif %}
                 <div class="text-center">{{note.element_link.letter_value}}</div>
-                <div class="text-center" style="max-height:31px"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ note.element_link.image_url}}.svg"/></div>
+                <div class="text-center"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ note.element_link.image_url}}.svg"/></div>
                 <div class="text-center" style="font-size:0.5rem">&nbsp;
         {% elif note.rule_link != None %}
             {% if note.rule_link.deduction_amount > 0 %}
