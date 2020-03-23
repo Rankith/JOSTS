@@ -1,21 +1,16 @@
 
 {% load staticfiles %}
 
-<div class="row ">
+<div class="row no-gutters">
    
-    <div class="col-12">
-         
-        <div class="d-flex justify-content-center">
                 
-                <div class="col-12 col-md-8" id="VidHoldForClick">
+                <div class="col-12 col-md-8"">
                     {% include "app/video.html" %}
                 </div>
-                <div class="col-12 col-md-4"  id="VidHoldForClick2">
+                <div class="col-12 col-md-4" >
                     <div id="divNotesArea" class="pl-2">
                     </div>
-                </div>
-        </div>
-    </div>   
+                </div> 
 </div>
 
 <script src="{% static 'app/scripts/video_player.js' %}?v=1.4"></script>
@@ -69,12 +64,7 @@
     //exists solely to stop clicking around video to close screen
     return false;
     }
-    $("#VidHoldForClick").click(function(e) {
-   e.stopPropagation();
-});
-     $("#VidHoldForClick2").click(function(e) {
-   e.stopPropagation();
-});
+
 
 </script>
 

@@ -5,7 +5,7 @@
     </video>
 </div>
 <div class="row no-gutters pt-1">
-    <div class="col-12 col-md-4 pr-4">
+    <div class="col-12 col-xl-4 col-md-6 pr-4">
         <div class="row no-gutters">
             <div class="col-2 text-center">
                 <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-5);" title="-5 Frames">-5</div>
@@ -22,12 +22,12 @@
             </div>
         </div>
     </div>
-    <div id="VidFramesArea" class="col-md-3 d-flex">
+    <div id="VidFramesArea" class="col-xl-3 col-md-6 d-flex">
         <input id="txtFrameJump" style="width:40px;display:none" onkeypress="TextFrameJump(event)" />
         <div id="divVidFramesSecondsHolder" class="pl-2 d-flex align-items-center" style="font-size:0.8rem"><div id="divVidFramesSeconds"></div></div>
         <button id="btnVidElement" type="button" class="btn btn-main ml-2" style="padding-top:0;padding-bottom:0" onclick="JumpToElement()">Element</button>
     </div>
-    <div id="VidSpeedArea" class="col-12 col-md-5">
+    <div id="VidSpeedArea" class="col-12 col-xl-5">
         <div class="row no-gutters">
             <div class="col-8 pt-1">
                 <div id="SpeedSlider"></div>
