@@ -1,0 +1,138 @@
+﻿
+{% load staticfiles %}
+    <div class="card rules-section-header">
+        {% for vid in videos %}
+            {% ifchanged vid.year %}
+                {% if not forloop.first %}
+                    </ul>
+                    </ul>
+                    </div>
+                {% endif %}
+                <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
+                    {{vid.year}}
+                </div>
+                    <div id="detail-{{forloop.counter}}" class="collapse show">
+                        <ul class="list-group">
+                            
+                {% endifchanged %}
+                             {% ifchanged vid.type %}
+                          
+                                {% ifchanged vid.year %}
+                                {% else %}
+                                </ul>
+                                </div>
+                                {% endifchanged %}
+                                <li class="list-group-item rules-subsection-header" style="cursor:pointer">
+                                    <div class=" h4" data-toggle="collapse" data-target="#detail-inner-{{forloop.counter}}">
+                                       {{vid.type}}-Jury
+                                    </div>
+                                </li>
+                             <div id="detail-inner-{{forloop.counter}}" class="collapse show">
+                                <ul class="list-group">
+                            {% endifchanged %}
+                             <li class="list-group-item rules-cue" style="cursor:pointer" onclick="ShowVid('{{vid.id}}')" id="div{{vid.id}}">
+                                     {% autoescape off %}
+                                     {{vid.name}}
+                                     {% endautoescape %}
+                                
+                            </li>
+           
+        {% endfor %}
+                </ul>
+        </div>
+    </div>
+
+<div id="divNumElements" style="display:none">{{num_rules}}</div>
+<script type="text/javascript">
+    //store checkboxes in ls and load as needed
+     if (localStorage.your_note) {
+        $('#chkYourNote').prop("checked", localStorage.your_note == 1)
+        $('#chkYourNote').prop("checked") ? $("#divYourNote").show() : $("#divYourNote").hide();
+    }
+    else
+        $("#divYourNote").hide();
+    $('#chkYourNote').change(function() {
+        localStorage.your_note = this.checked ? 1 : 0
+        this.checked ? $("#divYourNote").show() : $("#divYourNote").hide();
+    });
+
+    if (localStorage.additional_info) {
+        $('#chkAdditionalInfo').prop("checked", localStorage.additional_info == 1)
+        $('#chkAdditionalInfo').prop("checked") ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
+    }
+    else
+        $("#divAdditionalInfo").hide();
+    $('#chkAdditionalInfo').change(function() {
+        localStorage.additional_info = this.checked ? 1 : 0
+        this.checked ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
+    });
+   
+    $("#lblAdditionalInfo").show();
+   $("#lblYourNote").show();
+    //stop the notes area from closing if you click in it.
+    $("#txtUserNotes").click(function(e) {
+        e.stopPropagation();
+    });
+
+    //save the notes when done typing
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 1000;  //time in ms (5 seconds)
+
+    //on keyup, start the countdown
+    $('#txtUserNotes').keyup(function(){
+        clearTimeout(typingTimer);
+        if ($('#txtUserNotes').val()) {
+            typingTimer = setTimeout(SaveNote, doneTypingInterval);
+        }
+    });
+
+    //user is "finished typing," do something
+    function SaveNote () {
+        var note = $('#txtUserNotes').val();
+
+        $.ajax({
+            url: '{% url "update_user_note" %}',
+            data: {
+                'note': note,
+                'element': '{{lang_elements.element.id}}'
+            },
+            dataType: 'json',
+            success: function (data) {
+              if (data.is_taken) {
+                alert("A user with this username already exists.");
+              }
+            }
+      });
+    }
+</script>
+<script type="text/javascript">
+     function RemoveSelected() {
+
+             $(".selected-list-item").addClass("rules-cue").removeClass("selected-list-item");
+
+    }
+     function ShowVid(idIn)
+    {
+        //console.log(idIn);
+        //attach setting the list height to the element div finishing its animation
+        SelectedElement = idIn;
+        RemoveSelected();
+            $("#div" + idIn).removeClass("rules-cue").addClass("selected-list-item");
+
+        $('#divElement').on('hidden.bs.collapse', function () {
+             $("#divElement").empty();
+            SetPadding();
+        }).on('shown.bs.collapse', function() {
+            SetPadding();
+        }).on('show.bs.collapse', function() {
+            SetPadding();
+        });
+        $("#divElement").load("/tc_video/?tcid=" + idIn, VidLoaded);
+    }
+    //after loaded it calls this to set heights and load the vid
+    function VidLoaded() {
+        ShowAndSetHeight();
+        VidLoad();//on video_single.html
+        ShowAndSetHeight();
+    }
+</script>

@@ -25,6 +25,7 @@
     {% endfor %}
 </div>
 
+{% if search_type == 'comp' %}
 <div class="row no-gutters pt-2">
     {% for type in types %}
     <div class="pr-2">
@@ -58,6 +59,21 @@
         </div>
         {% endfor %}
     </div>
+
+{% elif search_type == 'tc' %}
+
+<div class="row no-gutters pt-2">
+    {% for year in years %}
+    <div class="pr-2">
+        <label id="lblTCY{{year.short_name}}" class="search-button">
+            <input type="checkbox" id="chkTCY{{year.short_name}}" value="{{year.short_name}}" class="check-search check-search-type" data-search="short_name" onchange="SearchChangeType(this)">
+            <div class="search-button value-button"><div style="text-transform:uppercase">{{year.short_name}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+{% endif %}
 
 <div class="row no-gutters">
     <div class="pr-2">

@@ -51,6 +51,9 @@
                     {% if SHOW_COMPETITION_VIDEOS %}
                         <li class="nav-item"><a class="nav-link {% if "competition_videos" in request.path %}active{% endif %}" href="{% url 'competition_videos' %}">Competition Videos</a></li>
                     {% endif %}
+                    {% if SHOW_TC_EXAMPLES %}
+                        <li class="nav-item"><a class="nav-link {% if "tc_examples" in request.path %}active{% endif %}" href="{% url 'tc_examples' %}">TC Examples</a></li>
+                    {% endif %}
                 </ul>
                 {% include 'app/loginpartial.html' %}
             </div>

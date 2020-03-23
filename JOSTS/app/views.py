@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
-    Competition,CompetitionType,CompetitionGroup,CompetitionVideo
+    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1040,6 +1040,65 @@ def import_from_fig(request):
 
             response +=  " | video notes created: " + str(VideoNote.objects.filter(video__disc_id=discid).count())
 
+        if 'tcexamples' in type or type=='all':
+            #Video.objects.filter(disc_id=discid).delete()
+            Video.objects.filter(disc_id=discid).exclude(tcexample=None).delete()
+            query="Select ID,Event,Year,NoteType,File,FPS,SpecialNotes,name From tcexamples order by Year,NoteType,Event"
+            cursor.execute(query)
+            for (id,event,year,type,file,fps,special,name) in cursor:
+                file = file.replace(".mov",".mp4")
+                vid = Video(disc_id=discid,old_id=id+100000,event=event,file=file,fps=fps)
+                vid.save()
+                tcvid = TCExample(video=vid,name=name,type=type,year=year,short_name=year[2:],special_notes=special)
+                tcvid.save()
+
+            response +=  " | tc videos created: " + str(TCExample.objects.filter(video__disc_id=discid).count())
+
+        if 'tcnotes' in type or type=='all':
+            #VideoNote.objects.filter(video__disc_id=discid).delete()
+            query="Select videoid,type,color,linkid,frame,Event,type,event,cr,overridetext,novaluetype,skipframe FROM tcexamplesnotes order by videoid"
+            cursor.execute(query)
+            lastvid = ""
+
+            for (videoid,type,color,linkid,frame,Event,type,event,cr,overridetext,novaluetype,skipframe) in cursor:
+                if cr == None:
+                    cr = ''
+                if overridetext == None:
+                    overridetext = ''
+                if novaluetype == None:
+                    novaluetype = ''
+                if color == None:
+                    color = ''
+                if skipframe == None or skipframe == '' or skipframe == '0' or skipframe == 0:
+                    skipframe = False
+                else:
+                    skipframe = True
+                if color == '9':
+                    color = ''
+                elif color == 'b':
+                    color = 'Blue'
+                elif color == 'r':
+                    color = 'Red'
+
+                event = event.upper()
+                
+                if lastvid != videoid:
+                    lastvid = videoid
+                    video_ref = Video.objects.filter(old_id=videoid+100000,disc_id=discid).first()
+                vn = VideoNote(video=video_ref,frame=frame,skip_frame=skipframe,color=color,event=event,cr=cr,override_text=overridetext,no_value_type=novaluetype)
+                if type.lower() == "element" and novaluetype.lower() == "unrated":
+                    ul = UnratedElement.objects.filter(old_id=linkid,disc_id=discid).first()
+                    vn.unrated_link = ul
+                elif type == 'E' or type == 'D':
+                    rl = RuleLink.objects.filter(old_id=linkid,disc_id=discid).first()
+                    vn.rule_link = rl
+                else:
+                    el = Element.objects.filter(old_id=linkid,disc_id=discid).first()
+                    vn.element_link = el
+                vn.save();
+
+            response +=  " | tc notes created: " + str(VideoNote.objects.filter(video__disc_id=discid).exclude(video__tcexample=None).count())
+
     return JsonResponse({'result':response})
 
 
@@ -1111,6 +1170,65 @@ def comp_video(request):
     vid = CompetitionVideo.objects.get(pk=request.GET.get('compvid'))
     context = {
         'video': vid,
+        'type':'comp',
         }
     log_activity(request,'Competition Videos','View',str(vid))
     return render(request, 'app/video_single.html',context=context)
+
+#TCExamples videos
+@login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
+def tc_examples(request):
+    context = {
+        'type':'tc',
+        'search_type':'tc',
+        'list_type':'tc',
+        }
+    return render(request, 'app/elements_fixed.html',context=context)
+
+def tc_search(request):
+    years = TCExample.objects.filter(video__disc=request.session.get('disc',1)).order_by('short_name').values('short_name').distinct()
+    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+    context = {
+        'years':years,
+        'events': events,
+        'search_type':'tc',
+        }
+    return render(request, 'app/video_search.html',context=context)
+
+
+def tc_list(request):
+    dget = dict(request.GET)
+    search = dget['search'][0]
+    search = search.replace("1/2","½")
+    search = search.replace("1/4","¼")
+    del dget['search']
+    value_display = dget['value_display'][0]
+    del dget['value_display']
+    query = Q()
+    for k,v in dget.items():
+        innerQuery = Q()
+        for i in v:
+            kwargs = {'{0}'.format(k): i}
+            innerQuery.add(Q(**kwargs), Q.OR)
+        query.add(innerQuery,Q.AND)
+    videos = TCExample.objects.filter(query).order_by('-year','type','name')
+    if search != "":
+        videos = videos.filter(name__icontains=search)
+    videos = videos.filter(video__disc_id=request.session.get('disc',1))
+    context = {
+        'videos': videos,
+        'num_videos': str(len(videos)) + " Videos",
+        }
+    #activity log
+    log_activity(request,'TC Examples','List','')
+    return render(request, 'app/tc_list.html',context=context)
+
+def tc_video(request):
+    vid = TCExample.objects.get(pk=request.GET.get('tcid'))
+    context = {
+        'video': vid,
+        'type':'tc',
+        }
+    log_activity(request,'TC Examples','View',str(vid))
+    return render(request, 'app/video_tc.html',context=context)

@@ -4,21 +4,21 @@
         <source src="{% static 'app/videos/' %}{{request.session.disc_path}}/{{ element.element.event|lower }}/{{element.element.videos.first.file}}" type="video/mp4">
     </video>
 </div>
-<div class="row no-gutters pt-2">
+<div class="row no-gutters pt-1">
     <div class="col-12 col-md-4 pr-4">
         <div class="row no-gutters">
             <div class="col-2 text-center">
-                <i class="fas fa-fast-backward" style="font-size:1.6rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-5);" title="-5 Frames"></i>
-            </div>
-            <div class="col-2 text-center" style="padding-top:0.05rem">
-                <i class="fas fa-step-backward" style="font-size:1.45rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-1)" title="-1 Frame"></i>
-            </div>
-            <div id="VidFrameDisplay" class="col-2 text-center" style="width:40px">0</div>
-            <div class="col-2 text-center" style="padding-top:0.05rem">
-                <i class="fas fa-step-forward" style="font-size:1.45rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(1)" title="+1 Frame"></i>
+                <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-5);" title="-5 Frames">-5</div>
             </div>
             <div class="col-2 text-center">
-                <i class="fas fa-fast-forward" style="font-size:1.6rem;cursor:pointer" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(5)" title="+5 Frames"></i>
+                <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-1);" title="-1 Frames">-1</div>
+            </div>
+            <div id="VidFrameDisplay" class="col-2 text-center" style="width:40px">0</div>
+            <div class="col-2 text-center">
+                <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(1);" title="+1 Frames">+1</div>
+            </div>
+            <div class="col-2 text-center">
+                <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(5);" title="+5 Frames">+5</div>
             </div>
         </div>
     </div>

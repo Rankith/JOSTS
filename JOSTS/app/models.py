@@ -284,3 +284,11 @@ class CompetitionVideo(models.Model):
     competition_group = models.ForeignKey(CompetitionGroup, on_delete=models.SET_NULL,null=True)
     video = models.ForeignKey(Video,on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+
+class TCExample(models.Model):
+    video = models.ForeignKey(Video,on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    type = models.CharField(max_length=1)
+    year = models.CharField(max_length=4)
+    short_name = models.CharField(max_length=3)
+    special_notes = models.TextField(blank=True,default='')

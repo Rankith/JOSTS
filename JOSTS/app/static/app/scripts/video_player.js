@@ -83,7 +83,7 @@ var EJump = 0;
     }
    
 
-    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1, extrapath='') {
+    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1, extrapath='', hide='') {
         VidJSPlayer.pause();
         var vidurl;
         console.log(extrapath);
@@ -105,6 +105,10 @@ var EJump = 0;
             $("#divNotesArea").empty();
             $("#divNotesArea").append(data);
             $("#divHud").detach().appendTo("#VidHudArea");
+            if (hide != '') {
+                $("#NotesTitle" + hide).hide();
+                $("#Notes" + hide).hide();
+            }
         });
 
         $("#divVidFramesSeconds").html("1 sec = " + VidFPS + "");
