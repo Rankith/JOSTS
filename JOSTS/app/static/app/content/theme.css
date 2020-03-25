@@ -362,6 +362,7 @@ input:checked + .display-button {
 
 .video-element-header{
     font-weight:bold;
+    cursor:pointer;
 }
 
 .dropdown-menu{
