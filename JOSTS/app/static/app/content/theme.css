@@ -339,3 +339,35 @@ input:checked + .display-button {
     background-color: red;
     color: #FFFFFF;
 }
+
+.video-note-header {
+    background-color: #6077ac;
+    font-weight: 700;
+    position:relative;
+}
+
+.video-note-header::after {
+    position:absolute;
+    right: 10px;
+    top: 10px;
+    width: 0;
+    height: 0;
+    vertical-align: .255em;
+    content: "";
+    border-top: .3em solid;
+    border-right: .3em solid transparent;
+    border-bottom: 0;
+    border-left: .3em solid transparent
+}
+
+.video-element-header{
+    font-weight:bold;
+}
+
+.dropdown-menu{
+    background-color:white;
+}
+
+.dropdown-item{
+    color:black;
+}

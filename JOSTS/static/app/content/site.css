@@ -108,7 +108,7 @@ input[type="checkbox"].input-validation-error {
     overflow: hidden;
 }
 .detail-sym {
-    max-height: 40px;
+    max-height: 35px;
     overflow: hidden;
 }
 
@@ -383,4 +383,20 @@ a.BlueLoginButton {
 }
 .video-note-devaule {
     color: red;
+}
+
+.dropdown-toggle[aria-expanded="true"]:after {
+    transform: rotate(180deg);
+}
+
+.dropdown-toggle:after {
+    transition: 0.5s;
+}
+
+.video-note-header[aria-expanded="true"]:after {
+    transform: rotate(180deg);
+}
+
+.video-note-header:after {
+    transition: 0.5s;
 }
