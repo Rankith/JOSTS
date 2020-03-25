@@ -104,7 +104,7 @@ input[type="checkbox"].input-validation-error {
     z-index: 101;
 }
 .detail-image {
-    height: 200px;
+    max-height: 200px;
     overflow: hidden;
 }
 .detail-sym {
