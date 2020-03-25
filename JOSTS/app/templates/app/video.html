@@ -5,7 +5,7 @@
     </video>
 </div>
 <div class="row no-gutters pt-1">
-    <div class="col-12 col-xl-4 col-md-6 pr-4">
+    <div class="col-12 col-xl-4 col-md-6">
         <div class="row no-gutters">
             <div class="col-2 text-center">
                 <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-5);" title="-5 Frames">-5</div>
@@ -13,7 +13,11 @@
             <div class="col-2 text-center">
                 <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-1);" title="-1 Frames">-1</div>
             </div>
-            <div id="VidFrameDisplay" class="col-4 text-center" style="width:40px">0</div>
+            <div class="col-4 text-center">
+                <div id="VidFrameDisplay" class="text-center">0</div>
+                 <div id="divVidFramesSecondsHolder" class="" style="font-size:0.8rem"><div id="divVidFramesSeconds"></div></div>
+            </div>
+            
             <div class="col-2 text-center">
                 <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(1);" title="+1 Frames">+1</div>
             </div>
@@ -22,14 +26,14 @@
             </div>
         </div>
     </div>
-    <div id="VidFramesArea" class="col-xl-3 col-md-6 d-flex">
-        <input id="txtFrameJump" style="width:40px;display:none" onkeypress="TextFrameJump(event)" />
-        <div id="divVidFramesSecondsHolder" class="pl-2 d-flex align-items-center" style="font-size:0.8rem"><div id="divVidFramesSeconds"></div></div>
+    <div id="VidFramesArea" class="col-xl-3 col-md-6 d-flex justify-content-center">
+        <input id="txtFrameJump" style="width:40px;height:25px;display:none" onkeypress="TextFrameJump(event)" />
+       
         <button id="btnVidElement" type="button" class="btn btn-main ml-2" style="padding-top:0;padding-bottom:0" onclick="JumpToElement()">Element</button>
     </div>
     <div id="VidSpeedArea" class="col-12 col-xl-5">
         <div class="row no-gutters">
-            <div class="col-8 pt-1">
+            <div class="col-8 pt-2">
                 <div id="SpeedSlider"></div>
             </div>
             <div class="col-4 pl-4" id="divsSpeedSliderValues">
