@@ -5,7 +5,7 @@
     </video>
 </div>
 <div class="row no-gutters pt-1">
-    <div class="col-12 col-xl-4 col-md-6">
+    <div class="col-xl-4 col-6">
         <div class="row no-gutters">
             <div class="col-2 text-center">
                 <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-5);" title="-5 Frames">-5</div>
@@ -15,7 +15,7 @@
             </div>
             <div class="col-4 text-center">
                 <div id="VidFrameDisplay" class="text-center">0</div>
-                 <div id="divVidFramesSecondsHolder" class="" style="font-size:0.8rem"><div id="divVidFramesSeconds"></div></div>
+                 <div id="divVidFramesSecondsHolder" class="" style="font-size:0.6rem"><div id="divVidFramesSeconds"></div></div>
             </div>
             
             <div class="col-2 text-center">
@@ -26,17 +26,18 @@
             </div>
         </div>
     </div>
-    <div id="VidFramesArea" class="col-xl-3 col-md-6 d-flex justify-content-center">
+    <div id="VidFramesArea" class="col-xl-3 col-md-6 col-1 d-flex justify-content-center">
         <input id="txtFrameJump" style="width:40px;height:25px;display:none" onkeypress="TextFrameJump(event)" />
     </div>
-    <div id="VidSpeedArea" class="col-12 col-xl-5">
+    <div id="VidSpeedArea" class="col-5 col-xl-5">
         <div class="row no-gutters">
-            <div class="col-8 pt-2">
-                <div id="SpeedSlider"></div>
-            </div>
-            <div class="col-4 pl-4" id="divsSpeedSliderValues">
+            <div class="col-12 col-lg-4 text-center" id="divsSpeedSliderValues">
 
             </div>
+            <div class="col-12 col-lg-8 pb-2 pt-1">
+                <div id="SpeedSlider"></div>
+            </div>
+            
         </div>
     </div>
     <div id="VidHudArea" class="col-12"></div>
