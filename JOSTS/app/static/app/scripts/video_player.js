@@ -101,6 +101,7 @@ var EJump = 0;
             "src": vidurl
         });
         VidJSPlayer.play();
+        $("#divHud").remove();
         $.get('/video_notes/?video=' + idIn + '&element=' + elementJump, function (data) {
             $("#divNotesArea").empty();
             $("#divNotesArea").append(data);
