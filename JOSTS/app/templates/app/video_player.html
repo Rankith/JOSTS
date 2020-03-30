@@ -1,27 +1,31 @@
 {% block content %}
 {% load staticfiles %}
 <div class="row no-gutters">
-    <div class="col-12 col-md-1" >
+    <div class="col-12 col-xl-1" >
         {% if editable and editmode == "true" %}
             <div id="divVideosInList" class="sortable">
-                     {% for vid in element.element.videolink_set.all %}<button id="btnVid{{ vid.video.id }}" type="button" class="btn btn-main mb-2 col-2 col-md-4 vid-in-list mr-2 vid-edit" videoid="{{ vid.video.id}}" onclick="EditModeShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.video.id }}</button>{% endfor %}
+                     {% for vid in element.element.videolink_set.all %}<button id="btnVid{{ vid.video.id }}" type="button" class="btn btn-main mb-2 col-2 col-xl-3 vid-in-list mr-2 vid-edit btn-small-pad" videoid="{{ vid.video.id}}" onclick="EditModeShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.video.id }}</button>{% endfor %}
             </div>
             <div style="max-height:500px;overflow:auto">Related Videos
             <div id="divVideosNotInList">
-                {% for vid in potential %}<button id="btnVid{{ vid.id }}" type="button" draggable="true" class="btn btn-main mb-2 col-md-4 col-2 vid-not-in-list mr-2 vid-edit" videoid="{{ vid.id}}" onclick="EditModeShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.id }}</button>{% endfor %}
+                {% for vid in potential %}<button id="btnVid{{ vid.id }}" type="button" draggable="true" class="btn btn-main mb-2 col-xl-3 col-2 vid-not-in-list mr-2 vid-edit btn-small-pad" videoid="{{ vid.id}}" onclick="EditModeShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.id }}</button>{% endfor %}
             </div>
         </div>
         {% else %}
+         <div class="row no-gutters">
             {% for vid in element.element.videolink_set.all %}
-                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main  col-md-4 col-2 mb-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{element.element.id}})">{{ forloop.counter }}</button>
-            {% endfor %}
+             
+                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2 col-2 col-xl-3 mr-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{element.element.id}})">{{ forloop.counter }}</button>
+
+                 {% endfor %}
             {% if editable %}
                 <br/>
-                <button id="btnVidEdit" type="button" class="btn btn-main mb-2 d-none d-lg-block" onclick="LoadVideo(true)">Edit</button>
+                <button id="btnVidEdit" type="button" class="btn btn-main mb-2 d-none d-xl-block" onclick="LoadVideo(true)">Edit</button>
             {% endif %}
+          </div>
         {% endif %}
     </div>
-    <div class="col-12 col-md-8">
+    <div class="col-12 col-md-9">
     {% if editable and editmode == "true" %}
         <div id="divEditArea">
             <button id="btnAddVideo" onclick="AddVideo()" class="btn btn-main mb-2" style="display:none">Add Video</button>

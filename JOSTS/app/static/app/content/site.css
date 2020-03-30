@@ -414,3 +414,9 @@ a.BlueLoginButton {
 .video-note-header:after {
     transition: 0.5s;
 }
+
+.btn-small-pad {
+    padding-right: .05rem !important;
+    padding-left: .05rem !important;
+    font-size:0.8rem;
+}
