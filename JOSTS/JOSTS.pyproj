@@ -2490,8 +2490,10 @@
     <Content Include="app\static\app\scripts\shorthand_drawing.js" />
     <Content Include="app\static\app\videos\jrsts-landing-video.mp4" />
     <Content Include="app\templates\app\base.html" />
+    <Content Include="app\templates\app\ji_display.html" />
     <Content Include="app\templates\app\tc_list.html" />
     <Content Include="app\templates\app\video_list.html" />
+    <Content Include="app\templates\app\ji_search.html" />
     <Content Include="app\templates\app\video_tc.html" />
     <Content Include="app\templates\app\video_single.html" />
     <Content Include="app\templates\app\video_search.html" />

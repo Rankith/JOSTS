@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
-    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample
+    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1232,3 +1232,39 @@ def tc_video(request):
         }
     log_activity(request,'TC Examples','View',str(vid))
     return render(request, 'app/video_tc.html',context=context)
+
+#Judge Instructions
+@login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
+def judge_instructions(request):
+    context = {
+        'type':'ji',
+        'search_type':'ji',
+        'list_type':'ji',
+        }
+    return render(request, 'app/elements_fixed.html',context=context)
+
+def ji_search(request):
+    years = JudgeInstruction.objects.filter(disc=request.session.get('disc',1)).order_by('year').values('year').distinct()
+    types = JudgeInstruction.objects.filter(disc=request.session.get('disc',1)).order_by('type').values('type').distinct()
+    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+    context = {
+        'years':years,
+        'events': events,
+        'types': types,
+        'search_type':'ji',
+        }
+    return render(request, 'app/ji_search.html',context=context)
+
+def ji_list(request):
+    dget = dict(request.GET)
+    discipline = Disc.objects.get(id=request.session.get('disc',1)).full_name
+    event = dget['event__iexact'][0];
+    type = dget['type'][0];
+    year = dget['year'][0];
+    path = "https://web-sts.com/" + discipline + "/JudgeInstructions/20" + year + "/" + event + "/" + type + "/index.html"
+    context = {
+        'path': path,
+        }
+    log_activity(request,'Judge Instructions','View',str(event + " " + type + " " + year))
+    return render(request, 'app/ji_display.html',context=context)

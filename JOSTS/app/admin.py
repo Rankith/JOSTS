@@ -1,7 +1,7 @@
 from django.contrib import admin
 from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, \
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
-    Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample
+    Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -148,6 +148,11 @@ class TCExampleAdmin(ImportExportModelAdmin):
     list_editable=('name',)
     list_filter = ('type','year')
 
+class JudgeInstructionAdmin(admin.ModelAdmin):
+    list_display=('id', 'disc','event','year','type')
+    list_editable=('disc','event','year','type')
+    list_filter = ('event','type','year')
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -178,3 +183,4 @@ admin.site.register(Competition,CompetitionAdmin)
 admin.site.register(CompetitionGroup,CompetitionGroupAdmin)
 admin.site.register(CompetitionVideo,CompetitionVideoAdmin)
 admin.site.register(TCExample,TCExampleAdmin)
+admin.site.register(JudgeInstruction,JudgeInstructionAdmin)

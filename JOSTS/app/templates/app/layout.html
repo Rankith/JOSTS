@@ -51,8 +51,16 @@
                     {% if SHOW_COMPETITION_VIDEOS %}
                         <li class="nav-item"><a class="nav-link {% if "competition_videos" in request.path %}active{% endif %}" href="{% url 'competition_videos' %}">Competition Videos</a></li>
                     {% endif %}
-                    {% if SHOW_TC_EXAMPLES %}
-                        <li class="nav-item"><a class="nav-link {% if "tc_examples" in request.path %}active{% endif %}" href="{% url 'tc_examples' %}">TC Examples</a></li>
+                     {% if SHOW_JUDGE_INSTRUCTIONS or SHOW_TC_EXAMPLES%}
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle  {% if "tc_examples" in request.path or "judge_instructions" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          TC Content
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item {% if "tc_examples" in request.path %}active{% endif %}" href="{% url 'tc_examples' %}">TC Examples</a>
+                          <a class="dropdown-item {% if "judge_instructions" in request.path %}active{% endif %}" href="{% url 'judge_instructions' %}">Judge Instructions</a>
+                        </div>
+                    </li>
                     {% endif %}
                 </ul>
                 {% include 'app/loginpartial.html' %}

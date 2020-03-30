@@ -1,0 +1,144 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div class="sidebar-header">
+   
+</div>
+
+<div class="row no-gutters pt-2">
+    {% for event in events %}
+    <div class="col">
+        <label id="lblE{{event}}" class="search-button">
+            <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search check-search-event" data-search="event__iexact" onchange="SearchChangeEvent(this)">
+            <div class="search-button event-button">
+                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/{{event}}_White.svg" />
+            </div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row no-gutters pt-2">
+    {% for year in years %}
+    <div class="pr-2">
+        <label id="lblJIY{{year.year}}" class="search-button">
+            <input type="checkbox" id="chkTCY{{year.year}}" value="{{year.year}}" class="check-search check-search-year" data-search="year" onchange="SearchChangeYear(this)">
+            <div class="search-button group-button"><div style="text-transform:uppercase">{{year.year}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+
+<div class="row no-gutters pt-2">
+    {% for type in types %}
+    <div class="pr-2">
+        <label id="lblJIT{{type.type}}" class="search-button">
+            <input type="checkbox" id="chkE{{type.type}}" value="{{type.type}}" class="check-search check-search-type" data-search="type" onchange="SearchChangeType(this)">
+            <div class="search-button value-button"><div style="text-transform:uppercase">{{type.type}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+        var search_type = '{{search_type}}';
+</script>
+<script type="text/javascript">
+    var Event = "";
+
+    function SearchChangeEvent(el) {
+        //console.log("SCE");
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-event').not(el).prop('checked', false);
+            $('.check-search-event').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            //ShowHideSearches();
+            CreateSearchParams();
+            //Event = $(el).val();
+        }
+    }
+
+      function SearchChangeType(el) {
+
+          if (!el.checked)
+              $(el).prop('checked', true);
+          else {
+              localStorage.setItem(el.id, el.checked ? 1 : 0);
+              $('.check-search-type').not(el).prop('checked', false);
+              $('.check-search-type').not(el).each(function (i) {
+                  localStorage.setItem(this.id, 0);
+              });
+              CreateSearchParams();
+          }       
+    }
+
+    function SearchChangeYear(el) {
+
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-year').not(el).prop('checked', false);
+            $('.check-search-year').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            CreateSearchParams();
+        }
+    }
+
+
+
+    function CreateSearchParams() {
+        //console.log("CSP");
+        var strValues = "";
+        Event = $('.check-search-event:checkbox:checked').val();
+        if (list_type !== 'undefined') {
+            $(".check-search:checkbox:checked").each(function (i) {
+                if ($(this).parent().is(":visible"))
+                    strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+                //console.log($(this).attr("data-search") + " : " + $(this).val());
+            });
+             
+            $.get("/" + list_type + "_list/?" + strValues, function (data) {
+                $("#divElementList").empty();
+                $("#divElementList").append(data);
+                $("#divElementCountDisplay").html(($("#divNumElements").html()));
+                $("#div" + SelectedElement).click();
+            });
+        }
+        //$("#divElementList").empty();
+        //$("#divElementList").load("/element_list/?" + strValues);
+    }
+    
+    function LoadLastSelections() {
+        //console.log("LLS");
+        //console.log(localStorage);
+
+        $(".check-search:checkbox").each(function (i) {
+            console.log(this.id);
+             console.log(localStorage.getItem(this.id));
+            if (localStorage.getItem(this.id) == "1")
+                $(this).prop('checked', true);
+            else
+                $(this).prop('checked', false);
+        });
+
+        if ($(".check-search-event:checkbox:checked").length == 0 && $(".check-search-event:checkbox").length > 0) 
+            $(".check-search-event:checkbox")[0].click();
+        if ($(".check-search-year:checkbox:checked").length == 0 && $(".check-search-year:checkbox").length > 0)
+            $(".check-search-year:checkbox")[0].click();
+        if ($(".check-search-type:checkbox:checked").length == 0 && $(".check-search-type:checkbox").length > 0)
+            $(".check-search-type:checkbox")[0].click();
+        else {
+            CreateSearchParams();
+        }
+    }
+</script>
+{% endblock %}

@@ -292,3 +292,9 @@ class TCExample(models.Model):
     year = models.CharField(max_length=4)
     short_name = models.CharField(max_length=3)
     special_notes = models.TextField(blank=True,default='')
+
+class JudgeInstruction(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
+    event = models.CharField(max_length=2)
+    year = models.CharField(max_length=4)
+    type = models.CharField(max_length=1)

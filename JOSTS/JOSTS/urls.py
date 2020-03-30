@@ -83,4 +83,7 @@ urlpatterns = [
     path('tc_search/', views.tc_search, name='tc_search'),
     path('tc_list/', views.tc_list, name='tc_list'),
     path('tc_video/', views.tc_video, name='tc_video'),
+    path('judge_instructions/', views.judge_instructions, name='judge_instructions'),
+    path('ji_search/', views.ji_search, name='ji_search'),
+    path('ji_list/', views.ji_list, name='ji_list'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
