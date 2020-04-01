@@ -126,7 +126,7 @@
 {% block scripts %}
 <script type="text/javascript">
         var search_type = '{{search_type}}';
-    {% if search_type != "rule" %}
+    {% if search_type != "rule" and search_type != "shorthand" %}
         var vaultlow = {{vault_low}};
         var vaulthigh = {{vault_high}};
         var vaultslider = "{{vault_slider}}";
