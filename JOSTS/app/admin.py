@@ -153,6 +153,11 @@ class JudgeInstructionAdmin(admin.ModelAdmin):
     list_editable=('disc','event','year','type')
     list_filter = ('event','type','year')
 
+class UnratedElementAdmin(ImportExportModelAdmin):
+    list_display=('id', 'disc','event','name')
+    list_editable=('disc','event','name')
+    list_filter = ('disc','event')
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -175,7 +180,7 @@ admin.site.register(VideoLink,VideoLinkAdmin)
 admin.site.register(PageTour,PageTourAdmin)
 admin.site.register(UserToursComplete,UserToursCompleteAdmin)
 admin.site.register(Disc)
-admin.site.register(UnratedElement)
+admin.site.register(UnratedElement,UnratedElementAdmin)
 admin.site.register(VersionSettings)
 admin.site.register(StructureGroup,StructureGroupAdmin)
 admin.site.register(CompetitionType,CompetitionTypeAdmin)

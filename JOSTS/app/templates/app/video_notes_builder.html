@@ -64,13 +64,17 @@
                     <div class="col-6">
                         <div class="form-group">
                             <select class="selectpicker form-control" id="ddlUnrated" data-live-search="true" data-size="8" data-header="Select an unrated element" title="Select an unrated element">
-                                
+                                 {% for unrated in unrateds %}
+
+                                <option value="{{ unrated.id }}">{{ unrated.name }}</option>
+
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
                     <div class="col-6">
-                        <button id="btnAddUnrated" type="button" class="btn btn-main" onclick="">Add Unrated</button>
-                        <button id="btnUpdateUnrated" type="button" class="btn btn-main" onclick="">Update Unrated</button>
+                        <button id="btnAddUnrated" type="button" class="btn btn-main" onclick="AddUnrated_Click()">Add Unrated</button>
+                        <button id="btnUpdateUnrated" type="button" class="btn btn-main" onclick="UpdateUnrated_Click()">Update Unrated</button>
                     </div>
                 </div>
             </div>
@@ -245,9 +249,28 @@
         }
     }
 
+    function AddUnrated_Click() {
+        if ($("#ddlUnrated").val() != "" && OnVideo != -1) {
+            ChangesMade = true;
+            AddNewRow($("#ddlUnrated").val(), CurFrame, 'unrated');
+        }
+    }
+
+    function UpdateUnrated_Click() {
+        if (SelectedRow != -1 && $("#ddlUnrated").val() != "" && OnVideo != -1) {
+            ChangesMade = true;
+            Notes[SelectedRow].element_link_id = null;
+            Notes[SelectedRow].unrated_link_id = $("#ddlUnrated").val();
+            $("#div" + SelectedRow + "Item").html(Unrated[$("#ddlUnrated").val()].name);
+            $("#div" + SelectedRow + "ID").html("-");
+            $("#div" + SelectedRow + "Val").html("-");
+        }
+    }
+
     function UpdateRule_Click() {
         if (SelectedRow != -1 && $("#ddlRule").val() != "" && OnVideo != -1) {
             ChangesMade = true;
+            Notes[SelectedRow].unrated_link_id = null;
             Notes[SelectedRow].element_link_id = $("#ddlRule").val();
             $("#div" + SelectedRow + "Item").html(Rules[$("#ddlRule").val()].text);
             $("#div" + SelectedRow + "ID").html('-');
@@ -350,6 +373,20 @@
                 no_value_type: "no",
                 override_text: "",
                 rule_link_id: IDIn,
+                skip_frame: false,
+                video_id: OnVideo
+            };
+        }
+        else if (TypeIn == "unrated") {
+            Notes[OnRow] = {
+                color: "Black",
+                cr: "",
+                unrated_link_id: IDIn,
+                element_link_id: null,
+                frame: FrameIn,
+                no_value_type: "unrated",
+                override_text: "",
+                rule_link_id: null,
                 skip_frame: false,
                 video_id: OnVideo
             };

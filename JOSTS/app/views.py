@@ -634,6 +634,7 @@ def element_lookup(request):
     else:
         vals = Element.objects.filter(disc=request.session.get('disc',1)).filter(event=eventIn).order_by('letter_value').values('letter_value').distinct()   
     groups = Element.objects.filter(disc=request.session.get('disc',1)).filter(event=eventIn).order_by('str_grp').values('str_grp').distinct()
+    groups = StructureGroup.objects.filter(disc_id=request.session.get('disc',1),event=eventIn).order_by('group')
     elements = ElementText.objects.filter(element__disc=request.session.get('disc',1)).filter(element__event=eventIn,language="EN").order_by('element__str_grp','element__letter_value','element__code_order')
     context = {
         'vals':vals,
@@ -757,7 +758,7 @@ def video_notes_builder(request):
     event = request.GET.get('event','fx')
     videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     unrated = UnratedElement.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).order_by('id')
-    elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__code_order')
+    elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__str_grp','element__code_order')
     rules = RuleLink.objects.filter(event='',disc=request.session.get('disc',1)) | RuleLink.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     events=request.session.get('disc_events','V,UB,BB,FX').split(",")
     context = {
