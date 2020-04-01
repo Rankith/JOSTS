@@ -230,7 +230,8 @@ function CheckImage() {
     SaveRecordImageNoData(dataImage);
     var fd = new FormData();
     fd.append('image', dataImage);
-    fd.append('discevent', drawing_prefix + Disc +  Event);
+    fd.append('discevent', drawing_prefix + Disc + Event);
+    console.log(drawing_prefix + Disc + Event);
     //AddToListYou(dataImage);
     $.ajax({
         'url': "https://symbolsdl.jdogzennodes.club:5000/predict",
