@@ -4,7 +4,7 @@
     <div class="col-12 col-xl-1" >
         {% if editable and editmode == "true" %}
             <div id="divVideosInList" class="sortable">
-                     {% for vid in element.element.videolink_set.all %}<button id="btnVid{{ vid.video.id }}" type="button" class="btn btn-main mb-2 col-2 col-xl-3 vid-in-list mr-2 vid-edit btn-small-pad" videoid="{{ vid.video.id}}" onclick="EditModeShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.video.id }}</button>{% endfor %}
+                     {% for vid in element.element.videolink_set.all %}<button id="btnVid{{ vid.video.id }}" type="button" class="btn btn-main mb-2 col-2 col-md-1 col-xl-3 vid-in-list mr-2 vid-edit btn-small-pad" videoid="{{ vid.video.id}}" onclick="EditModeShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.video.id }}</button>{% endfor %}
             </div>
             <div style="max-height:500px;overflow:auto">Related Videos
             <div id="divVideosNotInList">
@@ -14,9 +14,9 @@
         {% else %}
          <div class="row no-gutters">
             {% for vid in element.element.videolink_set.all %}
-             
-                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2 col-2 col-xl-3 mr-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{element.element.id}})">{{ forloop.counter }}</button>
-
+             <!--<div class="col-2 col-xl-3">-->
+                 <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main col-2 col-md-1 col-xl-3 mb-2 mr-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{element.element.id}})">{{ forloop.counter }}</button>
+            <!--</div>-->
                  {% endfor %}
             {% if editable %}
                 <br/>
