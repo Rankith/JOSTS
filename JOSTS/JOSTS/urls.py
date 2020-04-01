@@ -86,4 +86,5 @@ urlpatterns = [
     path('judge_instructions/', views.judge_instructions, name='judge_instructions'),
     path('ji_search/', views.ji_search, name='ji_search'),
     path('ji_list/', views.ji_list, name='ji_list'),
+    path('change_disc/', views.change_disc, name='change_disc'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

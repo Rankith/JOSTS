@@ -1268,3 +1268,11 @@ def ji_list(request):
         }
     log_activity(request,'Judge Instructions','View',str(event + " " + type + " " + year))
     return render(request, 'app/ji_display.html',context=context)
+
+def change_disc(request):
+    disc = Disc.objects.get(folder_name=request.GET.get('disc'))
+    request.session['disc'] = disc.id
+    request.session['disc_path'] = disc.folder_name
+    request.session['disc_full_name'] = disc.full_name
+    request.session['disc_events'] = disc.event_list
+    return redirect('elements')  
