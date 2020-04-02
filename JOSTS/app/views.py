@@ -634,7 +634,7 @@ def element_lookup(request):
     else:
         vals = Element.objects.filter(disc=request.session.get('disc',1)).filter(event=eventIn).order_by('letter_value').values('letter_value').distinct()   
     groups = Element.objects.filter(disc=request.session.get('disc',1)).filter(event=eventIn).order_by('str_grp').values('str_grp').distinct()
-    groups = StructureGroup.objects.filter(disc_id=request.session.get('disc',1),event=eventIn).order_by('group')
+    #groups = StructureGroup.objects.filter(disc_id=request.session.get('disc',1),event=eventIn).order_by('group')
     elements = ElementText.objects.filter(element__disc=request.session.get('disc',1)).filter(element__event=eventIn,language="EN").order_by('element__str_grp','element__letter_value','element__code_order')
     context = {
         'vals':vals,
