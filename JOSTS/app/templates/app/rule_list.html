@@ -30,14 +30,15 @@
                                 <ul class="list-group">
                             {% endifchanged %}
                              <li class="list-group-item rules-cue" style="cursor:pointer" >
-                                <div class="position-absolute col pr-4 text-right" style="right:0px;top:0px">
+                               
+                                 <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
+                                      <div class="position-absolute col pr-4 text-right" style="right:0px;top:0px">
                                     {% if rule.rls > 0 %}
                                         {% if request.user.is_staff or request.user.is_superuser %}
                                             <i class="fas fa-play-circle"></i><sub></sub>
                                         {% endif %}
                                     {% endif %}
                                 </div>
-                                 <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
                                      {% autoescape off %}
                                      <pre>{{rule.cue}}</pre>
                                      {% endautoescape %}
