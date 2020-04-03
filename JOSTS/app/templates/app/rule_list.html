@@ -30,6 +30,13 @@
                                 <ul class="list-group">
                             {% endifchanged %}
                              <li class="list-group-item rules-cue" style="cursor:pointer" >
+                                <div class="position-absolute col pr-4 text-right" style="right:0px;top:0px">
+                                    {% if rule.rls > 0 %}
+                                        {% if request.user.is_staff or request.user.is_superuser %}
+                                            <i class="fas fa-play-circle"></i><sub></sub>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
                                  <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
                                      {% autoescape off %}
                                      <pre>{{rule.cue}}</pre>
@@ -48,10 +55,19 @@
                                         {% endautoescape %}
                                     </div>
                                     <div class="row no-gutters">
-                                        <div class="col rule-section">
-                                            {{rule.rule.sub_rule}}
-                                        </div>
-                                        
+                                        <div class="col d-flex rule-section">
+                                            <div>
+                                                {{rule.rule.sub_rule}}
+                                            </div>
+                                            <div class="pl-3">
+                                                {% if rule.rule.rulelink_set.all.count > 0 %}
+                                                    {% if request.user.is_staff or request.user.is_superuser %}
+                                                        <div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.75rem;font-weight:bold"  onclick="LoadVideo('{{ rule.id }}')">
+                                                        <i class="fas fa-play-circle"></i>&nbsp;</button></div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div> 
                                         
                                     </div>
                                 </div>
@@ -123,5 +139,19 @@
               }
             }
       });
+    }
+</script>
+<script type="text/javascript">
+    function LoadVideo(RuleID,EditMode = false) {
+        $("#modalMainTitle").html("");
+        if (window.innerWidth >= 600)
+            $(".modal-dialog").addClass("mw-100").addClass("w-75");
+        $("#modalBodyArea2").hide();
+        $("#modalBodyArea1").empty();
+        $.get("/video_player/?rule=" + RuleID + "&editmode=" + EditMode, function (data) {
+            $("#modalBodyArea1").append(data);
+            $("#btnVid1").click();
+        });
+        $("#modalBodyArea1").show();
     }
 </script>

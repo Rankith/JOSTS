@@ -221,6 +221,8 @@ class VideoNote(models.Model):
     override_text = models.CharField(max_length=255,blank=True,default='')
     no_value_type = models.CharField(max_length=25,blank=True,default='')
     timestamp = models.DateTimeField(auto_now=True)
+    class Meta:
+       ordering = ['-video__id']
 
 class VideoNoteTemp(models.Model):
     video = models.ForeignKey(Video, on_delete=models.SET_NULL,null=True)

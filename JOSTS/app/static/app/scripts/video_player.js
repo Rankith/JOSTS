@@ -84,7 +84,12 @@ var EJump = 0;
    
 
     function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1, extrapath='', hide='') {
-        VidJSPlayer.pause();
+        /*console.log(idIn);
+        console.log(fileIn);
+        console.log(FPSIn);
+        console.log(oldID);
+        console.log(elementJump);
+        VidJSPlayer.pause();*/
         var vidurl;
         console.log(extrapath);
         if (oldID != '' && oldID != 'None') {
@@ -95,6 +100,7 @@ var EJump = 0;
         }
         else
             vidurl = SourceBase + fileIn;
+        console.log(vidurl);
         VidFPS = FPSIn;
         VidJSPlayer.src({
             "type": "video/mp4",

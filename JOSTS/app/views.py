@@ -27,6 +27,7 @@ import json
 import mysql.connector
 from django.db.models import Value
 from django.db.models.functions import Replace,Left
+from django.db.models import Count
 
 def home(request):
     """Renders the home page."""
@@ -497,6 +498,7 @@ def rule_list(request):
     if search != "":
         rules = rules.filter(cue__icontains=search) | rules.filter(response__icontains=search) | rules.filter(rule_description__icontains=search) | rules.filter(specific_deduction__icontains=search) | rules.filter(additional_info__icontains=search)
     rules = rules.filter(rule__disc=request.session.get('disc',1))
+    rules = rules.annotate(rls = Count('rule__rulelink__videonote'))
     context = {
         'rules': rules,
         'num_rules': str(len(rules)) + " Rules",
@@ -742,16 +744,32 @@ def check_tour(request):
 
 #Videos
 def video_player(request):
-    element = ElementText.objects.get(pk=request.GET.get('element'))
-    potential_videos = Video.objects.filter(id__in=VideoNote.objects.filter(element_link=element.element).values_list('video').distinct())
-    potential_videos = potential_videos.exclude(id__in=element.element.videolink_set.all().values_list('video'))
-    context = {
-        'element': element,
-        'editable': request.user.is_staff,
-        'editmode': request.GET.get('editmode'),
-        'potential': potential_videos
+    elementid = request.GET.get('element',-1)
+    if elementid != -1: #element
+        element = ElementText.objects.get(pk=elementid)
+        potential_videos = Video.objects.filter(id__in=VideoNote.objects.filter(element_link=element.element).values_list('video').distinct())
+        potential_videos = potential_videos.exclude(id__in=element.element.videolink_set.all().values_list('video'))
+        context = {
+            'element': element,
+            'mode': 'element',
+            'editable': request.user.is_staff,
+            'editmode': request.GET.get('editmode'),
+            'potential': potential_videos
         }
-    return render(request, 'app/video_player.html',context=context)
+        return render(request, 'app/video_player.html',context=context)
+    else: #rule
+        ruleid = request.GET.get('rule',-1)
+        rule = RuleText.objects.get(pk=ruleid)
+        rulelinks = rule.rule.rulelink_set.all().order_by('category_order')
+        #cat0 = rulelinks.filter('category')
+        context = {
+            'rule': rule,
+            'rulelinks': rulelinks,
+            'mode': 'rule',
+            'editable': request.user.is_staff
+        }
+        return render(request, 'app/video_player.html',context=context)
+   
 
 @user_passes_test(lambda u: u.is_staff)
 def video_notes_builder(request):
