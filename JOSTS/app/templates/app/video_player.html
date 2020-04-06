@@ -38,7 +38,7 @@
                                 {% for vid in rlink.videonote_set.all|slice:":4" %}
                                     {% if vid.video != None %}
                                         <div class="col-6 text-center">
-                                            <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" style="width:80%" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{rule.rule.id}},'{{vid.video.event}}')">{{ forloop.counter }}</button>
+                                            <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" style="width:80%" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{rule.rule.id}},'{{vid.video.event}}','','rule')">{{ forloop.counter }}</button>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -87,7 +87,7 @@
     $("#divVideoElement").html("{{rule.specific_deduction}}");
     {% endif %}
 </script>
-<script src="{% static 'app/scripts/video_player.js' %}?v=1.51"></script>
+<script src="{% static 'app/scripts/video_player.js' %}?v=1.52"></script>
 <script src="{% static 'app/scripts/sortable.min.js' %}?v=1.1"></script>
 <script type="text/javascript">
     function EditModeShowVideo(idIn, fileIn, FPSIn = 25,el,old,elID=-1) {

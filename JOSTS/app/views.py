@@ -827,6 +827,7 @@ def save_video_notes(request):
 
 def video_notes(request):
     video = request.GET.get('video','')
+    type = request.GET.get('type','element')
     if video == 'temp':
         notes = VideoNoteTemp.objects.all().order_by('frame')
     else:
@@ -834,7 +835,10 @@ def video_notes(request):
     element = request.GET.get('element',-1)
     frame_jump = -1
     if element != -1:
-        jnote = notes.filter(element_link__id = element)
+        if type == 'element':
+            jnote = notes.filter(element_link__id = element)
+        else:
+            jnote = notes.filter(rule_link__rule__id = element)
         if len(jnote) >= 1:
             frame_jump = jnote[0].frame
 

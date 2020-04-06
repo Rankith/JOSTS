@@ -83,7 +83,7 @@ var EJump = 0;
     }
    
 
-    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1, extrapath='', hide='') {
+    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1, extrapath='', hide='', typeIn='element') {
         /*console.log(idIn);
         console.log(fileIn);
         console.log(FPSIn);
@@ -108,7 +108,7 @@ var EJump = 0;
         });
         VidJSPlayer.play();
         $("#divHud").remove();
-        $.get('/video_notes/?video=' + idIn + '&element=' + elementJump, function (data) {
+        $.get('/video_notes/?video=' + idIn + '&element=' + elementJump + '&type=' + typeIn, function (data) {
             $("#divNotesArea").empty();
             $("#divNotesArea").append(data);
             $("#divHud").detach().appendTo("#VidHudArea");
