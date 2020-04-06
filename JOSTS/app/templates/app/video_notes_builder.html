@@ -7,10 +7,10 @@
     
     <div class="col-5">
         <div class="d-flex">
-            <div id="divVidList" class="pr-1" style="overflow:auto;">
+            <div id="divVidList" class="pr-3" style="overflow:auto;">
 
                 {% for video in videos %}
-                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{vid.video.fps}})" style="cursor:pointer" class="video-select">{{ video.id }}</div>
+                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{vid.video.fps}})" style="cursor:pointer;font-size:0.8rem" class="video-select">{{ video.id }}</div>
                 {% endfor %}
                
             </div>
@@ -271,7 +271,7 @@
         if (SelectedRow != -1 && $("#ddlRule").val() != "" && OnVideo != -1) {
             ChangesMade = true;
             Notes[SelectedRow].unrated_link_id = null;
-            Notes[SelectedRow].element_link_id = $("#ddlRule").val();
+            Notes[SelectedRow].rule_link_id = $("#ddlRule").val();
             $("#div" + SelectedRow + "Item").html(Rules[$("#ddlRule").val()].text);
             $("#div" + SelectedRow + "ID").html('-');
             $("#div" + SelectedRow + "Val").html('-');

@@ -346,6 +346,9 @@ def element_search(request):
     ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     groupDict = {}
     valueDict = {}
+    VideoNote.objects.filter(rule_link__id=1698,event='R').update(rule_link=RuleLink.objects.get(pk=1702))
+    VideoNote.objects.filter(rule_link__id=1699,event='R').update(rule_link=RuleLink.objects.get(pk=1703))
+    VideoNote.objects.filter(rule_link__id=1700,event='R').update(rule_link=RuleLink.objects.get(pk=1704))
     #Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
     #RuleLink.objects.update(type=Left('type',1))
     #vvals = Element.objects.filter(letter_value='A').update(down_value_letter='A')
