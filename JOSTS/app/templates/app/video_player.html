@@ -81,8 +81,11 @@
         DiscP = "Womens";
 
     token = "{{ csrf_token }}";
-
+     {% if mode == "element" %}
     $("#divVideoElement").html(ElementIDText + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ElementShortText);
+    {% else %}
+    $("#divVideoElement").html("{{rule.specific_deduction}}");
+    {% endif %}
 </script>
 <script src="{% static 'app/scripts/video_player.js' %}?v=1.51"></script>
 <script src="{% static 'app/scripts/sortable.min.js' %}?v=1.1"></script>
