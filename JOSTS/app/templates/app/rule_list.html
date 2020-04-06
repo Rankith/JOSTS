@@ -1,7 +1,7 @@
 ﻿
 {% load staticfiles %}
     <div class="card rules-section-header">
-        {% for rule in rules %}
+        {% for rule,vidcount in rules %}
             {% ifchanged rule.rule.section %}
                 {% if not forloop.first %}
                     </ul>
@@ -33,9 +33,9 @@
                                
                                  <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
                                       <div class="position-absolute col pr-4 text-right" style="right:0px;top:0px">
-                                    {% if rule.rls > 0 %}
+                                    {% if rule.rule.rulelink_set.all.count > 0 %}
                                         {% if request.user.is_staff or request.user.is_superuser %}
-                                            <i class="fas fa-play-circle"></i><sub></sub>
+                                            <i class="fas fa-play-circle"></i><sub>{{vidcount}}</sub>
                                         {% endif %}
                                     {% endif %}
                                 </div>
@@ -64,7 +64,7 @@
                                                 {% if rule.rule.rulelink_set.all.count > 0 %}
                                                     {% if request.user.is_staff or request.user.is_superuser %}
                                                         <div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.75rem;font-weight:bold"  onclick="LoadVideo('{{ rule.id }}')">
-                                                        <i class="fas fa-play-circle"></i>&nbsp;</button></div>
+                                                        <i class="fas fa-play-circle"></i>&nbsp;{{vidcount}}</button></div>
                                                     {% endif %}
                                                 {% endif %}
                                             </div>

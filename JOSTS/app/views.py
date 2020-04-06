@@ -27,7 +27,7 @@ import json
 import mysql.connector
 from django.db.models import Value
 from django.db.models.functions import Replace,Left
-from django.db.models import Count
+from django.db.models import Count,Max
 
 def home(request):
     """Renders the home page."""
@@ -498,9 +498,21 @@ def rule_list(request):
     if search != "":
         rules = rules.filter(cue__icontains=search) | rules.filter(response__icontains=search) | rules.filter(rule_description__icontains=search) | rules.filter(specific_deduction__icontains=search) | rules.filter(additional_info__icontains=search)
     rules = rules.filter(rule__disc=request.session.get('disc',1))
-    rules = rules.annotate(rls = Count('rule__rulelink__videonote'))
+    vidcounts = []
+    for r in rules:
+        totalvids=0
+        if r.rule.rulelink_set.count() > 0:
+            for rl in r.rule.rulelink_set.all():
+                vids = rl.videonote_set.all().values('id').distinct().count()
+                if vids > 4:
+                    vids = 4
+                totalvids += vids
+        vidcounts.append(totalvids)
+
+            #r.rule.rulelink_set.annotate(rls = Count('rule__rulelink__videonote__video__id',distinct=True))
+    #rules = rules.annotate(rls = Count('rule__rulelink__videonote'))
     context = {
-        'rules': rules,
+        'rules': zip(rules,vidcounts),
         'num_rules': str(len(rules)) + " Rules",
         'section_header' : VersionSettings.objects.first().rule_sub_header,
         }
