@@ -346,9 +346,6 @@ def element_search(request):
     ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     groupDict = {}
     valueDict = {}
-    VideoNote.objects.filter(rule_link__id=1698,event='R').update(rule_link=RuleLink.objects.get(pk=1702))
-    VideoNote.objects.filter(rule_link__id=1699,event='R').update(rule_link=RuleLink.objects.get(pk=1703))
-    VideoNote.objects.filter(rule_link__id=1700,event='R').update(rule_link=RuleLink.objects.get(pk=1704))
     #Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
     #RuleLink.objects.update(type=Left('type',1))
     #vvals = Element.objects.filter(letter_value='A').update(down_value_letter='A')
@@ -504,15 +501,17 @@ def rule_list(request):
     vidcounts = []
     for r in rules:
         totalvids=0
+        lastcat=-1
         if r.rule.rulelink_set.count() > 0:
-            for rl in r.rule.rulelink_set.all():
-                vids = rl.videonote_set.all().values('id').distinct().count()
-                if vids > 4:
-                    vids = 4
-                totalvids += vids
+            for rl in r.rule.rulelink_set.all().order_by('category_order'):
+                if lastcat != rl.category_order:
+                    vids = rl.videonote_set.all().filter(video__tcexample=None).values('id').distinct().count()
+                    if vids > 4:
+                        vids = 4
+                    totalvids += vids
+                    lastcat = rl.category_order
         vidcounts.append(totalvids)
-
-            #r.rule.rulelink_set.annotate(rls = Count('rule__rulelink__videonote__video__id',distinct=True))
+    #r.rule.rulelink_set.annotate(rls = Count('rule__rulelink__videonote__video__id',distinct=True))
     #rules = rules.annotate(rls = Count('rule__rulelink__videonote'))
     context = {
         'rules': zip(rules,vidcounts),
@@ -776,10 +775,17 @@ def video_player(request):
         ruleid = request.GET.get('rule',-1)
         rule = RuleText.objects.get(pk=ruleid)
         rulelinks = rule.rule.rulelink_set.all().order_by('category_order')
+        cat = []
+        vids = []
+        for c in rule.rule.rulelink_set.all().values('category_order').order_by('category_order').distinct():
+            thiscat = RuleLink.objects.filter(rule = rule.rule,category_order=c['category_order']).first()
+            cat.append(thiscat)
+            vids.append(Video.objects.filter(tcexample=None,videonote__rule_link=thiscat))
         #cat0 = rulelinks.filter('category')
         context = {
             'rule': rule,
             'rulelinks': rulelinks,
+            'cats':zip(cat,vids),
             'mode': 'rule',
             'editable': request.user.is_staff
         }

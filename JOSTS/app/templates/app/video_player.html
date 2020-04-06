@@ -30,15 +30,15 @@
      {% else %}
         <div class="col-12 col-xl-1">
             <div class="row no-gutters">
-                {% for rlink in rulelinks %}
-                    {% if rlink.videonote_set.count > 0 %}
+                {% for rlink,vids in cats %}
+                    {% if vids.count > 0 %}
                         <div class="col-xl-12 col-md-3 col-6">
                             <div class="row no-gutters">
                                 <div class="rule-video-section-header col-12 text-center">{{rlink.category_name}}</div>
-                                {% for vid in rlink.videonote_set.all|slice:":4" %}
-                                    {% if vid.video != None %}
+                                {% for vid in vids|slice:":4" %}
+                                    {% if vid != None %}
                                         <div class="col-6 text-center">
-                                            <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" style="width:80%" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{rule.rule.id}},'{{vid.video.event}}','','rule')">{{ forloop.counter }}</button>
+                                            <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" style="width:80%" onclick="ShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},'{{vid.old_id}}',{{rule.rule.id}},'{{vid.event}}','','rule')">{{ forloop.counter }}</button>
                                         </div>
                                     {% endif %}
                                 {% endfor %}

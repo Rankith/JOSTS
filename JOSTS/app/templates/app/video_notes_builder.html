@@ -7,7 +7,7 @@
     
     <div class="col-5">
         <div class="d-flex">
-            <div id="divVidList" class="pr-3" style="overflow:auto;">
+            <div id="divVidList" style="overflow:auto;width:60px">
 
                 {% for video in videos %}
                 <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{vid.video.fps}})" style="cursor:pointer;font-size:0.8rem" class="video-select">{{ video.id }}</div>

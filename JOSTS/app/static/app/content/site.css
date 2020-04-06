@@ -239,7 +239,7 @@ input:checked + .slider:before {
     cursor:pointer
 }
 .rule-section {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 .list-group-item {
     padding: 0.55rem 1rem;
