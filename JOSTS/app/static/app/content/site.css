@@ -425,3 +425,7 @@ a.BlueLoginButton {
     font-size: .9rem;
     text-decoration: underline;
 }
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255,255,255,.7)
+}

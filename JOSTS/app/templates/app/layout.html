@@ -25,7 +25,7 @@
                 </button>
                 <a href="/" class="navbar-brand">{{request.session.disc_path|upper}} {{request.session.version_name|upper}}</a>
             </div>
-            <span class="text-secondary">© 2019</span>
+            <span class="text-secondary"></span>
             <div class="navbar-collapse collapse" id="navbarSupportedContent">
                 <ul class="nav navbar-nav">
                     <li class="nav-item"><a class="nav-link {% if "elements" in request.path or request.path == "/" %}active{% endif %}" href="{% url 'elements' %}">Elements</a></li>
