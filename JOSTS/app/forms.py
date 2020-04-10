@@ -58,7 +58,7 @@ class UnsubscribeFeedbackForm(forms.ModelForm):
             }
 
 class LoginForm(AuthenticationForm):
-    discs = Disc.objects.all()
+    discs = Disc.objects.filter(show_login=True)
     disc = forms.ModelChoiceField(discs,empty_label = None)
 
     class Meta:
