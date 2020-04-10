@@ -429,3 +429,8 @@ a.BlueLoginButton {
 .navbar-dark .navbar-nav .nav-link {
     color: rgba(255,255,255,.7)
 }
+
+.radio_login {
+    list-style-type:none;
+    padding-left:3px;
+}

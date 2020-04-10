@@ -59,7 +59,7 @@ class UnsubscribeFeedbackForm(forms.ModelForm):
 
 class LoginForm(AuthenticationForm):
     discs = Disc.objects.filter(show_login=True)
-    disc = forms.ModelChoiceField(discs,empty_label = None)
+    disc = forms.ModelChoiceField(discs,widget=forms.RadioSelect(attrs={'class':'radio_login'}), empty_label = None)
 
     class Meta:
         model = User
