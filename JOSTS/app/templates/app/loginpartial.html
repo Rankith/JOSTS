@@ -21,7 +21,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item {% if "about" in request.path %}active{% endif %}" href="{% url 'about' %}">About</a>
-                <a class="dropdown-item {% if "contact" in request.path %}active{% endif %}" href="mailto:gymjudgehills@gmail.com">Contact</a>
+                <a class="dropdown-item {% if "contact" in request.path %}active{% endif %}" href="{% url 'contact' %}">Contact</a>
             </div>
         </li>
         <li class="nav-item dropdown">

@@ -1,20 +1,30 @@
 {% extends "app/layout.html" %}
 
 {% block content %}
-
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
-
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
-
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
-
+<div class="text-base">
+<h1>Contact Us</h1>
+<form method="post">
+    {% csrf_token %}
+    {% if success == 'success' %}
+        <h4 style="color:green">Contact request recieved.</h4>
+    {% endif %}
+     {% for field in form %}
+            <div class="row">
+                <div class="col">
+              {{ field.label_tag }}<br>
+              {{ field }}
+              {% if field.help_text %}
+                <small style="color: grey">{{ field.help_text }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+              {% endfor %}
+                    </div>
+            </div>
+          {% endfor %}
+    <div class="form-actions">
+      <button type="submit">Send</button>
+    </div>
+</form>
+    </div>
 {% endblock %}

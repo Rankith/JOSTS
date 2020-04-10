@@ -18,7 +18,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth.forms import UserCreationForm
-from .forms import SignUpForm, SubscriptionForm,UnsubscribeFeedbackForm,SettingsForm,LoginForm
+from .forms import SignUpForm, SubscriptionForm,UnsubscribeFeedbackForm,SettingsForm,LoginForm,ContactForm
 from django.contrib.auth import authenticate, login
 import stripe
 from django.views.decorators.csrf import csrf_exempt
@@ -28,6 +28,7 @@ import mysql.connector
 from django.db.models import Value
 from django.db.models.functions import Replace,Left
 from django.db.models import Count,Max
+from django.core.mail import send_mail
 
 def home(request):
     """Renders the home page."""
@@ -828,6 +829,7 @@ def save_video_notes(request):
         for note in data["notes"]:
             vn = VideoNote(**note)
             vn.save()
+        send_mail(request.session.get('version_name','websts') + ' video note updated',request.session.get('version_name','websts') + ' ' + Disc.objects.get(id=request.session.get('disc',1)).folder_name.upper() + ' ' + Video.objects.get(id=data["video"]).event +' video ' + str(data["video"]) + ' updated by ' + request.user.username,'stsmailrecover@gmail.com',['gymjudgehills@gmail.com'],fail_silently=True)
 
     resp = {'updated':True}
     #activity log
@@ -1320,3 +1322,19 @@ def change_disc(request):
     request.session['disc_full_name'] = disc.full_name
     request.session['disc_events'] = disc.event_list
     return redirect('elements')  
+
+def contact(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            from_email = form.cleaned_data['from_email']
+            message = form.cleaned_data['message']
+            try:
+                send_mail(subject, 'email from: ' + from_email + '\r\n' + message, 'stsmailrecover@gmail.com', ['gymjudgehills@gmail.com'])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return render(request, "app/contact.html", context={'form': form,'success':'success'})
+    return render(request, "app/contact.html", {'form': form})
