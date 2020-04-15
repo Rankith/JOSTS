@@ -834,7 +834,7 @@ def save_video_notes(request):
         vid =  Video.objects.get(pk=data["video"])
         vid.extra_notes = data["extra"]
         vid.save()
-        send_mail(request.session.get('version_name','websts') + ' video note updated',request.session.get('version_name','websts') + ' ' + Disc.objects.get(id=request.session.get('disc',1)).folder_name.upper() + ' ' + Video.objects.get(id=data["video"]).event +' video ' + str(data["video"]) + ' updated by ' + request.user.username,'stsmailrecover@gmail.com',['rankith117@gmail.com'],fail_silently=True)
+        send_mail(request.session.get('version_name','websts') + ' video note updated',request.session.get('version_name','websts') + ' ' + Disc.objects.get(id=request.session.get('disc',1)).folder_name.upper() + ' ' + Video.objects.get(id=data["video"]).event +' video ' + str(data["video"]) + ' updated by ' + request.user.username,'stsmailrecover@gmail.com',['gymjudgehills@gmail.com'],fail_silently=True)
 
     resp = {'updated':True}
     #activity log
