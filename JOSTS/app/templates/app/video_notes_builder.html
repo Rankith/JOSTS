@@ -77,8 +77,46 @@
                         <button id="btnUpdateUnrated" type="button" class="btn btn-main" style="width:47%;font-size:0.8rem;padding-top:.5rem;padding-bottom:.5rem" onclick="UpdateUnrated_Click()">Update Unrated</button>
                     </div>
                 </div>
+                <div class="row mt-auto">
+            <div class="text-base col text-center d-flex justify-content-center" id="divShorthandLookup"><!--justify-content-around-->
+                  <div class="align-self-center pr-4">
+                        <button type="button" class="btn btn-main mb-4" data-toggle="modal" data-target="#modalMain" onclick="LoadLookup()"><h5 class="mb-1 mt-1">Find</h5></button><br/>
+                       <button type="button" id="btnClear" class="btn btn-main" onclick="erase(); return false;"><h5 class="mb-1 mt-1">Clear</h5></button>
+                      <table class="w-100">
+                            <tr>
+                                <td align="right">
+                                    <label id="lblAutoClear" class="switch">
+                                        <input type="checkbox" id="chkAutoClear" checked="checked">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+                                <td style="vertical-align:top" align="left">
+                                    <label for="chkAutoClear" style="margin-bottom:0 !important">Auto Clear</label>
+                                </td>
+                            </tr>
+                        </table>
+                </div>
+                <div style="width:200px;">
+                  
+                    <img src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ lang_elements.element.image_url}}.svg" id="ShorthandTrainingImageTrace" name="ShorthandTrainingImageTrace" style="max-height:200;width:200px;position:absolute;opacity:0.5;display:none;user-drag: none;user-select: none;-moz-user-select: none;-webkit-user-drag: none;-webkit-user-select: none;-ms-user-select: none;">
+                    <canvas id="can" width="200" height="200"></canvas>
+                    <img id="canvasimg" style="display:none;">
+
+                    <input type="checkbox" id="chkTrace" style="display:none">
+                    <input type="checkbox" id="chkSave" style="display:none">
+                    <div class="col text-base">
+                        
+                    </div>
+                </div>
+                
+                <div class="align-self-center pl-4">
+                        <button type="button" class="btn btn-main"  onclick="CheckImage(); return false;"><h5 class="mb-1 mt-1">Done</h5></button>
+                </div>
             </div>
         </div>
+            </div>
+        </div>
+        
 
     </div>
     <div id="divNotesEditArea" class="col-5">
@@ -140,25 +178,33 @@
 
 {% endblock %}
 {% block scripts %}
-
+<script src="{% static 'app/scripts/shorthand_drawing.js' %}?v=1.1"></script>
 <script type="text/javascript">
     var SourceBase = "{% static 'app/videos/'%}{{request.session.disc_path}}/{{ event }}/";
     var Elements = new Array();
     var Unrated = new Array();
+    var ElementIDs = new Array();
+    var UnratedOldIDs = new Array();
     var DiscP = "{{request.session.disc_path}}";
+    var Disc = "{{request.session.disc_full_name}}";
     var Rules = new Array();
     var EventP = "{{ event }}";
+    var EventForDraw = "{{ event|upper }}";
+    var drawing_prefix = '{{drawing_prefix}}';
     token = "{{ csrf_token }}";
     {% for element in elements %}
     Elements[{{element.element.id}}] = {group: '{{ element.element.str_grp }}',
                         val: '{{ element.element.letter_value }}',
                         idtext: '{{ element.id_number_text }}',
                         text: '{{ element.short_text }}',
+    idnum: '{{ element.element.id_number }}',
                         id: '{{element.element.id}}'};
+    ElementIDs['{{element.element.id_number}}'] = '{{element.element.id}}';
     {% endfor %}
     {% for unrated in unrateds %}
     Unrated[{{unrated.id}}] = {name: '{{ unrated.name }}',
                         id: '{{unrated.id}}'};
+    UnratedOldIDs['{{unrated.old_id}}'] = '{{unrated.id}}';
     {% endfor %}
     {% for rule in rules %}
     Rules[{{rule.id}}] = {rule: '{{ rule.rule }}',
@@ -219,7 +265,33 @@
     skeleton += "<input type='checkbox' onclick='chkSkipFrameClick(NumberRep)' id='chkNumberRepSkipFrame'>";
     skeleton += "</div>";
     skeleton += "</div>";
+    DrawInit();
 
+    function SetResult(result) {
+        //console.log(result);
+        result = result.replace(EventP.toLowerCase(), "");
+        if (result.substring(0, 2) == "es") {
+            result = result.replace("es", "");
+            $('#ddlUnrated').selectpicker('val', UnratedOldIDs[result]);
+            AddUnrated_Click();
+        }
+        else {
+            $('#ddlElement').selectpicker('val', ElementIDs[result]);
+            AddElement_Click();
+        }
+        if ($("#chkAutoClear").prop("checked"))
+            erase();
+    }
+     function LoadLookup() {
+        $("#modalMainTitle").html("Lookup By Group");
+        $(".modal-dialog").addClass("mw-100").addClass("w-75");
+        $("#modalBodyArea2").hide();
+        $("#modalBodyArea1").empty();
+        $.get("/element_lookup/?event=" + EventP, function (data) {
+            $("#modalBodyArea1").append(data);
+        });
+        $("#modalBodyArea1").show();
+    }
     function AddNotesRow(CountIn,ElementTextIn,FrameIn,ElementIDIn, ElementValueIn,CRIn = '', ColorIn='Black',NoValueIn='no',SkipIn = false) {
         var SkelAdd = skeleton
         SkelAdd = SkelAdd.replace(/NumberRep/g, CountIn);
@@ -236,7 +308,12 @@
         $("#txt" + (CountIn) + "CR").val(CRIn);
         $("#chk" + (CountIn) + "SkipFrame").prop('checked', SkipIn);
     }
+        function CheckImageError(result) {
 
+    }
+    function CheckImageBefore(image) {
+
+    }
     function AddElement_Click() {
         if ($("#ddlElement").val() != "" && OnVideo != -1) {
             ChangesMade = true;

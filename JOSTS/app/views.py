@@ -645,7 +645,7 @@ def shorthand_search(request):
     return render(request, 'app/element_search.html',context=context)
 
 def element_lookup(request):
-    eventIn = request.GET.get('event')
+    eventIn = request.GET.get('event').upper()
     if (eventIn == "V"):
         vals = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     else:
@@ -808,6 +808,7 @@ def video_notes_builder(request):
         'event': event,
         'events': events,
         'unrateds': unrated,
+        'drawing_prefix':VersionSettings.objects.first().drawing_prefix
         }
     return render(request, 'app/video_notes_builder.html',context=context)
 

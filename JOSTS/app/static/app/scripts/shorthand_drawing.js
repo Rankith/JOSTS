@@ -229,9 +229,14 @@ function CheckImage() {
     var dataImage = canvas.toDataURL();
     SaveRecordImageNoData(dataImage);
     var fd = new FormData();
+    var eventrespond;
+    if (typeof (Event) == "function")
+        eventrespond = EventForDraw;
+    else
+        eventrespond = Event;
     fd.append('image', dataImage);
-    fd.append('discevent', drawing_prefix + Disc + Event);
-    console.log(drawing_prefix + Disc + Event);
+    fd.append('discevent', drawing_prefix + Disc + eventrespond);
+    console.log(drawing_prefix + Disc + eventrespond);
     //AddToListYou(dataImage);
     $.ajax({
         'url': "https://symbolsdl.jdogzennodes.club:5000/predict",
@@ -272,14 +277,18 @@ function SaveRecordImageNoData(image) {
         //generate unique string
         var name = date.toLocaleString().replace(/\//g, "").replace(/ /g, "").replace(",", "").replace(/:/g, "") + date.getMilliseconds();
         name = $("#hdnName").val() + name;
-
+        var eventrespond;
+        if (typeof (Event) == "function")
+            eventrespond = EventForDraw;
+        else
+            eventrespond = Event;
         $.ajax({
             url: '/save_record_image/',
             type: 'POST',
             data: {
                 data: image,
                 name: name,
-                event: Event.toLowerCase(),
+                event: eventrespond.toLowerCase(),
                 disc: Disc.toLowerCase(),
                 label: $("#hdnName").val(),
                 csrfmiddlewaretoken: window.CSRF_TOKEN
