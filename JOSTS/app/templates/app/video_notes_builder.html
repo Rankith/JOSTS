@@ -17,8 +17,8 @@
             <div style="flex-grow:1" class="pl-2">
                     
                 <div>{% include "app/video.html" %}</div>
-                <div class="row pt-2">
-                    <div class="col-6">
+                <div class="row no-gutters pt-2">
+                    <div class="col-7">
                         <div class="form-group">
                             <select class="selectpicker form-control" id="ddlElement" data-live-search="true" data-size="8" data-header="Select an element" title="Select an element">
                                 {% for element in elements %}
@@ -36,14 +36,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <button id="btnAddElement" type="button" class="btn btn-main" onclick="AddElement_Click()">Add Element</button>
-                        <button id="btnUpdateElement" type="button" class="btn btn-main" onclick="UpdateElement_Click()">Update Element</button>
+                    <div class="col-5 text-right">
+                        <button id="btnAddElement" type="button" class="btn btn-main" style="width:47%;font-size:0.8rem;padding-top:.5rem;padding-bottom:.5rem" onclick="AddElement_Click()">Add Element</button>
+                        <button id="btnUpdateElement" type="button" class="btn btn-main" style="width:47%;font-size:0.8rem;padding-top:.5rem;padding-bottom:.5rem" onclick="UpdateElement_Click()">Update Element</button>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-6">
+                <div class="row no-gutters">
+                    <div class="col-7">
                         <div class="form-group">
                             <select class="selectpicker form-control" id="ddlRule" data-live-search="true" data-size="8" data-header="Select a deduction" title="Select a deduction">
                                 {% for rule in rules %}
@@ -54,14 +54,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <button id="btnAddDeduction" type="button" class="btn btn-main" onclick="AddRule_Click()">Add Deduction</button>
-                        <button id="btnUpdateDeduction" type="button" class="btn btn-main" onclick="UpdateRule_Click()">Update Deduction</button>
+                    <div class="col-5 text-right">
+                        <button id="btnAddDeduction" type="button" class="btn btn-main" style="width:47%;font-size:0.8rem;padding-top:.5rem;padding-bottom:.5rem" onclick="AddRule_Click()">Add Deduction</button>
+                        <button id="btnUpdateDeduction" type="button" class="btn btn-main" style="width:47%;font-size:0.8rem;padding-top:.5rem;padding-bottom:.5rem" onclick="UpdateRule_Click()">Update Deduction</button>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-6">
+                <div class="row no-gutters">
+                    <div class="col-7">
                         <div class="form-group">
                             <select class="selectpicker form-control" id="ddlUnrated" data-live-search="true" data-size="8" data-header="Select an unrated element" title="Select an unrated element">
                                  {% for unrated in unrateds %}
@@ -72,9 +72,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <button id="btnAddUnrated" type="button" class="btn btn-main" onclick="AddUnrated_Click()">Add Unrated</button>
-                        <button id="btnUpdateUnrated" type="button" class="btn btn-main" onclick="UpdateUnrated_Click()">Update Unrated</button>
+                    <div class="col-5 text-right">
+                        <button id="btnAddUnrated" type="button" class="btn btn-main" style="width:47%;font-size:0.8rem;padding-top:.5rem;padding-bottom:.5rem" onclick="AddUnrated_Click()">Add Unrated</button>
+                        <button id="btnUpdateUnrated" type="button" class="btn btn-main" style="width:47%;font-size:0.8rem;padding-top:.5rem;padding-bottom:.5rem" onclick="UpdateUnrated_Click()">Update Unrated</button>
                     </div>
                 </div>
             </div>
@@ -126,10 +126,15 @@
         <button id="btnUpdateFrame" type="button" class="btn btn-main mt-2" onclick="UpdateFrame_Click()">Update Frame</button><br/>
         <button id="btnDuplicate" type="button" class="btn btn-main mt-2" onclick="Duplicate()">Duplicate</button><br />
         <button id="btnRemove" type="button" class="btn btn-main mt-2" onclick="Remove()">Remove</button><br /><br/>
-        <button id="btnSave" type="button" class="btn btn-main" onclick="SaveNotes_Click()">Save Notes</button><br/><br/>
-        <button id="btnPreview" type="button" class="btn btn-main" onclick="UpdatePreview_Click()">Update Preview</button><br/><br/>
+        <div class="text-center">
+        <button id="btnSave" type="button" class="btn btn-main mb-2" onclick="SaveNotes_Click()">Save Analysis</button><br/>
+        <button id="btnPreview" type="button" class="btn btn-main mb-2" onclick="UpdatePreview_Click()">Update Preview</button><br/>
+            </div>
         <div id="divNotesArea">
         </div>
+        <div id="divExtraNotesArea">
+            Extra Notes:
+            <textarea id="txtExtraNotes" name="txtExtraNotes" style="height:300px;width:100%"></textarea>
     </div>
 </div>
 
@@ -480,7 +485,8 @@
             url: '/ajax/save_video_notes/',
             data: JSON.stringify({
                 video: OnVideo,
-                notes: Notes
+                notes: Notes,
+                extra: $("#txtExtraNotes").val()
             }),
             headers: { "X-CSRFToken": token },
             type:'POST',
@@ -519,6 +525,7 @@
             url: '/get_video_notes/?video=' + OnVideo,
             success: function (data) {
                 Notes = data.notes;
+                $("#txtExtraNotes").val(data.extra)
                 LoadNotes();
             }
       });

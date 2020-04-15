@@ -68,7 +68,7 @@
                 <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}redstripe.svg" style="position:absolute;height:65px;top:0px">
                 {% endif %}
                 <div class="text-center" style="font-size:0.9rem">{{note.element_link.letter_value}}</div>
-                <div class="text-center"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ note.element_link.image_url}}.svg"/></div>
+                <div class="text-center" style="background-color:white"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ note.element_link.image_url}}.svg"/></div>
                 <div class="text-center" style="font-size:0.5rem">&nbsp;
         {% elif note.rule_link != None %}
             {% if note.rule_link.deduction_amount > 0 %}
@@ -80,7 +80,7 @@
             {% endif %}
             <div id="divHud{{note.frame}}" frame="{{note.frame}}" style="position:relative;cursor:pointer" class="HudContainer" onclick="VideoNoteClick({{note.frame}})">
                 <div class="text-center" style="font-size:0.9rem"></div>
-                <div class="text-center"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/es{{ note.unrated_link.id}}.svg"/></div>
+                <div class="text-center" style="background-color:white"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/es{{ note.unrated_link.id}}.svg"/></div>
                 <div class="text-center" style="font-size:0.5rem">&nbsp;
         {% endif %}
         {% endfor %}

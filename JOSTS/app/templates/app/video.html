@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <div id="divVideoContainer">
-    <video controls id="VideoPlayer" class="video-js vjs-16-9">
+    <video controls id="VideoPlayer" class="video-js vjs-16-9" disablePictureInPicture >
         <source src="{% static 'app/videos/' %}{{request.session.disc_path}}/{{ element.element.event|lower }}/{{element.element.videos.first.file}}" type="video/mp4">
     </video>
 </div>
@@ -14,7 +14,7 @@
                 <div style="cursor:pointer" class="font-weight-bold" onmouseup="VideoStepEnd();" onmouseout="VideoStepEnd();" onmousedown="VideoStep(-1);" title="-1 Frames">-1</div>
             </div>
             <div class="col-4 text-center">
-                <div id="VidFrameDisplay" class="text-center">0</div>
+                <div id="VidFrameDisplay" class="text-center" onclick="$('#txtFrameJump').val($('#VidFrameDisplay').val())">0</div>
                  <div id="divVidFramesSecondsHolder" class="" style="font-size:0.6rem"><div id="divVidFramesSeconds"></div></div>
             </div>
             
@@ -27,7 +27,9 @@
         </div>
     </div>
     <div id="VidFramesArea" class="col-xl-3 col-md-1 col-1 d-flex justify-content-center">
-        <input id="txtFrameJump" style="width:40px;height:25px;display:none" onkeypress="TextFrameJump(event)" />
+        <div class="text-center"><input id="txtFrameJump" style="width:40px;height:25px;display:none" onkeypress="TextFrameJump(event)" />
+        <div style="font-size:0.6rem">enter frame</div></div>
+        
     </div>
     <div id="VidSpeedArea" class="col-5 col-xl-5">
         <div class="row no-gutters">

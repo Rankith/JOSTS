@@ -814,7 +814,9 @@ def video_notes_builder(request):
 def get_video_notes(request):
     video = request.GET.get('video')
     notes = VideoNote.objects.filter(video=video).order_by('frame').values()
-    return JsonResponse({'notes': list(notes)})
+    extra = Video.objects.get(pk=video).extra_notes
+    return JsonResponse({'notes': list(notes),
+                         'extra': extra})
 
 def save_video_notes(request):
     data = json.loads(request.body)
@@ -829,7 +831,10 @@ def save_video_notes(request):
         for note in data["notes"]:
             vn = VideoNote(**note)
             vn.save()
-        send_mail(request.session.get('version_name','websts') + ' video note updated',request.session.get('version_name','websts') + ' ' + Disc.objects.get(id=request.session.get('disc',1)).folder_name.upper() + ' ' + Video.objects.get(id=data["video"]).event +' video ' + str(data["video"]) + ' updated by ' + request.user.username,'stsmailrecover@gmail.com',['gymjudgehills@gmail.com'],fail_silently=True)
+        vid =  Video.objects.get(pk=data["video"])
+        vid.extra_notes = data["extra"]
+        vid.save()
+        send_mail(request.session.get('version_name','websts') + ' video note updated',request.session.get('version_name','websts') + ' ' + Disc.objects.get(id=request.session.get('disc',1)).folder_name.upper() + ' ' + Video.objects.get(id=data["video"]).event +' video ' + str(data["video"]) + ' updated by ' + request.user.username,'stsmailrecover@gmail.com',['rankith117@gmail.com'],fail_silently=True)
 
     resp = {'updated':True}
     #activity log

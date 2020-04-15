@@ -25,6 +25,7 @@ class Video(models.Model):
     approved = models.BooleanField(default=False)
     approved_johanna = models.BooleanField(default=False)
     old_id = models.IntegerField(null=True,default=None)
+    extra_notes = models.TextField(blank=True,default='')
     def __str__(self):
         return self.event + " " + self.file
 
