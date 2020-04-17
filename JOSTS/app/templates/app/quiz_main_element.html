@@ -26,8 +26,8 @@
         <div class="row">
             {% for group in groups %}
             <div class="pr-2">
-                <label id="lblG{{group.str_grp}}" class="search-button">
-                    <input type="checkbox" id="chkG{{group.str_grp}}" value="{{group.str_grp}}" class="check-search answer-group" onchange="SelectGroup(this)">
+                <label id="lblGA{{group.str_grp}}" class="search-button">
+                    <input type="checkbox" id="chkGA{{group.str_grp}}" value="{{group.str_grp}}" class="check-search answer-group" onchange="SelectGroup(this)">
                     <div class="search-button group-button answer-button-group"><div>{{group.str_grp}}</div></div>
                 </label>
             </div>
@@ -164,7 +164,7 @@
                 $('.answer-group:checkbox:checked').next().removeClass("group-button").addClass("quiz-correct-button");
             else {
                 $('.answer-group:checkbox:checked').next().removeClass("group-button").addClass("quiz-wrong-button");
-                $('#chkG' + QuizElementsGroups[OnElement]).next().removeClass("group-button").addClass("quiz-correct-button");
+                $('#chkGA' + QuizElementsGroups[OnElement]).next().removeClass("group-button").addClass("quiz-correct-button");
                 AllCorrect = false;
             }
         }

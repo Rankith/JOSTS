@@ -686,7 +686,21 @@ def quiz_element(request):
 
 def quiz_setup(request):
     events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+    vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
+    groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
+    groupDict = {}
+    valueDict = {}
+    for group in groups:
+        groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
+        groupDict[group['str_grp']] = groupEvents
+    for value in vals:
+        valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value']).order_by('event').values('event').distinct())
+        valueDict[value['letter_value']] = valueEvents
     context = {
+        'vals':vals,
+        'groups': groups,
+        'groupsEvents': groupDict,
+        'valueEvents': valueDict,
         'events':events,
         'type': request.GET.get('type')
         }
@@ -694,8 +708,29 @@ def quiz_setup(request):
 
 def quiz(request):
     missed = request.GET.get('missed',-1)
+    
+    #search = dget['search'][0]
+    #search = search.replace("1/2","½")
+    #search = search.replace("1/4","¼")
+    #del dget['search']
     if missed == -1:
-        quiz = ElementText.objects.filter(element__event=request.GET.get('event'),element__disc=request.session.get('disc',1)).order_by('?')
+        dget = dict(request.GET)
+        del dget['undefined']
+        del dget['prompt']
+        del dget['type']
+        del dget['event']
+        query = Q(language="EN")
+        for k,v in dget.items():
+            innerQuery = Q()
+            for i in v:
+                kwargs = {'{0}'.format(k): i}
+                innerQuery.add(Q(**kwargs), Q.OR)
+            query.add(innerQuery,Q.AND)
+        quiz = ElementText.objects.filter(query).order_by('?')
+        #if search != "":
+            #elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
+        quiz = quiz.filter(element__disc=request.session.get('disc',1))
+        #quiz = ElementText.objects.filter(element__event=request.GET.get('event'),element__disc=request.session.get('disc',1)).order_by('?')
         elements = quiz
     else:
         quiz = ElementText.objects.filter(element__in=QuizResult.objects.filter(id=missed)[0].missed.all().values_list('id'))

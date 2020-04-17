@@ -17,6 +17,29 @@
     {% endfor %}
 </div>
 
+<div class="row no-gutters">
+    {% for key, value in groupsEvents.items %}
+    <div class="pr-2">
+        <label id="lblG{{forloop.counter}}" class="search-button">
+            <input type="checkbox" id="chkG{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__str_grp" onchange="SearchChange(this)">
+            <div class="search-button group-button"><div>{{key}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row no-gutters" id="Values">
+    {% for key, value in valueEvents.items %}
+    <div class="pr-2">
+        <label id="lblV{{forloop.counter}}" class="search-button">
+            <input type="checkbox" id="chkV{{forloop.counter}}" value="{{key}}" class="check-search {{value}}" data-search="element__letter_value" onchange="SearchChange(this)">
+            <div class="search-button value-button"><div style="text-transform:uppercase">{{key}}</div></div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+
+
 {% if type == "Shorthand" %}
 <h5>Prompt:</h5>
 <div class="row no-gutters">
@@ -139,10 +162,38 @@
                     $(this).prop('checked', true);
                 });
             }
+           
         }
+        
+        $(".check-search-display:checkbox").each(function (i) {
+                if (localStorage.getItem(this.id) == "1")
+                    $(this).prop('checked', true);
+                else
+                    $(this).prop('checked', false);
+             });
+            if ($('.check-search-display:checked').val() == undefined) {
+                $("#chkDisplayImage").prop('checked', true);
+                 localStorage.setItem('chkDisplayImage', 1);
+        }
+         if ($(".check-search-element-prompt:checkbox:checked").length == 0) {
+                  $("#chkPromptElementImage").prop('checked', true);
+                localStorage.setItem("chkPromptElementImage", 1);
+        }
+
+         if ($(".check-search-element-test:checkbox:checked").length == 0) {
+                  $("#chkTestElementGroup").prop('checked', true);
+                localStorage.setItem("chkTestElementGroup", 1);
+            }
         CheckIfVault();
+        ShowHideSearches();
 
         }
+    function ShowHideSearches() {
+        ev = $('.check-search-event:checked').val();
+        $('.check-search').not('.check-search-event').not('.search-' + ev).not('.check-search-display').parent().hide();
+        $('.check-search.search-' + ev).parent().show();
+
+    }
     function SearchChangeEvent(el) {
         //console.log("SCE");
         if (!el.checked)
@@ -153,6 +204,7 @@
             $('.check-search-event').not(el).each(function (i) {
                 localStorage.setItem(this.id, 0);
             });
+            ShowHideSearches();
             CheckIfVault();
             //Event = $(el).val();
         }
@@ -185,7 +237,16 @@
 
     function StartQuiz() {
         SetQuizSettings();
-        $.get("/quiz/?type=" + type + "&event=" + $(".check-search:checkbox:checked").val() + "&prompt=" + PromptTypeSetup, function (data) {
+         var strValues = "";
+        Event = $('.check-search-event:checkbox:checked').val();
+       
+        $(".check-search:checkbox:checked").each(function (i) {
+            if ($(this).parent().is(":visible"))
+                strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+            //console.log($(this).attr("data-search") + " : " + $(this).val());
+        });
+
+        $.get("/quiz/?type=" + type + "&event=" + $(".check-search:checkbox:checked").val() + "&prompt=" + PromptTypeSetup + "&" + strValues, function (data) {
             $("#divContentParent").empty();
             $("#divContentParent").append(data);
             $('#sidebarCollapse').click();
