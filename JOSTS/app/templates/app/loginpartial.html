@@ -9,8 +9,8 @@
                 {{request.session.disc_path|upper}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'change_disc' %}?disc=wag">WAG</a>
-                <a class="dropdown-item" href="{% url 'change_disc' %}?disc=mag">MAG</a>
+                <a class="dropdown-item" href="{% url 'change_disc' %}?disc=wag&next={{ request.path }}">WAG</a>
+                <a class="dropdown-item" href="{% url 'change_disc' %}?disc=mag&next={{ request.path }}">MAG</a>
             </div>
         </li>
         {% endif %}

@@ -1362,7 +1362,7 @@ def change_disc(request):
     request.session['disc_path'] = disc.folder_name
     request.session['disc_full_name'] = disc.full_name
     request.session['disc_events'] = disc.event_list
-    return redirect('elements')  
+    return redirect(request.GET.get('next'))  
 
 def contact(request):
     if request.method == 'GET':
