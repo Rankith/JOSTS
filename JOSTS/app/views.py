@@ -894,6 +894,9 @@ def video_notes(request):
         if len(jnote) >= 1:
             frame_jump = jnote[0].frame
 
+    #remove 0 deductions if not rules
+    if type == 'element':
+        notes = notes.exclude(Q(rule_link__deduction_amount=0) & ~Q(rule_link__text='--- no E-jury deductions ---'))
     context = {
         'elementjump':frame_jump,
         'notes':notes
