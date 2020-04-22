@@ -10,7 +10,7 @@
                 </div>
                 <div style="max-height:500px;overflow:auto">Related Videos
                 <div id="divVideosNotInList">
-                    {% for vid in potential %}<button id="btnVid{{ vid.id }}" type="button" draggable="true" class="btn btn-main mb-2 col-xl-3 col-2 vid-not-in-list mr-2 vid-edit btn-small-pad" videoid="{{ vid.id}}" onclick="EditModeShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},this,'{{vid.video.old_id}}',{{element.element.id}})">{{ vid.id }}</button>{% endfor %}
+                    {% for vid in potential %}<button id="btnVid{{ vid.id }}" type="button" draggable="true" class="btn btn-main mb-2 col-xl-3 col-2 vid-not-in-list mr-2 vid-edit btn-small-pad" videoid="{{ vid.id}}" onclick="EditModeShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},this,'{{vid.old_id}}',{{element.element.id}})">{{ vid.id }}</button>{% endfor %}
                 </div>
             </div>
             {% else %}
