@@ -144,6 +144,24 @@
     }
     function SetListHeight() {
     }
+    function GoNext() {
+        if ($("#divHolder" + SelectedElement).next().length != 0)
+            $("#divHolder" + SelectedElement).next().click();
+        else
+            GoFirst();
+    }
+    function GoPrevious() {
+        if ($("#divHolder" + SelectedElement).prev().length != 0)
+            $("#divHolder" + SelectedElement).prev().click();
+        else
+            GoLast();
+    }
+    function GoFirst() {
+        $("#divHolder" + SelectedElement).parent().children()[0].click()
+    }
+    function GoLast() {
+        $("#divHolder" + SelectedElement).parent().children().last().click()
+    }
 
 </script>
 {% endblock %}
