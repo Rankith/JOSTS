@@ -7,12 +7,12 @@
             <div style="height:220px" class="image-background rounded position-relative">
                <div class="detail-top-left">{{lang_elements.named}}</div>
                 <div class="detail-top-right"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ lang_elements.element.image_url}}.svg"/></div>
-                <div style="position:absolute;left:5px;top:40%">
+                <div style="position:absolute;left:5px;top:40%;z-index:1001">
                     <button id="btnPrev" type="button" class="btn btn-main pr-3 pl-3"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoPrevious(); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
                     <br/>
                      <button id="btnFirst" type="button" class="btn btn-main pr-3 pl-3"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoFirst(); event.stopPropagation();"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></button>
                 </div>
-                <div style="position:absolute;right:5px;top:40%">
+                <div style="position:absolute;right:5px;top:40%;z-index:1001">
                     <button id="btnNext" type="button" class="btn btn-main pr-3 pl-3" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoNext(); event.stopPropagation();"><i class="fas fa-chevron-right"></i></button>
                     <br/>
                      <button id="btnLast" type="button" class="btn btn-main pr-3 pl-3"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoLast(); event.stopPropagation();"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></button>
