@@ -146,7 +146,7 @@ class CompetitionVideoAdmin(ImportExportModelAdmin):
 class TCExampleAdmin(ImportExportModelAdmin):
     list_display=('id', 'type','video','name','year')
     list_editable=('name',)
-    list_filter = ('type','year')
+    list_filter = ('type','year','video__disc')
 
 class JudgeInstructionAdmin(admin.ModelAdmin):
     list_display=('id', 'disc','event','year','type')
