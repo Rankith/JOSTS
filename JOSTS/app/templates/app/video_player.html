@@ -17,7 +17,7 @@
                 <div class="row no-gutters">
                 {% for vid in element.element.videolink_set.all %}
                     <!--<div class="col-2 col-xl-3">-->
-                        <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main col-2 col-md-1 col-xl-3 mb-2 mr-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{element.element.id}})">{{ forloop.counter }}</button>
+                        <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main vid-btn col-2 col-md-1 col-xl-3 mb-2 mr-2" onclick="ShowVideo({{ vid.video.id }},'{{ vid.video.file }}',{{vid.video.fps}},'{{vid.video.old_id}}',{{element.element.id}},'','','element',this)">{{ forloop.counter }}</button>
                 <!--</div>-->
                         {% endfor %}
                 {% if editable %}
@@ -38,7 +38,7 @@
                                 {% for vid in vids|slice:":4" %}
                                     {% if vid != None %}
                                         <div class="col-6 text-center">
-                                            <button id="btnVid{{ forloop.counter }}" type="button" class="btn btn-main mb-2" style="width:80%" onclick="ShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},'{{vid.old_id}}',{{rule.rule.id}},'{{vid.event}}','','rule')">{{ forloop.counter }}</button>
+                                            <button id="btnVid{{ forloop.counter }}" type="button" class="btn vid-btn btn-main mb-2" style="width:80%" onclick="ShowVideo({{ vid.id }},'{{ vid.file }}',{{vid.fps}},'{{vid.old_id}}',{{rule.rule.id}},'{{vid.event}}','','rule',this)">{{ forloop.counter }}</button>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -87,7 +87,7 @@
     $("#divVideoElement").html("{{rule.specific_deduction}}");
     {% endif %}
 </script>
-<script src="{% static 'app/scripts/video_player.js' %}?v=1.52"></script>
+<script src="{% static 'app/scripts/video_player.js' %}?v=1.54"></script>
 <script src="{% static 'app/scripts/sortable.min.js' %}?v=1.1"></script>
 <script type="text/javascript">
     function EditModeShowVideo(idIn, fileIn, FPSIn = 25,el,old,elID=-1) {

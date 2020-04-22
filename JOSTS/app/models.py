@@ -230,6 +230,7 @@ class VideoNoteTemp(models.Model):
     video = models.ForeignKey(Video, on_delete=models.SET_NULL,null=True)
     rule_link = models.ForeignKey(RuleLink, on_delete=models.SET_NULL,null=True,blank=True)
     element_link = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True,blank=True)
+    unrated_link = models.ForeignKey(UnratedElement, on_delete=models.SET_NULL,null=True,blank=True)
     frame = models.IntegerField(default=0)
     skip_frame = models.BooleanField(default=False)
     color = models.CharField(max_length=12,blank=True,default='')

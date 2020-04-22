@@ -83,7 +83,7 @@ var EJump = 0;
     }
    
 
-    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1, extrapath='', hide='', typeIn='element') {
+    function ShowVideo(idIn, fileIn, FPSIn = 25, oldID, elementJump = -1, extrapath='', hide='', typeIn='element', elIn = '') {
         /*console.log(idIn);
         console.log(fileIn);
         console.log(FPSIn);
@@ -92,6 +92,7 @@ var EJump = 0;
         VidJSPlayer.pause();*/
         var vidurl;
         console.log(extrapath);
+        //console.log(oldID)
         if (oldID != '' && oldID != 'None') {
             if (extrapath == '')
                 vidurl = "https://web-sts.com/" + DiscP + "/VideoFiles/" + EventP + "/" + fileIn;
@@ -100,6 +101,9 @@ var EJump = 0;
         }
         else
             vidurl = SourceBase + fileIn;
+        $(".vid-btn").removeClass("value-button");
+        if (elIn != '')
+            $(elIn).addClass("value-button");
         console.log(vidurl);
         VidFPS = FPSIn;
         VidJSPlayer.src({

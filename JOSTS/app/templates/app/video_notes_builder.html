@@ -10,7 +10,7 @@
             <div id="divVidList" style="overflow:auto;width:60px">
 
                 {% for video in videos %}
-                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{vid.video.fps}})" style="cursor:pointer;font-size:0.8rem" class="video-select">{{ video.id }}</div>
+                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{video.fps}},'{{video.old_id}}','{{video.competitionvideo_set.first.competition_group.competition.type.short_name}}{{video.competitionvideo_set.first.competition_group.competition.short_name}}/{{video.event}}/{{video.competitionvideo_set.first.competition_group.short_name}}')" style="cursor:pointer;font-size:0.8rem" class="video-select">{{ video.id }}</div>
                 {% endfor %}
                
             </div>
@@ -222,7 +222,7 @@
 
    
 </script>
-<script src="{% static 'app/scripts/video_player.js' %}?v=1.51"></script>
+<script src="{% static 'app/scripts/video_player.js' %}?v=1.54"></script>
 <script type="text/javascript">
 
     var ChangesMade = false;
@@ -485,7 +485,7 @@
         SelectedRow = TRIn;
     }
 
-    function VideoClick(idIn, fileIn,el,FPSIn = 25) {
+    function VideoClick(idIn, fileIn,el,FPSIn = 25,oldIDIn, extraPathIn) {
         if (ChangesMade)
 	    {
 		    if (confirm('Changes not saved, are you sure you want to go to a different video?'))
@@ -498,11 +498,14 @@
 		    }
 
         }
+        if (extraPathIn == "//")
+            extraPathIn = "";
+        //console.log(extraPathIn);
         VidFPS = FPSIn;
         $("#divVidFramesSeconds").html("1 sec = " + VidFPS + "");
         ChangesMade = false;
         RemoveAll();
-        ShowVideo(idIn, fileIn);
+        ShowVideo(idIn, fileIn, FPSIn, oldIDIn,-1,extraPathIn);
         $(".video-select").removeClass("div-selected");
         $(el).addClass("div-selected");
         OnVideo = idIn;
