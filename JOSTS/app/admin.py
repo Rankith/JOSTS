@@ -113,9 +113,9 @@ class VideoLinkAdmin(admin.ModelAdmin):
     list_editable=('video','element','order','frame_jump')
 
 class VideoAdmin(ImportExportModelAdmin):
-    list_display=('id','disc','event','file','fps','approved', 'approved_johanna','old_id')
+    list_display=('id','disc','event','file','fps','approved_final', 'approved_liason','old_id')
     list_filter = ('disc','event')
-    list_editable=('disc','event','file','fps','approved', 'approved_johanna')
+    list_editable=('disc','event','file','fps','approved_final', 'approved_liason')
     search_fields = ('file','old_id')
 
 class StructureGroupAdmin(admin.ModelAdmin):

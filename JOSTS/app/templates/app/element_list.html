@@ -283,3 +283,12 @@
 {% endif %}
 
 <div id="divNumElements" style="display:none">{{num_elements}}</div>
+<script type="text/javascript">
+    var ElementList = new Array();
+    var elcount = 0;
+
+    {% for element in lang_elements %}
+    ElementList[elcount] = {{element.id}};
+    {% endfor %}
+
+</script>

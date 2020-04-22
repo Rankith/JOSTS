@@ -163,8 +163,34 @@
                 </div>
         <button id="btnUpdateFrame" type="button" class="btn btn-main mt-2" onclick="UpdateFrame_Click()">Update Frame</button><br/>
         <button id="btnDuplicate" type="button" class="btn btn-main mt-2" onclick="Duplicate()">Duplicate</button><br />
-        <button id="btnRemove" type="button" class="btn btn-main mt-2" onclick="Remove()">Remove</button><br /><br/>
+        <button id="btnRemove" type="button" class="btn btn-main mt-2" onclick="Remove()">Remove</button><br />
+        <br/>
         <div class="text-center">
+            <center>
+              <table>
+                <tr>
+                    <td align="right">
+                        <label id="lblFinalApproved" class="switch">
+                            <input type="checkbox" id="chkFinalApproved" checked="checked">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td style="vertical-align:top" align="left">
+                        <label for="chkFinalApproved" style="margin-bottom:0 !important">Final Approved</label>
+                    </td>
+                </tr>
+                 <tr>
+                    <td align="right">
+                        <label id="lblLiasonApproved" class="switch">
+                            <input type="checkbox" id="chkLiasonApproved" checked="checked">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td style="vertical-align:top" align="left">
+                        <label for="chkLiasonApproved" style="margin-bottom:0 !important">Liaison Approved</label>
+                    </td>
+                </tr>
+            </table></center>
         <button id="btnSave" type="button" class="btn btn-main mb-2" onclick="SaveNotes_Click()">Save Analysis</button><br/>
         <button id="btnPreview" type="button" class="btn btn-main mb-2" onclick="UpdatePreview_Click()">Update Preview</button><br/>
             </div>
@@ -231,6 +257,14 @@
     var OnVideo = -1;
     var Notes = new Array();
     var DataHold;
+
+    $('#chkLiasonApproved').click(function () {
+        SetApproved();
+    });
+
+    $('#chkFinalApproved').click(function () {
+        SetApproved();
+    });
 
     $("#divMain").removeClass("container").addClass("container-fluid");
     $("#divVideoContainer").css("height", "480px");
@@ -556,6 +590,24 @@
             OnRow++;
         }
     }
+
+     function SetApproved() {
+        $.ajax({
+            url: '/ajax/update_video_approved/',
+            data: JSON.stringify({
+                video: OnVideo,
+                approved_l: $('#chkLiasonApproved').prop("checked"),
+                approved_f: $('#chkFinalApproved').prop("checked")
+            }),
+            headers: { "X-CSRFToken": token },
+            type:'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'text',
+            success: function (data) {
+            }
+      });
+    }
+
     function SaveNotes_Click() {
         SaveNotes()
         
@@ -607,6 +659,8 @@
                 Notes = data.notes;
                 $("#txtExtraNotes").val(data.extra)
                 LoadNotes();
+                $('#chkLiasonApproved').prop("checked", data.approved_l)
+                $('#chkFinalApproved').prop("checked", data.approved_f)
             }
       });
     }

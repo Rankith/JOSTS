@@ -850,9 +850,11 @@ def video_notes_builder(request):
 def get_video_notes(request):
     video = request.GET.get('video')
     notes = VideoNote.objects.filter(video=video).order_by('frame').values()
-    extra = Video.objects.get(pk=video).extra_notes
+    vid = Video.objects.get(pk=video)
     return JsonResponse({'notes': list(notes),
-                         'extra': extra})
+                         'extra': vid.extra_notes,
+                         'approved_l': vid.approved_liason,
+                         'approved_f': vid.approved_final})
 
 def save_video_notes(request):
     data = json.loads(request.body)
@@ -871,6 +873,20 @@ def save_video_notes(request):
         vid.extra_notes = data["extra"]
         vid.save()
         send_mail(request.session.get('version_name','websts') + ' video note updated',request.session.get('version_name','websts') + ' ' + Disc.objects.get(id=request.session.get('disc',1)).folder_name.upper() + ' ' + Video.objects.get(id=data["video"]).event +' video ' + str(data["video"]) + ' updated by ' + request.user.username,'stsmailrecover@gmail.com',['gymjudgehills@gmail.com'],fail_silently=True)
+
+    resp = {'updated':True}
+    #activity log
+
+    return JsonResponse(resp)
+
+def update_video_approved(request):
+    data = json.loads(request.body)
+
+    vid =  Video.objects.get(pk=data["video"])
+    vid.approved_liason = data["approved_l"]
+    vid.approved_final = data["approved_f"]
+    vid.save()
+    #send_mail(request.session.get('version_name','websts') + ' video note updated',request.session.get('version_name','websts') + ' ' + Disc.objects.get(id=request.session.get('disc',1)).folder_name.upper() + ' ' + Video.objects.get(id=data["video"]).event +' video ' + str(data["video"]) + ' updated by ' + request.user.username,'stsmailrecover@gmail.com',['gymjudgehills@gmail.com'],fail_silently=True)
 
     resp = {'updated':True}
     #activity log
@@ -987,7 +1003,7 @@ def import_from_fig(request):
             cursor.execute(query)
             for (id,event,file,fps,approved,approvedJ) in cursor:
                 file = file.replace(".mov",".mp4")
-                vid = Video(disc_id=discid,old_id=id,event=event,file=file,fps=fps,approved=approved,approved_johanna=approvedJ)
+                vid = Video(disc_id=discid,old_id=id,event=event,file=file,fps=fps,approved_final=approved,approved_liason=approvedJ)
                 vid.save()
 
             response +=  " | videos created: " + str(Video.objects.filter(disc_id=discid).count())

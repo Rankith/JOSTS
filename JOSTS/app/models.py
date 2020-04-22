@@ -22,8 +22,8 @@ class Video(models.Model):
     event = models.CharField(max_length=2)
     file = models.CharField(max_length=255)
     fps = models.IntegerField(default=25)
-    approved = models.BooleanField(default=False)
-    approved_johanna = models.BooleanField(default=False)
+    approved_final = models.BooleanField(default=False)
+    approved_liason = models.BooleanField(default=False)
     old_id = models.IntegerField(null=True,default=None)
     extra_notes = models.TextField(blank=True,default='')
     def __str__(self):

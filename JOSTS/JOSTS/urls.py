@@ -73,6 +73,7 @@ urlpatterns = [
     path('video_notes/', views.video_notes, name='video_notes'),
     path('ajax/update_video_links/', views.update_video_links, name='update_video_links'),
     path('ajax/save_video_notes/', views.save_video_notes, name='save_video_notes'),
+    path('ajax/update_video_approved/', views.update_video_approved, name='update_video_approved'),
     path('check_tour/', views.check_tour, name='check_tour'),
     path('fig_import/', views.import_from_fig, name='fig_import'),
     path('competition_videos/', views.comp_videos, name='competition_videos'),
