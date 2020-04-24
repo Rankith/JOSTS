@@ -831,7 +831,7 @@ def video_player(request):
 @user_passes_test(lambda u: u.is_staff)
 def video_notes_builder(request):
     event = request.GET.get('event','fx')
-    Video.objects.update(approved_sts=True)
+    #Video.objects.update(approved_sts=True)
     videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     unrated = UnratedElement.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).order_by('id')
     elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__str_grp','element__code_order')
