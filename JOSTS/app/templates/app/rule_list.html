@@ -60,6 +60,9 @@
                                     </div>
                                     <div class="row no-gutters">
                                         <div class="col d-flex rule-section">
+                                            <div class="rule-section">
+                                            {{rule.rule.sub_rule}}
+                                        </div>
                                             <div class="pl-3">
                                                 {% if vidcount > 0 %}
                                                     {% if request.user.is_staff or request.user.is_superuser or SHOW_VIDEOS %}
@@ -68,6 +71,7 @@
                                                     {% endif %}
                                                 {% endif %}
                                             </div>
+                                            
                                         </div> 
                                         
                                     </div>

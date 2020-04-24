@@ -434,3 +434,22 @@ a.BlueLoginButton {
     list-style-type:none;
     padding-left:3px;
 }
+
+.dot {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.approved_sts {
+    background-color: red;
+}
+
+.approved_liaison {
+    background-color: yellow;
+}
+
+.approved_final {
+    background-color: #27fb27;
+}

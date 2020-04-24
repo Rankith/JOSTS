@@ -831,6 +831,7 @@ def video_player(request):
 @user_passes_test(lambda u: u.is_staff)
 def video_notes_builder(request):
     event = request.GET.get('event','fx')
+    Video.objects.update(approved_sts=True)
     videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     unrated = UnratedElement.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).order_by('id')
     elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__str_grp','element__code_order')
@@ -854,7 +855,8 @@ def get_video_notes(request):
     return JsonResponse({'notes': list(notes),
                          'extra': vid.extra_notes,
                          'approved_l': vid.approved_liason,
-                         'approved_f': vid.approved_final})
+                         'approved_f': vid.approved_final,
+                         'approved_s': vid.approved_sts})
 
 def save_video_notes(request):
     data = json.loads(request.body)
@@ -885,6 +887,7 @@ def update_video_approved(request):
     vid =  Video.objects.get(pk=data["video"])
     vid.approved_liason = data["approved_l"]
     vid.approved_final = data["approved_f"]
+    vid.approved_sts = data["approved_s"]
     vid.save()
     #send_mail(request.session.get('version_name','websts') + ' video note updated',request.session.get('version_name','websts') + ' ' + Disc.objects.get(id=request.session.get('disc',1)).folder_name.upper() + ' ' + Video.objects.get(id=data["video"]).event +' video ' + str(data["video"]) + ' updated by ' + request.user.username,'stsmailrecover@gmail.com',['gymjudgehills@gmail.com'],fail_silently=True)
 
@@ -895,7 +898,7 @@ def update_video_approved(request):
 
 def video_notes(request):
     video = request.GET.get('video','')
-    type = request.GET.get('type','element')
+    type = request.GET.get('type','rule')
     if video == 'temp':
         notes = VideoNoteTemp.objects.all().order_by('frame')
     else:

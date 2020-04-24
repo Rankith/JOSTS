@@ -10,7 +10,17 @@
             <div id="divVidList" style="overflow:auto;width:60px">
 
                 {% for video in videos %}
-                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{video.fps}},'{{video.old_id}}','{{video.competitionvideo_set.first.competition_group.competition.type.short_name}}{{video.competitionvideo_set.first.competition_group.competition.short_name}}/{{video.event}}/{{video.competitionvideo_set.first.competition_group.short_name}}')" style="cursor:pointer;font-size:0.8rem" class="video-select">{{ video.id }}</div>
+               
+                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{video.fps}},'{{video.old_id}}','{{video.competitionvideo_set.first.competition_group.competition.type.short_name}}{{video.competitionvideo_set.first.competition_group.competition.short_name}}/{{video.event}}/{{video.competitionvideo_set.first.competition_group.short_name}}')" style="cursor:pointer;font-size:0.7rem" class="video-select">{{ video.id }}
+               
+                
+                {% if video.approved_final %}
+                    <span class="dot approved_final"></span>
+                {% elif video.approved_liason %}
+                    <span class="dot approved_liaison"></span>
+                {% elif video.approved_sts %}
+                    <span class="dot approved_sts"></span>
+                {% endif %}</div>
                 {% endfor %}
                
             </div>
@@ -170,16 +180,16 @@
               <table>
                 <tr>
                     <td align="right">
-                        <label id="lblFinalApproved" class="switch">
-                            <input type="checkbox" id="chkFinalApproved" checked="checked">
+                        <label id="lblSTSApproved" class="switch">
+                            <input type="checkbox" id="chkSTSApproved" checked="checked">
                             <span class="slider round"></span>
                         </label>
                     </td>
                     <td style="vertical-align:top" align="left">
-                        <label for="chkFinalApproved" style="margin-bottom:0 !important">Final Approved</label>
+                        <label for="chkSTSApproved" style="margin-bottom:0 !important">STS Checked</label>&nbsp;<span class="dot approved_sts"></span>
                     </td>
                 </tr>
-                 <tr>
+                <tr>
                     <td align="right">
                         <label id="lblLiasonApproved" class="switch">
                             <input type="checkbox" id="chkLiasonApproved" checked="checked">
@@ -187,9 +197,21 @@
                         </label>
                     </td>
                     <td style="vertical-align:top" align="left">
-                        <label for="chkLiasonApproved" style="margin-bottom:0 !important">Liaison Approved</label>
+                        <label for="chkLiasonApproved" style="margin-bottom:0 !important">Liaison Approved</label>&nbsp;<span class="dot approved_liaison"></span>
                     </td>
                 </tr>
+                <tr>
+                    <td align="right">
+                        <label id="lblFinalApproved" class="switch">
+                            <input type="checkbox" id="chkFinalApproved" checked="checked">
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                    <td style="vertical-align:top" align="left">
+                        <label for="chkFinalApproved" style="margin-bottom:0 !important">Final Approved</label>&nbsp;<span class="dot approved_final"></span>
+                    </td>
+                </tr>
+                 
             </table></center>
         <button id="btnSave" type="button" class="btn btn-main mb-2" onclick="SaveNotes_Click()">Save Analysis</button><br/>
         <button id="btnPreview" type="button" class="btn btn-main mb-2" onclick="UpdatePreview_Click()">Update Preview</button><br/>
@@ -263,6 +285,10 @@
     });
 
     $('#chkFinalApproved').click(function () {
+        SetApproved();
+    });
+
+     $('#chkSTSApproved').click(function () {
         SetApproved();
     });
 
@@ -591,13 +617,22 @@
         }
     }
 
-     function SetApproved() {
-        $.ajax({
+    function SetApproved() {
+         //check which to show if any
+        $("#divVideo" + OnVideo).children(0).remove();
+        if ($('#chkFinalApproved').prop("checked"))
+            $("#divVideo" + OnVideo).append('<span class="dot approved_final"></span>');
+        else if ($('#chkLiasonApproved').prop("checked"))
+            $("#divVideo" + OnVideo).append('<span class="dot approved_liaison"></span>');
+        else if ($('#chkSTSApproved').prop("checked"))
+             $("#divVideo" + OnVideo).append('<span class="dot approved_sts"></span>');
+        $.ajax({ 
             url: '/ajax/update_video_approved/',
             data: JSON.stringify({
                 video: OnVideo,
                 approved_l: $('#chkLiasonApproved').prop("checked"),
-                approved_f: $('#chkFinalApproved').prop("checked")
+                approved_f: $('#chkFinalApproved').prop("checked"),
+                approved_s: $('#chkSTSApproved').prop("checked")
             }),
             headers: { "X-CSRFToken": token },
             type:'POST',
@@ -645,22 +680,25 @@
             dataType: 'text',
             success: function (data) {
                 $.get("/video_notes/?video=temp", function (data) {
+                    $("#divHud").remove();
                 $("#divNotesArea").empty();
-                $("#divNotesArea").append(data);
+                    $("#divNotesArea").append(data);
+                    $("#divHud").detach().appendTo("#VidHudArea");
             });
             }
       });
     }
 
      function GetNotes () {
-        $.ajax({
+        $.ajax({ 
             url: '/get_video_notes/?video=' + OnVideo,
             success: function (data) {
                 Notes = data.notes;
-                $("#txtExtraNotes").val(data.extra)
+                $("#txtExtraNotes").val(data.extra);
                 LoadNotes();
-                $('#chkLiasonApproved').prop("checked", data.approved_l)
-                $('#chkFinalApproved').prop("checked", data.approved_f)
+                $('#chkLiasonApproved').prop("checked", data.approved_l);
+                $('#chkFinalApproved').prop("checked", data.approved_f);
+                $('#chkSTSApproved').prop("checked", data.approved_s);
             }
       });
     }
@@ -675,9 +713,12 @@
     }
 
     function PreviewNotesVideo() {
-         $.get('/video_notes/?video=' + OnVideo, function (data) {
+        $.get('/video_notes/?video=' + OnVideo, function (data) {
+              $("#divHud").remove();
                 $("#divNotesArea").empty();
-                $("#divNotesArea").append(data);
+             $("#divNotesArea").append(data);
+             $("#divHud").detach().appendTo("#VidHudArea");
+                
             });
     }
 

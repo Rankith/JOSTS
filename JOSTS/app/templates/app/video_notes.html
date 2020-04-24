@@ -67,7 +67,11 @@
                 {% if note.no_value_type == 'unrecognized' or note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'special repitition' %}
                 <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}redstripe.svg" style="position:absolute;height:65px;top:0px">
                 {% endif %}
-                <div class="text-center" style="font-size:0.9rem">{{note.element_link.letter_value}}</div>
+                <div class="text-center" style="font-size:0.9rem">  {% if note.no_value_type != 'unrecognized' and note.no_value_type != 'repeat' and note.no_value_type != 'unrated' and note.no_value_type != 'special repitition' %}
+                {{note.element_link.letter_value}}
+                {% else %}
+                &nbsp;
+                {% endif %}</div>
                 <div class="text-center" style="background-color:white"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ note.element_link.image_url}}.svg"/></div>
                 <div class="text-center" style="font-size:0.5rem">&nbsp;
         {% elif note.rule_link != None %}
