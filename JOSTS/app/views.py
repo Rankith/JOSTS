@@ -303,7 +303,7 @@ def elements(request):
     #SymbolDuplicate.objects.filter(disc__isnull=True).update(disc=1)
     #QuizResult.objects.filter(disc__isnull=True).update(disc=1)
     #ActivityLog.objects.filter(disc__isnull=True).update(disc=1)
-    RuleLink.objects.filter(type="E").update(pause_time='indef')
+    #RuleLink.objects.filter(type="E").update(pause_time='indef')
     context = {
         'type':'element',
         'search_type':'element',
