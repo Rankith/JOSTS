@@ -1,7 +1,7 @@
 {% block content %}
 {% load staticfiles %}
 
-<div class="row no-gutters">
+<div class="row no-gutters" id="divVideoPlayer">
     {% if mode == "element" %}
         <div class="col-12 col-xl-1" >
             {% if editable and editmode == "true" %}
@@ -60,6 +60,7 @@
         <div class="col-12 col-md-3">
             <div id="divNotesArea" class="pl-2">
             </div>
+            <button id="btnGotoRule" onclick="GotoRule()" class="btn btn-main mb-2" style="display:none">Go To Rule</button>
         </div>
    
 </div>
@@ -90,6 +91,14 @@
 <script src="{% static 'app/scripts/video_player.js' %}?v=1.54"></script>
 <script src="{% static 'app/scripts/sortable.min.js' %}?v=1.1"></script>
 <script type="text/javascript">
+    $(document).keydown(function (event) {
+        var key = (event.keyCode ? event.keyCode : event.which);
+        if (key == 55)//7
+        {
+            console.log("here");
+            GotoRule();
+        }
+    });
     function EditModeShowVideo(idIn, fileIn, FPSIn = 25,el,old,elID=-1) {
         if ($(el).hasClass('vid-in-list')) {
             $("#btnAddVideo").hide();
@@ -108,6 +117,16 @@
     }
     function SortEnd(evt) {
         UpdateVideoList();
+    }
+
+    function GotoRule() {
+        $("#detail-single").remove();
+        var ruleid = $(".video-note-selected.e-note")[0].id.replace("vnE", "");
+        ruleid = NoteIDs[ruleid];
+        $.get('/rule_vid_ref/?id=' + ruleid, function (data) {
+            $("#divVideoPlayer").parent().prepend(data);
+            $("#divVideoPlayer").hide();
+        });
     }
 
     function AddVideo() {

@@ -523,6 +523,14 @@ def rule_list(request):
     log_activity(request,'Rules','View','')
     return render(request, 'app/rule_list.html',context=context)
 
+def rule_vid_ref(request):
+    idIn = request.GET.get('id')
+    rule = RuleText.objects.get(rule__id=idIn)
+    context= {'rule': rule}
+    #activity log
+    log_activity(request,'Rules','View Reference','')
+    return render(request, 'app/rule_vid_ref.html',context=context)
+
 #shorthand
 @login_required(login_url='/login/')
 @user_passes_test(subscription_check,login_url='/subscriptions/')

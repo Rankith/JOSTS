@@ -42,6 +42,7 @@ urlpatterns = [
     path('rule/', views.rule, name='rule'),
     path('rule_search/', views.rule_search, name='rule_search'),
     path('rule_list/', views.rule_list, name='rule_list'),
+    path('rule_vid_ref/', views.rule_vid_ref, name='rule_vid_ref'),
     path('shorthand_training/', views.shorthand_training, name='shorthand_training'),
     path('shorthand_trainer/', views.shorthand_trainer, name='shorthand_trainer'),
     path('save_record_image/', views.save_record_image, name='save_record_image'),

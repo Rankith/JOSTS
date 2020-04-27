@@ -1,0 +1,162 @@
+﻿
+{% load staticfiles %}
+    <div class="card rules-section-header">
+        {% for rule,vidcount in rules %}
+            {% ifchanged rule.rule.section %}
+                {% if not forloop.first %}
+                    </ul>
+                    </ul>
+                    </div>
+                {% endif %}
+                <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
+                    {{rule.rule.section}} - {{rule.chapter_text}}
+                </div>
+                    <div id="detail-{{forloop.counter}}" class="collapse show">
+                        <ul class="list-group">
+                {% endifchanged %}
+                             {% ifchanged rule.section_text %}
+                          
+                                {% ifchanged rule.rule.section %}
+                                {% else %}
+                                </ul>
+                                </div>
+                                {% endifchanged %}
+                                <li class="list-group-item rules-subsection-header" style="cursor:pointer" data-toggle="collapse" data-target="#detail-inner-{{forloop.counter}}">
+                                    <div class=" h4" >
+                                        {{section_header}} {{rule.rule.rule_no}} - {{rule.section_text}}
+                                    </div>
+                                </li>
+                             <div id="detail-inner-{{forloop.counter}}" class="collapse show">
+                                <ul class="list-group">
+                            {% endifchanged %}
+                             <li class="list-group-item rules-cue" style="cursor:pointer" >
+                               
+                                 <div data-toggle="collapse" data-target="#answer-{{forloop.counter}}">
+                                      <div class="position-absolute col pr-4 text-right" style="right:0px;top:0px">
+                                    {% if vidcount > 0 %}
+                                        {% if request.user.is_staff or request.user.is_superuser or SHOW_VIDEOS %}
+                                            <i class="fas fa-play-circle"></i><sub>{{vidcount}}</sub>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                     {% autoescape off %}
+                                     <pre>{{rule.cue}}</pre>
+                                     {% endautoescape %}
+                                      <div class="rule-section">
+                                            {{rule.rule.sub_rule}}
+                                        </div>
+                                 </div>
+                                
+                            </li>
+                             <div id="answer-{{forloop.counter}}" class="collapse position-relative">
+                                <div class="additional-info-rules" id="divAdditionalInfo">
+                                    {{rule.additional_info}}
+                                </div>
+                                <div class="list-group-item rules-response">
+                                    <div class="">
+                                        {% autoescape off %}
+                                        <pre>{{rule.response}}</pre>
+                                        {% endautoescape %}
+                                    </div>
+                                    <div class="row no-gutters">
+                                        <div class="col d-flex rule-section">
+                                            <div class="rule-section">
+                                            {{rule.rule.sub_rule}}
+                                        </div>
+                                            <div class="pl-3">
+                                                {% if vidcount > 0 %}
+                                                    {% if request.user.is_staff or request.user.is_superuser or SHOW_VIDEOS %}
+                                                        <div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.75rem;font-weight:bold"  onclick="LoadVideo('{{ rule.id }}')">
+                                                        <i class="fas fa-play-circle"></i>&nbsp;{{vidcount}}</button></div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                            
+                                        </div> 
+                                        
+                                    </div>
+                                </div>
+                            </div>
+           
+        {% endfor %}
+                </ul>
+        </div>
+    </div>
+
+<div id="divNumElements" style="display:none">{{num_rules}}</div>
+<script type="text/javascript">
+    //store checkboxes in ls and load as needed
+     if (localStorage.your_note) {
+        $('#chkYourNote').prop("checked", localStorage.your_note == 1)
+        $('#chkYourNote').prop("checked") ? $("#divYourNote").show() : $("#divYourNote").hide();
+    }
+    else
+        $("#divYourNote").hide();
+    $('#chkYourNote').change(function() {
+        localStorage.your_note = this.checked ? 1 : 0
+        this.checked ? $("#divYourNote").show() : $("#divYourNote").hide();
+    });
+
+    if (localStorage.additional_info) {
+        $('#chkAdditionalInfo').prop("checked", localStorage.additional_info == 1)
+        $('#chkAdditionalInfo').prop("checked") ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
+    }
+    else
+        $("#divAdditionalInfo").hide();
+    $('#chkAdditionalInfo').change(function() {
+        localStorage.additional_info = this.checked ? 1 : 0
+        this.checked ? $("#divAdditionalInfo").show() : $("#divAdditionalInfo").hide();
+    });
+   
+    $("#lblAdditionalInfo").show();
+   $("#lblYourNote").show();
+    //stop the notes area from closing if you click in it.
+    $("#txtUserNotes").click(function(e) {
+        e.stopPropagation();
+    });
+
+    //save the notes when done typing
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 1000;  //time in ms (5 seconds)
+
+    //on keyup, start the countdown
+    $('#txtUserNotes').keyup(function(){
+        clearTimeout(typingTimer);
+        if ($('#txtUserNotes').val()) {
+            typingTimer = setTimeout(SaveNote, doneTypingInterval);
+        }
+    });
+
+    //user is "finished typing," do something
+    function SaveNote () {
+        var note = $('#txtUserNotes').val();
+
+        $.ajax({
+            url: '{% url "update_user_note" %}',
+            data: {
+                'note': note,
+                'element': '{{lang_elements.element.id}}'
+            },
+            dataType: 'json',
+            success: function (data) {
+              if (data.is_taken) {
+                alert("A user with this username already exists.");
+              }
+            }
+      });
+    }
+</script>
+<script type="text/javascript">
+    function LoadVideo(RuleID,EditMode = false) {
+        $("#modalMainTitle").html("");
+        if (window.innerWidth >= 600)
+            $(".modal-dialog").addClass("mw-100").addClass("w-75");
+        $("#modalBodyArea2").hide();
+        $("#modalBodyArea1").empty();
+        $.get("/video_player/?rule=" + RuleID + "&editmode=" + EditMode, function (data) {
+            $("#modalBodyArea1").append(data);
+            $("#btnVid1").click();
+        });
+        $("#modalBodyArea1").show();
+    }
+</script>
