@@ -595,7 +595,7 @@ def save_record_image(request):
     binary_data = a2b_base64(imgstr)
     label_save = request.POST.get('label','')
     #remove the first '/' below to test local saving
-    output = open('/' + settings.MEDIA_ROOT + '/drawnimages/' + request.session.get('disc_full_name','womens') + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
+    output = open('/' + settings.MEDIA_ROOT + '/drawnimages/' + request.session.get('disc_full_name','womens').lower() + '/' + request.POST.get('event','') + '/' + request.POST.get('name','') + '.png', 'wb')
     output.write(binary_data)
     output.close()
     replace_with = SymbolDuplicate.objects.filter(event=request.POST.get('event',''),symbol=request.POST.get('label',''),disc=request.session.get('disc',1))
