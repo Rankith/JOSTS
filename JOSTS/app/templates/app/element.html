@@ -100,7 +100,7 @@
         </div>
         {% if lang_elements.element.videolink_set.all.count > 0 %}
             {% if request.user.is_staff or request.user.is_superuser or SHOW_VIDEOS %}
-             <div class="col"><div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold"  onclick="LoadVideo()">
+             <div class="col"><div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold"  onclick="LoadVideoFromElement()">
                     <i class="fas fa-play-circle"></i>&nbsp;{{ lang_elements.element.videolink_set.all.count }}</button></div></div>
             {% endif %}
         {% endif %}
@@ -217,7 +217,9 @@
             });
         }
     }
-    function LoadVideo(EditMode = false) {
+    function LoadVideoFromElement(EditMode = false) {
+        $(".detail-single").remove();
+        console.log("loading");
         $("#modalMainTitle").html("");
         if (window.innerWidth >= 600)
             $(".modal-dialog").addClass("mw-100").addClass("w-75");

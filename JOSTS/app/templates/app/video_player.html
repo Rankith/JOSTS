@@ -95,7 +95,7 @@
         var key = (event.keyCode ? event.keyCode : event.which);
         if (key == 55)//7
         {
-            console.log("here");
+            //console.log("here");
             GotoRule();
         }
     });
@@ -120,7 +120,8 @@
     }
 
     function GotoRule() {
-        $("#detail-single").remove();
+        console.log("going");
+        $(".detail-single").remove();
         var ruleid = $(".video-note-selected.e-note")[0].id.replace("vnE", "");
         ruleid = NoteIDs[ruleid];
         $.get('/rule_vid_ref/?id=' + ruleid, function (data) {

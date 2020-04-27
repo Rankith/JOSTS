@@ -208,6 +208,7 @@ class RuleLink(models.Model):
     type = models.CharField(max_length=1,blank=True,default='')
     event = models.CharField(max_length=2,blank=True,default='')
     old_id = models.IntegerField(null=True,default=None)
+    pause_time = models.CharField(max_length=5,default='temp')
     def __str__(self):
         return self.event + " " + self.text
 

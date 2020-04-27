@@ -303,6 +303,7 @@ def elements(request):
     #SymbolDuplicate.objects.filter(disc__isnull=True).update(disc=1)
     #QuizResult.objects.filter(disc__isnull=True).update(disc=1)
     #ActivityLog.objects.filter(disc__isnull=True).update(disc=1)
+    RuleLink.objects.filter(type="E").update(pause_time='indef')
     context = {
         'type':'element',
         'search_type':'element',
@@ -526,7 +527,23 @@ def rule_list(request):
 def rule_vid_ref(request):
     idIn = request.GET.get('id')
     rule = RuleText.objects.get(rule__id=idIn)
-    context= {'rule': rule}
+
+    totalvids=0
+    lastcat=-1
+    if rule.rule.rulelink_set.count() > 0:
+        for rl in rule.rule.rulelink_set.all().order_by('category_order'):
+            if lastcat != rl.category_order:
+                vids = rl.videonote_set.all().filter(video__tcexample=None).values('id').distinct().count()
+                if vids > 4:
+                    vids = 4
+                totalvids += vids
+                lastcat = rl.category_order
+    #r.rule.rulelink_set.annotate(rls = Count('rule__rulelink__videonote__video__id',distinct=True))
+    #rules = rules.annotate(rls = Count('rule__rulelink__videonote'))
+    context = {
+        'rule': rule,
+        'vidcount':totalvids
+        }
     #activity log
     log_activity(request,'Rules','View Reference','')
     return render(request, 'app/rule_vid_ref.html',context=context)
