@@ -45,12 +45,17 @@
         • {{note.element_link.elementtext_set.all.first.short_text}}
     </div>
     {% elif note.rule_link.type|upper == "E" %}
-        {% if note.skip_frame == False %}
-        <div id="vnE{{note.frame}}" class="video-note-line e-note video-note-color-{{note.color}}" onclick="VideoNoteClickE({{note.frame}},'{{note.rule_link.pause_time}}')">
-        {% else %}
-        <div>
-        {% endif %}
-             {{note.rule_link.text}}
+        <div class="row row no-gutters">
+            {% if note.skip_frame == False %}
+            <div id="vnE{{note.frame}}" style="flex-grow:1" class="video-note-line e-note video-note-color-{{note.color}} col-11-half" onclick="VideoNoteClickE({{note.frame}},'{{note.rule_link.pause_time}}')">
+            {% else %}
+            <div>
+            {% endif %}
+                 {{note.rule_link.text}}
+            </div>
+            <div class="col-half" onclick="GotoRule({{note.rule_link.rule.first.id}})">
+                <span class="rule-dot text-center">R</span>
+            </div>
         </div>
     {% endif %}
     {% endfor %}

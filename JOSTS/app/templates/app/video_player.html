@@ -60,11 +60,11 @@
         <div class="col-12 col-md-3">
             <div id="divNotesArea" class="pl-2">
             </div>
-            <button id="btnGotoRule" onclick="GotoRule()" class="btn btn-main mb-2" style="display:none">Go To Rule</button>
+           
         </div>
-   
+   <button id="btnGoBackVid" onclick="GoBack()" class="btn btn-main mb-2" style="display:none">Go Back</button>
 </div>
-
+ 
 {% endblock %}
 {% block scripts %}
 
@@ -80,25 +80,25 @@
         DiscP = "Mens";
     else
         DiscP = "Womens";
-
+    console.log("Up here");
     token = "{{ csrf_token }}";
      {% if mode == "element" %}
     $("#divVideoElement").html(ElementIDText + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + ElementShortText);
+    VideoGoBack[VideoGoBackDepth] = "/video_player/?element={{element.id}}";
+    VideoGoBackDepth++;
     {% else %}
     $("#divVideoElement").html("{{rule.specific_deduction}}");
+    VideoGoBack[VideoGoBackDepth] = "/video_player/?rule={{rule.id}}";
+    VideoGoBackDepth++;
     {% endif %}
+    console.log("Depth" + VideoGoBackDepth);
+    if (VideoGoBackDepth > 1)
+    $("#btnGoBackVid").show();
+
 </script>
 <script src="{% static 'app/scripts/video_player.js' %}?v=1.54"></script>
 <script src="{% static 'app/scripts/sortable.min.js' %}?v=1.1"></script>
 <script type="text/javascript">
-    $(document).keydown(function (event) {
-        var key = (event.keyCode ? event.keyCode : event.which);
-        if (key == 55)//7
-        {
-            //console.log("here");
-            GotoRule();
-        }
-    });
     function EditModeShowVideo(idIn, fileIn, FPSIn = 25,el,old,elID=-1) {
         if ($(el).hasClass('vid-in-list')) {
             $("#btnAddVideo").hide();
@@ -118,15 +118,25 @@
     function SortEnd(evt) {
         UpdateVideoList();
     }
-
-    function GotoRule() {
+    function GoBack() {
+        VideoGoBackDepth--;
+        $.get(VideoGoBack[VideoGoBackDepth - 1], function (data) {
+            $("#modalBodyArea1").empty();
+            $("#modalBodyArea1").append(data);
+            $("#btnVid1").click();
+        });
+       
+    }
+    function GotoRule(NoteIn) {
         console.log("going");
         $(".detail-single").remove();
-        var ruleid = $(".video-note-selected.e-note")[0].id.replace("vnE", "");
-        ruleid = NoteIDs[ruleid];
-        $.get('/rule_vid_ref/?id=' + ruleid, function (data) {
+        //var ruleid = $(".video-note-selected.e-note")[0].id.replace("vnE", "");
+        //NoteIn = NoteIDs[NoteIn];
+        VideoGoBack[VideoGoBackDepth] = "/rule_vid_ref/?id=" + NoteIn;
+        VideoGoBackDepth++;
+        $.get('/rule_vid_ref/?id=' + NoteIn, function (data) {
             $("#divVideoPlayer").parent().prepend(data);
-            $("#divVideoPlayer").hide();
+            $("#divVideoPlayer").remove();
         });
     }
 

@@ -6,7 +6,7 @@
     <title>JRSTS</title>
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}?version=1.46" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}?version=1.47" />
     <link rel="stylesheet" id="ThemeLink" type="text/css" href="{% static 'app/content/theme.css' %}?version=1.2" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/nouislider.min.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
@@ -119,6 +119,8 @@
         var ThemeLocation = "{% static 'app/content/' %}";
         var TourLocation = "{% static 'app/images/'%}";
         var ThemeVersion = "?version=1.1";
+        var VideoGoBack = new Array();
+        var VideoGoBackDepth = 0;
         var UserTheme = "{{user.usersettings.theme.file}}";
         if (UserTheme == "")
             UserTheme = "theme.css";

@@ -4,7 +4,7 @@
               
 <div id="detail-single" class="collapse show detail-single">
     <ul class="list-group">
-            <li class="list-group-item rules-cue" style="cursor:pointer" >
+            <li class="list-group-item rules-cue" >
                                
                 <div>
                     <div class="position-absolute col pr-4 text-right" style="right:0px;top:0px">
@@ -41,7 +41,7 @@
                         <div class="pl-3">
                             {% if vidcount > 0 %}
                                 {% if request.user.is_staff or request.user.is_superuser or SHOW_VIDEOS %}
-                                    <div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.75rem;font-weight:bold"  onclick="LoadVideo('{{ rule.id }}')">
+                                    <div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  style="padding: 0rem 0.2rem;font-size:0.75rem;font-weight:bold"  onclick="LoadVideo('{{ rule.id }}')">
                                     <i class="fas fa-play-circle"></i>&nbsp;{{vidcount}}</button></div>
                                 {% endif %}
                             {% endif %}
@@ -61,8 +61,16 @@
 
 <script type="text/javascript">
     function GoBack() {
-        $("#divVideoPlayer").show();
-        $("#detail-single").remove();
+        VideoGoBackDepth -= 2;
+        $.get(VideoGoBack[VideoGoBackDepth], function (data) {
+            
+            $("#modalBodyArea1").empty();
+            $("#modalBodyArea1").append(data);
+            $("#btnVid1").click();
+            if (VideoGoBackDepth > 1)
+                $("#btnGoBack").show();
+        });
+       
     }
 
     function LoadVideo(RuleID,EditMode = false) {
@@ -70,10 +78,13 @@
         if (window.innerWidth >= 600)
             $(".modal-dialog").addClass("mw-100").addClass("w-75");
         $("#modalBodyArea2").hide();
-        $("#modalBodyArea1").empty();
+        //$("#modalBodyArea1").empty();
         $.get("/video_player/?rule=" + RuleID + "&editmode=" + EditMode, function (data) {
             $("#modalBodyArea1").append(data);
             $("#btnVid1").click();
+            $("#detail-single").hide();
+            if (VideoGoBackDepth > 1)
+                $("#btnGoBack").show();
         });
         $("#modalBodyArea1").show();
     }
