@@ -459,9 +459,10 @@ a.BlueLoginButton {
     width: 12px;
     border-radius: 50%;
     display: inline-block;
-    background-color: deepskyblue;
+    background-color: #13747E;
     font-size:.6rem;
     cursor:pointer;
+    color;white-space;
 }
 
 .col-11-half {
