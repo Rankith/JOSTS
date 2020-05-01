@@ -502,7 +502,7 @@ def rule_list(request):
         rules = rules.filter(cue__icontains=search) | rules.filter(response__icontains=search) | rules.filter(rule_description__icontains=search) | rules.filter(specific_deduction__icontains=search) | rules.filter(additional_info__icontains=search)
     rules = rules.filter(rule__disc=request.session.get('disc',1))
     vidcounts = []
-    if len(dget.items()) == 0:
+    if len(dget.items()) == 0  and search == "":
         collapsed = True
     for r in rules:
         totalvids=0
