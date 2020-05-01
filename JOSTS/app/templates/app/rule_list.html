@@ -11,7 +11,7 @@
                 <div class="card-header h4" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
                     {{rule.rule.section}} - {{rule.chapter_text}}
                 </div>
-                    <div id="detail-{{forloop.counter}}" class="collapse {% if collapsed == false %}show{% endif %}">
+                    <div id="detail-{{forloop.counter}}" class="collapse {% if collapsed == False %}show{% endif %}">
                         <ul class="list-group">
                 {% endifchanged %}
                              {% ifchanged rule.section_text %}
@@ -26,7 +26,7 @@
                                         {{section_header}} {{rule.rule.rule_no}} - {{rule.section_text}}
                                     </div>
                                 </li>
-                             <div id="detail-inner-{{forloop.counter}}" class="collapse {% if collapsed == false %}show{% endif %}">
+                             <div id="detail-inner-{{forloop.counter}}" class="collapse {% if collapsed == False %}show{% endif %}">
                                 <ul class="list-group">
                             {% endifchanged %}
                              <li class="list-group-item rules-cue" style="cursor:pointer" >
