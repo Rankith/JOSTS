@@ -147,6 +147,8 @@
     var typingTimer;                //timer identifier
     var doneTypingInterval = 1000;  //time in ms (5 seconds)
 
+    //move the symbol to top right of image
+    $(".detail-top-right").css("right",($("#divElement").width()-$(".detail-image").width())/2 + "px")
     //on keyup, start the countdown
     $('#txtUserNotes').keyup(function(){
         clearTimeout(typingTimer);
