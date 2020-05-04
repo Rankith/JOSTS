@@ -1,7 +1,19 @@
 ﻿{% load staticfiles %}
 <div class="row no-gutters">
     <div class="col-md-5 col-6 pt-2 d-flex align-items-center justify-content-center flex-column pr-1">
-        <div style="height:170px" class="image-background rounded w-100" id="divPrompt">
+    
+        <div style="height:170px" class="image-background rounded w-100 position-relative" id="divPrompt">
+            <div style="position:absolute;left:5px;top:35%;z-index:1001">
+                <button id="btnPrev" type="button" class="btn btn-main"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:35px;opacity:0.5;display:none"  onclick="GoPrevious(); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
+                <br/>
+                <button id="btnFirst" type="button" class="btn btn-main"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:35px;opacity:0.5;display:none"  onclick="GoFirst(); event.stopPropagation();"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></button>
+            </div>
+            <div style="position:absolute;right:5px;top:35%;z-index:1001">
+                <button id="btnNext" type="button" class="btn btn-main" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:35px;opacity:0.5;display:none"  onclick="GoNext(); event.stopPropagation();"><i class="fas fa-chevron-right"></i></button>
+                <br/>
+                <button id="btnLast" type="button" class="btn btn-main"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:35px;opacity:0.5;display:none"  onclick="GoLast(); event.stopPropagation();"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div id="divCounter" style="position:absolute;left:5px;bottom:5px;z-index:1001"></div>
             <div class="row h-100 justify-content-center align-items-center text-center">
                 <div class="col-12 position-relative">
                     <img id="imgPrompt" class="img-fluid" style="max-height:150px;overflow:hidden" />
@@ -63,6 +75,13 @@
     var QuizElements = new Array();
     var QuizElementShortText = new Array();
     var QuizElementIDs = new Array();
+    var QuizAnswers = new Array();
+    var AnswerLocs = new Array();
+    var QuizGenerated = new Array();
+    QuizGenerated[1] = new Array();
+    QuizGenerated[2] = new Array();
+    QuizGenerated[3] = new Array();
+    QuizGenerated[4] = new Array();
     {% for element in lang_elements %}
         Elements[{{ forloop.counter0 }}] = "{{ element.element.image_url}}";
         ElementShortText[{{ forloop.counter0 }}] = "{{ element.short_text}}";
@@ -86,6 +105,7 @@
     var Missed = new Array();
     var SaveUrl =  '{% url "quiz_save" %}';
     var Event = '{{event}}';
+    var HighestOn = 0;
     
 </script>
 <script type="text/javascript">
@@ -132,24 +152,49 @@
         }
         PopulateQuiz(OnElement);
     }
-
+    function UpdateCounter() {
+        $("#divCounter").html((OnElement + 1) + "/" + NumElements);
+    }
     function PopulateQuiz(which){
         $("#imgPrompt").attr('src', PromptBaseURL + QuizElements[which] + ".svg")
-        AnswerLoc = GenerateAnswerLocation();
+        if (which == HighestOn) { //if this is a new item generate random, else lookup old
+            AnswerLoc = GenerateAnswerLocation();
+            AnswerLocs[which] = AnswerLoc;
+        }
+        else
+            AnswerLoc = AnswerLocs[which];
         var TempAnswer;
+        UpdateCounter();
         for (var i = 1; i <= 4; i++) {
             if (i != AnswerLoc) {
-                TempAnswer = GenerateRandomAnswer(which)
-                $("#imgAnswer" + i).attr('src', AnswerBaseURL + Elements[TempAnswer] + ".svg")
-                //if (PromptType == "Shorthand")
-                $("#divAnswer" + i + "Text").html(ElementShortText[TempAnswer]);
+                if (which == HighestOn) {//make new or get old
+                    TempAnswer = GenerateRandomAnswer(which)
+                    QuizGenerated[i][which] = TempAnswer;
+                }
+                else {
+                    TempAnswer = QuizGenerated[i][which];
+                }
+                 $("#imgAnswer" + i).attr('src', AnswerBaseURL + Elements[TempAnswer] + ".svg")
+                 $("#divAnswer" + i + "Text").html(ElementShortText[TempAnswer]);
             }
         }
         $("#imgAnswer" + AnswerLoc).attr('src', AnswerBaseURL + QuizElements[which] + ".svg")
-        //if (PromptType == "Shorthand")
-            $("#divAnswer" + AnswerLoc + "Text").html(QuizElementShortText[which]);
-        //else
-            $("#divPromptText").html(QuizElementShortText[which]);
+        $("#divAnswer" + AnswerLoc + "Text").html(QuizElementShortText[which]);
+        $("#divPromptText").html(QuizElementShortText[which]);
+        ShowHideNav();
+        if (which != HighestOn) {
+            //its not current quiz spot, so fill old
+            Answered = true;
+            $("#divAnswerContainer" + QuizAnswers[which]).click();
+            if (QuizAnswers[which] == AnswerLocs[which])
+                $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
+            else {
+                $("#divAnswerContainer" + AnswerLoc).addClass("quiz-border-correct").removeClass("quiz-border-neutral");
+                $("#divAnswerContainer" + QuizAnswers[which]).addClass("quiz-border-wrong").removeClass("quiz-border-neutral");
+            }
+        }
+        else
+            Answered = false;
   
     }
 
@@ -157,6 +202,7 @@
         if (Answered == false) {
             Answered = true;
             Total++;
+            QuizAnswers[OnElement] = which;
             if (which == AnswerLoc)
                 AnswerCorrect();
             else
@@ -185,18 +231,64 @@
         setTimeout(QuizNext, 2000);
     }
 
+   function GoPrevious() {
+        ResetButtons();
+        OnElement--;
+        PopulateQuiz(OnElement);
+    }
+    function GoNext() {
+        ResetButtons();
+        OnElement++;
+        PopulateQuiz(OnElement);
+    }
+    function GoLast() {
+        ResetButtons();
+        OnElement = HighestOn;
+        PopulateQuiz(OnElement);
+    }
+    function GoFirst() {
+        ResetButtons();
+        OnElement = 0;
+        PopulateQuiz(OnElement);
+    }
+
+    function ResetButtons() {
+        for (var i = 1; i <= 4; i++)
+                $("#divAnswerContainer" + i).addClass("quiz-border-neutral").removeClass("quiz-border-correct").removeClass("quiz-border-wrong");
+    }
+
+
     function QuizNext() {
         if (OnElement >= NumElements - 1)
             EndQuiz()
         else {
             Answered = false;
-            for (var i = 1; i <= 4; i++)
-                $("#divAnswerContainer" + i).addClass("quiz-border-neutral").removeClass("quiz-border-correct").removeClass("quiz-border-wrong");
+            ResetButtons();
             OnElement++;
+            HighestOn++;
+            if (OnElement != HighestOn);
+                OnElement = HighestOn;//in case they clicked back or forward right after answer
             PopulateQuiz(OnElement);
         }
     }
-
+        function ShowHideNav() {
+        if (HighestOn > OnElement) {
+            $("#btnNext").show();
+            $("#btnLast").show();
+        }
+        else {
+            $("#btnNext").hide();
+            $("#btnLast").hide();
+        }
+        if (OnElement > 0) {
+            $("#btnPrev").show();
+            $("#btnFirst").show();
+        }
+        else {
+            $("#btnPrev").hide();
+            $("#btnFirst").hide();
+        }
+    }
     function GenerateRandomAnswer(which) {
         var QuizA = Math.floor((Math.random() * NumElementsTotal));
         //make sure its not the correct answer!
