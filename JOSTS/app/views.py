@@ -863,9 +863,9 @@ def video_notes_builder(request):
     tc = request.GET.get('tc','false')
     #Video.objects.update(approved_sts=True)
     if tc=="false":
-        videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
+        videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).exclude(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id'))
     else:
-        videos = Video.objects.filter(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).order_by('short_name').values('short_name').values_list('video__id'))
+        videos = Video.objects.filter(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id'))
         #videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     unrated = UnratedElement.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).order_by('id')
     elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__str_grp','element__code_order')
