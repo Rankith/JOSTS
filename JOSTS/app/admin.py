@@ -11,6 +11,9 @@ class ElementAdmin(ImportExportModelAdmin):
     list_filter = ('disc','event','str_grp','letter_value','range')
     search_fields = ('id_number',)#comment if importing
     list_editable = ('str_grp','code_order','event','letter_value','value')#comment if importing
+
+   
+
 class UserNoteAdmin(admin.ModelAdmin):
     list_display = ('user','element','note')
 class ElementTextAdmin(ImportExportModelAdmin): 

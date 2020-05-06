@@ -53,6 +53,11 @@ class Element(models.Model):
     down_value_letter = models.CharField(max_length=2,default='',blank=True)
     show_exercise_builder = models.BooleanField(default=False)
     old_id = models.IntegerField(null=True,default=None)
+    tramp_body_position = models.CharField(max_length=1,default='',blank=True)
+    tramp_flips = models.IntegerField(default=0)
+    tramp_twists = models.IntegerField(default=0)
+    tramp_start_position = models.CharField(max_length=5,default='',blank=True)
+    tramp_end_position = models.CharField(max_length=5,default='',blank=True)
 
     def __str__(self):
         return self.event + " " + str(self.id_number)
@@ -84,6 +89,7 @@ class ElementText(models.Model):
     hold_text = models.CharField(max_length=50,blank=True,default='')
     def __str__(self):
         return self.element.event + " " + self.text
+    
 
 class UserNote(models.Model):
     element = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True)
