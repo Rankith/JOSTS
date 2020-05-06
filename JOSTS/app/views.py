@@ -860,8 +860,13 @@ def video_player(request):
 @user_passes_test(lambda u: u.is_staff)
 def video_notes_builder(request):
     event = request.GET.get('event','fx')
+    tc = request.GET.get('tc','false')
     #Video.objects.update(approved_sts=True)
-    videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
+    if tc=="false":
+        videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
+    else:
+        videos = Video.objects.filter(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).order_by('short_name').values('short_name').values_list('video__id'))
+        #videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     unrated = UnratedElement.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).order_by('id')
     elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__str_grp','element__code_order')
     rules = RuleLink.objects.filter(event='',disc=request.session.get('disc',1)) | RuleLink.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
@@ -873,7 +878,8 @@ def video_notes_builder(request):
         'event': event,
         'events': events,
         'unrateds': unrated,
-        'drawing_prefix':VersionSettings.objects.first().drawing_prefix
+        'drawing_prefix':VersionSettings.objects.first().drawing_prefix,
+        'TC':tc,
         }
     return render(request, 'app/video_notes_builder.html',context=context)
 

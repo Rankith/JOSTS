@@ -2,25 +2,33 @@
 
 {% block content %}
 {% load staticfiles %}
+<div id="divLoading" class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-sm">
 
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+
+    </div>
+</div>
 <div class="row text-base">
     
     <div class="col-5">
         <div class="d-flex">
             <div id="divVidList" style="overflow:auto;width:60px">
-
+                
                 {% for video in videos %}
                
-                <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{video.fps}},'{{video.old_id}}','{{video.competitionvideo_set.first.competition_group.competition.type.short_name}}{{video.competitionvideo_set.first.competition_group.competition.short_name}}/{{video.event}}/{{video.competitionvideo_set.first.competition_group.short_name}}')" style="cursor:pointer;font-size:0.7rem" class="video-select">{{ video.id }}
-               
-                
-                {% if video.approved_final %}
-                    <span class="dot approved_final"></span>
-                {% elif video.approved_liason %}
-                    <span class="dot approved_liaison"></span>
-                {% elif video.approved_sts %}
-                    <span class="dot approved_sts"></span>
-                {% endif %}</div>
+                    <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{video.fps}},'{{video.old_id}}','{{video.competitionvideo_set.first.competition_group.competition.type.short_name}}{{video.competitionvideo_set.first.competition_group.competition.short_name}}/{{video.event}}/{{video.competitionvideo_set.first.competition_group.short_name}}')" style="cursor:pointer;font-size:0.7rem" class="video-select">
+
+                        {{ video.id }}
+                    {% if video.approved_final %}
+                        <span class="dot approved_final"></span>
+                    {% elif video.approved_liason %}
+                        <span class="dot approved_liaison"></span>
+                    {% elif video.approved_sts %}
+                        <span class="dot approved_sts"></span>
+                    {% endif %}</div>
                 {% endfor %}
                
             </div>
@@ -36,9 +44,9 @@
                                 {% if not forloop.first %}
                                 </optgroup>
                                 {% endif %}
-                                <optgroup label="Group {{ element.element.str_grp }}">
+                                <optgroup class="text-white" label="Group {{ element.element.str_grp }}">
                                     {% endifchanged %}
-                                    <option value="{{ element.element.id }}" data-subtext="{{ element.element.letter_value }}">{{ element.id_number_text }} | {{ element.short_text }}</option>
+                                    <option class="text-white" value="{{ element.element.id }}" data-subtext="{{ element.element.letter_value }}">{{ element.id_number_text }} | {{ element.short_text }}</option>
                                     {% if forloop.last %}
                                 </optgroup>
                                 {% endif %}
@@ -58,7 +66,7 @@
                             <select class="selectpicker form-control" id="ddlRule" data-live-search="true" data-size="8" data-header="Select a deduction" title="Select a deduction">
                                 {% for rule in rules %}
 
-                                <option value="{{ rule.id }}" data-subtext="{{ rule.deduction_amount }}">{{ rule.text }}</option>
+                                <option class="text-white" value="{{ rule.id }}" data-subtext="{{ rule.deduction_amount }}">{{ rule.text }}</option>
 
                                 {% endfor %}
                             </select>
@@ -76,7 +84,7 @@
                             <select class="selectpicker form-control" id="ddlUnrated" data-live-search="true" data-size="8" data-header="Select an unrated element" title="Select an unrated element">
                                  {% for unrated in unrateds %}
 
-                                <option value="{{ unrated.id }}">{{ unrated.name }}</option>
+                                <option class="text-white" value="{{ unrated.id }}">{{ unrated.name }}</option>
 
                                 {% endfor %}
                             </select>
@@ -163,7 +171,7 @@
                         {% for ev in events %}
                         <div class="col-3">
                             <label id="lblE{{ev}}" class="search-button">
-                                <input type="checkbox" id="chkE{{ev}}" value="{{ev}}" class="check-search check-search-event" data-search="element__event" {% if ev|lower == event %} checked="checked" {% endif %} onchange="ChangeEvent(this)">
+                                <input type="checkbox" id="chkE{{ev}}" value="{{ev}}" class="check-search check-search-event" data-search="element__event" {% if ev|lower == event|lower %} checked="checked" {% endif %} onchange="ChangeEvent(this)">
                                 <div class="search-button event-button">
                                     <img class="img-fluid" src="{% static 'app/images/' %}{{request.session.disc_path}}/{{ev}}_White.svg" />
                                 </div>
@@ -171,6 +179,20 @@
                         </div>
                         {% endfor %}
                 </div>
+        <table>
+            <tr>
+                <td align="right">
+                    <label id="lblTCExamples" class="switch">
+                        <input type="checkbox" id="chkTCExamples" checked="checked">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+                <td style="vertical-align:top" align="left">
+                    <label for="chkTCExamples" style="margin-bottom:0 !important">TC Examples</label>
+                </td>
+            </tr>
+        </table>
+        
         <button id="btnUpdateFrame" type="button" class="btn btn-main mt-2" onclick="UpdateFrame_Click()">Update Frame</button><br/>
         <button id="btnDuplicate" type="button" class="btn btn-main mt-2" onclick="Duplicate()">Duplicate</button><br />
         <button id="btnRemove" type="button" class="btn btn-main mt-2" onclick="Remove()">Remove</button><br />
@@ -240,6 +262,7 @@
     var EventForDraw = "{{ event|upper }}";
     var drawing_prefix = '{{drawing_prefix}}';
     token = "{{ csrf_token }}";
+    var TC = {{TC}};
     {% for element in elements %}
     Elements[{{element.element.id}}] = {group: '{{ element.element.str_grp }}',
                         val: '{{ element.element.letter_value }}',
@@ -290,7 +313,13 @@
 
      $('#chkSTSApproved').click(function () {
         SetApproved();
-    });
+     });
+
+     $('#chkTCExamples').click(function () {
+        ToggleTC();
+     });
+
+    $('#chkTCExamples').prop("checked", TC);
 
     $("#divMain").removeClass("container").addClass("container-fluid");
     $("#divVideoContainer").css("height", "480px");
@@ -560,6 +589,8 @@
         }
         if (extraPathIn == "//")
             extraPathIn = "";
+        if (TC)
+            extraPathIn = "/examples";
         //console.log(extraPathIn);
         VidFPS = FPSIn;
         $("#divVidFramesSeconds").html("1 sec = " + VidFPS + "");
@@ -724,7 +755,19 @@
     }
 
     function ChangeEvent(el) {
-        window.location = "/video_notes_builder/?event=" + $(el).val().toLowerCase();
+        VideoPlayer.pause();
+        $('#divLoading').modal('show');
+        window.location = "/video_notes_builder/?event=" + $(el).val().toLowerCase() + "&tc=" + TC;
+    }
+
+    function ToggleTC() {
+        if (TC)
+            TC = false;
+        else
+            TC = true;
+        VideoPlayer.pause();
+        $('#divLoading').modal('show');
+        window.location = "/video_notes_builder/?event=" + $(".check-search:checkbox:checked").val() + "&tc=" + TC;
     }
 </script>
 {% endblock %}
