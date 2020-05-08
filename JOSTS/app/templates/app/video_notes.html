@@ -70,7 +70,7 @@
             {% endif %}
             <div id="divHud{{note.frame}}" frame="{{note.frame}}" style="position:relative;cursor:pointer" class="HudContainer" onclick="VideoNoteClick({{note.frame}})">
                 {% if note.no_value_type == 'unrecognized' or note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'special repitition' %}
-                <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}redstripe.svg" style="position:absolute;height:65px;top:0px">
+                <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}{% if request.session.disc_path == 'wag' %}redscross.svg{% else %}redstripe.svg{% endif %}" style="position:absolute;height:65px;top:0px">
                 {% endif %}
                 <div class="text-center" style="font-size:0.9rem">  {% if note.no_value_type != 'unrecognized' and note.no_value_type != 'repeat' and note.no_value_type != 'unrated' and note.no_value_type != 'special repitition' %}
                 {{note.element_link.letter_value}}
