@@ -21,7 +21,7 @@
                
                     <div id="divVideo{{ video.id }}" onclick="VideoClick({{ video.id }},'{{ video.file }}',this,{{video.fps}},'{{video.old_id}}','{{video.competitionvideo_set.first.competition_group.competition.type.short_name}}{{video.competitionvideo_set.first.competition_group.competition.short_name}}/{{video.event}}/{{video.competitionvideo_set.first.competition_group.short_name}}')" style="cursor:pointer;font-size:0.7rem" class="video-select">
 
-                        {{ video.id }}
+                        {{video.tcexample_set.first.type}} {{ video.id }} 
                     {% if video.approved_final %}
                         <span class="dot approved_final"></span>
                     {% elif video.approved_liason %}
@@ -263,6 +263,7 @@
     var drawing_prefix = '{{drawing_prefix}}';
     token = "{{ csrf_token }}";
     var TC = {{TC}};
+    console.log(Date.now()/1000);
     {% for element in elements %}
     Elements[{{element.element.id}}] = {group: '{{ element.element.str_grp }}',
                         val: '{{ element.element.letter_value }}',
@@ -272,11 +273,13 @@
                         id: '{{element.element.id}}'};
     ElementIDs['{{element.element.id_number}}'] = '{{element.element.id}}';
     {% endfor %}
+    console.log(Date.now()/1000);
     {% for unrated in unrateds %}
     Unrated[{{unrated.id}}] = {name: '{{ unrated.name }}',
                         id: '{{unrated.id}}'};
     UnratedOldIDs['{{unrated.old_id}}'] = '{{unrated.id}}';
     {% endfor %}
+    console.log(Date.now()/1000);
     {% for rule in rules %}
     Rules[{{rule.id}}] = {rule: '{{ rule.rule }}',
                         text: '{{ rule.text }}',
@@ -284,6 +287,7 @@
                         connected_elements: '{{ rule.connected_elements }}',
                         id: '{{rule.id}}'};
     {% endfor %}
+    console.log(Date.now()/1000);
     if (DiscP == "mag")
         DiscP = "Mens";
     else

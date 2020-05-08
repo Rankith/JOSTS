@@ -348,7 +348,7 @@ def element_search(request):
     ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
     groupDict = {}
     valueDict = {}
-    Video.objects.filter(id__in=TCExample.objects.all().values_list('video__id')).update(approved_liason=True,approved_final=True,approved_sts=True)
+    #Video.objects.filter(id__in=TCExample.objects.all().values_list('video__id')).update(approved_liason=True,approved_final=True,approved_sts=True)
 
     #Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
     #RuleLink.objects.update(type=Left('type',1))
@@ -866,6 +866,7 @@ def video_notes_builder(request):
     #Video.objects.update(approved_sts=True)
     if tc=="false":
         videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).exclude(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id'))
+        #Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).exclude(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id')).exclude(id__in=CompetitionVideo.objects.filter(video__event__iexact='fx', video__disc=request.session.get('disc',1)).values_list('video__id'))
     else:
         videos = Video.objects.filter(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id'))
         #videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
