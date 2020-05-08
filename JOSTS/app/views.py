@@ -865,8 +865,8 @@ def video_notes_builder(request):
     tc = request.GET.get('tc','false')
     #Video.objects.update(approved_sts=True)
     if tc=="false":
-        videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).exclude(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id'))
-        #Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).exclude(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id')).exclude(id__in=CompetitionVideo.objects.filter(video__event__iexact='fx', video__disc=request.session.get('disc',1)).values_list('video__id'))
+        #videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).exclude(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id'))
+        videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).exclude(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id')).exclude(id__in=CompetitionVideo.objects.filter(video__event__iexact='fx', video__disc=request.session.get('disc',1)).values_list('video__id'))
     else:
         videos = Video.objects.filter(id__in=TCExample.objects.filter(video__event__iexact=event, video__disc=request.session.get('disc',1)).values_list('video__id'))
         #videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
