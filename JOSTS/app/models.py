@@ -82,7 +82,7 @@ class ElementText(models.Model):
     element = models.ForeignKey(Element, on_delete=models.SET_NULL,null=True)
     language = models.CharField(max_length=2,default="EN")
     text = models.CharField(max_length=400,blank=True,default='')
-    short_text = models.CharField(max_length=70,blank=True,default='')
+    short_text = models.CharField(max_length=400,blank=True,default='')
     named = models.CharField(max_length=50,blank=True,default='')
     additional_info = models.CharField(max_length=400,blank=True,default='')
     id_number_text = models.CharField(max_length=50,blank=True,default='')
