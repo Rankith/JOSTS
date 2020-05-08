@@ -43,22 +43,22 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='element',
             name='value',
-            field=models.DecimalField(blank=True, decimal_places=1, default='', max_digits=3),
+            field=models.DecimalField(blank=True, decimal_places=1, default=0.0, max_digits=3),
         ),
         migrations.AlterField(
             model_name='element',
             name='value_67',
-            field=models.DecimalField(blank=True, decimal_places=1, default='', max_digits=3),
+            field=models.DecimalField(blank=True, decimal_places=1, default=0.0, max_digits=3),
         ),
         migrations.AlterField(
             model_name='element',
             name='value_8',
-            field=models.DecimalField(blank=True, decimal_places=1, default='', max_digits=3),
+            field=models.DecimalField(blank=True, decimal_places=1, default=0.0, max_digits=3),
         ),
         migrations.AlterField(
             model_name='element',
             name='value_9',
-            field=models.DecimalField(blank=True, decimal_places=1, default='', max_digits=3),
+            field=models.DecimalField(blank=True, decimal_places=1, default=0.0, max_digits=3),
         ),
         migrations.AlterField(
             model_name='rule',
