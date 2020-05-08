@@ -85,7 +85,7 @@ class ElementText(models.Model):
     short_text = models.CharField(max_length=400,blank=True,default='')
     named = models.CharField(max_length=50,blank=True,default='')
     additional_info = models.CharField(max_length=400,blank=True,default='')
-    id_number_text = models.CharField(max_length=50,blank=True,default='')
+    id_number_text = models.CharField(max_length=400,blank=True,default='')
     hold_text = models.CharField(max_length=50,blank=True,default='')
     def __str__(self):
         return self.element.event + " " + self.text
