@@ -119,11 +119,11 @@ class RuleText(models.Model):
     specific_deduction = models.CharField(max_length=400,blank=True,default='')
     chapter_text = models.CharField(max_length=255,blank=True,default='')
     section_text = models.CharField(max_length=255,blank=True,default='')
-    cat0 = models.CharField(max_length=30,blank=True,default='')
-    cat1 = models.CharField(max_length=30,blank=True,default='')
-    cat2 = models.CharField(max_length=30,blank=True,default='')
-    cat3 = models.CharField(max_length=30,blank=True,default='')
-    cat4 = models.CharField(max_length=30,blank=True,default='')
+    cat0 = models.CharField(max_length=80,blank=True,default='')
+    cat1 = models.CharField(max_length=80,blank=True,default='')
+    cat2 = models.CharField(max_length=80,blank=True,default='')
+    cat3 = models.CharField(max_length=80,blank=True,default='')
+    cat4 = models.CharField(max_length=80,blank=True,default='')
 
 class DrawnImage(models.Model):
     disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
