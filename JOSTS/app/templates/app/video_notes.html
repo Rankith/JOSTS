@@ -70,14 +70,19 @@
             {% endif %}
             <div id="divHud{{note.frame}}" frame="{{note.frame}}" style="position:relative;cursor:pointer" class="HudContainer" onclick="VideoNoteClick({{note.frame}})">
                 {% if note.no_value_type == 'unrecognized' or note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'special repitition' %}
-                <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}{% if request.session.disc_path == 'wag' %}redscross.svg{% else %}redstripe.svg{% endif %}" style="position:absolute;height:65px;top:0px">
+                    {% if note.element_link.image_url != "ub210101" and note.element_link.image_url != "ub220101" %}
+                        <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}{% if request.session.disc_path == 'wag' %}redscross.svg{% else %}redstripe.svg{% endif %}" style="position:absolute;height:65px;top:0px">
+                    {% endif %}
                 {% endif %}
                 <div class="text-center" style="font-size:0.9rem">  {% if note.no_value_type != 'unrecognized' and note.no_value_type != 'repeat' and note.no_value_type != 'unrated' and note.no_value_type != 'special repitition' %}
                 {{note.element_link.letter_value}}
                 {% else %}
                 &nbsp;
                 {% endif %}</div>
-                <div class="text-center" style="background-color:white"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{{ note.element_link.image_url}}.svg"/></div>
+               
+                
+                <!-- special case for WAG cast to handstand and straddle cast to handstand -->
+                <div class="text-center" style="background-color:white"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/{% if request.session.disc_path == "wag" and note.no_value_type == 'unrecognized' and note.element_link.image_url == "ub210101" %}es72.svg{% elif request.session.disc_path == "wag" and note.no_value_type == 'unrecognized' and note.element_link.image_url == "ub220101" %}es73.svg{% else %}{{ note.element_link.image_url}}.svg{% endif %}"/></div>
                 <div class="text-center" style="font-size:0.5rem">&nbsp;
         {% elif note.rule_link != None %}
             {% if note.rule_link.deduction_amount > 0 %}
