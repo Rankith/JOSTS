@@ -25,6 +25,17 @@
             </div>
         </li>
         <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Links
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="https://web-sts.com/FIG{{ request.session.disc_full_name }}CodeofPointsEnglish20.pdf" target="_blank">FIG Code</a>
+                <a class="dropdown-item" href="http://www.fig-gymnastics.com/site/pages/newsletters-{{ request.session.disc_path }}.php" target="_blank">FIG Newsletter</a>
+                <a class="dropdown-item" href="https://web-sts.com/FIGTechnicalRegulationsEnglish.pdf" target="_blank">FIG Technical Reg.</a>
+                <a class="dropdown-item" href="https://web-sts.com/ApparatusInfoEnglish.pdf" target="_blank">Apparatus Specs</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle  {% if "subscriptions" in request.path or "settings" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Account
             </a>

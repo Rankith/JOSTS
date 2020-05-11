@@ -1,0 +1,298 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div class="sidebar-header">
+   
+</div>
+{% if search_type == 'element' or search_type == 'rule' %}
+<div class="input-group input-group-sm mt-1" id="divSearch">
+  <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="txtSearch">
+  <div class="input-group-append">
+     <button class="btn btn-outline-secondary" type="button" onclick="SearchClick()">
+                <i class="fas fa-search"></i>
+            </button>
+  </div>
+</div>
+{% endif %}
+
+<div class="row no-gutters pt-2">
+    {% for event in events %}
+    <div class="col">
+        <label id="lblE{{event}}" class="search-button">
+            <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search check-search-event" data-search="element__event" onchange="SearchChangeEvent(this)">
+            <div class="search-button event-button">
+                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/{{event}}_White.svg" />
+            </div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+{% if search_type == 'element' %}
+    <div class="row no-gutters" id="Flips">
+        {% for flip in flips %}
+        <div class="pr-2">
+            <label id="lblF{{flip}}" class="search-button">
+                <input type="checkbox" id="chkF{{flip}}" value="{{flip}}" class="check-search search-TU search-DM" data-search="element__tramp_flips" onchange="SearchChange(this)">
+                <div class="search-button group-button">
+                    <div style="text-transform:uppercase">{{flip}}</div>
+                </div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row no-gutters" id="Values">
+        {% for twist in twists %}
+        <div class="pr-2">
+            <label id="lblT{{twist}}" class="search-button">
+                <input type="checkbox" id="chkT{{twist}}" value="{{twist}}" class="check-search search-TR search-SY search-TU search-DM" data-search="element__tramp_twists" onchange="SearchChange(this)">
+                <div class="search-button value-button">
+                    <div style="text-transform:uppercase">{{twist}}</div>
+                </div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row no-gutters pt-2 pb-2" id="range">
+        <div class="col-12 pr-3 pl-3">
+            <div id="ValueSlider"></div>
+        </div>
+        <div class="col-12 text-center" id="divSliderValues" style="font-size:1.4rem">
+           
+        </div>
+    </div>
+{% else %}
+    <div class="row no-gutters">
+        {% for rule in sections %}
+        <div class="pr-2">
+            <label id="lblS{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkS{{forloop.counter}}" value="{{rule.section}}" class="check-search" data-search="rule__section" onchange="SearchChange(this)">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{rule.search_display}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="row no-gutters">
+    <div class="pr-2">
+        <label id="lblReset" class="search-button">
+
+            <div class="search-button red-button" onclick="SearchReset()"><div style="text-transform:uppercase"><i class="fas fa-undo"></i></div></div>
+        </label>
+    </div>
+</div>
+
+{% if search_type == 'shorthand' %}
+
+{% endif %}
+
+{% if search_type == 'element' or search_type == 'shorthand_trainer' %}
+<div class="row no-gutters">
+    <div class="pr-2">
+        <label id="lblDisplayImage" class="search-button">
+            <input type="checkbox" id="chkDisplayImage" class="check-search-display" value="Image" onchange="DisplayChange(this)">
+            <div class="search-button display-button"><div style="text-transform:uppercase">Im</div></div>
+        </label>
+    </div>
+
+    <div class="pr-2">
+        <label id="lblDisplayShorthand" class="search-button">
+            <input type="checkbox" id="chkDisplayShorthand" class="check-search-display" value="Shorthand" onchange="DisplayChange(this)">
+            <div class="search-button display-button"><div style="text-transform:uppercase">Sy</div></div>
+        </label>
+    </div>
+
+    <div class="pr-2">
+        <label id="lblDisplayText" class="search-button">
+            <input type="checkbox" id="chkDisplayText" class="check-search-display" value="Text" onchange="DisplayChange(this)">
+            <div class="search-button display-button"><div style="text-transform:uppercase">Tx</div></div>
+        </label>
+    </div>
+</div>
+{% endif %}
+
+
+
+<div id="divElementCountDisplay" style="padding-bottom:60px"></div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+        var search_type = '{{search_type}}';
+    {% if search_type != "rule" and search_type != "shorthand" %}
+        var valuelow = {{value_low}};
+        var valuehigh = {{value_high}};
+    {% endif %}
+</script>
+<script type="text/javascript">
+    var Event = "";
+    var ValueDisplay = "value";
+
+    $('#txtSearch').keypress(function (e) {
+      if (e.which == 13) {
+          SearchClick();
+        return false;    //<---- Add this line
+      }
+    });
+
+    //value slider
+    if (search_type == "element") {
+        var slider = document.getElementById("ValueSlider")
+
+        noUiSlider.create(slider, {
+            start: [valuelow, valuehigh],
+            connect: true,
+            range: {
+                'min': valuelow,
+                'max': valuehigh
+            },
+            step: 0.1
+        });
+
+        slider.noUiSlider.on('update', function (values, handle) {
+            $("#divSliderValues").html(Number(values[0]).toFixed(1) + " - " + Number(values[1]).toFixed(1));
+
+        });
+
+        slider.noUiSlider.on('end', function (values, handle) {
+
+            localStorage.ValueRange = values;
+            CreateSearchParams();
+        });
+
+    }
+    function SearchChangeEvent(el) {
+        //console.log("SCE");
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-event').not(el).prop('checked', false);
+            $('.check-search-event').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            ShowHideSearches();
+            CreateSearchParams();
+            //Event = $(el).val();
+        }
+    }
+
+    function DisplayChange(el) {
+        //console.log("DC");
+         if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-display').not(el).prop('checked', false);
+            $('.check-search-display').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            CreateSearchParams();
+            //Event = $(el).val();
+        }
+    }
+
+    function ShowHideSearches() {
+        if (search_type != "rule") {
+            ev = $('.check-search-event:checked').val();
+            $('.check-search').not('.check-search-event').not('.search-' + ev).parent().hide();
+            $('.check-search.search-' + ev).parent().show();
+        }
+        /*if (ev == "V") {
+            $('#Values').hide();
+            $('#VaultValues').hide();*/
+        
+    }
+
+    function SearchClick() {
+        CreateSearchParams();
+    }
+
+    function SearchChange(el) {
+        //console.log("SC");
+        localStorage.setItem(el.id, el.checked ? 1 : 0);
+        CreateSearchParams();
+    }
+    function CreateSearchParams() {
+        //console.log("CSP");
+        var strValues = "";
+        Event = $('.check-search-event:checkbox:checked').val();
+        if (list_type !== 'undefined') {
+            $(".check-search:checkbox:checked").each(function (i) {
+                if ($(this).parent().is(":visible"))
+                    strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+                //console.log($(this).attr("data-search") + " : " + $(this).val());
+            });
+            if (search_type=="element") {
+                var vValue = "value";
+                ValueDisplay = vValue;
+                vValue = "element__" + vValue;
+                strValues = vValue + "__gte=" + slider.noUiSlider.get()[0] + "&" + vValue + "__lte=" + slider.noUiSlider.get()[1] + "&" + strValues;  
+            }
+            else
+                 ValueDisplay = "value";
+            strValues = "value_display=" + ValueDisplay + "&" + strValues;
+            if (search_type == "element" || type == "shorthand_trainer") {
+                strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
+            }
+            //if ($("#txtSearch").val() != "")
+            strValues = "search=" + $("#txtSearch").val() + "&" + strValues;
+            
+            $.get("/" + list_type + "_list/?" + strValues, function (data) {
+                $("#divElementList").empty();
+                $("#divElementList").append(data);
+                $("#divElementCountDisplay").html(($("#divNumElements").html()));
+                $("#div" + SelectedElement).click();
+            });
+        }
+        //$("#divElementList").empty();
+        //$("#divElementList").load("/element_list/?" + strValues);
+    }
+    function SearchReset() {
+        $(".check-search:checkbox:checked:not(.check-search-event)").each(function (i) {
+            localStorage.setItem(this.id, 0);
+            $(this).removeAttr('checked');
+            
+        });
+        $("#txtSearch").val("");
+        CreateSearchParams();
+        }
+    function LoadLastSelections() {
+        //console.log("LLS");
+        //console.log(localStorage);
+
+        $(".check-search:checkbox").each(function (i) {
+            console.log(this.id);
+             console.log(localStorage.getItem(this.id));
+            if (localStorage.getItem(this.id) == "1")
+                $(this).prop('checked', true);
+            else
+                $(this).prop('checked', false);
+        });
+        if (search_type == "element" || type == "shorthand_trainer") {
+             $(".check-search-display:checkbox").each(function (i) {
+                if (localStorage.getItem(this.id) == "1")
+                    $(this).prop('checked', true);
+                else
+                    $(this).prop('checked', false);
+             });
+            if ($('.check-search-display:checked').val() == undefined) {
+                $("#chkDisplayImage").prop('checked', true);
+                 localStorage.setItem('chkDisplayImage', 1);
+            }
+        }
+        console.log($(".check-search-event:checkbox:checked").length);
+        if ($(".check-search-event:checkbox:checked").length == 0 && $(".check-search-event:checkbox").length > 0) 
+            $(".check-search-event:checkbox")[0].click();
+        else {
+            ShowHideSearches();
+            CreateSearchParams();
+        }
+        if (search_type == "element") {
+            if (localStorage.ValueRange != undefined)
+                slider.noUiSlider.set([localStorage.ValueRange.split(",")[0], localStorage.ValueRange.split(",")[1]]);
+        }
+    }
+</script>
+{% endblock %}

@@ -343,70 +343,48 @@ def update_user_note(request):
     return JsonResponse(resp)
 
 def element_search(request):
-    vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
-    groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
-    ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
-    groupDict = {}
-    valueDict = {}
-    #Video.objects.filter(id__in=TCExample.objects.all().values_list('video__id')).update(approved_liason=True,approved_final=True,approved_sts=True)
+    if request.session.get('disc_path') == 'tra':
+        #trampoline so get different stuff
+        twists = Element.objects.filter(disc=request.session.get('disc',1)).order_by('tramp_twists').values_list('tramp_twists',flat=True).distinct()
+        flips = Element.objects.filter(disc=request.session.get('disc',1)).order_by('tramp_flips').values_list('tramp_flips',flat=True).distinct()
+        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+        context = {
+            'twists':twists,
+            'flips': flips,
+            'events': events,
+            'search_type':'element',
+            'value_low':0,
+            'value_high':6,
+            }
+        return render(request, 'app/element_search_tramp.html',context=context)
+    else:
+        vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
+        groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
+        ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
+        groupDict = {}
+        valueDict = {}
+        #Video.objects.filter(id__in=TCExample.objects.all().values_list('video__id')).update(approved_liason=True,approved_final=True,approved_sts=True)
 
-    #Video.objects.update(file=Replace('file',Value('.mov'),Value('.mp4')))
-    #RuleLink.objects.update(type=Left('type',1))
-    #vvals = Element.objects.filter(letter_value='A').update(down_value_letter='A')
-    #vvals = Element.objects.filter(letter_value='B').update(down_value_letter='A')
-    #vvals = Element.objects.filter(letter_value='C').update(down_value_letter='B')
-    #vvals = Element.objects.filter(letter_value='D').update(down_value_letter='C')
-    #vvals = Element.objects.filter(letter_value='E').update(down_value_letter='D')
-    #vvals = Element.objects.filter(letter_value='A').update(up_value_letter='B')
-    #vvals = Element.objects.filter(letter_value='B').update(up_value_letter='C')
-    #vvals = Element.objects.filter(letter_value='C').update(up_value_letter='D')
-    #vvals = Element.objects.filter(letter_value='D').update(up_value_letter='E')
-    #vvals = Element.objects.filter(letter_value='E').update(up_value_letter='E')
-    #vvals = Element.objects.filter(letter_value='B').update(value=0.3)
-    #vvals = Element.objects.filter(letter_value_9='B').update(value_9=0.3)
-    #vvals = Element.objects.filter(letter_value_8='B').update(value_8=0.3)
-    #vvals = Element.objects.filter(letter_value_67='B').update(value_67=0.3)
-    #vvals = Element.objects.filter(letter_value='C').update(value=0.5)
-    #vvals = Element.objects.filter(letter_value_9='C').update(value_9=0.5)
-    #vvals = Element.objects.filter(letter_value_8='C').update(value_8=0.5)
-    #vvals = Element.objects.filter(letter_value_67='C').update(value_67=0.5)
-    #vvals = Element.objects.filter(letter_value='D').update(value=0.5)
-    #vvals = Element.objects.filter(letter_value_9='D').update(value_9=0.5)
-    #vvals = Element.objects.filter(letter_value_8='D').update(value_8=0)
-    #vvals = Element.objects.filter(letter_value_67='D').update(value_67=0)
-    #vvals = Element.objects.filter(letter_value='E').update(value=0.5)
-    #vvals = Element.objects.filter(letter_value_9='E').update(value_9=0.5)
-    #vvals = Element.objects.filter(letter_value_8='E').update(value_8=0)
-    #vvals = Element.objects.filter(letter_value_67='E').update(value_67=0)
-    #vvals = Element.objects.filter(letter_value='D').update(bonus=0.1)
-    #vvals = Element.objects.filter(letter_value='E').update(bonus=0.2)
-    #vvals = Element.objects.filter(event="V").update(letter_value_67='')
-    #vvals = Element.objects.filter(event="V").update(letter_value_8='')
-    #vvals = Element.objects.filter(event="V").update(letter_value_9='')
-    #vvals = Element.objects.filter(event="V").filter(value__gte=8.0).filter(value__lt=9.0).update(range=8)
-    #vvals = Element.objects.filter(event="V").filter(value__gte=9.0).filter(value__lt=10.0).update(range=9)
-    #vvals = Element.objects.filter(event="V").filter(value__gte=10).update(range=10)
-
-    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
-    for group in groups:
-        groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
-        groupDict[group['str_grp']] = groupEvents
-    for value in vals:
-        valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value']).order_by('event').values('event').distinct())
-        valueDict[value['letter_value']] = valueEvents
-    context = {
-        'vals':vals,
-        'groups': groups,
-        'groupsEvents': groupDict,
-        'valueEvents': valueDict,
-        'events': events,
-        'ranges': ranges,
-        'search_type':'element',
-        'vault_low':Disc.objects.filter(id=request.session.get('disc',1)).first().vault_range_low,
-        'vault_high':Disc.objects.filter(id=request.session.get('disc',1)).first().vault_range_high,
-        'vault_slider':VersionSettings.objects.first().use_level_slider
-        }
-    return render(request, 'app/element_search.html',context=context)
+        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+        for group in groups:
+            groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
+            groupDict[group['str_grp']] = groupEvents
+        for value in vals:
+            valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value']).order_by('event').values('event').distinct())
+            valueDict[value['letter_value']] = valueEvents
+        context = {
+            'vals':vals,
+            'groups': groups,
+            'groupsEvents': groupDict,
+            'valueEvents': valueDict,
+            'events': events,
+            'ranges': ranges,
+            'search_type':'element',
+            'vault_low':Disc.objects.filter(id=request.session.get('disc',1)).first().vault_range_low,
+            'vault_high':Disc.objects.filter(id=request.session.get('disc',1)).first().vault_range_high,
+            'vault_slider':VersionSettings.objects.first().use_level_slider
+            }
+        return render(request, 'app/element_search.html',context=context)
 
 def element_list(request):
     dget = dict(request.GET)
