@@ -359,6 +359,7 @@ a.BlueLoginButton {
 
 .video-note-line {
     font-weight:600;
+    cursor:pointer;
 }
 
 .video-note-selected {

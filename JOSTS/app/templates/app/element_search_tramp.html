@@ -6,6 +6,11 @@
 {% if search_type == 'element' or search_type == 'rule' %}
 <div class="input-group input-group-sm mt-1" id="divSearch">
   <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="txtSearch">
+    <div class="input-group-append">
+        <button class="btn border border-left-0" style="background-color:#fff" onclick="ClearSearch()">
+      <i class="fas fa-times fa-xs" style="background-color:#fff;color:black;cursor:pointer;"></i>
+            </button>
+    </div>
   <div class="input-group-append">
      <button class="btn btn-outline-secondary" type="button" onclick="SearchClick()">
                 <i class="fas fa-search"></i>
@@ -148,7 +153,9 @@
         return false;    //<---- Add this line
       }
     });
-
+    function ClearSearch() {
+        $('#txtSearch').val("")
+    }
     //value slider
     if (search_type == "element") {
         var slider = document.getElementById("ValueSlider")
