@@ -349,6 +349,15 @@ def element_search(request):
         flips = Element.objects.filter(disc=request.session.get('disc',1)).order_by('tramp_flips').values_list('tramp_flips',flat=True).distinct()
         events=request.session.get('disc_events','V,UB,BB,FX').split(",")
         positions = 'feet,front,back'.split(",")
+        twistsDict = {}
+        for twist in twists:
+            if twist == 0:
+                t = "0"
+            elif twist % 2 != 0:
+                t = str(int(twist)) + "/2"
+            else:
+                t = str(int(twist/2)) + "/1"
+            twistsDict[twist] = t
         context = {
             'twists':twists,
             'flips': flips,
@@ -356,7 +365,8 @@ def element_search(request):
             'search_type':'element',
             'value_low':0,
             'value_high':6,
-            'positions':positions
+            'positions':positions,
+            'twistsDict': twistsDict
             }
         return render(request, 'app/element_search_tramp.html',context=context)
     else:
