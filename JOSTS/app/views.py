@@ -346,7 +346,9 @@ def element_search(request):
     if request.session.get('disc_path') == 'tra':
         #trampoline so get different stuff
         twists = Element.objects.filter(disc=request.session.get('disc',1)).order_by('tramp_twists').values_list('tramp_twists',flat=True).distinct()
-        flips = Element.objects.filter(disc=request.session.get('disc',1)).order_by('tramp_flips').values_list('tramp_flips',flat=True).distinct()
+        flips = Element.objects.filter(disc=request.session.get('disc',1))#.order_by('tramp_flips').values_list('tramp_flips',flat=True).distinct()
+        flips = flips.filter(event="TU") | flips.filter(event="DM")
+        flips = flips.order_by('tramp_flips').values_list('tramp_flips',flat=True).distinct()
         events=request.session.get('disc_events','V,UB,BB,FX').split(",")
         positions = 'feet,front,back'.split(",")
         twistsDict = {}
