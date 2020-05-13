@@ -27,6 +27,19 @@
     {% endfor %}
 </div>
 {% if search_type == 'element' %}
+ <div class="row no-gutters" id="Positions">
+        {% for position in positions %}
+        <div class="pr-2">
+            <label id="lblP{{position}}" class="search-button">
+                <input type="checkbox" id="chkF{{position}}" value="{{position}}" class="check-search search-TR search-SY" data-search="element__tramp_start_position,element__tramp_end_position" onchange="SearchChange(this)">
+                <div class="search-button group-button">
+                     <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/TRA-{{position}}.svg" />
+                </div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
     <div class="row no-gutters" id="Flips">
         {% for flip in flips %}
         <div class="pr-2">

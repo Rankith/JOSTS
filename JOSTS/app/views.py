@@ -348,6 +348,7 @@ def element_search(request):
         twists = Element.objects.filter(disc=request.session.get('disc',1)).order_by('tramp_twists').values_list('tramp_twists',flat=True).distinct()
         flips = Element.objects.filter(disc=request.session.get('disc',1)).order_by('tramp_flips').values_list('tramp_flips',flat=True).distinct()
         events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+        positions = 'feet,front,back'.split(",")
         context = {
             'twists':twists,
             'flips': flips,
@@ -355,6 +356,7 @@ def element_search(request):
             'search_type':'element',
             'value_low':0,
             'value_high':6,
+            'positions':positions
             }
         return render(request, 'app/element_search_tramp.html',context=context)
     else:
@@ -401,8 +403,9 @@ def element_list(request):
     for k,v in dget.items():
         innerQuery = Q()
         for i in v:
-            kwargs = {'{0}'.format(k): i}
-            innerQuery.add(Q(**kwargs), Q.OR)
+            for ks in k.split(','):#allow multi things
+                kwargs = {'{0}'.format(ks): i}
+                innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
     elements = ElementText.objects.filter(query).order_by('element__str_grp','element__code_order')
     if search != "":
