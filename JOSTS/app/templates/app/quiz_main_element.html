@@ -31,6 +31,15 @@
         </div>
     </div>
 </div>
+{% if direct_val %}
+<div class="row pt-1" id="divDirectValTest">
+    <div class="col-3 text-right mt-auto mb-auto text-base">Value: </div>
+    <div class="col-9 d-flex justify-content-start">
+        <input type="text" class="form-control mr-2" placeholder="0.0" aria-label="Value" id="txtValue" style="width:50px">
+        <button type="button" class="btn btn-main font-weight-bold" onclick="SubmitValue()" id="btnSubmitDirectValue">Submit</button>
+    </div>
+</div>
+{% else %}
 <div class="row pt-1" id="divGroupTest" style="display:none">
     <div class="col-3 text-right mt-auto mb-auto text-base">Group: </div>
     <div class="col-9 d-flex justify-content-start">
@@ -62,6 +71,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 <div class="row justify-content-center">
     <div class="row" style="width:250px">
         <div class="text-success font-weight-bold col-6 text-right">
@@ -81,11 +91,13 @@
 </div>
 {% block scripts %}
 <script type="text/javascript">
+    var DirectValue = {{direct_val|lower}};
     var NumElements = {{quiz|length}};
     var QuizElements = new Array();
     var QuizElementShortText = new Array();
     var QuizElementIDs = new Array();
     var QuizElementsValues = new Array();
+    var QuizElementsDirectValues = new Array();
     var QuizElementsGroups = new Array();
     var QuizAnswersGroup = new Array();
     var QuizAnswersValue = new Array();
@@ -97,6 +109,7 @@
         QuizElementShortText[{{ forloop.counter0 }}] = "{{ q.short_text}}";
         QuizElementIDs[{{ forloop.counter0 }}] = "{{ q.element.id}}";
         QuizElementsValues[{{ forloop.counter0 }}] = "{{ q.element.letter_value}}";
+    QuizElementsDirectValues[{{ forloop.counter0 }}] = "{{ q.element.value}}";
         QuizElementsGroups[{{ forloop.counter0 }}] = "{{ q.element.str_grp}}";
     {% endfor %}
     var ImageBaseURL = "{% static 'app/images/'%}{{request.session.disc_path}}/elements/";
@@ -143,8 +156,15 @@
                 $("#chkV" + QuizAnswersValue[which]).click();
             if (TestSetup["Group"])
                 $("#chkGA" + QuizAnswersGroup[which]).click();
+            if (DirectValue) {
+                ColorDirectBox();
+                $("#txtValue").val(QuizAnswersValue[which]);
+                $("#btnSubmitDirectValue").hide();
+            }
             ColorAnswers();
         }
+        else
+            $("#btnSubmitDirectValue").show();
     }
 
     function SelectValue(el) {
@@ -169,6 +189,28 @@
             if ((NumTests == 1 || ValueAnswered) && OnElement==HighestOn)
                 CheckAnswer();
         }
+    }
+
+    function SubmitValue() {
+        $("#btnSubmitDirectValue").hide();
+        QuizAnswersValue[OnElement] = $("#txtValue").val()
+        ColorDirectBox()
+        if (QuizAnswersValue[OnElement] == QuizElementsDirectValues[OnElement]) {
+            Correct++
+        }
+        else {
+            $("#txtValue").val(QuizElementsDirectValues[OnElement])
+            Missed[Wrong] = QuizElementIDs[OnElement];
+            Wrong++;
+        }
+        setTimeout(QuizNext, 2000);
+    }
+
+    function ColorDirectBox() {
+        if (QuizAnswersValue[OnElement] == QuizElementsDirectValues[OnElement])
+            $("#txtValue").css("background-color", "green")
+        else
+            $("#txtValue").css("background-color", "red")
     }
 
     function ColorAnswers()
@@ -284,26 +326,33 @@
     }
 
     function ResetButtons() {
-        //reset button classes
-        $('.quiz-wrong-button').each(function (i) {
-            $(this).removeClass('quiz-wrong-button');
-            if ($(this).hasClass('answer-button-value'))
-                $(this).addClass('value-button');
-            else
-                $(this).addClass('group-button');
-        });
+        if (DirectValue) {
+            $("#txtValue").css("background-color", "white")
+            $("#txtValue").val("")
+        }
+        else {
+            //reset button classes
+            $('.quiz-wrong-button').each(function (i) {
+                $(this).removeClass('quiz-wrong-button');
+                if ($(this).hasClass('answer-button-value'))
+                    $(this).addClass('value-button');
+                else
+                    $(this).addClass('group-button');
+            });
 
-        $('.quiz-correct-button').each(function (i) {
-            $(this).removeClass('quiz-correct-button');
-            if ($(this).hasClass('answer-button-value'))
-                $(this).addClass('value-button');
-            else
-                $(this).addClass('group-button');
-        });
+            $('.quiz-correct-button').each(function (i) {
+                $(this).removeClass('quiz-correct-button');
+                if ($(this).hasClass('answer-button-value'))
+                    $(this).addClass('value-button');
+                else
+                    $(this).addClass('group-button');
+            });
 
-        //uncheck em all
-        $('.answer-group').prop('checked', false);
-        $('.answer-value').prop('checked', false);
+            //uncheck em all
+            $('.answer-group').prop('checked', false);
+            $('.answer-value').prop('checked', false);
+        }
+
     }
 
     function UpdateStats() {

@@ -795,16 +795,29 @@ def quiz(request):
         quiz = ElementText.objects.filter(element__in=QuizResult.objects.filter(id=missed)[0].missed.all().values_list('id'))
         elements = ElementText.objects.filter(element__event=request.GET.get('event'),element__disc=request.session.get('disc',1))
     #elements = ElementText.objects.filter(element__event=request.GET.get('event'))
-    vals = Element.objects.filter(event=request.GET.get('event')).filter(disc=request.session.get('disc',1)).order_by('letter_value').values('letter_value').distinct()
-    groups = Element.objects.filter(event=request.GET.get('event')).filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
-    context = {
-        'event': request.GET.get('event'),
-        'lang_elements': elements,
-        'quiz': quiz,
-        'prompt_type': request.GET.get('prompt'),
-        'vals':vals,
-        'groups': groups
-        }
+    if request.session.get('disc_path') == 'tra':
+        vals = Element.objects.filter(event=request.GET.get('event')).filter(disc=request.session.get('disc',1)).order_by('value').values('value').distinct()
+        context = {
+            'event': request.GET.get('event'),
+            'lang_elements': elements,
+            'quiz': quiz,
+            'prompt_type': request.GET.get('prompt'),
+            'vals':vals,
+            'direct_val':True
+            }
+    else:
+        vals = Element.objects.filter(event=request.GET.get('event')).filter(disc=request.session.get('disc',1)).order_by('letter_value').values('letter_value').distinct()
+        groups = Element.objects.filter(event=request.GET.get('event')).filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
+    
+        context = {
+            'event': request.GET.get('event'),
+            'lang_elements': elements,
+            'quiz': quiz,
+            'prompt_type': request.GET.get('prompt'),
+            'vals':vals,
+            'groups': groups,
+            'direct_val':False
+            }
     #activity log
     log_activity(request,request.GET.get('type','Shorthand') + ' Quiz','Start','')
     return render(request, 'app/quiz_main_' + request.GET.get('type','shorthand').lower() + '.html',context=context)
