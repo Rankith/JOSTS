@@ -243,6 +243,8 @@ def loginview(request):
             request.session['disc_full_name'] = login_form.cleaned_data.get('disc').full_name;
             request.session['disc_events'] = login_form.cleaned_data.get('disc').event_list;
             request.session['version_name'] = VersionSettings.objects.first().name
+            disc = Disc.objects.get(pk=login_form.cleaned_data.get('disc').id)
+            request.session['exclude_screens'] = disc.exclude_screens
             return redirect('elements')
     else:
         login_form = LoginForm()
@@ -709,26 +711,58 @@ def quiz_element(request):
     return render(request, 'app/quiz_base.html',context=context)
 
 def quiz_setup(request):
-    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
-    vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
-    groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
-    groupDict = {}
-    valueDict = {}
-    for group in groups:
-        groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
-        groupDict[group['str_grp']] = groupEvents
-    for value in vals:
-        valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value']).order_by('event').values('event').distinct())
-        valueDict[value['letter_value']] = valueEvents
-    context = {
-        'vals':vals,
-        'groups': groups,
-        'groupsEvents': groupDict,
-        'valueEvents': valueDict,
-        'events':events,
-        'type': request.GET.get('type')
-        }
-    return render(request, 'app/quiz_setup.html',context=context)
+    if request.session.get('disc_path') == 'tra':
+        #trampoline so get different stuff
+        twists = Element.objects.filter(disc=request.session.get('disc',1)).order_by('tramp_twists').values_list('tramp_twists',flat=True).distinct()
+        flips = Element.objects.filter(disc=request.session.get('disc',1))#.order_by('tramp_flips').values_list('tramp_flips',flat=True).distinct()
+        flips = flips.filter(event="TU") | flips.filter(event="DM")
+        flips = flips.order_by('tramp_flips').values_list('tramp_flips',flat=True).distinct()
+        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+        positions = 'feet,front,back'.split(",")
+        twistsDict = {}
+        for twist in twists:
+            if twist == 0:
+                t = "0"
+            elif twist % 2 != 0:
+                t = str(int(twist)) + "/2"
+            else:
+                t = str(int(twist/2)) + "/1"
+            twistsDict[twist] = t
+        context = {
+            'twists':twists,
+            'flips': flips,
+            'events': events,
+            'search_type':'element',
+            'value_low':0,
+            'value_high':6,
+            'positions':positions,
+            'twistsDict': twistsDict,
+            'type': request.GET.get('type'),
+            'tramp': True
+            }
+        return render(request, 'app/quiz_setup.html',context=context)
+    else:
+        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+        vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
+        groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
+        groupDict = {}
+        valueDict = {}
+        for group in groups:
+            groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp']).order_by('event').values('event').distinct())
+            groupDict[group['str_grp']] = groupEvents
+        for value in vals:
+            valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value']).order_by('event').values('event').distinct())
+            valueDict[value['letter_value']] = valueEvents
+        context = {
+            'vals':vals,
+            'groups': groups,
+            'groupsEvents': groupDict,
+            'valueEvents': valueDict,
+            'events':events,
+            'type': request.GET.get('type'),
+            'tramp': False
+            }
+        return render(request, 'app/quiz_setup.html',context=context)
 
 def quiz(request):
     missed = request.GET.get('missed',-1)

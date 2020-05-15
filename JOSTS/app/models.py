@@ -14,6 +14,7 @@ class Disc(models.Model):
     vault_range_low = models.DecimalField(max_digits=3,default=7.0,decimal_places=1)
     vault_range_high = models.DecimalField(max_digits=3,default=10.1,decimal_places=1)
     show_login = models.BooleanField(default=False)
+    exclude_screens = models.TextField(blank=True, default='')
     def __str__(self):
        return self.display_name
 

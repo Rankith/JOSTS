@@ -30,35 +30,35 @@
                 <ul class="nav navbar-nav">
                     <li class="nav-item"><a class="nav-link {% if "elements" in request.path or request.path == "/" %}active{% endif %}" href="{% url 'elements' %}">Elements</a></li>
                     <li class="nav-item"><a class="nav-link {% if "rules" in request.path %}active{% endif %}" href="{% url 'rules' %}">Rules</a></li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" {% if "shorthand_training" in request.session.exclude_screens and "shorthand_lookup" in request.session.exclude_screens %} style="display:none" {% endif %}>
                         <a class="nav-link dropdown-toggle  {% if "shorthand" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Shorthand
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item {% if "shorthand_training" in request.path %}active{% endif %}" href="{% url 'shorthand_training' %}">Training</a>
-                          <a class="dropdown-item {% if "shorthand_lookup" in request.path %}active{% endif %}" href="{% url 'shorthand_lookup' %}">Lookup</a>
+                          <a class="dropdown-item {% if "shorthand_training" in request.path %}active{% endif %}" href="{% url 'shorthand_training' %}"  {% if "shorthand_training" in request.session.exclude_screens %} style="display:none" {% endif %}>Training</a>
+                          <a class="dropdown-item {% if "shorthand_lookup" in request.path %}active{% endif %}" href="{% url 'shorthand_lookup' %}"  {% if "shorthand_lookup" in request.session.exclude_screens %} style="display:none" {% endif %}>Lookup</a>
                         </div>
                     </li>
-                     <li class="nav-item dropdown">
+                     <li class="nav-item dropdown" {% if "quiz_element" in request.session.exclude_screens and "quiz_shorthand" in request.session.exclude_screens %} style="display:none" {% endif %}>
                         <a class="nav-link dropdown-toggle  {% if "quiz" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Quiz
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item {% if "quiz_element" in request.path %}active{% endif %}" href="{% url 'quiz_element' %}">Element</a>
-                          <a class="dropdown-item {% if "quiz_shorthand" in request.path %}active{% endif %}" href="{% url 'quiz_shorthand' %}">Shorthand</a>
+                          <a class="dropdown-item {% if "quiz_element" in request.path %}active{% endif %}" href="{% url 'quiz_element' %}" {% if "quiz_element" in request.session.exclude_screens %} style="display:none" {% endif %}>Element</a>
+                          <a class="dropdown-item {% if "quiz_shorthand" in request.path %}active{% endif %}" href="{% url 'quiz_shorthand' %}" {% if "quiz_shorthand" in request.session.exclude_screens %} style="display:none" {% endif %}>Shorthand</a>
                         </div>
                     </li>
                     {% if SHOW_COMPETITION_VIDEOS %}
-                        <li class="nav-item"><a class="nav-link {% if "competition_videos" in request.path %}active{% endif %}" href="{% url 'competition_videos' %}">Competition Videos</a></li>
+                        <li class="nav-item"><a class="nav-link {% if "competition_videos" in request.path %}active{% endif %}" href="{% url 'competition_videos' %}"  {% if "competition_videos" in request.session.exclude_screens %} style="display:none" {% endif %}>Competition Videos</a></li>
                     {% endif %}
                      {% if SHOW_JUDGE_INSTRUCTIONS or SHOW_TC_EXAMPLES%}
-                     <li class="nav-item dropdown">
+                     <li class="nav-item dropdown"  {% if "judge_instructions" in request.session.exclude_screens and "tc_examples" in request.session.exclude_screens %} style="display:none" {% endif %}>
                         <a class="nav-link dropdown-toggle  {% if "tc_examples" in request.path or "judge_instructions" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           TC Content
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item {% if "tc_examples" in request.path %}active{% endif %}" href="{% url 'tc_examples' %}">TC Examples</a>
-                          <a class="dropdown-item {% if "judge_instructions" in request.path %}active{% endif %}" href="{% url 'judge_instructions' %}">Judge Instructions</a>
+                          <a class="dropdown-item {% if "tc_examples" in request.path %}active{% endif %}" href="{% url 'tc_examples' %}" {% if "tc_examples" in request.session.exclude_screens %} style="display:none" {% endif %}>TC Examples</a>
+                          <a class="dropdown-item {% if "judge_instructions" in request.path %}active{% endif %}" href="{% url 'judge_instructions' %}" {% if "judge_instructions" in request.session.exclude_screens %} style="display:none" {% endif %}>Judge Instructions</a>
                         </div>
                     </li>
                     {% endif %}
