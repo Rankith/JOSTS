@@ -495,7 +495,7 @@ def rule_list(request):
             kwargs = {'{0}'.format(k): i}
             innerQuery.add(Q(**kwargs), Q.OR)
         query.add(innerQuery,Q.AND)
-    rules = RuleText.objects.filter(query).order_by('rule__display_order')
+    rules = RuleText.objects.filter(query).order_by('rule__display_order','rule_id')
     if search != "":
         rules = rules.filter(cue__icontains=search) | rules.filter(response__icontains=search) | rules.filter(rule_description__icontains=search) | rules.filter(specific_deduction__icontains=search) | rules.filter(additional_info__icontains=search)
     rules = rules.filter(rule__disc=request.session.get('disc',1))
