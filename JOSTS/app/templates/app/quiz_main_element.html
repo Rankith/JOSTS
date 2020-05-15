@@ -128,6 +128,13 @@
 </script>
 <script type="text/javascript">
 
+    $('#txtValue').keypress(function (e) {
+      if (e.which == 13) {
+          SubmitValue();
+        return false;    //<---- Add this line
+      }
+    });
+
     if (TestSetup["Value"]) {
         $("#divValueTest").show();
         NumTests++;
@@ -142,6 +149,7 @@
     function PopulateQuiz(which) {
         GroupAnswered = false;
         ValueAnswered = false;
+        
         UpdateCounter();
         if (PromptSetup["Shorthand"])
             $("#pShorthand").attr('src', SymbolBaseURL + QuizElements[which] + ".svg");
@@ -160,11 +168,16 @@
                 ColorDirectBox();
                 $("#txtValue").val(QuizAnswersValue[which]);
                 $("#btnSubmitDirectValue").hide();
+                Answered = true
             }
             ColorAnswers();
         }
-        else
-            $("#btnSubmitDirectValue").show();
+        else {
+            if (DirectValue) {
+                $("#btnSubmitDirectValue").show();
+                Answered = false
+            }
+        }
     }
 
     function SelectValue(el) {
@@ -192,18 +205,21 @@
     }
 
     function SubmitValue() {
-        $("#btnSubmitDirectValue").hide();
-        QuizAnswersValue[OnElement] = $("#txtValue").val()
-        ColorDirectBox()
-        if (QuizAnswersValue[OnElement] == QuizElementsDirectValues[OnElement]) {
-            Correct++
+        if (Answered == false) {
+            Answered = true
+            $("#btnSubmitDirectValue").hide();
+            QuizAnswersValue[OnElement] = $("#txtValue").val()
+            ColorDirectBox()
+            if (QuizAnswersValue[OnElement] == QuizElementsDirectValues[OnElement]) {
+                Correct++
+            }
+            else {
+                $("#txtValue").val(QuizElementsDirectValues[OnElement])
+                Missed[Wrong] = QuizElementIDs[OnElement];
+                Wrong++;
+            }
+            setTimeout(QuizNext, 2000);
         }
-        else {
-            $("#txtValue").val(QuizElementsDirectValues[OnElement])
-            Missed[Wrong] = QuizElementIDs[OnElement];
-            Wrong++;
-        }
-        setTimeout(QuizNext, 2000);
     }
 
     function ColorDirectBox() {
