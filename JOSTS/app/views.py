@@ -1450,6 +1450,10 @@ def change_disc(request):
     request.session['disc_path'] = disc.folder_name
     request.session['disc_full_name'] = disc.full_name
     request.session['disc_events'] = disc.event_list
+    request.session['disc'] = disc.id;
+    request.session['version_name'] = VersionSettings.objects.first().name
+    request.session['exclude_screens'] = disc.exclude_screens
+    
     return redirect(request.GET.get('next'))  
 
 def contact(request):
