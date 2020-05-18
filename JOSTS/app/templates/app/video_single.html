@@ -15,17 +15,17 @@
 <script src="{% static 'app/scripts/video_player.js' %}?v=1.5"></script>
 <script type="text/javascript">
     var SourceBase = "{% static 'app/videos/'%}{{request.session.disc_path}}/{{ video.video.event }}/";
-    var DiscP = "{{request.session.disc_path}}";
+    var DiscP = "{{request.session.full_name}}";
     var EventP = "{{ video.video.event }}";
     var vidid = "{{video.video.id}}";
     var vidfile = "{{video.video.file}}";
     var vidfps = "{{video.video.fps}}";
     var vidoldid = "{{video.video.old_id}}";
 
-    if (DiscP == "mag")
-        DiscP = "Mens";
-    else
-        DiscP = "Womens";
+    //if (DiscP == "mag")
+     //   DiscP = "Mens";
+    //else
+      //  DiscP = "Womens";
 
     token = "{{ csrf_token }}";
     

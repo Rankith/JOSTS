@@ -111,7 +111,7 @@ class UserToursCompleteAdmin(admin.ModelAdmin):
     list_display=('id','user','page')
     search_fields = ('user','page')
 
-class VideoLinkAdmin(admin.ModelAdmin):
+class VideoLinkAdmin(ImportExportModelAdmin):
     list_display=('id','video','element','order','frame_jump')
     list_editable=('video','element','order','frame_jump')
 
@@ -121,22 +121,22 @@ class VideoAdmin(ImportExportModelAdmin):
     list_editable=('disc','event','file','fps','approved_final', 'approved_liason')
     search_fields = ('file','old_id')
 
-class StructureGroupAdmin(admin.ModelAdmin):
+class StructureGroupAdmin(ImportExportModelAdmin):
     list_display=('id', 'disc','event','group','name')
     list_editable=('disc','event','group','name')
     list_filter = ('disc','event')
 
-class CompetitionTypeAdmin(admin.ModelAdmin):
+class CompetitionTypeAdmin(ImportExportModelAdmin):
     list_display=('id', 'disc','name','short_name')
     list_editable=( 'disc','name','short_name')
     list_filter = ('disc',)
 
-class CompetitionAdmin(admin.ModelAdmin):
+class CompetitionAdmin(ImportExportModelAdmin):
     list_display=('id','type','year','name','short_name')
     list_editable=( 'type','year','name','short_name')
     list_filter = ('type__disc','type','year')
 
-class CompetitionGroupAdmin(admin.ModelAdmin):
+class CompetitionGroupAdmin(ImportExportModelAdmin):
     list_display=('id', 'competition','name','short_name')
     list_editable=( 'competition','name','short_name')
     list_filter = ('competition',)
@@ -160,6 +160,10 @@ class UnratedElementAdmin(ImportExportModelAdmin):
     list_display=('id', 'disc','event','name')
     list_editable=('disc','event','name')
     list_filter = ('disc','event')
+
+class DiscAdmin(admin.ModelAdmin):
+    list_display=('id', 'display_name')
+    list_editable=('display_name',)
 
 
 admin.site.register(Element,ElementAdmin)
