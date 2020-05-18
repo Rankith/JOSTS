@@ -96,7 +96,7 @@
                 {% if request.session.disc_path == "wag" %}
                     <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}{% if request.session.disc_path == 'wag' %}redscross.svg{% else %}redstripe.svg{% endif %}" style="position:absolute;height:65px;top:0px">
                 {% endif %}
-                <div class="text-center" style="font-size:0.9rem"></div>
+                <div class="text-center" style="font-size:0.9rem">&nbsp;</div>
                 <div class="text-center" style="background-color:white"><img class="img-fluid detail-sym" src="{% static 'app/images/'%}{{request.session.disc_path}}/sym/es{{ note.unrated_link.id}}.svg"/></div>
                 <div class="text-center" style="font-size:0.5rem">&nbsp;
         {% endif %}
