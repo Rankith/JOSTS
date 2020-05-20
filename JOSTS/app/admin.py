@@ -1,7 +1,8 @@
 from django.contrib import admin
 from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, \
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
-    Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction
+    Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
+    CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -165,6 +166,24 @@ class DiscAdmin(admin.ModelAdmin):
     list_display=('id', 'display_name')
     list_editable=('display_name',)
 
+class CoachMethodologyAdmin(ImportExportModelAdmin):
+    list_display=('id', 'text','image')
+    list_editable=('text','image')
+
+class CoachEnvironmentAdmin(ImportExportModelAdmin):
+    list_display=('id', 'text','image')
+    list_editable=('text','image')
+
+class CoachInstructionAdmin(ImportExportModelAdmin):
+    list_display=('id', 'disc','event','level','name','display_order', 'development','physical')
+    list_editable=('disc','event','level','name','display_order', 'development','physical')
+    list_filter = ('disc','event','level')
+
+class CoachVideoLineAdmin(ImportExportModelAdmin):
+    list_display=('id', 'instruction','type','text','display_order')
+    list_editable=('instruction','type','text','display_order')
+    list_filter = ('instruction__disc','instruction__event','instruction__level')
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -196,3 +215,7 @@ admin.site.register(CompetitionGroup,CompetitionGroupAdmin)
 admin.site.register(CompetitionVideo,CompetitionVideoAdmin)
 admin.site.register(TCExample,TCExampleAdmin)
 admin.site.register(JudgeInstruction,JudgeInstructionAdmin)
+admin.site.register(CoachMethodology,CoachMethodologyAdmin)
+admin.site.register(CoachEnvironment,CoachEnvironmentAdmin)
+admin.site.register(CoachInstruction,CoachInstructionAdmin)
+admin.site.register(CoachVideoLine,CoachVideoLineAdmin)
