@@ -90,4 +90,6 @@ urlpatterns = [
     path('ji_list/', views.ji_list, name='ji_list'),
     path('change_disc/', views.change_disc, name='change_disc'),
     path('contact/', views.contact, name='contact'),
+    path('coach_elements/', views.coach_elements, name='coach_elements'),
+    path('coach_element_search/', views.coach_element_search, name='coach_element_search'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

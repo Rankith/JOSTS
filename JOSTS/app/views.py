@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
-    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction
+    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1484,3 +1484,36 @@ def contact(request):
                 return HttpResponse('Invalid header found.')
             return render(request, "app/contact.html", context={'form': form,'success':'success'})
     return render(request, "app/contact.html", {'form': form})
+
+def coach_elements(request):
+    context = {
+        'type':'coach_element',
+        'search_type':'coach_element',
+        'list_type':'coach_element',
+        }
+    return render(request, 'app/elements_fixed.html',context=context)
+
+def coach_element_search(request):   
+    levels = CoachInstruction.objects.filter(disc=request.session.get('disc',1)).order_by('level').values_list('level',flat=True).distinct()
+    events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+    context = {
+        'levels':levels,
+        'events': events,
+        'search_type':'element',
+        }
+    return render(request, 'app/coach_element_search.html',context=context)
+
+def coach_element(request):
+    idIn = request.GET.get('id')
+    element = CoachInstruction.objects.filter(id=idIn)
+    #userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
+    #if (len(userNote) > 0):
+        #userNote = userNote[0].note;
+    #else:
+        #userNote = '';
+    context = {
+        'coach_element': element[0],
+        }
+    #activity log
+    log_activity(request,'Coach_Elements','View',str(element[0]))
+    return render(request, 'app/coach_element.html',context=context)

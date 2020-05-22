@@ -1,0 +1,160 @@
+﻿{% block content %}
+{% load staticfiles %}
+
+<div class="text-center detail-background rounded-top text-detail">
+    <div class="row" onclick="">
+        <div class="col">
+            <div style="height:220px" class="image-background rounded position-relative">
+               <div class="detail-top-left">{{coach_element.short_text}}</div>
+                <div style="position:absolute;left:5px;top:40%;z-index:1001">
+                    <button id="btnPrev" type="button" class="btn btn-main pr-3 pl-3"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoPrevious(); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
+                    <br/>
+                     <button id="btnFirst" type="button" class="btn btn-main pr-3 pl-3"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoFirst(); event.stopPropagation();"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div style="position:absolute;right:5px;top:40%;z-index:1001">
+                    <button id="btnNext" type="button" class="btn btn-main pr-3 pl-3" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoNext(); event.stopPropagation();"><i class="fas fa-chevron-right"></i></button>
+                    <br/>
+                     <button id="btnLast" type="button" class="btn btn-main pr-3 pl-3"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoLast(); event.stopPropagation();"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div id="divYourNote" class="your-note">
+			        <label class="text-note-header mb-0">Your Note:</label><br/>
+                    <textarea id="txtUserNotes" name="txtUserNotes" rows="3" class="w-100">{{user_note}}</textarea>
+                </div>
+                <div class="row h-100 justify-content-center align-items-center">
+                    <div class="col-12 pb-1 " style="margin-top:-1rem;line-height:1.1;height:36px;overflow:hidden">
+                        {{coach_element.text}}
+                    </div>
+                    <div class="col-12 position-relative">
+                        <img class="img-fluid detail-image" src="{% static 'app/images/'%}{{request.session.disc_path}}/coach_elements/{{ coach_element.image}}.svg"/>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row no-gutters text-detail-bottom">
+        <div class="col"><div class="text-center"></div></div>
+        <div class="col"><div class="text-center">
+
+             </div></div>
+       
+       <!-- <div class="col text-white">
+            <table class="w-100">
+                <tr>
+                    <td align="right">
+                        <label id="lblAdditionalInfo" class="switch" style="display:none">
+                            <input type="checkbox" id="chkAdditionalInfo">
+                            <span class="slider round"></span>
+                        </label></td>
+                    <td style="vertical-align:top"  align="left">
+                        <label for="chkAdditionalInfo" style="margin-bottom:0 !important">INFO&nbsp;</label>
+                    </td>
+                </tr>
+            </table>
+        </div>-->
+        <div class="col">
+            <table class="w-100">
+                <tr>
+                    <td align="right">
+                        <label id="lblYourNote" class="switch" style="display:none">
+                            <input type="checkbox" id="chkYourNote">
+                            <span class="slider round"></span>
+                        </label></td>
+                    <td style="vertical-align:top" align="left">
+                         <label for="chkYourNote" style="margin-bottom:0 !important">NOTES&nbsp;</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<li class="list-group-item rules-subsection-header" style="cursor:pointer" data-toggle="collapse" data-target="#detail-inner-{{forloop.counter}}">
+                                    <div class=" h4" >
+                                        {{section_header}} {{rule.rule.rule_no}} - {{rule.section_text}}
+                                    </div>
+                                </li>
+                             <div id="detail-inner-{{forloop.counter}}" class="collapse {% if collapsed == False %}show{% endif %}">
+                                <ul class="list-group">
+
+
+
+<script type="text/javascript">
+    var ElementID = {{coach_element.id}};
+    //store checkboxes in ls and load as needed
+     if (localStorage.your_note) {
+        $('#chkYourNote').prop("checked", localStorage.your_note == 1)
+        $('#chkYourNote').prop("checked") ? $("#divYourNote").show() : $("#divYourNote").hide();
+    }
+    else
+        $("#divYourNote").hide();
+    $('#chkYourNote').change(function() {
+        localStorage.your_note = this.checked ? 1 : 0
+        this.checked ? $("#divYourNote").show() : $("#divYourNote").hide();
+    });
+
+  
+   $("#lblYourNote").show();
+    //stop the notes area from closing if you click in it.
+    $("#txtUserNotes").click(function(e) {
+        e.stopPropagation();
+    });
+
+    //save the notes when done typing
+    var typingTimer;                //timer identifier
+    var doneTypingInterval = 1000;  //time in ms (5 seconds)
+
+    //on keyup, start the countdown
+    $('#txtUserNotes').keyup(function(){
+        clearTimeout(typingTimer);
+        if ($('#txtUserNotes').val()) {
+            typingTimer = setTimeout(SaveNote, doneTypingInterval);
+        }
+    });
+
+    //user is "finished typing," do something
+    function SaveNote () {
+        var note = $('#txtUserNotes').val();
+
+        $.ajax({
+            url: '{% url "coach_update_user_note" %}',
+            data: {
+                'note': note,
+                'element': '{{coach_element.id}}'
+            },
+            dataType: 'json',
+            success: function (data) {
+              if (data.is_taken) {
+                alert("A user with this username already exists.");
+              }
+            }
+      });
+    }
+</script>
+<script type="text/javascript">
+    var InfoHolder = "";
+    var InfoH = "";
+    var InfoW = "";
+
+    
+    function LoadVideoFromElement(EditMode = false) {
+        VideoGoBackDepth=0;
+        console.log("loading");
+        $("#modalMainTitle").html("");
+        if (window.innerWidth >= 600)
+            $(".modal-dialog").addClass("mw-100").addClass("w-75");
+        $("#modalBodyArea2").hide();
+        $("#modalBodyArea1").empty();
+        $.get("/video_player/?element=" + ElementID + "&editmode=" + EditMode, function (data) {
+            $("#modalBodyArea1").append(data);
+            if (EditMode)
+                $("#divVideosInList").children()[0].click()
+            else
+                $("#btnVid1").click();
+        });
+        $("#modalBodyArea1").show();
+    }
+
+</script>
+
+{% endblock %}
