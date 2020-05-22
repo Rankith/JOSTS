@@ -325,7 +325,8 @@ class CoachInstruction(models.Model):
     disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     event = models.CharField(max_length=2)
     level = models.IntegerField(default=0)
-    name = models.CharField(max_length=255)
+    text = models.CharField(max_length=255)
+    short_text = models.CharField(max_length=255, blank=True)
     display_order = models.IntegerField(default=0)
     development = models.TextField(blank=True,default='')
     pre_req_elements =  models.ManyToManyField('self', blank=True)
@@ -333,6 +334,9 @@ class CoachInstruction(models.Model):
     physical = models.TextField(blank=True,default='')
     methodology = models.ManyToManyField(CoachMethodology, blank=True)
     environment = models.ManyToManyField(CoachEnvironment, blank=True)
+    notes1 = models.CharField(max_length=300, blank=True)
+    notes2 = models.CharField(max_length=300, blank=True)
+    notes3 = models.CharField(max_length=300, blank=True)
 
 class CoachVideoLine(models.Model):
     instruction = models.ForeignKey(CoachInstruction, on_delete=models.CASCADE,null=True)

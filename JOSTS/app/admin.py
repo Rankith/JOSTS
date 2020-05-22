@@ -175,8 +175,8 @@ class CoachEnvironmentAdmin(ImportExportModelAdmin):
     list_editable=('text','image')
 
 class CoachInstructionAdmin(ImportExportModelAdmin):
-    list_display=('id', 'disc','event','level','name','display_order', 'development','physical')
-    list_editable=('disc','event','level','name','display_order', 'development','physical')
+    list_display=('id', 'disc','event','level','text','short_text','display_order', 'development','physical')
+    list_editable=('disc','event','level','text','short_text','display_order', 'development','physical')
     list_filter = ('disc','event','level')
 
 class CoachVideoLineAdmin(ImportExportModelAdmin):
