@@ -333,6 +333,7 @@ class CoachInstruction(models.Model):
     level = models.IntegerField(default=0)
     text = models.CharField(max_length=255)
     short_text = models.CharField(max_length=255, blank=True)
+    image = models.CharField(max_length=255, blank=True)
     display_order = models.IntegerField(default=0)
     development = models.TextField(blank=True,default='')
     pre_req_elements =  models.ManyToManyField('self', blank=True)
