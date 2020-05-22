@@ -74,7 +74,9 @@
     </div>
     <div id="divDevelopmentDetail" class="collapse show">
         <div class="list-group-item rules-cue" >
-            {{coach_element.development}}
+            {% autoescape off %}
+            <pre>{{coach_element.development}}</pre>
+            {% endautoescape %}
         </div>
     </div>
 </div>
@@ -126,7 +128,9 @@
     </div>
     <div id="divPhysicalDetail" class="collapse show">
         <div class="list-group-item rules-cue">
-            {{coach_element.physical}}
+            {% autoescape off %}
+            <pre>{{coach_element.physical}}</pre>
+            {% endautoescape %}
         </div>
     </div>
 </div>
