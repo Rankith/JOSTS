@@ -317,9 +317,15 @@ class CoachMethodology(models.Model):
     text = models.CharField(max_length=255)
     image = models.CharField(max_length=255)
 
+    def __str__(self):
+       return str(self.image)
+
 class CoachEnvironment(models.Model):
     text = models.CharField(max_length=255)
     image = models.CharField(max_length=255)
+
+    def __str__(self):
+       return str(self.image)
 
 class CoachInstruction(models.Model):
     disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
@@ -337,6 +343,9 @@ class CoachInstruction(models.Model):
     notes1 = models.CharField(max_length=300, blank=True)
     notes2 = models.CharField(max_length=300, blank=True)
     notes3 = models.CharField(max_length=300, blank=True)
+
+    def __str__(self):
+       return str(self.short_text)
 
 class CoachVideoLine(models.Model):
     instruction = models.ForeignKey(CoachInstruction, on_delete=models.CASCADE,null=True)
