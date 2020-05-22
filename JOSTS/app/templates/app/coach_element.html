@@ -5,7 +5,7 @@
     <div class="row" onclick="">
         <div class="col">
             <div style="height:220px" class="image-background rounded position-relative">
-               <div class="detail-top-left">{{coach_element.short_text}}</div>
+               
                 <div style="position:absolute;left:5px;top:40%;z-index:1001">
                     <button id="btnPrev" type="button" class="btn btn-main pr-3 pl-3"   style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold;width:55px;opacity:0.5"  onclick="GoPrevious(); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
                     <br/>
@@ -20,10 +20,11 @@
 			        <label class="text-note-header mb-0">Your Note:</label><br/>
                     <textarea id="txtUserNotes" name="txtUserNotes" rows="3" class="w-100">{{user_note}}</textarea>
                 </div>
-                <div class="row h-100 justify-content-center align-items-center">
-                    <div class="col-12 pb-1 " style="margin-top:-1rem;line-height:1.1;height:36px;overflow:hidden">
+                 <div class="col-12 pb-1 " style="line-height:1.1;height:36px;overflow:hidden">
                         {{coach_element.text}}
                     </div>
+                <div class="row h-100 justify-content-center align-items-center">
+                   
                     <div class="col-12 position-relative">
                         <img class="img-fluid detail-image" src="{% static 'app/images/'%}{{request.session.disc_path}}/coach_elements/{{ coach_element.image}}.svg"/>
                     </div>
@@ -33,10 +34,8 @@
         </div>
     </div>
     <div class="row no-gutters text-detail-bottom">
+        <div class="col"><div class="text-center"><button id="btnClose" type="button" style="padding: 0rem 0.2rem;font-size:0.95rem;" class="btn btn-main" onclick="CloseCoachElement();">Close</button></div></div>
         <div class="col"><div class="text-center"></div></div>
-        <div class="col"><div class="text-center">
-
-             </div></div>
        
        <!-- <div class="col text-white">
             <table class="w-100">
@@ -69,13 +68,112 @@
     </div>
 </div>
 
-<li class="list-group-item rules-subsection-header" style="cursor:pointer" data-toggle="collapse" data-target="#detail-inner-{{forloop.counter}}">
-                                    <div class=" h4" >
-                                        {{section_header}} {{rule.rule.rule_no}} - {{rule.section_text}}
-                                    </div>
-                                </li>
-                             <div id="detail-inner-{{forloop.counter}}" class="collapse {% if collapsed == False %}show{% endif %}">
-                                <ul class="list-group">
+<div id="divDevelopment">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divDevelopmentDetail">
+            DEVELOPMENT
+    </div>
+    <div id="divDevelopmentDetail" class="collapse show">
+        <div class="list-group-item rules-cue" >
+            {{coach_element.development}}
+        </div>
+    </div>
+</div>
+
+<div id="divPreReq">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divPreReqDetail">
+            PRE-REQUISITE ELEMENTS
+    </div>
+    <div id="divPreReqDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            <ul class="mb-0">
+                {% for req in coach_element.pre_req_elements.all %}
+                    <li>{{req.short_text}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="divRelated">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divRelatedDetail">
+            RELATED SKILLS
+    </div>
+    <div id="divRelatedDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            <ul class="mb-0">
+                {% for rel in coach_element.related_elements.all %}
+                    <li>{{rel.short_text}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="divMechanics">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divMechanicsDetail">
+            MECHANICS
+    </div>
+    <div id="divMechanicsDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            more stuff yo
+        </div>
+    </div>
+</div>
+
+<div id="divPhysical">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divPhysicalDetail">
+            PHYSICAL QUALITIES &amp; PREPERATION
+    </div>
+    <div id="divPhysicalDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            {{coach_element.physical}}
+        </div>
+    </div>
+</div>
+
+<div id="divDescription">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divDescriptionDetail">
+            DESCRIPTION
+    </div>
+    <div id="divDescriptionDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            more stuff yo
+        </div>
+    </div>
+</div>
+
+<div id="divKeyPoints">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divKeyPointsDetail">
+            KEY POINTS
+    </div>
+    <div id="divKeyPointsDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            more stuff yo
+        </div>
+    </div>
+</div>
+
+<div id="divMethodology">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divMethodologyDetail">
+            METHODOLOGY
+    </div>
+    <div id="divMethodologyDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            more stuff yo
+        </div>
+    </div>
+</div>
+
+<div id="divEnvironment">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divEnvironmentDetail">
+            THE ENVIRONMENT
+    </div>
+    <div id="divEnvironmentDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            more stuff yo
+        </div>
+    </div>
+</div>
 
 
 

@@ -1,0 +1,63 @@
+﻿
+{% load staticfiles %} 
+<div id="divCoachElement">
+
+</div>
+<div id="divCoachElementList">
+        <div class="row">
+    {% for element in coach_elements %}
+       
+
+        <div class="col-lg-3 col-md-4 col-sm-6 mt-2 mb-1" id="divHolder{{element.id}}" onclick="CoachElementClick({{element.id}})" style="height:190px;cursor:pointer" >
+            <div class="row">
+                <div class="col">
+                    <div style="height:172px" class="image-background rounded" id="div{{element.id}}">
+                        <div class="row justify-content-center align-items-center" style="height:140px">
+                            <div class="position-absolute col pl-4" style="left:0px;top:0px">
+                                <!-- videos eventually-->
+                            </div>
+                            <div class="col text-center">
+                                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/coach_elements/{{ element.image}}.svg"  style="max-height:140px;overflow:hidden"/>
+                            </div>
+                            
+                        </div>
+                        <div class="row text-center d-flex align-items-end">
+                            <div class="col-12 pb-1 " style="line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
+                                {{element.short_text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><div class="text-center"></div></div>
+                <div class="col text-right"><div class="text-center">
+                      </div></div>
+            </div>
+        </div>
+
+
+    {% endfor %}
+                </div>
+</div>
+
+
+<div id="divNumElements" style="display:none">{{num_elements}}</div>
+<script type="text/javascript">
+    var ElementList = new Array();
+    var elcount = 0;
+
+    {% for element in coach_elements %}
+    ElementList[elcount] = {{element.id}};
+    {% endfor %}
+
+</script>
+<script type="text/javascript">
+    function CoachElementClick(idIn) {
+        $("#divCoachElement").empty();
+        $("#divCoachElement").load("/" + type + "?id=" + idIn, ShowAndSetHeight);
+    }
+    function CloseCoachElement() {
+        $("#divCoachElement").empty();
+    }
+</script>    

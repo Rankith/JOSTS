@@ -92,4 +92,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('coach_elements/', views.coach_elements, name='coach_elements'),
     path('coach_element_search/', views.coach_element_search, name='coach_element_search'),
+    path('coach_element_list/', views.coach_element_list, name='coach_element_list'),
+    path('coach_element/', views.coach_element, name='coach_element'),
+    path('coach_update_user_note/', views.coach_update_user_note, name='coach_update_user_note'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

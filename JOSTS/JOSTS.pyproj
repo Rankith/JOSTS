@@ -2492,6 +2492,7 @@
     <Content Include="app\templates\app\base.html" />
     <Content Include="app\templates\app\coach_element_search.html" />
     <Content Include="app\templates\app\coach_element.html" />
+    <Content Include="app\templates\app\coach_element_list.html" />
     <Content Include="app\templates\app\element_search_tramp.html" />
     <Content Include="app\templates\app\ji_display.html" />
     <Content Include="app\templates\app\rule_vid_ref.html" />

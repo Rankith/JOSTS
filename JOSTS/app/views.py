@@ -1517,3 +1517,45 @@ def coach_element(request):
     #activity log
     log_activity(request,'Coach_Elements','View',str(element[0]))
     return render(request, 'app/coach_element.html',context=context)
+
+def coach_element_list(request):
+    dget = dict(request.GET)
+    search = dget['search'][0]
+    search = search.replace("1/2","½")
+    search = search.replace("1/4","¼")
+    del dget['search']
+    event = dget['event']
+    query = Q()
+    for k,v in dget.items():
+        innerQuery = Q()
+        for i in v:
+            for ks in k.split(','):#allow multi things
+                kwargs = {'{0}'.format(ks): i}
+                innerQuery.add(Q(**kwargs), Q.OR)
+        query.add(innerQuery,Q.AND)
+    elements = CoachInstruction.objects.filter(query).order_by('display_order')
+    if search != "":
+        #element__usernote__note__icontains=search
+        elements = elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(notes1__icontains=search).distinct() | elements.filter(notes2__icontains=search).distinct() | elements.filter(notes3__icontains=search).distinct()
+    elements = elements.filter(disc=request.session.get('disc',1))
+    context = {
+        'coach_elements': elements,
+        'num_elements': str(len(elements)) + " Elements",
+        }
+
+    #activity log
+    log_activity(request,'Coach Elements','List',request.GET.get('event'))
+    return render(request, 'app/coach_element_list.html',context=context)
+
+def coach_update_user_note(request):
+    elementIn = request.GET.get('element')
+    noteIn = request.GET.get('note')
+    elementInstance = Element.objects.get(pk=elementIn)
+    note, created = UserNote.objects.update_or_create(
+        user=request.user.id,element=elementIn,
+        defaults={'user': request.user,'element':elementInstance,'note':noteIn},
+    )
+    resp = {'updated':True}
+    #activity log
+    log_activity(request,'Elements','Update User Note',str(elementInstance))
+    return JsonResponse(resp)
