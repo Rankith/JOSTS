@@ -341,9 +341,9 @@ class CoachInstruction(models.Model):
     physical = models.TextField(blank=True,default='')
     methodology = models.ManyToManyField(CoachMethodology, blank=True)
     environment = models.ManyToManyField(CoachEnvironment, blank=True)
-    notes1 = models.CharField(max_length=300, blank=True, null=True)
-    notes2 = models.CharField(max_length=300, blank=True, null=True)
-    notes3 = models.CharField(max_length=300, blank=True, null=True)
+    notes1 = models.CharField(max_length=500, blank=True, null=True)
+    notes2 = models.CharField(max_length=500, blank=True, null=True)
+    notes3 = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
        return str(self.short_text)
