@@ -2,7 +2,7 @@ from django.contrib import admin
 from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, \
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
     Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
-    CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine
+    CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -12,8 +12,6 @@ class ElementAdmin(ImportExportModelAdmin):
     list_filter = ('disc','event','str_grp','letter_value','range')
     search_fields = ('id_number',)#comment if importing
     list_editable = ('str_grp','code_order','event','letter_value','value')#comment if importing
-
-   
 
 class UserNoteAdmin(admin.ModelAdmin):
     list_display = ('user','element','note')
@@ -185,6 +183,11 @@ class CoachVideoLineAdmin(ImportExportModelAdmin):
     list_filter = ('instruction__disc','instruction__event','instruction__level')
 
 
+class CoachVideoLinkAdmin(ImportExportModelAdmin):
+    list_display=('id','video','coach_element','order','frame_jump')
+    list_editable=('video','coach_element','order','frame_jump')
+
+
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
 admin.site.register(Rule,RuleAdmin)
@@ -219,3 +222,4 @@ admin.site.register(CoachMethodology,CoachMethodologyAdmin)
 admin.site.register(CoachEnvironment,CoachEnvironmentAdmin)
 admin.site.register(CoachInstruction,CoachInstructionAdmin)
 admin.site.register(CoachVideoLine,CoachVideoLineAdmin)
+admin.site.register(CoachVideoLink,CoachVideoLinkAdmin)

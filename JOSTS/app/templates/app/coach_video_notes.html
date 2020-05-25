@@ -1,0 +1,59 @@
+{% block content %}
+{% load staticfiles %}
+
+<div id="MechanicsNotesTitle" class="video-note-header" data-toggle="collapse" data-target="#MechanicsNotes" aria-expanded="true">MECHANICS</div>
+<div id="MechanicsNotes" style="border:1px solid black;font-size:0.8rem;" class="p-1 collapse show">
+    {% for note in notes %}
+        {% if note.type == "mechanics" %}
+            <div id="vn{{note.id}}" class="video-note-line d-note" onclick="VideoNoteClick({{note.id}})">
+                • {{note.text}}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div id="DescriptionNotesTitle" class="video-note-header" data-toggle="collapse" data-target="#DescriptionNotes" aria-expanded="true">DESCRIPTION</div>
+<div id="DescriptionNotes" style="border:1px solid black;font-size:0.8rem;" class="p-1 collapse show">
+    {% for note in notes %}
+        {% if note.type == "description" %}
+            <div id="vn{{note.frame}}" class="video-note-line d-note" onclick="VideoNoteClick({{note.id}})">
+                • {{note.text}}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div id="KeyNotesTitle" class="video-note-header" data-toggle="collapse" data-target="#KeyNotes" aria-expanded="true">FOCUS POINTS</div>
+<div id="KeyNotes" style="border:1px solid black;font-size:0.8rem;" class="p-1 collapse show">
+    {% for note in notes %}
+        {% if note.type == "key" %}
+            <div id="vn{{note.id}}" class="video-note-line d-note" onclick="VideoNoteClick({{note.id}})">
+                • {{note.text}}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    var Frames = new Array();
+    var ElementJump = {{elementjump}};
+   
+</script>
+<script type="text/javascript">
+    function VideoNoteClick(frameIn) {
+        VideoFrameJump(frameIn);
+    }
+    function VideoNoteClickE(frameIn, typeIn) {
+        if (typeIn == 'temp')
+            VideoFrameJump(frameIn);
+        else
+            VideoFrameJumpPause(frameIn);
+    }
+    function HighlightNote(frameIn) {
+       
+    }
+</script>
+
+{% endblock %}

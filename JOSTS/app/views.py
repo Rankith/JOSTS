@@ -246,7 +246,6 @@ def loginview(request):
             disc = Disc.objects.get(pk=login_form.cleaned_data.get('disc').id)
             request.session['exclude_screens'] = disc.exclude_screens
             request.session['discs'] = list(Disc.objects.filter(show_login=True).values_list("display_name",flat=True))
-            request.session['is_admin'] = user.is_staff
             return redirect('elements')
     else:
         login_form = LoginForm()
@@ -868,6 +867,7 @@ def check_tour(request):
 #Videos
 def video_player(request):
     elementid = request.GET.get('element',-1)
+    coachelementid = request.GET.get('coachelement',-1)
     if elementid != -1: #element
         element = ElementText.objects.get(pk=elementid)
         potential_videos = Video.objects.filter(id__in=VideoNote.objects.filter(element_link=element.element).values_list('video').distinct())
@@ -878,6 +878,17 @@ def video_player(request):
             'editable': request.user.is_staff,
             'editmode': request.GET.get('editmode'),
             'potential': potential_videos
+        }
+        return render(request, 'app/video_player.html',context=context)
+    elif coachelementid != -1: #element
+        element = CoachInstruction.objects.get(pk=coachelementid)
+        #potential_videos = Video.objects.filter(id__in=VideoNote.objects.filter(element_link=element.element).values_list('video').distinct())
+        #potential_videos = potential_videos.exclude(id__in=element.element.videolink_set.all().values_list('video'))
+        context = {
+            'element': element,
+            'mode': 'coach',
+            'editable': request.user.is_staff,
+            'editmode': request.GET.get('editmode'),
         }
         return render(request, 'app/video_player.html',context=context)
     else: #rule
@@ -979,29 +990,50 @@ def update_video_approved(request):
 def video_notes(request):
     video = request.GET.get('video','')
     type = request.GET.get('type','rule')
-    if video == 'temp':
-        notes = VideoNoteTemp.objects.all().order_by('frame')
+    if type == "coach":
+        video = request.GET.get('video','')
+        coach_element = request.GET.get('element',-1)
+        notes = CoachVideoLine.objects.filter(instruction=coach_element)
+        frame_jump = -1
+        #if element != -1:
+            #if type == 'element':
+                #jnote = notes.filter(element_link__id = element)
+            #else:
+                #jnote = notes.filter(rule_link__rule__id = element)
+            #if len(jnote) >= 1:
+                #frame_jump = jnote[0].frame
+
+        context = {
+            'elementjump':frame_jump,
+            'notes':notes
+            }
+
+        return render(request, 'app/coach_video_notes.html',context=context)
     else:
-        notes = VideoNote.objects.filter(video=video).order_by('frame')
-    element = request.GET.get('element',-1)
-    frame_jump = -1
-    if element != -1:
-        if type == 'element':
-            jnote = notes.filter(element_link__id = element)
+        if video == 'temp':
+            notes = VideoNoteTemp.objects.all().order_by('frame')
         else:
-            jnote = notes.filter(rule_link__rule__id = element)
-        if len(jnote) >= 1:
-            frame_jump = jnote[0].frame
+            notes = VideoNote.objects.filter(video=video).order_by('frame')
+        element = request.GET.get('element',-1)
+        frame_jump = -1
+        if element != -1:
+            if type == 'element':
+                jnote = notes.filter(element_link__id = element)
+            else:
+                jnote = notes.filter(rule_link__rule__id = element)
+            if len(jnote) >= 1:
+                frame_jump = jnote[0].frame
 
-    #remove 0 deductions if not rules
-    if type == 'element':
-        notes = notes.exclude(Q(rule_link__deduction_amount=0) & ~Q(rule_link__text='--- no E-jury deductions ---'))
-    context = {
-        'elementjump':frame_jump,
-        'notes':notes
-        }
+        #remove 0 deductions if not rules
+        if type == 'element':
+            notes = notes.exclude(Q(rule_link__deduction_amount=0) & ~Q(rule_link__text='--- no E-jury deductions ---'))
+        context = {
+            'elementjump':frame_jump,
+            'notes':notes
+            }
 
-    return render(request, 'app/video_notes.html',context=context)
+        return render(request, 'app/video_notes.html',context=context)
+
 
 def update_video_links(request):
     data = json.loads(request.body)

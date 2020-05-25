@@ -355,3 +355,11 @@ class CoachVideoLine(models.Model):
     display_order = models.IntegerField(default=0)
     class Meta:
       ordering = ['display_order']
+
+class CoachVideoLink(models.Model):
+    video = models.ForeignKey(Video,on_delete=models.CASCADE)
+    coach_element = models.ForeignKey(CoachInstruction,on_delete=models.CASCADE)
+    order = models.IntegerField(default=1)
+    frame_jump = models.IntegerField(default=0)
+    class Meta:
+        ordering = ['order']

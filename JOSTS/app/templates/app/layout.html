@@ -62,7 +62,7 @@
                         </div>
                     </li>
                     {% endif %}
-                    {% if request.session.is_admin %}
+                    {% if request.user.is_staff or request.user.is_superuser %}
                      <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle  {% if "coach" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Coach

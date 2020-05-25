@@ -14,7 +14,11 @@
                     <div style="height:172px" class="image-background rounded" id="div{{element.id}}">
                         <div class="row justify-content-center align-items-center" style="height:140px">
                             <div class="position-absolute col pl-4" style="left:0px;top:0px">
-                                <!-- videos eventually-->
+                                {% if element.coachvideolink_set.all.count > 0 %}
+                                    {% if request.user.is_staff or request.user.is_superuser or SHOW_VIDEOS %}
+                                        <i class="fas fa-play-circle"></i><sub>{{ element.coachvideolink_set.all.count }}</sub>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                             <div class="col text-center">
                                 <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/coach_elements/{{ element.image}}.svg"  style="max-height:140px;overflow:hidden"/>
