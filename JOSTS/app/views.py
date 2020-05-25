@@ -246,6 +246,7 @@ def loginview(request):
             disc = Disc.objects.get(pk=login_form.cleaned_data.get('disc').id)
             request.session['exclude_screens'] = disc.exclude_screens
             request.session['discs'] = list(Disc.objects.filter(show_login=True).values_list("display_name",flat=True))
+            request.session['is_admin'] = user.is_staff
             return redirect('elements')
     else:
         login_form = LoginForm()

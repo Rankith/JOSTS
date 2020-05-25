@@ -62,6 +62,16 @@
                         </div>
                     </li>
                     {% endif %}
+                    {% if request.session.is_admin %}
+                     <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle  {% if "coach" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Coach
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item {% if "coach_elements" in request.path %}active{% endif %}" href="{% url 'coach_elements' %}"  >Elements</a>
+                        </div>
+                    </li>
+                    {% endif %}
                 </ul>
                 {% include 'app/loginpartial.html' %}
             </div>
