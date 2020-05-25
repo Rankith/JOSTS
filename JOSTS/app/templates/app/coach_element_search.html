@@ -45,6 +45,81 @@
         {% endfor %}
     </div>
 
+<div>
+    <table style="font-size:0.8rem;font-weight:600">
+        <tr>
+            <td align="right">
+                <label id="lblDevelopment" class="switch">
+                    <input type="checkbox" id="chkDevelopment" class="check-search-coach" onchange="CoachDisplayChange(this)">
+                    <span class="slider round"></span>
+                </label></td>
+            <td style="vertical-align:middle" align="left">
+                <label for="chkDevelopment" style="margin-bottom:0 !important">DEVELOPMENT</label>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <label id="lblMechanics" class="switch">
+                    <input type="checkbox" id="chkMechanics" class="check-search-coach" onchange="CoachDisplayChange(this)">
+                    <span class="slider round"></span>
+                </label></td>
+            <td style="vertical-align:middle" align="left">
+                <label for="chkMechanics" style="margin-bottom:0 !important">MECHANICS</label>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <label id="lblPhsycial" class="switch">
+                    <input type="checkbox" id="chkPhysical" class="check-search-coach" onchange="CoachDisplayChange(this)">
+                    <span class="slider round"></span>
+                </label></td>
+            <td style="vertical-align:middle" align="left" >
+                <label for="chkPhysical" style="margin-bottom:0 !important">PHYSICAL QUALITIES &amp; PREPERATION</label>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <label id="lblDescription" class="switch">
+                    <input type="checkbox" id="chkDescription" class="check-search-coach" onchange="CoachDisplayChange(this)">
+                    <span class="slider round"></span>
+                </label></td>
+            <td style="vertical-align:middle" align="left">
+                <label for="chkDescription" style="margin-bottom:0 !important">DESCRIPTION</label>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <label id="lblKey" class="switch">
+                    <input type="checkbox" id="chkKey" class="check-search-coach" onchange="CoachDisplayChange(this)">
+                    <span class="slider round"></span>
+                </label></td>
+            <td style="vertical-align:middle" align="left">
+                <label for="chkKey" style="margin-bottom:0 !important">KEY POINTS</label>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <label id="lblMethodology" class="switch">
+                    <input type="checkbox" id="chkMethodology" class="check-search-coach" onchange="CoachDisplayChange(this)">
+                    <span class="slider round"></span>
+                </label></td>
+            <td style="vertical-align:middle" align="left">
+                <label for="chkMethodology" style="margin-bottom:0 !important">METHODOLOGY</label>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">
+                <label id="lblEnvironment" class="switch">
+                    <input type="checkbox" id="chkEnvironment" class="check-search-coach" onchange="CoachDisplayChange(this)">
+                    <span class="slider round"></span>
+                </label></td>
+            <td style="vertical-align:middle" align="left">
+                <label for="chkEnvironment" style="margin-bottom:0 !important">THE ENVIRONMENT</label>
+            </td>
+        </tr>
+
+    </table>
+</div>
 
 
 {% else %}
@@ -60,7 +135,7 @@
     </div>
 {% endif %}
 
-<div class="row no-gutters">
+<div class="row no-gutters pt-2">
     <div class="pr-2">
         <label id="lblReset" class="search-button">
 
@@ -79,6 +154,7 @@
 <script type="text/javascript">
     var Event = "";
     var ValueDisplay = "value";
+
 
     $('#txtSearch').keypress(function (e) {
       if (e.which == 13) {
@@ -109,6 +185,13 @@
         CreateSearchParams();
     }
 
+    function CoachDisplayChange(el) {
+        //console.log("SC");
+        localStorage.setItem(el.id, el.checked ? 1 : 0);
+        CoachElementUpdateDisplay()
+        
+    }
+
     function SearchChange(el) {
         //console.log("SC");
         localStorage.setItem(el.id, el.checked ? 1 : 0);
@@ -117,6 +200,7 @@
     function CreateSearchParams() {
         //console.log("CSP");
         var strValues = "";
+        //CloseCoachElement();
         Event = $('.check-search-event:checkbox:checked').val();
         if (list_type !== 'undefined') {
             $(".check-search:checkbox:checked").each(function (i) {
@@ -131,7 +215,7 @@
                 $("#divElementList").empty();
                 $("#divElementList").append(data);
                 $("#divElementCountDisplay").html(($("#divNumElements").html()));
-                $("#div" + SelectedElement).click();
+                //$("#div" + SelectedElement).click();
             });
         }
         //$("#divElementList").empty();
@@ -143,6 +227,10 @@
             $(this).removeAttr('checked');
             
         });
+        $(".check-search-coach").each(function (i) {
+            localStorage.setItem(this.id, 1);
+            $(this).prop('checked', true);
+        });
         $("#txtSearch").val("");
         CreateSearchParams();
         }
@@ -151,12 +239,20 @@
         //console.log(localStorage);
 
         $(".check-search:checkbox").each(function (i) {
-            console.log(this.id);
-             console.log(localStorage.getItem(this.id));
+            //console.log(this.id);
+            // console.log(localStorage.getItem(this.id));
             if (localStorage.getItem(this.id) == "1")
                 $(this).prop('checked', true);
             else
                 $(this).prop('checked', false);
+        });
+        $(".check-search-coach").each(function (i) {
+            console.log(this.id);
+            console.log(localStorage.getItem(this.id));
+            if (localStorage.getItem(this.id) == "0")
+                $(this).prop('checked', false);
+            else
+                $(this).prop('checked', true);
         });
         if (search_type == "element" || type == "shorthand_trainer") {
              $(".check-search-display:checkbox").each(function (i) {

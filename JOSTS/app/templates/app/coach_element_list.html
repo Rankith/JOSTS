@@ -54,10 +54,16 @@
 </script>
 <script type="text/javascript">
     function CoachElementClick(idIn) {
+        SelectedElement = idIn;
+        RemoveSelected();
+        $("#div" + idIn).removeClass("image-background").addClass("selected-list-item");
         $("#divCoachElement").empty();
         $("#divCoachElement").load("/" + type + "?id=" + idIn, ShowAndSetHeight);
+        
     }
     function CloseCoachElement() {
+        RemoveSelected();
         $("#divCoachElement").empty();
     }
+
 </script>    

@@ -353,3 +353,5 @@ class CoachVideoLine(models.Model):
     type = models.CharField(max_length=50)
     text = models.CharField(max_length=1000)
     display_order = models.IntegerField(default=0)
+    class Meta:
+      ordering = ['display_order']
