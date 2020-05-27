@@ -1007,7 +1007,7 @@ def video_notes(request):
         context = {
             'elementjump':frame_jump,
             'notes':notes,
-            'frames':frames
+            'frames':frames.frame_list.split(",")
             }
 
         return render(request, 'app/coach_video_notes.html',context=context)

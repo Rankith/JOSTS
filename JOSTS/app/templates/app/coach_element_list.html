@@ -63,7 +63,7 @@
         $("#div" + idIn).removeClass("image-background").addClass("selected-list-item");
         $("#divCoachElement").empty();
         $("#divCoachElement").load("/" + type + "?id=" + idIn, ShowAndSetHeight);
-        
+        document.documentElement.scrollTop=0
     }
     function CloseCoachElement() {
         RemoveSelected();
