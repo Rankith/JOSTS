@@ -361,5 +361,6 @@ class CoachVideoLink(models.Model):
     coach_element = models.ForeignKey(CoachInstruction,on_delete=models.CASCADE)
     order = models.IntegerField(default=1)
     frame_jump = models.IntegerField(default=0)
+    frame_list = models.CharField(max_length=300, blank=True)
     class Meta:
         ordering = ['order']

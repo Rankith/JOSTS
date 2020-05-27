@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
-    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine
+    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -880,7 +880,7 @@ def video_player(request):
             'potential': potential_videos
         }
         return render(request, 'app/video_player.html',context=context)
-    elif coachelementid != -1: #element
+    elif coachelementid != -1: #coach
         element = CoachInstruction.objects.get(pk=coachelementid)
         #potential_videos = Video.objects.filter(id__in=VideoNote.objects.filter(element_link=element.element).values_list('video').distinct())
         #potential_videos = potential_videos.exclude(id__in=element.element.videolink_set.all().values_list('video'))
@@ -994,6 +994,7 @@ def video_notes(request):
         video = request.GET.get('video','')
         coach_element = request.GET.get('element',-1)
         notes = CoachVideoLine.objects.filter(instruction=coach_element)
+        frames = CoachVideoLink.objects.filter(coach_element=coach_element,video__id=video)[0]
         frame_jump = -1
         #if element != -1:
             #if type == 'element':
@@ -1005,7 +1006,8 @@ def video_notes(request):
 
         context = {
             'elementjump':frame_jump,
-            'notes':notes
+            'notes':notes,
+            'frames':frames
             }
 
         return render(request, 'app/coach_video_notes.html',context=context)

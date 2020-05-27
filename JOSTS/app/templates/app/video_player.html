@@ -67,7 +67,22 @@
                 <button id="btnRemoveVideo" onclick="RemoveVideo()" class="btn btn-main mb-2" style="display:none">Remove Video</button> 
             </div>
         {% endif %}
-        {% include "app/video.html" %}</div>
+        {% include "app/video.html" %}
+        {% if mode == "coach" %}
+            <div style="font-weight:600">PRE-REQUISITE ELEMENTS:</div>
+            <ul class="mb-0">
+                {% for req in element.pre_req_elements.all %}
+                    <li><a href="#" onclick="CoachElementClick({{req.id}}); $('#modalMain').modal('hide');"><u>{{req.short_text}}</u></a></li>
+                {% endfor %}
+             </ul>
+            <div style="font-weight:600">RELATED SKILLS:</div>
+            <ul class="mb-0">
+                {% for rel in element.related_elements.all %}
+                    <li><a href="#" onclick="CoachElementClick({{rel.id}}); $('#modalMain').modal('hide');"><u>{{rel.short_text}}</u></a></li>
+                {% endfor %}
+             </ul>
+        {% endif %}
+        </div>
         <div class="col-12 col-md-3">
             <div id="divNotesArea" class="pl-2">
             </div>

@@ -95,7 +95,7 @@
         <div class="list-group-item rules-cue">
             <ul class="mb-0">
                 {% for req in coach_element.pre_req_elements.all %}
-                    <li>{{req.short_text}}</li>
+                    <li><a href="#" onclick="CoachElementClick({{req.id}})"><u>{{req.short_text}}</u></a></li>
                 {% endfor %}
             </ul>
         </div>
@@ -110,7 +110,7 @@
         <div class="list-group-item rules-cue">
             <ul class="mb-0">
                 {% for rel in coach_element.related_elements.all %}
-                    <li>{{rel.short_text}}</li>
+                    <li><a href="#" onclick="CoachElementClick({{rel.id}})"><u>{{rel.short_text}}</u></a></li>
                 {% endfor %}
             </ul>
         </div>
