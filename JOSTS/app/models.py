@@ -314,7 +314,7 @@ class JudgeInstruction(models.Model):
     type = models.CharField(max_length=1)
 
 class CoachMethodology(models.Model):
-    text = models.CharField(max_length=400)
+    text = models.CharField(max_length=1000)
     image = models.CharField(max_length=255)
 
     def __str__(self):
