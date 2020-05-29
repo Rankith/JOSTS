@@ -350,7 +350,7 @@ class CoachInstruction(models.Model):
     notes3 = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
-       return str(self.short_text)
+       return str(self.id) + " : " + str(self.short_text)
     class Meta:
       ordering = ['id']
 
