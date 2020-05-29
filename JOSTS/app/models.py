@@ -351,6 +351,8 @@ class CoachInstruction(models.Model):
 
     def __str__(self):
        return str(self.short_text)
+    class Meta:
+      ordering = ['id']
 
 class CoachVideoLine(models.Model):
     instruction = models.ForeignKey(CoachInstruction, on_delete=models.CASCADE,null=True)
