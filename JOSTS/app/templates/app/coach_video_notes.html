@@ -16,7 +16,7 @@
 <div id="DescriptionNotes" style="border:1px solid black;font-size:0.8rem;" class="p-1 collapse show">
     {% for note in notes %}
         {% if note.type == "description" %}
-            <div id="vn{{note.frame}}" class="video-note-line d-note" onclick="CoachVideoNoteClick({{ forloop.counter }})">
+            <div id="vn{{note.frame}}" class="video-note-line d-note" onclick="CoachVideoNoteClickPause({{ forloop.counter }})">
                 • {{note.text}}
             </div>
         {% endif %}
@@ -27,7 +27,7 @@
 <div id="KeyNotes" style="border:1px solid black;font-size:0.8rem;" class="p-1 collapse show">
     {% for note in notes %}
         {% if note.type == "key" %}
-            <div id="vn{{note.id}}" class="video-note-line d-note" onclick="CoachVideoNoteClick({{ forloop.counter }})">
+            <div id="vn{{note.id}}" class="video-note-line d-note" onclick="CoachVideoNoteClickPause({{ forloop.counter }})">
                 • {{note.text}}
             </div>
         {% endif %}
@@ -46,6 +46,7 @@
    
 </script>
 <script type="text/javascript">
+    VideoFrameJump(ElementJump);
     function VideoNoteClick(frameIn) {
         VideoFrameJump(frameIn);
     }
@@ -59,7 +60,10 @@
        
     }
     function CoachVideoNoteClick(frameIn) {
-        VideoNoteClick(Jumps[frameIn])
+        VideoFrameJump(Jumps[frameIn])
+    }
+    function CoachVideoNoteClickPause(frameIn) {
+        VideoFrameJumpPause(Jumps[frameIn])
     }
 </script>
 

@@ -319,6 +319,8 @@ class CoachMethodology(models.Model):
 
     def __str__(self):
        return str(self.image)
+    class Meta:
+       ordering = ['id']
 
 class CoachEnvironment(models.Model):
     text = models.CharField(max_length=400)
@@ -326,6 +328,8 @@ class CoachEnvironment(models.Model):
 
     def __str__(self):
        return str(self.image)
+    class Meta:
+       ordering = ['id']
 
 class CoachInstruction(models.Model):
     disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)

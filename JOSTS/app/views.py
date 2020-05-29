@@ -995,7 +995,7 @@ def video_notes(request):
         coach_element = request.GET.get('element',-1)
         notes = CoachVideoLine.objects.filter(instruction=coach_element)
         frames = CoachVideoLink.objects.filter(coach_element=coach_element,video__id=video)[0]
-        frame_jump = -1
+        frame_jump = frames.frame_jump
         #if element != -1:
             #if type == 'element':
                 #jnote = notes.filter(element_link__id = element)

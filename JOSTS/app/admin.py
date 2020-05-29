@@ -183,8 +183,8 @@ class CoachVideoLineAdmin(ImportExportModelAdmin):
     list_filter = ('instruction__disc','instruction__event','instruction__level')
 
 class CoachVideoLinkAdmin(ImportExportModelAdmin):
-    list_display=('id','video','coach_element','order','frame_list')
-    list_editable=('coach_element','order','frame_list')
+    list_display=('id','video','coach_element','order','frame_jump','frame_list')
+    list_editable=('coach_element','order','frame_jump','frame_list')
 
 
 admin.site.register(Element,ElementAdmin)
