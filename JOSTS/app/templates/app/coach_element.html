@@ -262,26 +262,28 @@
 {% endif %}
 
 {% if coach_element.notes1 != None or coach_element.notes2 != None or coach_element.notes3 != None %}
-<div id="divNotes">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divNotesDetail">
-            NOTES
-    </div>
-    <div id="divNotesDetail" class="collapse show">
-        <div class="list-group-item rules-cue">
-            <ul class="mb-0">
-                {% if coach_element.notes1 != None %}
-                    <li>{{coach_element.notes1}}</li>
-                {% endif %}
-                {% if coach_element.notes2 != None %}
-                    <li>{{coach_element.notes2}}</li>
-                {% endif %}
-                {% if coach_element.notes3 != None %}
-                    <li>{{coach_element.notes3}}</li>
-                {% endif %}
-            </ul>
+    {% if coach_element.notes1 != '' or coach_element.notes2 != '' or coach_element.notes3 != '' %}
+        <div id="divNotes">
+            <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divNotesDetail">
+                    NOTES
+            </div>
+            <div id="divNotesDetail" class="collapse show">
+                <div class="list-group-item rules-cue">
+                    <ul class="mb-0">
+                        {% if coach_element.notes1 != None and coach_element.notes1 != '' %}
+                            <li>{{coach_element.notes1}}</li>
+                        {% endif %}
+                        {% if coach_element.notes2 != None and coach_element.notes2 != ' %}
+                            <li>{{coach_element.notes2}}</li>
+                        {% endif %}
+                        {% if coach_element.notes3 != None and coach_element.notes3 != ' %}
+                            <li>{{coach_element.notes3}}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    {% endif %}
 {% endif %}
 
 <script type="text/javascript">
