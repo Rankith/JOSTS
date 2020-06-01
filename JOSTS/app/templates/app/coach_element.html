@@ -74,48 +74,54 @@
     </div>
 </div>
 
-<div id="divDevelopment">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divDevelopmentDetail">
-            DEVELOPMENT
-    </div>
-    <div id="divDevelopmentDetail" class="collapse show">
-        <div class="list-group-item rules-cue" >
-            {% autoescape off %}
-            <pre>{{coach_element.development}}</pre>
-            {% endautoescape %}
+{% if coach_element.development != None and coach_element.development != '' %}
+    <div id="divDevelopment">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divDevelopmentDetail">
+                DEVELOPMENT
+        </div>
+        <div id="divDevelopmentDetail" class="collapse show">
+            <div class="list-group-item rules-cue" >
+                {% autoescape off %}
+                <pre>{{coach_element.development}}</pre>
+                {% endautoescape %}
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 
-<div id="divPreReq">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divPreReqDetail">
-            PRE-REQUISITE ELEMENTS
-    </div>
-    <div id="divPreReqDetail" class="collapse show">
-        <div class="list-group-item rules-cue">
-            <ul class="mb-0">
-                {% for req in coach_element.pre_req_elements.all %}
-                    <li><a href="#" onclick="CoachElementClick({{req.id}})"><u>{{req.short_text}}</u></a></li>
-                {% endfor %}
-            </ul>
+{% if coach_element.pre_req_elements.all.count > 0 %}
+    <div id="divPreReq">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divPreReqDetail">
+                PRE-REQUISITE ELEMENTS
+        </div>
+        <div id="divPreReqDetail" class="collapse show">
+            <div class="list-group-item rules-cue">
+                <ul class="mb-0">
+                    {% for req in coach_element.pre_req_elements.all %}
+                        <li><a href="#" onclick="CoachElementClick({{req.id}})"><u>{{req.short_text}}</u></a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 
-<div id="divRelated">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divRelatedDetail">
-            RELATED SKILLS
-    </div>
-    <div id="divRelatedDetail" class="collapse show">
-        <div class="list-group-item rules-cue">
-            <ul class="mb-0">
-                {% for rel in coach_element.related_elements.all %}
-                    <li><a href="#" onclick="CoachElementClick({{rel.id}})"><u>{{rel.short_text}}</u></a></li>
-                {% endfor %}
-            </ul>
+{% if coach_element.related_elements.all.count > 0 %}
+    <div id="divRelated">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divRelatedDetail">
+                RELATED SKILLS
+        </div>
+        <div id="divRelatedDetail" class="collapse show">
+            <div class="list-group-item rules-cue">
+                <ul class="mb-0">
+                    {% for rel in coach_element.related_elements.all %}
+                        <li><a href="#" onclick="CoachElementClick({{rel.id}})"><u>{{rel.short_text}}</u></a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 
 <div id="divMechanics">
     <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divMechanicsDetail">
@@ -134,18 +140,20 @@
     </div>
 </div>
 
-<div id="divPhysical">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divPhysicalDetail">
-            PHYSICAL QUALITIES &amp; PREPERATION
-    </div>
-    <div id="divPhysicalDetail" class="collapse show">
-        <div class="list-group-item rules-cue">
-            {% autoescape off %}
-            <pre>{{coach_element.physical}}</pre>
-            {% endautoescape %}
+{% if coach_element.physical != None and coach_element.physical != '' %}
+    <div id="divPhysical">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divPhysicalDetail">
+                PHYSICAL QUALITIES &amp; PREPERATION
+        </div>
+        <div id="divPhysicalDetail" class="collapse show">
+            <div class="list-group-item rules-cue">
+                {% autoescape off %}
+                <pre>{{coach_element.physical}}</pre>
+                {% endautoescape %}
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 
 <div id="divDescription">
     <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divDescriptionDetail">
@@ -181,75 +189,100 @@
     </div>
 </div>
 
-<div id="divMethodology">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divMethodologyDetail">
-            METHODOLOGY
-    </div>
-    <div id="divMethodologyDetail" class="collapse show">
-         <div class="list-group-item rules-cue pb-0">
-            <div class="row no-gutters">
-                {% for meth in coach_element.methodology.all %}
-                <div class="col-lg-3 col-md-4 col-sm-6 mt-2 mb-1" style="" >
-                    <div class="row">
-                        <div class="col">
-                            <div style="" class="image-background rounded" id="div{{element.id}}">
-                                <div class="row justify-content-center align-items-center" style="height:140px">
-                                    <div class="col text-center">
-                                        <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/coach_elements/methodology/{{ meth.image}}.svg"  style="max-height:140px;overflow:hidden"/>
-                                    </div>
+{% if coach_element.methodology.all.count > 0 %}
+    <div id="divMethodology">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divMethodologyDetail">
+                METHODOLOGY
+        </div>
+        <div id="divMethodologyDetail" class="collapse show">
+             <div class="list-group-item rules-cue pb-0">
+                <div class="row no-gutters">
+                    {% for meth in coach_element.methodology.all %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mt-2 mb-1" style="" >
+                        <div class="row">
+                            <div class="col">
+                                <div style="" class="image-background rounded" id="div{{element.id}}">
+                                    <div class="row justify-content-center align-items-center" style="height:140px">
+                                        <div class="col text-center">
+                                            <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/coach_elements/methodology/{{ meth.image}}.svg"  style="max-height:140px;overflow:hidden"/>
+                                        </div>
                             
-                                </div>
-                                <div class="row text-center d-flex align-items-end">
-                                    <div class="col-12 pb-1 " style="line-height:1.1;font-size:.8rem">
-                                         {% autoescape off %}
-                                             {{meth.text}}
-                                        {% endautoescape %}
+                                    </div>
+                                    <div class="row text-center d-flex align-items-end">
+                                        <div class="col-12 pb-1 " style="line-height:1.1;font-size:.8rem">
+                                             {% autoescape off %}
+                                                 {{meth.text}}
+                                            {% endautoescape %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
     </div>
-</div>
+{% endif %}
 
-<div id="divEnvironment">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divEnvironmentDetail">
-            THE ENVIRONMENT
-    </div>
-    <div id="divEnvironmentDetail" class="collapse show">
-        <div class="list-group-item rules-cue pb-0">
-            <div class="row no-gutters">
-                {% for meth in coach_element.environment.all %}
-                <div class="col-lg-3 col-md-4 col-sm-6 mt-2 mb-1" style="height:190px;" >
-                    <div class="row">
-                        <div class="col">
-                            <div style="height:172px" class="image-background rounded" id="div{{element.id}}">
-                                <div class="row justify-content-center align-items-center" style="height:140px">
-                                    <div class="col text-center">
-                                        <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/coach_elements/environment/{{ meth.image}}.svg"  style="max-height:140px;overflow:hidden"/>
-                                    </div>
+{% if coach_element.environment.all.count > 0 %}
+    <div id="divEnvironment">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divEnvironmentDetail">
+                THE ENVIRONMENT
+        </div>
+        <div id="divEnvironmentDetail" class="collapse show">
+            <div class="list-group-item rules-cue pb-0">
+                <div class="row no-gutters">
+                    {% for meth in coach_element.environment.all %}
+                    <div class="col-lg-3 col-md-4 col-sm-6 mt-2 mb-1" style="height:190px;" >
+                        <div class="row">
+                            <div class="col">
+                                <div style="height:172px" class="image-background rounded" id="div{{element.id}}">
+                                    <div class="row justify-content-center align-items-center" style="height:140px">
+                                        <div class="col text-center">
+                                            <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/coach_elements/environment/{{meth.image}}.svg"  style="max-height:140px;overflow:hidden"/>
+                                        </div>
                             
-                                </div>
-                                <div class="row text-center d-flex align-items-end">
-                                    <div class="col-12 pb-1 " style="line-height:1.1;height:32px;overflow:hidden;font-size:.8rem">
-                                        {{meth.text}}
+                                    </div>
+                                    <div class="row text-center d-flex align-items-end">
+                                        <div class="col-12 pb-1 " style="line-height:1.1;overflow:hidden;font-size:.8rem">
+                                            {{meth.text}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
         </div>
     </div>
+{% endif %}
+
+{% if coach_element.notes1 != None or coach_element.notes2 != None or coach_element.notes3 != None %}
+<div id="divNotes">
+    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divNotesDetail">
+            NOTES
+    </div>
+    <div id="divNotesDetail" class="collapse show">
+        <div class="list-group-item rules-cue">
+            <ul class="mb-0">
+                {% if coach_element.notes1 != None %}
+                    <li>{{coach_element.notes1}}</li>
+                {% endif %}
+                {% if coach_element.notes2 != None %}
+                    <li>{{coach_element.notes2}}</li>
+                {% endif %}
+                {% if coach_element.notes3 != None %}
+                    <li>{{coach_element.notes3}}</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </div>
-
-
+{% endif %}
 
 <script type="text/javascript">
     var ElementID = {{coach_element.id}};

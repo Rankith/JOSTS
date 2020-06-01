@@ -19,6 +19,7 @@
 </div>
 {% endif %}
 
+{% if search_type == 'element' %}
 <div class="row no-gutters pt-2">
     {% for event in events %}
     <div class="col">
@@ -31,7 +32,7 @@
     </div>
     {% endfor %}
 </div>
-{% if search_type == 'element' %}
+
  <div class="row no-gutters" id="Levels">
         {% for level in levels %}
         <div class="pr-2">
@@ -127,8 +128,8 @@
         {% for rule in sections %}
         <div class="pr-2">
             <label id="lblS{{forloop.counter}}" class="search-button">
-                <input type="checkbox" id="chkS{{forloop.counter}}" value="{{rule.section}}" class="check-search" data-search="rule__section" onchange="SearchChange(this)">
-                <div class="search-button value-button"><div style="text-transform:uppercase">{{rule.search_display}}</div></div>
+                <input type="checkbox" id="chkS{{forloop.counter}}" value="{{rule.category}}" class="check-search" data-search="rule__section" onchange="SearchChange(this)">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{rule.category}}</div></div>
             </label>
         </div>
         {% endfor %}
