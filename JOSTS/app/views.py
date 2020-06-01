@@ -1541,6 +1541,9 @@ def coach_element_search(request):
 def coach_element(request):
     idIn = request.GET.get('id')
     element = CoachInstruction.objects.filter(id=idIn)
+    key_points = CoachVideoLine.objects.filter(instruction=idIn,type='key')
+    description = CoachVideoLine.objects.filter(instruction=idIn,type='description')
+    mechanics = CoachVideoLine.objects.filter(instruction=idIn,type='mechanics')
     #userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
     #if (len(userNote) > 0):
         #userNote = userNote[0].note;
@@ -1548,6 +1551,9 @@ def coach_element(request):
         #userNote = '';
     context = {
         'coach_element': element[0],
+        'key_points' : key_points,
+        'descriptions' : description,
+        'mechanics' : mechanics
         }
     #activity log
     log_activity(request,'Coach_Elements','View',str(element[0]))

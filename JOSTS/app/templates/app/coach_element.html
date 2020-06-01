@@ -123,22 +123,24 @@
     </div>
 {% endif %}
 
-<div id="divMechanics">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divMechanicsDetail">
-            MECHANICS
-    </div>
-    <div id="divMechanicsDetail" class="collapse show">
-        <div class="list-group-item rules-cue">
-            <ul class="mb-0">
-                {% for line in coach_element.coachvideoline_set.all %}
-                    {% if line.type == "mechanics" %}
-                        <li>{{line.text}}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+{% if mechanics.count > 0 %}
+    <div id="divMechanics">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divMechanicsDetail">
+                MECHANICS
+        </div>
+        <div id="divMechanicsDetail" class="collapse show">
+            <div class="list-group-item rules-cue">
+                <ul class="mb-0">
+                    {% for line in coach_element.coachvideoline_set.all %}
+                        {% if line.type == "mechanics" %}
+                            <li>{{line.text}}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 
 {% if coach_element.physical != None and coach_element.physical != '' %}
     <div id="divPhysical">
@@ -155,39 +157,43 @@
     </div>
 {% endif %}
 
-<div id="divDescription">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divDescriptionDetail">
-            DESCRIPTION
-    </div>
-    <div id="divDescriptionDetail" class="collapse show">
-        <div class="list-group-item rules-cue">
-              <ul class="mb-0">
-                {% for line in coach_element.coachvideoline_set.all %}
-                    {% if line.type == "description" %}
-                        <li>{{line.text}}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+{% if description.count > 0 %}
+    <div id="divDescription">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divDescriptionDetail">
+                DESCRIPTION
+        </div>
+        <div id="divDescriptionDetail" class="collapse show">
+            <div class="list-group-item rules-cue">
+                  <ul class="mb-0">
+                    {% for line in coach_element.coachvideoline_set.all %}
+                        {% if line.type == "description" %}
+                            <li>{{line.text}}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 
-<div id="divKey">
-    <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divKeyPointsDetail">
-            KEY POINTS
-    </div>
-    <div id="divKeyPointsDetail" class="collapse show">
-        <div class="list-group-item rules-cue">
-              <ul class="mb-0">
-                {% for line in coach_element.coachvideoline_set.all %}
-                    {% if line.type == "key" %}
-                        <li>{{line.text}}</li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+{% if key_points.count > 0 %}
+    <div id="divKey">
+        <div class="list-group-item rules-subsection-header show mt-2 h5" style="cursor:pointer" data-toggle="collapse" data-target="#divKeyPointsDetail">
+                KEY POINTS
+        </div>
+        <div id="divKeyPointsDetail" class="collapse show">
+            <div class="list-group-item rules-cue">
+                  <ul class="mb-0">
+                    {% for line in coach_element.coachvideoline_set.all %}
+                        {% if line.type == "key" %}
+                            <li>{{line.text}}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-</div>
+{% endif %}
 
 {% if coach_element.methodology.all.count > 0 %}
     <div id="divMethodology">
@@ -269,17 +275,19 @@
             </div>
             <div id="divNotesDetail" class="collapse show">
                 <div class="list-group-item rules-cue">
-                    <ul class="mb-0">
+
+                    {% autoescape off %}
                         {% if coach_element.notes1 != None and coach_element.notes1 != '' %}
-                            <li>{{coach_element.notes1}}</li>
+                            {{coach_element.notes1}}
                         {% endif %}
                         {% if coach_element.notes2 != None and coach_element.notes2 != '' %}
-                            <li>{{coach_element.notes2}}</li>
+                            {{coach_element.notes2}}
                         {% endif %}
                         {% if coach_element.notes3 != None and coach_element.notes3 != '' %}
-                            <li>{{coach_element.notes3}}</li>
+                            {{coach_element.notes3}}
                         {% endif %}
-                    </ul>
+                    {% endautoescape %}
+
                 </div>
             </div>
         </div>
