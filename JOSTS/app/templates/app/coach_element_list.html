@@ -6,7 +6,18 @@
 <div id="divCoachElementList">
         <div class="row">
     {% for element in coach_elements %}
-       
+        {% ifchanged element.level %}
+            {% if not forloop.first %}
+                </div></div>
+            {% endif %}
+            <div class="card rules-subsection-header col">
+                <div class="card-header card-header-custom" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
+                    Level {{element.level}}
+                </div>
+            </div>
+            <div id="detail-{{forloop.counter}}" class="collapse show">
+            <div class="row">
+        {% endifchanged %}
 
         <div class="col-lg-3 col-md-4 col-sm-6 mt-2 mb-1" id="divHolder{{element.id}}" onclick="CoachElementClick({{element.id}})" style="height:190px;cursor:pointer" >
             <div class="row">
@@ -40,7 +51,7 @@
             </div>
         </div>
 
-
+ {% if forloop.last %}</div></div>{% endif %}
     {% endfor %}
                 </div>
 </div>
