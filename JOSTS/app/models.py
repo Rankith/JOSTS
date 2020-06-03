@@ -383,6 +383,7 @@ class CoachFundamentalSection(models.Model):
     name = models.CharField(max_length=55)
     category = models.ForeignKey(CoachFundamentalCategory,on_delete=models.CASCADE)
     display_order = models.IntegerField(default=0)
+    is_quiz = models.BooleanField(default=False)
     def __str__(self):
        return str(self.name) 
     class Meta:
