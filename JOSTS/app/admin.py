@@ -187,12 +187,12 @@ class CoachVideoLinkAdmin(ImportExportModelAdmin):
     list_editable=('coach_element','order','frame_jump','frame_list')
 
 class CoachFundamentalCategoryAdmin(ImportExportModelAdmin):
-    list_display=('id','name')
-    list_editable=('name',)
+    list_display=('id','name','display_order')
+    list_editable=('name','display_order')
 
 class CoachFundamentalSectionAdmin(ImportExportModelAdmin):
-    list_display=('id','name','category')
-    list_editable=('name','category')
+    list_display=('id','name','category','display_order')
+    list_editable=('name','category','display_order')
 
 class CoachFundamentalSlideAdmin(ImportExportModelAdmin):
     list_display=('id','section','display_order','interaction_type','interaction_prompt','body')
