@@ -384,6 +384,8 @@ class CoachFundamentalSection(models.Model):
     category = models.ForeignKey(CoachFundamentalCategory,on_delete=models.CASCADE)
     display_order = models.IntegerField(default=0)
     is_quiz = models.BooleanField(default=False)
+    is_graded = models.BooleanField(default=False)
+    number_of_questions = models.IntegerField(default=0)
     def __str__(self):
        return str(self.name) 
     class Meta:
