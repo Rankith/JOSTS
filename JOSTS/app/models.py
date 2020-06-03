@@ -373,14 +373,20 @@ class CoachVideoLink(models.Model):
 
 class CoachFundamentalCategory(models.Model):
     name = models.CharField(max_length=55)
+    display_order = models.IntegerField(default=0)
     def __str__(self):
        return str(self.name)
+    class Meta:
+      ordering = ['display_order']
 
 class CoachFundamentalSection(models.Model):
     name = models.CharField(max_length=55)
     category = models.ForeignKey(CoachFundamentalCategory,on_delete=models.CASCADE)
+    display_order = models.IntegerField(default=0)
     def __str__(self):
        return str(self.name) 
+    class Meta:
+      ordering = ['display_order']
 
 class CoachFundamentalSlide(models.Model):
     section = models.ForeignKey(CoachFundamentalSection,on_delete=models.CASCADE)
