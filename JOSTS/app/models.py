@@ -370,3 +370,44 @@ class CoachVideoLink(models.Model):
     frame_list = models.CharField(max_length=300, blank=True)
     class Meta:
         ordering = ['order']
+
+class CoachFundamentalCategory(models.Model):
+    name = models.CharField(max_length=55)
+    def __str__(self):
+       return str(self.name)
+
+class CoachFundamentalSection(models.Model):
+    name = models.CharField(max_length=55)
+    category = models.ForeignKey(CoachFundamentalCategory,on_delete=models.CASCADE)
+    def __str__(self):
+       return str(self.name) 
+
+class CoachFundamentalSlide(models.Model):
+    section = models.ForeignKey(CoachFundamentalSection,on_delete=models.CASCADE)
+    body = models.TextField(blank=True,default='')
+    display_order = models.IntegerField(default=0)
+
+    MULTIPLECHOICE = 'MC'
+    MULTIPLESELECT = 'MS'
+    TEXTINPUT = 'T'
+    NONE = 'N'
+    INTERACTION_TYPES = [
+        (MULTIPLECHOICE,'Multiple Choice'),
+        (MULTIPLESELECT,'Multi Select'),
+        (TEXTINPUT,'Text Input'),
+        (NONE,'None'),
+        ]
+
+    interaction_type = models.CharField(max_length=2,choices=INTERACTION_TYPES,default=NONE)
+    interaction_prompt = models.CharField(max_length=400,blank=True,default='')
+
+    def __str__(self):
+       return str(self.section) + ":" + str(self.display_order)
+    class Meta:
+      ordering = ['display_order']
+
+class CoachFundamentalAnswer(models.Model):
+    slide = models.ForeignKey(CoachFundamentalSlide,on_delete=models.CASCADE)
+    text = models.CharField(max_length=255)
+    response_text = models.CharField(max_length=255)
+    correct = models.BooleanField(default=False)

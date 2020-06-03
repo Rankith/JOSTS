@@ -2,7 +2,7 @@ from django.contrib import admin
 from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, \
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
     Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
-    CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink
+    CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink, CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -186,6 +186,24 @@ class CoachVideoLinkAdmin(ImportExportModelAdmin):
     list_display=('id','video','coach_element','order','frame_jump','frame_list')
     list_editable=('coach_element','order','frame_jump','frame_list')
 
+class CoachFundamentalCategoryAdmin(ImportExportModelAdmin):
+    list_display=('id','name')
+    list_editable=('name',)
+
+class CoachFundamentalSectionAdmin(ImportExportModelAdmin):
+    list_display=('id','name','category')
+    list_editable=('name','category')
+
+class CoachFundamentalSlideAdmin(ImportExportModelAdmin):
+    list_display=('id','section','display_order','interaction_type','interaction_prompt','body')
+    list_editable=('section','display_order','interaction_type','interaction_prompt','body')
+    list_filter = ('section__category','section')
+
+class CoachFundamentalAnswerAdmin(ImportExportModelAdmin):
+    list_display=('id','slide','text','response_text','correct')
+    list_editable=('slide','text','response_text','correct')
+    list_filter = ('slide__section','slide')
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -222,3 +240,7 @@ admin.site.register(CoachEnvironment,CoachEnvironmentAdmin)
 admin.site.register(CoachInstruction,CoachInstructionAdmin)
 admin.site.register(CoachVideoLine,CoachVideoLineAdmin)
 admin.site.register(CoachVideoLink,CoachVideoLinkAdmin)
+admin.site.register(CoachFundamentalCategory,CoachFundamentalCategoryAdmin)
+admin.site.register(CoachFundamentalSection,CoachFundamentalSectionAdmin)
+admin.site.register(CoachFundamentalSlide,CoachFundamentalSlideAdmin)
+admin.site.register(CoachFundamentalAnswer,CoachFundamentalAnswerAdmin)
