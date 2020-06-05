@@ -238,6 +238,30 @@ input:checked + .slider:before {
     position:absolute;
     cursor:pointer
 }
+
+.fundamental-button {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-decoration: none;
+    display: flex;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    font-weight: bold;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    width:100%
+}
+
+.fundamental-button input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+    cursor: pointer
+}
+
 .rule-section {
     font-size: 0.8rem;
 }

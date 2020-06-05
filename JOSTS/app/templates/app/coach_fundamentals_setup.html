@@ -1,0 +1,124 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div class="sidebar-header">
+
+</div>
+
+<div class="row no-gutters pt-2">
+    {% for sect in sects %}
+    {% ifchanged sect.category %}
+        {% if not forloop.first %}
+            </div>
+            </div>
+        {% endif %}
+        <div class="col-12">
+            <label id="lblC{{sect.category.name}}" class="fundamental-button">
+                <input type="checkbox" id="chkC{{sect.category.name}}" value="{{sect.category.name}}" data-toggle="collapse" data-target="#divCategory{{sect.category.name}}" class="check-category" onchange="ChangeCategory(this)">
+                <div class="fundamental-button group-button">
+                   {{sect.category.name}}
+                </div>
+            </label>
+            <div id="divCategory{{sect.category.name}}" class="collapse pl-4">
+    {% endifchanged %}
+            <label id="lblS{{sect.id}}" class="fundamental-button">
+                <input type="checkbox" id="chkS{{sect.id}}" value="{{sect.id}}"  class="check-section" onchange="ChangeSection(this)">
+                <div class="fundamental-button value-button">
+                    {{sect.name}}
+                </div>
+            </label>
+    {% endfor %}
+        </div>
+</div>
+
+
+
+    <div id="divElementCountDisplay" style="padding-bottom:60px"></div>
+
+    {% endblock %}
+    {% block scripts %}
+    <script type="text/javascript">
+    LoadLastSelections();
+
+    function ChangeSection(el) {
+        console.log("change section");
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+           
+            $('.check-section').not(el).prop('checked', false);
+            $('.check-section').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            GotoSection($(el).val());
+            //Event = $(el).val();
+        }
+    }
+
+    function ChangeCategory(el) {
+        console.log("change cat");
+        //if (!el.checked)
+        //    $(el).prop('checked', true);
+        //else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            //$('.check-section').not(el).prop('checked', false);
+            //$('.check-section').not(el).each(function (i) {
+            //    localStorage.setItem(this.id, 0);
+           // });
+            //Event = $(el).val();
+       // }
+    }
+
+
+    function LoadLastSelections() {
+        $(".check-category:checkbox").each(function (i) {
+            if (localStorage.getItem(this.id) == "1") {
+                
+                $(this).prop('checked', true);
+                $("#divCategory" + $(this).val()).collapse("show");
+            }
+            else
+                $(this).prop('checked', false);
+        });
+        $(".check-section:checkbox").each(function (i) {
+            if (localStorage.getItem(this.id) == "1")
+                $(this).prop('checked', true);
+            else
+                $(this).prop('checked', false);
+        });
+
+
+    }
+
+    function GotoSection(section) {
+        $.get("/coach_fundamentals_slides/?section=" + section, function (data) {
+            $("#divContentParent").empty();
+            $("#divContentParent").append(data);
+            $('#sidebarCollapse').click();
+        });
+    
+    }
+
+
+    function StartQuiz() {
+        SetQuizSettings();
+         var strValues = "";
+        Event = $('.check-search-event:checkbox:checked').val();
+       
+        $(".check-search:checkbox:checked").each(function (i) {
+            if ($(this).parent().is(":visible"))
+                strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+            //console.log($(this).attr("data-search") + " : " + $(this).val());
+        });
+
+        $.get("/quiz/?type=" + type + "&event=" + $(".check-search:checkbox:checked").val() + "&prompt=" + PromptTypeSetup + "&" + strValues, function (data) {
+            $("#divContentParent").empty();
+            $("#divContentParent").append(data);
+            $('#sidebarCollapse').click();
+        });
+            }
+
+
+    
+    </script>
+    {% endblock %}

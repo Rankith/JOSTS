@@ -372,6 +372,7 @@ class CoachVideoLink(models.Model):
         ordering = ['order']
 
 class CoachFundamentalCategory(models.Model):
+    disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     name = models.CharField(max_length=55)
     display_order = models.IntegerField(default=0)
     def __str__(self):

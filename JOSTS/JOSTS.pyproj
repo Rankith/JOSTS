@@ -2493,8 +2493,12 @@
     <Content Include="app\templates\app\coach_element_search.html" />
     <Content Include="app\templates\app\coach_element.html" />
     <Content Include="app\templates\app\coach_element_list.html" />
+    <Content Include="app\templates\app\coach_fundamentals_individual_slide.html" />
     <Content Include="app\templates\app\element_search_tramp.html" />
     <Content Include="app\templates\app\ji_display.html" />
+    <Content Include="app\templates\app\coach_base.html" />
+    <Content Include="app\templates\app\coach_fundamentals_setup.html" />
+    <Content Include="app\templates\app\coach_fundamentals_slides.html" />
     <Content Include="app\templates\app\rule_vid_ref.html" />
     <Content Include="app\templates\app\tc_list.html" />
     <Content Include="app\templates\app\video_list.html" />

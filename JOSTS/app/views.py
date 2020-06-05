@@ -7,7 +7,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
-    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink
+    Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
+    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1600,3 +1601,36 @@ def coach_update_user_note(request):
     #activity log
     log_activity(request,'Elements','Update User Note',str(elementInstance))
     return JsonResponse(resp)
+
+@login_required(login_url='/login/')
+@user_passes_test(subscription_check,login_url='/subscriptions/')
+def coach_fundamentals(request):
+    context = {
+        'type':'Element',
+        }
+    #activity log
+    log_activity(request,'Coach Fundamental','View','')
+    return render(request, 'app/coach_base.html',context=context)
+
+def coach_fundamentals_setup(request):
+    sects = CoachFundamentalSection.objects.filter(category__disc=request.session.get('disc',1)).order_by('category__display_order','display_order')
+    context = {
+        'sects':sects,
+        }
+    return render(request, 'app/coach_fundamentals_setup.html',context=context)
+
+def coach_fundamentals_slides(request):
+    sectionIn = request.GET.get('section')
+    slides = CoachFundamentalSlide.objects.filter(section=sectionIn).order_by('display_order')
+    context = {
+        'slides':slides,
+        }
+    return render(request, 'app/coach_fundamentals_slides.html',context=context)
+
+def coach_fundamentals_slide(request):
+    slideIn = request.GET.get('slide')
+    slide = CoachFundamentalSlide.objects.get(pk=slideIn)
+    context = {
+        'slide':slide,
+        }
+    return render(request, 'app/coach_fundamentals_individual_slide.html',context=context)

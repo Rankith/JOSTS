@@ -1,0 +1,172 @@
+﻿{% load staticfiles %}
+<div class="row no-gutters">
+    <div id="divSlide" class="col-8" style="slide-base">
+    </div>
+    <div id="divNotepad" class="col-4">Notepad</div>
+</div>
+<div id="divControls">
+    <button id="btnPrev" type="button" class="btn btn-main pr-3 pl-3" onclick="GoPrevious(); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
+    <button id="btnNext" type="button" class="btn btn-main pr-3 pl-3" onclick="GoNext(); event.stopPropagation();"><i class="fas fa-chevron-right"></i></button>
+</div>
+{% block scripts %}
+<script type="text/javascript">
+    var NumSlides = {{slides|length}};
+    var Slides = Array()
+    var InteractType = Array()
+    {% for s in slides %}
+        Slides[{{ forloop.counter0 }}] = {{s.id}};
+        InteractType[{{ forloop.counter0 }}] = "{{ s.interaction_type}}";
+    {% endfor %}
+
+    var OnSlide = 0;
+    var Answered = false;
+    var Correct = 0;
+    var Wrong = 0;
+    var Total = 0;
+    var Missed = new Array();
+    var SaveUrl =  '{% url "quiz_save" %}';
+    var Event = '{{event}}';
+    var HighestOn = 0;
+
+</script>
+<script type="text/javascript">
+
+    $('#txtValue').keypress(function (e) {
+      if (e.which == 13) {
+          SubmitValue();
+        return false;    //<---- Add this line
+      }
+    });
+
+    PopulateSlide(Slides[0]);
+
+    function PopulateSlide(which) {
+
+        $.get("/coach_fundamentals_slide/?slide=" + which, function (data) {
+            $("#divSlide").empty();
+            $("#divSlide").append(data);
+
+        });
+    }
+
+    function PopulateQuiz(which) {
+        GroupAnswered = false;
+        ValueAnswered = false;
+        
+        UpdateCounter();
+        if (PromptSetup["Shorthand"])
+            $("#pShorthand").attr('src', SymbolBaseURL + QuizElements[which] + ".svg");
+        if (PromptSetup["Image"])
+            $("#pImage").attr('src', ImageBaseURL + QuizElements[which] + ".svg");
+        if (PromptSetup["Text"])
+            $("#pText").html(QuizElementShortText[which]);
+
+        if (which != HighestOn) {
+            //its not current quiz spot, so fill old
+            if (TestSetup["Value"])
+                $("#chkV" + QuizAnswersValue[which]).click();
+            if (TestSetup["Group"])
+                $("#chkGA" + QuizAnswersGroup[which]).click();
+            if (DirectValue) {
+                ColorDirectBox();
+                $("#txtValue").val(QuizAnswersValue[which]);
+                $("#btnSubmitDirectValue").hide();
+                Answered = true
+            }
+            ColorAnswers();
+        }
+        else {
+            if (DirectValue) {
+                $("#btnSubmitDirectValue").show();
+                Answered = false
+            }
+        }
+    }
+
+    
+
+    function UpdateCounter() {
+        $("#divCounter").html((OnElement + 1) + "/" + NumElements);
+    }
+
+
+    function GoPrevious() {
+        ResetButtons();
+        OnElement--;
+        PopulateQuiz(OnElement);
+        ShowHideNav();
+    }
+    function GoNext() {
+        ResetButtons();
+        OnElement++;
+        PopulateQuiz(OnElement);
+        ShowHideNav();
+    }
+    function GoLast() {
+        ResetButtons();
+        OnElement = HighestOn;
+        PopulateQuiz(OnElement);
+        ShowHideNav();
+    }
+    function GoFirst() {
+        ResetButtons();
+        OnElement = 0;
+        PopulateQuiz(OnElement);
+        ShowHideNav();
+    }
+
+    function QuizNext() {
+        if (OnElement >= NumElements - 1)
+            EndQuiz()
+        else {
+            Answered = false;
+            ResetButtons();
+            OnElement++;
+            HighestOn++;
+            if (OnElement != HighestOn)
+                OnElement = HighestOn;//in case they clicked back or forward right after answer
+            UpdateStats();
+            PopulateQuiz(OnElement);
+            ShowHideNav();
+        }
+    }
+
+   
+
+    function UpdateStats() {
+        $("#divCorrectCount").html("Correct: " + Correct);
+        $("#divWrongCount").html("Incorrect: " + Wrong);
+    }
+
+    function EndQuiz() {
+        if (OnElement > 0)
+            SaveQuiz();
+
+        $("#modalMainTitle").html("Quiz Results");
+        $(".modal-dialog").removeClass("mw-100").removeClass("w-75");
+        $("#modalBodyArea2").empty().append($("#QuizResults"));
+        $("#QuizResults").show();
+        $("#qrCorrect").html(Correct);
+        $("#qrTotal").html(Total);
+        $("#modalMain").modal();
+    }
+
+    function SaveQuiz() {
+        $.ajax({
+            url: SaveUrl,
+            data: {
+                'event': Event,
+                'correct': Correct,
+                'wrong': Wrong,
+                'type': 'Element',
+                'missed': Missed
+            },
+            dataType: 'json',
+            success: function (data) {
+
+            }
+        });
+    }
+</script>
+
+{% endblock %}

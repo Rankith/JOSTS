@@ -187,8 +187,8 @@ class CoachVideoLinkAdmin(ImportExportModelAdmin):
     list_editable=('coach_element','order','frame_jump','frame_list')
 
 class CoachFundamentalCategoryAdmin(ImportExportModelAdmin):
-    list_display=('id','name','display_order')
-    list_editable=('name','display_order')
+    list_display=('id','name','disc','display_order')
+    list_editable=('name','disc','display_order')
 
 class CoachFundamentalSectionAdmin(ImportExportModelAdmin):
     list_display=('id','name','category','display_order','is_quiz','is_graded','number_of_questions')
