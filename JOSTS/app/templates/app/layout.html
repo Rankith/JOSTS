@@ -32,7 +32,7 @@
                     <li class="nav-item"><a class="nav-link {% if "rules" in request.path %}active{% endif %}" href="{% url 'rules' %}">Rules</a></li>
                     <li class="nav-item dropdown" {% if "shorthand_training" in request.session.exclude_screens and "shorthand_lookup" in request.session.exclude_screens %} style="display:none" {% endif %}>
                         <a class="nav-link dropdown-toggle  {% if "shorthand" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Shorthand
+                          {% if request.session.disc_path == "mag" %}Symbols{% else %}Shorthand{% endif %}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                           <a class="dropdown-item {% if "shorthand_training" in request.path %}active{% endif %}" href="{% url 'shorthand_training' %}"  {% if "shorthand_training" in request.session.exclude_screens %} style="display:none" {% endif %}>Training</a>
