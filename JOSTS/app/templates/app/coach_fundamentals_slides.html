@@ -1,6 +1,6 @@
 ﻿{% load staticfiles %}
 <div class="row no-gutters">
-    <div id="divSlideArea" class="col-12 col-md-8 slide-base" style="min-height:600px">
+    <div id="divSlideArea" class="col-12 col-md-8 slide-base" style="min-height:400px">
         <div id="divCounter" style="position:absolute;left:5px;bottom:5px;z-index:1001"></div>
         <div id="divSlide"></div>
     </div>
@@ -130,7 +130,7 @@
     }
     function GoLast() {
         //ResetButtons();
-        OnSlide = HighestOn;
+        OnSlide = NumSlides - 1;
         PopulateSlide(OnSlide);
         //ShowHideNav();
     }
