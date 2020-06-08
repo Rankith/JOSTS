@@ -1,10 +1,10 @@
 ﻿{% load staticfiles %}
 <div class="row no-gutters">
-    <div id="divSlideArea" class="col-12 col-md-8 slide-base" style="min-height:400px">
+    <div id="divSlideArea" class="col-12 col-md-9 slide-base" style="min-height:400px">
         <div id="divCounter" style="position:absolute;left:5px;bottom:5px;z-index:1001"></div>
         <div id="divSlide"></div>
     </div>
-    <div id="divNotepad" class="col-4 d-none d-md-block"><div class="pl-2 text-center d-flex flex-column h-100"><div class="text-note-header" style="background-color:#1e1e3a">Notepad</div><div style="flex-grow:1"><textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea></div></div>
+    <div id="divNotepad" class="col-3 d-none d-md-block"><div class="pl-2 text-center d-flex flex-column h-100"><div class="text-note-header" style="background-color:#1e1e3a">Notepad</div><div style="flex-grow:1"><textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea></div></div>
 </div>
 <div id="divControls">
     <button id="btnFirst" type="button" class="btn btn-main pr-3 pl-3" onclick="GoFirst(); event.stopPropagation();"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></button>
@@ -45,12 +45,17 @@
     PopulateSlide(0);
 
     function PopulateSlide(which) {
+        if (which > HighestOn)
+            HighestOn = which;
         SetNavButtons();
+        if (InteractType[which] != "N") {
+            $("#btnLast").addClass("disabled").prop("disabled", "disabled");
+            $("#btnNext").addClass("disabled").prop("disabled", "disabled");
+        }
         $("#divCounter").html((which + 1) + "/" + (NumSlides));
         $.get("/coach_fundamentals_slide/?slide=" + Slides[which], function (data) {
             $("#divSlide").empty();
             $("#divSlide").append(data);
-
         });
         
     }
@@ -109,7 +114,10 @@
         }
     }
 
-    
+    function SubmitAnswer() {
+        if (OnSlide < NumSlides - 1)
+            GoNext();
+    }
 
     function UpdateCounter() {
         $("#divCounter").html((OnElement + 1) + "/" + NumElements);
@@ -130,7 +138,7 @@
     }
     function GoLast() {
         //ResetButtons();
-        OnSlide = NumSlides - 1;
+        OnSlide = HighestOn;
         PopulateSlide(OnSlide);
         //ShowHideNav();
     }
