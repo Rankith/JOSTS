@@ -38,7 +38,7 @@
     {% block scripts %}
     <script type="text/javascript">
     LoadLastSelections();
-
+    GotoSelectedSection();
     function ChangeSection(el) {
         console.log("change section");
         if (!el.checked)
@@ -50,7 +50,7 @@
             $('.check-section').not(el).each(function (i) {
                 localStorage.setItem(this.id, 0);
             });
-            GotoSection($(el).val());
+            GotoSelectedSection();
             //Event = $(el).val();
         }
     }
@@ -90,11 +90,12 @@
 
     }
 
-    function GotoSection(section) {
+        function GotoSelectedSection() {
+        var section = $('.check-section:checkbox:checked').val();
         $.get("/coach_fundamentals_slides/?section=" + section, function (data) {
             $("#divContentParent").empty();
             $("#divContentParent").append(data);
-            $('#sidebarCollapse').click();
+            //$('#sidebarCollapse').click();
         });
     
     }

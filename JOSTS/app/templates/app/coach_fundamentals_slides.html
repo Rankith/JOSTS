@@ -1,12 +1,14 @@
 ﻿{% load staticfiles %}
 <div class="row no-gutters">
-    <div id="divSlide" class="col-8 slide-base">
+    <div id="divSlide" class="col-12 col-md-8 slide-base" style="min-height:600px">
     </div>
-    <div id="divNotepad" class="col-4">Notepad</div>
+    <div id="divNotepad" class="col-4 d-none d-md-block"><div class="pl-2 text-center d-flex flex-column h-100"><div class="text-note-header" style="background-color:#1e1e3a">Notepad</div><div style="flex-grow:1"><textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea></div></div>
 </div>
 <div id="divControls">
+    <button id="btnFirst" type="button" class="btn btn-main pr-3 pl-3" onclick="GoFirst(); event.stopPropagation();"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></button>
     <button id="btnPrev" type="button" class="btn btn-main pr-3 pl-3" onclick="GoPrevious(); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
     <button id="btnNext" type="button" class="btn btn-main pr-3 pl-3" onclick="GoNext(); event.stopPropagation();"><i class="fas fa-chevron-right"></i></button>
+    <button id="btnLast" type="button" class="btn btn-main pr-3 pl-3" onclick="GoLast(); event.stopPropagation();"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></button>
 </div>
 {% block scripts %}
 <script type="text/javascript">
@@ -41,12 +43,33 @@
     PopulateSlide(Slides[0]);
 
     function PopulateSlide(which) {
-
-        $.get("/coach_fundamentals_slide/?slide=" + which, function (data) {
+        SetNavButtons();
+        $.get("/coach_fundamentals_slide/?slide=" + Slides[which], function (data) {
             $("#divSlide").empty();
             $("#divSlide").append(data);
 
         });
+        
+    }
+
+    function SetNavButtons() {
+        if (OnSlide == 0) {
+            $("#btnFirst").addClass("disabled").prop("disabled", "disabled");
+            $("#btnPrev").addClass("disabled").prop("disabled", "disabled");
+        }
+        else {
+            $("#btnFirst").removeClass("disabled").prop("disabled", "");
+            $("#btnPrev").removeClass("disabled").prop("disabled", "");
+        }
+
+        if (OnSlide == NumSlides - 1) {
+            $("#btnLast").addClass("disabled").prop("disabled", "disabled");
+            $("#btnNext").addClass("disabled").prop("disabled", "disabled");
+        }
+        else {
+            $("#btnLast").removeClass("disabled").prop("disabled", "");
+            $("#btnNext").removeClass("disabled").prop("disabled", "");
+        }
     }
 
     function PopulateQuiz(which) {
@@ -91,28 +114,28 @@
 
 
     function GoPrevious() {
-        ResetButtons();
-        OnElement--;
-        PopulateQuiz(OnElement);
-        ShowHideNav();
+        //ResetButtons();
+        OnSlide--;
+        PopulateSlide(OnSlide);
+       // ShowHideNav();
     }
     function GoNext() {
-        ResetButtons();
-        OnElement++;
-        PopulateQuiz(OnElement);
-        ShowHideNav();
+        //ResetButtons();
+        OnSlide++;
+        PopulateSlide(OnSlide);
+        //ShowHideNav();
     }
     function GoLast() {
-        ResetButtons();
-        OnElement = HighestOn;
-        PopulateQuiz(OnElement);
-        ShowHideNav();
+        //ResetButtons();
+        OnSlide = HighestOn;
+        PopulateSlide(OnSlide);
+        //ShowHideNav();
     }
     function GoFirst() {
-        ResetButtons();
-        OnElement = 0;
-        PopulateQuiz(OnElement);
-        ShowHideNav();
+        //ResetButtons();
+        OnSlide = 0;
+        PopulateSlide(OnSlide);
+       // ShowHideNav();
     }
 
     function QuizNext() {

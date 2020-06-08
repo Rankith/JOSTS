@@ -241,33 +241,33 @@ input:checked + .display-button {
     border-color: #007bff;
 }
 
-    .btn-main:hover {
-        color: #fff;
-        background-color: #0069d9;
-        border-color: #0062cc;
-    }
+.btn-main:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
 
-    .btn-main:focus, .btn-main.focus {
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-    }
+.btn-main:focus, .btn-main.focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
 
-    .btn-main.disabled, .btn-main:disabled {
-        color: #fff;
-        background-color: #007bff;
-        border-color: #007bff;
-    }
+.btn-main.disabled, .btn-main:disabled {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
 
-    .btn-main:not(:disabled):not(.disabled):active, .btn-main:not(:disabled):not(.disabled).active,
-    .show > .btn-main.dropdown-toggle {
-        color: #fff;
-        background-color: #0062cc;
-        border-color: #005cbf;
-    }
+.btn-main:not(:disabled):not(.disabled):active, .btn-main:not(:disabled):not(.disabled).active,
+.show > .btn-main.dropdown-toggle {
+    color: #fff;
+    background-color: #0062cc;
+    border-color: #005cbf;
+}
 
-        .btn-main:not(:disabled):not(.disabled):active:focus, .btn-main:not(:disabled):not(.disabled).active:focus,
-        .show > .btn-main.dropdown-toggle:focus {
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-        }
+.btn-main:not(:disabled):not(.disabled):active:focus, .btn-main:not(:disabled):not(.disabled).active:focus,
+.show > .btn-main.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
 
 .btn-second {
     color: #fff;
@@ -275,39 +275,45 @@ input:checked + .display-button {
     border-color: #007bff;
 }
 
-    .btn-second:hover {
-        color: #fff;
-        background-color: #0069d9;
-        border-color: #0062cc;
-    }
+.btn-second:hover {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
 
-    .btn-second:focus, .btn-second.focus {
-        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-    }
+.btn-second:focus, .btn-second.focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
 
-    .btn-second.disabled, .btn-second:disabled {
-        color: #fff;
-        background-color: #007bff;
-        border-color: #007bff;
-    }
+.btn-second.disabled, .btn-second:disabled {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
 
-    .btn-second:not(:disabled):not(.disabled):active, .btn-second:not(:disabled):not(.disabled).active,
-    .show > .btn-second.dropdown-toggle {
-        color: #fff;
-        background-color: #0062cc;
-        border-color: #005cbf;
-    }
+.btn-second:not(:disabled):not(.disabled):active, .btn-second:not(:disabled):not(.disabled).active,
+.show > .btn-second.dropdown-toggle {
+    color: #fff;
+    background-color: #0062cc;
+    border-color: #005cbf;
+}
 
-        .btn-second:not(:disabled):not(.disabled):active:focus, .btn-second:not(:disabled):not(.disabled).active:focus,
-        .show > .btn-second.dropdown-toggle:focus {
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-        }
+.btn-second:not(:disabled):not(.disabled):active:focus, .btn-second:not(:disabled):not(.disabled).active:focus,
+.show > .btn-second.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
 
 
 /* sliders always use a !important*/
 
-.noUi-base {
-    background-color: #ffffff !important;
+.noUi-base{
+    background-color:#ffffff !important;
+
+}
+
+
+.slide-base{
+    background-color:#ffffff;
 }
 
 .noUi-handle {
@@ -321,11 +327,9 @@ input:checked + .display-button {
 .quiz-border-neutral {
     border: 4px solid #a0b4d0;
 }
-
 .quiz-border-correct {
     border: 4px solid green;
 }
-
 .quiz-border-wrong {
     border: 4px solid red;
 }
@@ -333,17 +337,14 @@ input:checked + .display-button {
 .login-color {
     color: #6aa6f1;
 }
-
 .row-selected {
     background-color: #3879d9;
     color: #FFFFFF;
 }
-
 .quiz-correct-button {
     background-color: green;
     color: #FFFFFF;
 }
-
 .quiz-wrong-button {
     background-color: red;
     color: #FFFFFF;
@@ -352,23 +353,49 @@ input:checked + .display-button {
 .video-note-header {
     background-color: #bec7d4;
     font-weight: 700;
-    position: relative;
+    position:relative;
     border-color: black;
     border-style: solid;
     border-width: .01em;
 }
 
-.video-element-header {
+.video-element-header{
     color: #007bff;
     text-decoration: underline;
     font-weight: 600;
-    cursor: pointer;
+    cursor:pointer;
 }
 
-.dropdown-menu {
-    background-color: #080b0e;
+.dropdown-menu{
+    background-color:#080b0e;
 }
 
-.dropdown-item {
-    color: #848587;
+.dropdown-item{
+    color:#848587;
+}
+
+.table-head {
+    background-color: #1e1e3a;
+	color: #fff;
+	font-weight: bold;
+}
+
+
+.table-subhead {
+    background-color: #4d5484 !important;
+    color: #fff;
+	font-weight: bold;
+}
+
+
+.null-cell {
+    background-color: #ededf4 !important;
+    color: #6d6a85 !important;
+}
+
+
+.highlight-cell {
+    color: #fff;
+    background-color: #007bff;
+	font-weight: bold;
 }
