@@ -996,6 +996,9 @@ def video_notes(request):
         coach_element = request.GET.get('element',-1)
         notes = CoachVideoLine.objects.filter(instruction=coach_element)
         frames = CoachVideoLink.objects.filter(coach_element=coach_element,video__id=video)[0]
+        key_points = CoachVideoLine.objects.filter(instruction=coach_element,type='key')
+        description = CoachVideoLine.objects.filter(instruction=coach_element,type='description')
+        mechanics = CoachVideoLine.objects.filter(instruction=coach_element,type='mechanics')
         frame_jump = frames.frame_jump
         #if element != -1:
             #if type == 'element':
@@ -1008,6 +1011,9 @@ def video_notes(request):
         context = {
             'elementjump':frame_jump,
             'notes':notes,
+            'keys':key_points,
+            'descs':description,
+            'mechs':mechanics,
             'frames':frames.frame_list.split(",")
             }
 
