@@ -1,6 +1,6 @@
 ﻿{% load staticfiles %}
 <div class="row no-gutters">
-    <div id="divSlideArea" class="col-12 col-md-9 slide-base" style="min-height:400px">
+    <div id="divSlideArea" class="col-12 col-md-9 slide-base pl-2" style="min-height:400px">
         <div id="divCounter" style="position:absolute;left:5px;bottom:5px;z-index:1001"></div>
         <div id="divSlide"></div>
     </div>
@@ -120,6 +120,10 @@
             if ($(this).prop("checked"))
                 $("#" + this.id.replace("chk", "div")).show();
         });
+        if (OnSlide < NumSlides - 1) {
+            $("#btnLast").removeClass("disabled").prop("disabled", "");
+            $("#btnNext").removeClass("disabled").prop("disabled", "");
+        }
         //setTimeout(SlideNext, 2000);
         
     }
