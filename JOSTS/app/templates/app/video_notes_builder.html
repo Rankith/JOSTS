@@ -729,6 +729,8 @@
         $.ajax({ 
             url: '/get_video_notes/?video=' + OnVideo,
             success: function (data) {
+               // console.log("notes");
+                //console.log(data);
                 Notes = data.notes;
                 $("#txtExtraNotes").val(data.extra);
                 LoadNotes();

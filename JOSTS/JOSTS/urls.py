@@ -98,5 +98,6 @@ urlpatterns = [
     path('coach_fundamentals/', views.coach_fundamentals, name='coach_fundamentals'),
     path('coach_fundamentals_setup/', views.coach_fundamentals_setup, name='coach_fundamentals_setup'),
     path('coach_fundamentals_slides/', views.coach_fundamentals_slides, name='coach_fundamentals_slides'),
-     path('coach_fundamentals_slide/', views.coach_fundamentals_slide, name='coach_fundamentals_slide'),
+    path('coach_fundamentals_slide/', views.coach_fundamentals_slide, name='coach_fundamentals_slide'),
+    path('ajax/coach_check_answer/', views.coach_check_answer, name='coach_check_answer'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

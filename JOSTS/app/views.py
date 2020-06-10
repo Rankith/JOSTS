@@ -1636,7 +1636,33 @@ def coach_fundamentals_slides(request):
 def coach_fundamentals_slide(request):
     slideIn = request.GET.get('slide')
     slide = CoachFundamentalSlide.objects.get(pk=slideIn)
+    answers = CoachFundamentalAnswer.objects.filter(slide=slideIn).order_by('?')
     context = {
         'slide':slide,
+        'answers':answers
         }
     return render(request, 'app/coach_fundamentals_individual_slide.html',context=context)
+
+def coach_check_answer(request):
+    data = json.loads(request.body)
+    slide = CoachFundamentalSlide.objects.get(pk=data["slide"])
+    answers = CoachFundamentalAnswer.objects.filter(slide=slide)
+    correct = True
+    answers_dict = {}
+    count = 0
+    for answer in answers:
+        if answer.correct or str(answer.id) in data["answers"]:
+            answers_dict[count] = {}
+            answers_dict[count]['id'] = answer.id
+            answers_dict[count]['response'] = answer.response_text
+            answers_dict[count]['correct'] = answer.correct
+            count += 1
+        if answer.correct and not str(answer.id) in data["answers"]:
+            correct = False
+        elif answer.correct == False and str(answer.id) in data["answers"]:
+            correct = False
+    resp = {'Correct':correct,
+            'Answers':answers_dict}
+    #activity log
+
+    return JsonResponse(resp)

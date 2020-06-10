@@ -3,27 +3,28 @@
 <div id="divInteractArea">
     {{slide.interaction_prompt}}
     {% if slide.interaction_type != 'N' %}
-        <div id="divAnswerArea" class="pl-2 pt-2">
+        <div id="divAnswerArea" class="pl-2 pt-2 row no-gutters">
             {% if slide.interaction_type == 'MS' or slide.interaction_type == 'MC' %}
-                <table class="">
-                    {% for a in slide.coachfundamentalanswer_set.all %}
-                        <tr>
-                            <td align="right">
-                                <label id="lblAnswer{{forloop.counter0}}" class="switch">
-                                    {% if slide.interaction_type == 'MS' %}
-                                        <input type="checkbox" id="chkAnswer{{forloop.counter0}}" class="answer">
-                                    {% else %}
-                                        <input type="radio" id="chkAnswer{{forloop.counter0}}" class="answer" name="rdoQuiz">
-                                    {% endif %}
-                                    <span class="slider round"></span>
-                                </label></td>
-                            <td style="vertical-align:top" align="left">
-                                    <label for="chkAnswer{{forloop.counter0}}" style="margin-bottom:0 !important">{{a.text}}</label>
-                            </td>
-                            <td><div id="divAnswer{{forloop.counter0}}" style="display:none" {% if a.correct %} class="text-success" {% else %} class="text-danger" {% endif %}>{{a.response_text}}</div></td>
-                        </tr>
-                    {% endfor %}
-                </table>
+                {% for a in answers %}
+                    <div class="col-3 d-flex">
+                        <div>
+                            <label id="lblAnswer{{forloop.counter0}}" class="switch">
+                                {% if slide.interaction_type == 'MS' %}
+                                    <input type="checkbox" id="chkAnswer{{a.id}}" data-id="{{a.id}}" class="answer">
+                                {% else %}
+                                    <input type="radio" id="chkAnswer{{a.id}}" data-id="{{a.id}}"class="answer" name="rdoQuiz">
+                                {% endif %}
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="pl-1">
+                                <label for="chkAnswer{{a.id}}" style="margin-bottom:0 !important">{{a.text}}</label>
+                        </div>
+                    </div>
+                    <div id="divAnswer{{a.id}}" class="col-9">
+
+                    </div>
+                {% endfor %}
             {% elif slide.interaction_type == 'T' %}
                 <input type="text" class="form-control mb-2" placeholder="Answer" aria-label="Answer" id="txtAnswer">
             {% endif %}

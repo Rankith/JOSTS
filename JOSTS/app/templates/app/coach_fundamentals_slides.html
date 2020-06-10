@@ -31,6 +31,8 @@
     var SaveUrl =  '{% url "quiz_save" %}';
     var Event = '{{event}}';
     var HighestOn = 0;
+    var token = "{{ csrf_token }}";
+    var HoldData;
 
 </script>
 <script type="text/javascript">
@@ -115,14 +117,59 @@
     }
 
     function SubmitAnswer() {
-        $(".answer").each(function (i) {
+        $("#btnSubmitAnswer").hide();
+        /*$(".answer").each(function (i) {
             console.log(this.id)
             if ($(this).prop("checked"))
                 $("#" + this.id.replace("chk", "div")).show();
-        });
-        SetNavButtons();
+        });*/
+        CheckAnswer();
+        
         //setTimeout(SlideNext, 2000);
         
+    }
+
+    function CheckAnswer() {
+        var answered = "";
+        var comma = "";
+        $(".answer").each(function (i) {
+            if ($(this).prop("checked")) {
+                answered += comma + $(this).data("id");
+                comma = ",";
+            }
+        });
+        $.ajax({
+            url: '/ajax/coach_check_answer/',
+            data: JSON.stringify({
+                slide: Slides[OnSlide],
+                answers: answered,
+            }),
+            headers: { "X-CSRFToken": token },
+            type:'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'text',
+            success: function (data) {
+                data = JSON.parse(data);
+                HoldData = data;
+                SetResult(data);
+            }
+      });
+    }
+
+    function SetResult(data) {
+        
+        for (var j = 0; j < Object.keys(data.Answers).length; j++) {
+            $("#divAnswer" + data.Answers[j].id).html(data.Answers[j].response);
+            if (data.Answers[j].correct)
+                $("#divAnswer" + data.Answers[j].id).addClass("text-success");
+            else
+                $("#divAnswer" + data.Answers[j].id).addClass("text-danger");
+        }
+        if (data["Correct"]) 
+            $("#divAnswerText").html("Correct").addClass("text-success");
+        else
+            $("#divAnswerText").html("Incorrect").addClass("text-danger");
+        SetNavButtons();
     }
 
     function SlideNext() {
