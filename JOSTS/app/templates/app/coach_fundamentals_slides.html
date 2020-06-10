@@ -115,6 +115,16 @@
     }
 
     function SubmitAnswer() {
+        $(".answer").each(function (i) {
+            console.log(this.id)
+            if ($(this).prop("checked"))
+                $("#" + this.id.replace("chk", "div")).show();
+        });
+        setTimeout(SlideNext, 2000);
+        
+    }
+
+    function SlideNext() {
         if (OnSlide < NumSlides - 1)
             GoNext();
     }

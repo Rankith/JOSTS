@@ -4,39 +4,30 @@
     {{slide.interaction_prompt}}
     {% if slide.interaction_type != 'N' %}
         <div id="divAnswerArea" class="pl-2 pt-2">
-            {% if slide.interaction_type == 'MS' %}
+            {% if slide.interaction_type == 'MS' or slide.interaction_type == 'MC' %}
                 <table class="">
                     {% for a in slide.coachfundamentalanswer_set.all %}
                         <tr>
                             <td align="right">
                                 <label id="lblAnswer{{forloop.counter0}}" class="switch">
-                                    <input type="checkbox" id="chkAnswer{{forloop.counter0}}">
+                                    {% if slide.interaction_type == 'MS' %}
+                                        <input type="checkbox" id="chkAnswer{{forloop.counter0}}" class="answer">
+                                    {% else %}
+                                        <input type="radio" id="chkAnswer{{forloop.counter0}}" class="answer" name="rdoQuiz">
+                                    {% endif %}
                                     <span class="slider round"></span>
                                 </label></td>
                             <td style="vertical-align:top" align="left">
                                     <label for="chkAnswer{{forloop.counter0}}" style="margin-bottom:0 !important">{{a.text}}</label>
                             </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% elif slide.interaction_type == 'MC' %}
-                <table class="">
-                    {% for a in slide.coachfundamentalanswer_set.all %}
-                        <tr>
-                            <td align="right">
-                                <label id="lblAnswer{{forloop.counter0}}" class="switch">
-                                    <input type="radio" id="chkAnswer{{forloop.counter0}}" name="rdoQuiz">
-                                    <span class="slider round"></span>
-                                </label></td>
-                            <td style="vertical-align:top" align="left">
-                                    <label for="chkAnswer{{forloop.counter0}}" style="margin-bottom:0 !important">{{a.text}}</label>
-                            </td>
+                            <td><div id="divAnswer{{forloop.counter0}}" style="display:none" {% if a.correct %} class="text-success" {% else %} class="text-danger" {% endif %}>{{a.response_text}}</div></td>
                         </tr>
                     {% endfor %}
                 </table>
             {% elif slide.interaction_type == 'T' %}
                 <input type="text" class="form-control mb-2" placeholder="Answer" aria-label="Answer" id="txtAnswer">
             {% endif %}
+            <div id="divAnswerText"></div>
             <button id="btnSubmitAnswer" type="button" class="btn btn-main" onclick="SubmitAnswer(); event.stopPropagation();">Submit</button>
         </div>
     {% endif %}
