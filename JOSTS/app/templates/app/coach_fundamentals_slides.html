@@ -117,13 +117,15 @@
     }
 
     function SubmitAnswer() {
-        $("#btnSubmitAnswer").hide();
-        /*$(".answer").each(function (i) {
-            console.log(this.id)
-            if ($(this).prop("checked"))
-                $("#" + this.id.replace("chk", "div")).show();
-        });*/
-        CheckAnswer();
+        if ($(".answer:radio:checked").length > 0) {
+            $("#btnSubmitAnswer").hide();
+            /*$(".answer").each(function (i) {
+                console.log(this.id)
+                if ($(this).prop("checked"))
+                    $("#" + this.id.replace("chk", "div")).show();
+            });*/
+            CheckAnswer();
+        }
         
         //setTimeout(SlideNext, 2000);
         
@@ -178,6 +180,7 @@
             $("#divAnswerIndicator").html("Correct").addClass("text-success");
         else
             $("#divAnswerIndicator").html("Incorrect").addClass("text-danger");
+        $("#lblAnswer" + data["Correct_ID"]).removeClass("quizneutral").addClass("quizcorrect");
         SetNavButtons();
     }
 

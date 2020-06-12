@@ -9,11 +9,10 @@
                     <div class="d-flex">
                         <div>
                             <label id="lblAnswer{{a.id}}" class="quizradio quizneutral">{{a.text}}
-                                {% if slide.interaction_type == 'MS' %}
-                                    <input type="checkbox" id="chkAnswer{{a.id}}" data-id="{{a.id}}" class="answer">
-                                {% else %}
+                                
                                     <input type="radio" id="chkAnswer{{a.id}}" data-id="{{a.id}}"class="answer" name="rdoQuiz">
-                                {% endif %}
+
+                                <span class="circlespan"></span>
                                  <span class="checkmark"></span>
                             </label>
                         </div>

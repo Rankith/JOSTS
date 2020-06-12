@@ -1650,8 +1650,8 @@ def coach_check_answer(request):
     correct = True
     answers_dict = {}
     count = 0
+    correct_id = -1
     for answer in answers:
-        #if answer.correct or str(answer.id) in data["answers"]:
         if str(answer.id) in data["answers"]:
             answers_dict[count] = {}
             answers_dict[count]['id'] = answer.id
@@ -1660,8 +1660,11 @@ def coach_check_answer(request):
             count += 1
         if answer.correct == False and str(answer.id) in data["answers"]:
             correct = False
+        if answer.correct:
+            correct_id = answer.id
     resp = {'Correct':correct,
-            'Answers':answers_dict}
+            'Answers':answers_dict,
+            'Correct_ID':correct_id}
     #activity log
 
     return JsonResponse(resp)
