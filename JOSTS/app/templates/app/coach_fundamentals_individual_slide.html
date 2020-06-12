@@ -6,7 +6,7 @@
         <div id="divAnswerArea" class="pl-2 pt-2 no-gutters">
             {% if slide.interaction_type == 'MS' or slide.interaction_type == 'MC' %}
                 {% for a in answers %}
-                    <div class="col-3 d-flex">
+                    <div class="d-flex">
                         <div>
                             <label id="lblAnswer{{a.id}}" class="quizradio quizneutral">{{a.text}}
                                 {% if slide.interaction_type == 'MS' %}
@@ -20,9 +20,6 @@
                         <div class="pl-1">
                                 <label for="chkAnswer{{a.id}}" style="margin-bottom:0 !important"></label>
                         </div>
-                    </div>
-                    <div id="divAnswer{{a.id}}" class="col-9">
-
                     </div>
                 {% endfor %}
             {% elif slide.interaction_type == 'T' %}
