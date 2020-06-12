@@ -118,7 +118,7 @@
 
     function SubmitAnswer() {
         if ($(".answer:radio:checked").length > 0) {
-            $("#btnSubmitAnswer").hide();
+            $("#btnSubmitAnswer").addClass("disabled").prop("disabled", "disabled");
             /*$(".answer").each(function (i) {
                 console.log(this.id)
                 if ($(this).prop("checked"))
@@ -159,7 +159,7 @@
     }
 
     function SetResult(data) {
-        
+        $("#btnSubmitAnswer").hide();
         /*for (var j = 0; j < Object.keys(data.Answers).length; j++) {
             $("#divAnswer" + data.Answers[j].id).html(data.Answers[j].response);
             if (data.Answers[j].correct)
