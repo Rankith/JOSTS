@@ -158,17 +158,26 @@
 
     function SetResult(data) {
         
-        for (var j = 0; j < Object.keys(data.Answers).length; j++) {
+        /*for (var j = 0; j < Object.keys(data.Answers).length; j++) {
             $("#divAnswer" + data.Answers[j].id).html(data.Answers[j].response);
             if (data.Answers[j].correct)
                 $("#divAnswer" + data.Answers[j].id).addClass("text-success");
             else
                 $("#divAnswer" + data.Answers[j].id).addClass("text-danger");
+        }*/
+        $("#divAnswerText").html(data.Answers[0].response);
+        if (data.Answers[0].correct) {
+            $("#divAnswerText").addClass("text-success");
+            $("#lblAnswer" + data.Answers[0].id).removeClass("quizneutral").addClass("quizcorrect");
+        }
+        else {
+            $("#divAnswerText").addClass("text-danger");
+            $("#lblAnswer" + data.Answers[0].id).removeClass("quizneutral").addClass("quizincorrect");
         }
         if (data["Correct"]) 
-            $("#divAnswerText").html("Correct").addClass("text-success");
+            $("#divAnswerIndicator").html("Correct").addClass("text-success");
         else
-            $("#divAnswerText").html("Incorrect").addClass("text-danger");
+            $("#divAnswerIndicator").html("Incorrect").addClass("text-danger");
         SetNavButtons();
     }
 

@@ -1651,15 +1651,14 @@ def coach_check_answer(request):
     answers_dict = {}
     count = 0
     for answer in answers:
-        if answer.correct or str(answer.id) in data["answers"]:
+        #if answer.correct or str(answer.id) in data["answers"]:
+        if str(answer.id) in data["answers"]:
             answers_dict[count] = {}
             answers_dict[count]['id'] = answer.id
             answers_dict[count]['response'] = answer.response_text
             answers_dict[count]['correct'] = answer.correct
             count += 1
-        if answer.correct and not str(answer.id) in data["answers"]:
-            correct = False
-        elif answer.correct == False and str(answer.id) in data["answers"]:
+        if answer.correct == False and str(answer.id) in data["answers"]:
             correct = False
     resp = {'Correct':correct,
             'Answers':answers_dict}
