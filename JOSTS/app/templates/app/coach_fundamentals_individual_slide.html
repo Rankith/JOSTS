@@ -1,6 +1,6 @@
 ﻿{% load staticfiles %}
 <div id="divSlideArea">{% autoescape off %}{{slide.body}}{% endautoescape %}</div>
-<div id="divInteractArea">
+<div id="divInteractArea" class="pb-2">
     {{slide.interaction_prompt}}
     {% if slide.interaction_type != 'N' %}
         <div id="divAnswerArea" class="pl-2 pt-2 no-gutters">
