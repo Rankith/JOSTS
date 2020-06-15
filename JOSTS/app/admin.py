@@ -196,8 +196,8 @@ class CoachFundamentalSectionAdmin(ImportExportModelAdmin):
     list_editable=('name','category','display_order','is_quiz','is_graded','number_of_questions')
 
 class CoachFundamentalSlideAdmin(ImportExportModelAdmin):
-    list_display=('id','section','display_order','interaction_type','interaction_prompt','body')
-    list_editable=('section','display_order','interaction_type','interaction_prompt','body')
+    list_display=('id','section','display_order','interaction_type','interaction_prompt','interaction_random_order','body')
+    list_editable=('section','display_order','interaction_type','interaction_prompt','interaction_random_order','body')
     list_filter = ('section__category','section')
 
 class CoachFundamentalAnswerAdmin(ImportExportModelAdmin):

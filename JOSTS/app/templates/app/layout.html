@@ -6,7 +6,7 @@
     <title>JRSTS</title>
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}?version=1.51" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}?version=1.52" />
     <link rel="stylesheet" id="ThemeLink" type="text/css" href="{% static 'app/content/theme.css' %}?version=1.2" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/nouislider.min.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
@@ -69,6 +69,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                           <a class="dropdown-item {% if "coach_elements" in request.path %}active{% endif %}" href="{% url 'coach_elements' %}"  >Elements</a>
+                         <a class="dropdown-item {% if "coach_fundamentals" in request.path %}active{% endif %}" href="{% url 'coach_fundamentals' %}"  >Fundamentals</a>
                         </div>
                     </li>
                     {% endif %}

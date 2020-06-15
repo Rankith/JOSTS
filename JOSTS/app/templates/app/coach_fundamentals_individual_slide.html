@@ -13,7 +13,8 @@
                                     <input type="radio" id="chkAnswer{{a.id}}" data-id="{{a.id}}"class="answer" name="rdoQuiz">
 
                                 <span class="circlespan"></span>
-                                 <span class="checkmark"></span>
+                                <span class="checkmark"></span>
+                                <span class="checkmarkletter" id="chkAnswerLetter{{a.id}}">{% cycle 'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' %}</span>
                             </label>
                         </div>
                         <div class="pl-1">

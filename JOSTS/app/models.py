@@ -410,6 +410,7 @@ class CoachFundamentalSlide(models.Model):
 
     interaction_type = models.CharField(max_length=2,choices=INTERACTION_TYPES,default=NONE)
     interaction_prompt = models.CharField(max_length=400,blank=True,default='')
+    interaction_random_order = models.BooleanField(default=True)
 
     def __str__(self):
        return str(self.section) + ":" + str(self.display_order)

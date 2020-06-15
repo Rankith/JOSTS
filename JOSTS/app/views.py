@@ -1643,7 +1643,10 @@ def coach_fundamentals_slides(request):
 def coach_fundamentals_slide(request):
     slideIn = request.GET.get('slide')
     slide = CoachFundamentalSlide.objects.get(pk=slideIn)
-    answers = CoachFundamentalAnswer.objects.filter(slide=slideIn).order_by('?')
+    if slide.interaction_random_order:
+        answers = CoachFundamentalAnswer.objects.filter(slide=slideIn).order_by('?')
+    else:
+        answers = CoachFundamentalAnswer.objects.filter(slide=slideIn).order_by('id')
     user_answers = CoachFundamentalUserAnswer.objects.filter(answer__slide=slide,user_id=request.user.id)
     context = {
         'slide':slide,

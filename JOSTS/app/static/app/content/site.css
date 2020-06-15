@@ -532,6 +532,7 @@ a.BlueLoginButton {
     width: 25px;
     background-color: #ccc;
     border-radius: 50%;
+    text-align: center !important;
 }
 
 /* On mouse-over, add a grey background color */
@@ -544,12 +545,26 @@ a.BlueLoginButton {
     background-color: #2196F3;
 }
 
+.quizneutral input:checked ~ .checkmarkletter {
+    display:none;
+}
+
 .quizcorrect input:checked ~ .checkmark {
     background-color: #4BEC29;
 }
 
 .quizincorrect input:checked ~ .checkmark {
     background-color: #EC6029;
+}
+
+.quizincorrect input:checked ~ .checkmarkletter {
+    display: none;
+}
+
+.checkmarkletter {
+    position:absolute;
+    top:2px;
+    left:11px;
 }
 
 
