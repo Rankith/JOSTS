@@ -553,6 +553,10 @@ a.BlueLoginButton {
     background-color: #4BEC29;
 }
 
+.quizcorrect input:checked ~ .checkmarkletter {
+    display: none;
+}
+
 .quizincorrect input:checked ~ .checkmark {
     background-color: #EC6029;
 }
