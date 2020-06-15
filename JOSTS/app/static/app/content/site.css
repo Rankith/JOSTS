@@ -530,13 +530,13 @@ a.BlueLoginButton {
     left: 3px;
     height: 25px;
     width: 25px;
-    background-color: #eee;
+    background-color: #ccc;
     border-radius: 50%;
 }
 
 /* On mouse-over, add a grey background color */
 .quizradio:hover input ~ .checkmark {
-    background-color: #ccc;
+    background-color: #8a8a8a;
 }
 
 /* When the radio button is checked, add a blue background */

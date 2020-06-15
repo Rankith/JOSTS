@@ -4,7 +4,8 @@
         <div id="divCounter" style="position:absolute;right:5px;bottom:5px;z-index:1001"></div>
         <div id="divSlide"></div>
     </div>
-    <div id="divNotepad" class="col-3 d-none d-md-block"><div class="pl-2 text-center d-flex flex-column h-100"><div class="text-note-header" style="background-color:#1e1e3a">Notepad</div><div style="flex-grow:1"><textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea></div></div>
+    <div id="divNotepad" class="col-3 d-none d-md-block">
+        <div class="pl-2 text-center d-flex flex-column h-100"><div class="text-note-header" style="background-color:#1e1e3a">Notepad</div><div style="flex-grow:1"><textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea></div></div>
 </div>
 <div id="divControls">
     <button id="btnFirst" type="button" class="btn btn-main pr-3 pl-3" onclick="GoFirst(); event.stopPropagation();"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></button>
@@ -21,18 +22,20 @@
         Slides[{{ forloop.counter0 }}] = {{s.id}};
         InteractType[{{ forloop.counter0 }}] = "{{ s.interaction_type}}";
     {% endfor %}
-
+    var Section = {{section}}
     var OnSlide = 0;
     var Answered = false;
     var Correct = 0;
     var Wrong = 0;
     var Total = 0;
     var Missed = new Array();
-    var SaveUrl =  '{% url "quiz_save" %}';
     var Event = '{{event}}';
     var HighestOn = 0;
     var token = "{{ csrf_token }}";
     var HoldData;
+    var ProgURL = '{% url "coach_update_progress" %}';
+    var SetAnswerURL = '{% url "coach_set_answer" %}';
+    var HighestStart = {{highest}}
 
 </script>
 <script type="text/javascript">
@@ -43,12 +46,15 @@
         return false;    //<---- Add this line
       }
     });
-
-    PopulateSlide(0);
+    OnSlide = HighestStart;
+    PopulateSlide(HighestStart);
 
     function PopulateSlide(which) {
-        if (which > HighestOn)
+        if (which > HighestOn) {
             HighestOn = which;
+            UpdateProgress(false);
+        }
+        
         SetNavButtons();
         if (InteractType[which] != "N") {
             $("#btnLast").addClass("disabled").prop("disabled", "disabled");
@@ -58,8 +64,38 @@
         $.get("/coach_fundamentals_slide/?slide=" + Slides[which], function (data) {
             $("#divSlide").empty();
             $("#divSlide").append(data);
+            CheckPrevAnswer();
         });
         
+    }
+
+    function CheckPrevAnswer() {
+        var answers = $("#divUA").html().trim();
+
+        if (answers.length > 0) {
+            answers.split(",").forEach(function (answer) {
+                $("#chkAnswer" + answer).prop('checked', true);
+                CheckAnswer();
+                //console.log(answer);
+            });
+
+        }
+
+    }
+
+    function UpdateProgress (finished) {
+        $.ajax({
+            url: ProgURL,
+            data: {
+                'highest': HighestOn,
+                'finished': finished,
+                'section':Section
+            },
+            dataType: 'json',
+            success: function (data) {
+              
+            }
+      });
     }
 
     function SetNavButtons() {
@@ -82,43 +118,10 @@
         }
     }
 
-    function PopulateQuiz(which) {
-        GroupAnswered = false;
-        ValueAnswered = false;
-        
-        UpdateCounter();
-        if (PromptSetup["Shorthand"])
-            $("#pShorthand").attr('src', SymbolBaseURL + QuizElements[which] + ".svg");
-        if (PromptSetup["Image"])
-            $("#pImage").attr('src', ImageBaseURL + QuizElements[which] + ".svg");
-        if (PromptSetup["Text"])
-            $("#pText").html(QuizElementShortText[which]);
-
-        if (which != HighestOn) {
-            //its not current quiz spot, so fill old
-            if (TestSetup["Value"])
-                $("#chkV" + QuizAnswersValue[which]).click();
-            if (TestSetup["Group"])
-                $("#chkGA" + QuizAnswersGroup[which]).click();
-            if (DirectValue) {
-                ColorDirectBox();
-                $("#txtValue").val(QuizAnswersValue[which]);
-                $("#btnSubmitDirectValue").hide();
-                Answered = true
-            }
-            ColorAnswers();
-        }
-        else {
-            if (DirectValue) {
-                $("#btnSubmitDirectValue").show();
-                Answered = false
-            }
-        }
-    }
-
     function SubmitAnswer() {
         if ($(".answer:radio:checked").length > 0) {
             $("#btnSubmitAnswer").addClass("disabled").prop("disabled", "disabled");
+            SaveAnswer();
             /*$(".answer").each(function (i) {
                 console.log(this.id)
                 if ($(this).prop("checked"))
@@ -131,6 +134,27 @@
         
     }
 
+    function SaveAnswer() {
+        var answered = "";
+        var comma = "";
+        $(".answer").each(function (i) {
+            if ($(this).prop("checked")) {
+                answered += comma + $(this).data("id");
+                comma = ",";
+            }
+        });
+        $.ajax({
+            url: SetAnswerURL,
+            data: {
+                'answers': answered,
+            },
+            dataType: 'json',
+            success: function (data) {
+                
+            }
+      });
+    }
+
     function CheckAnswer() {
         var answered = "";
         var comma = "";
@@ -139,6 +163,7 @@
                 answered += comma + $(this).data("id");
                 comma = ",";
             }
+            $(this).prop("disabled", "disabled");
         });
         $.ajax({
             url: '/ajax/coach_check_answer/',
@@ -235,13 +260,6 @@
         }
     }
 
-   
-
-    function UpdateStats() {
-        $("#divCorrectCount").html("Correct: " + Correct);
-        $("#divWrongCount").html("Incorrect: " + Wrong);
-    }
-
     function EndQuiz() {
         if (OnElement > 0)
             SaveQuiz();
@@ -253,23 +271,6 @@
         $("#qrCorrect").html(Correct);
         $("#qrTotal").html(Total);
         $("#modalMain").modal();
-    }
-
-    function SaveQuiz() {
-        $.ajax({
-            url: SaveUrl,
-            data: {
-                'event': Event,
-                'correct': Correct,
-                'wrong': Wrong,
-                'type': 'Element',
-                'missed': Missed
-            },
-            dataType: 'json',
-            success: function (data) {
-
-            }
-        });
     }
 </script>
 

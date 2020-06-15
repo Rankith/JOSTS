@@ -8,7 +8,7 @@ from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
     Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
-    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer
+    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1628,8 +1628,15 @@ def coach_fundamentals_setup(request):
 def coach_fundamentals_slides(request):
     sectionIn = request.GET.get('section')
     slides = CoachFundamentalSlide.objects.filter(section=sectionIn).order_by('display_order')
+    highest = CoachFundamentalUserProgress.objects.filter(section=sectionIn,user=request.user.id).values("highest_slide")
+    if len(highest) <= 0:
+        highest=0
+    else:
+        highest=highest[0]["highest_slide"]
     context = {
         'slides':slides,
+        'section':sectionIn,
+        'highest':highest
         }
     return render(request, 'app/coach_fundamentals_slides.html',context=context)
 
@@ -1637,9 +1644,11 @@ def coach_fundamentals_slide(request):
     slideIn = request.GET.get('slide')
     slide = CoachFundamentalSlide.objects.get(pk=slideIn)
     answers = CoachFundamentalAnswer.objects.filter(slide=slideIn).order_by('?')
+    user_answers = CoachFundamentalUserAnswer.objects.filter(answer__slide=slide,user_id=request.user.id)
     context = {
         'slide':slide,
-        'answers':answers
+        'answers':answers,
+        'user_answers':user_answers
         }
     return render(request, 'app/coach_fundamentals_individual_slide.html',context=context)
 
@@ -1667,4 +1676,28 @@ def coach_check_answer(request):
             'Correct_ID':correct_id}
     #activity log
 
+    return JsonResponse(resp)
+
+def coach_update_progress(request):
+    section = request.GET.get('section')
+    highest = request.GET.get('highest')
+    finished = request.GET.get('finished',False)
+    if finished == "false":
+        finished = False
+    else:
+        finished = True
+    sectionInstance = CoachFundamentalSection.objects.get(pk=section)
+    progress, created = CoachFundamentalUserProgress.objects.update_or_create(
+        user=request.user.id,section=sectionInstance,
+        defaults={'user': request.user,'section':sectionInstance,'highest_slide':highest,'finished':finished},
+    )
+    resp = {'updated':True}
+    return JsonResponse(resp)
+
+def coach_set_answer(request):
+    answers = request.GET.get('answers').split(",")
+    for answer in answers:
+        ua = CoachFundamentalUserAnswer(user_id=request.user.id,answer_id=answer)
+        ua.save()
+    resp = {'updated':True}
     return JsonResponse(resp)

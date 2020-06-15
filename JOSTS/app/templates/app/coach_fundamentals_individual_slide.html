@@ -27,6 +27,11 @@
             <div id="divAnswerIndicator"></div>
             <div id="divAnswerText"></div>
             <button id="btnSubmitAnswer" type="button" class="btn btn-main" onclick="SubmitAnswer(); event.stopPropagation();">Submit</button>
+            <div id="divUA" style="display:none">
+                {% for ua in user_answers %}
+                    {{ua.answer.id}}{% if not forloop.first %},{% endif %}
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
 </div>

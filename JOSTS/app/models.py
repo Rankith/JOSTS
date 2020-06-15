@@ -421,3 +421,13 @@ class CoachFundamentalAnswer(models.Model):
     text = models.CharField(max_length=255)
     response_text = models.CharField(max_length=255)
     correct = models.BooleanField(default=False)
+
+class CoachFundamentalUserProgress(models.Model):
+    section = models.ForeignKey(CoachFundamentalSection,on_delete=models.CASCADE)
+    highest_slide = models.IntegerField(default=0)
+    finished = models.BooleanField(default=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+
+class CoachFundamentalUserAnswer(models.Model):
+    answer = models.ForeignKey(CoachFundamentalAnswer,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)

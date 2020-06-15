@@ -2,7 +2,8 @@ from django.contrib import admin
 from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, DrawnImage, SymbolDuplicate, SubscriptionTest, Subscription, \
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
     Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
-    CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink, CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer
+    CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink, CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, \
+    CoachFundamentalUserProgress, CoachFundamentalUserAnswer
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -204,6 +205,14 @@ class CoachFundamentalAnswerAdmin(ImportExportModelAdmin):
     list_editable=('slide','text','response_text','correct')
     list_filter = ('slide__section','slide')
 
+class CoachFundamentalUserProgressAdmin(ImportExportModelAdmin):
+    list_display=('id','user','section','highest_slide','finished')
+    list_editable=('section','highest_slide','finished')
+    list_filter = ('section',)
+
+class CoachFundamentalUserAnswerAdmin(ImportExportModelAdmin):
+    list_display=('id','user','answer')
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -244,3 +253,5 @@ admin.site.register(CoachFundamentalCategory,CoachFundamentalCategoryAdmin)
 admin.site.register(CoachFundamentalSection,CoachFundamentalSectionAdmin)
 admin.site.register(CoachFundamentalSlide,CoachFundamentalSlideAdmin)
 admin.site.register(CoachFundamentalAnswer,CoachFundamentalAnswerAdmin)
+admin.site.register(CoachFundamentalUserProgress,CoachFundamentalUserProgressAdmin)
+admin.site.register(CoachFundamentalUserAnswer,CoachFundamentalUserAnswerAdmin)
