@@ -625,4 +625,8 @@ a.BlueLoginButton {
     width: 31px;
     border-radius: 50%;
     border: 2px solid #4BEC29;
-} 
+}
+
+.disabled-button {
+    background-color: #8a8a8a;
+}

@@ -21,8 +21,8 @@
             <div id="divCategory{{sect.category.name}}" class="collapse pl-4">
     {% endifchanged %}
             <label id="lblS{{sect.id}}" class="fundamental-button">
-                <input type="checkbox" id="chkS{{sect.id}}" value="{{sect.id}}"  class="check-section" onchange="ChangeSection(this)">
-                <div class="fundamental-button value-button">
+                <input type="checkbox" id="chkS{{sect.id}}" value="{{sect.id}}"  class="check-section"  {% if sect.coachfundamentalslide_set.all.count <= 0 %} disabled="disabled" {% endif %} onchange="ChangeSection(this)">
+                <div class="fundamental-button {% if sect.coachfundamentalslide_set.all.count <= 0 %} disabled-button {% else %} value-button {% endif %} ">
                     {{sect.name}}
                 </div>
             </label>
