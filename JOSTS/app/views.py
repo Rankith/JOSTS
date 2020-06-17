@@ -8,7 +8,7 @@ from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
     Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
-    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer
+    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1627,7 +1627,50 @@ def coach_fundamentals_setup(request):
 
 def coach_fundamentals_slides(request):
     sectionIn = request.GET.get('section')
-    slides = CoachFundamentalSlide.objects.filter(section=sectionIn).order_by('display_order')
+    restart = request.GET.get('restart')
+    section = CoachFundamentalSection.objects.get(pk=sectionIn)
+    isexam = False
+    if section.is_graded:
+        isexam = True
+    #check for quiz and quiz structure
+    if section.is_quiz:
+        #check to see if quiz is made
+        quiz = CoachFundamentalUserQuiz.objects.filter(slide__section=section).order_by('display_order')
+        if len(quiz) <= 0:
+            #make quiz
+            slides = CoachFundamentalSlide.objects.filter(section=sectionIn).order_by('?')
+            for x in range(section.number_of_questions):
+                uq = CoachFundamentalUserQuiz(slide=slides[x],user_id=request.user.id,display_order=x)
+                uq.save()
+            quiz = CoachFundamentalUserQuiz.objects.filter(slide__section=section).order_by('display_order')
+        elif restart=="true":
+            #this is a restart, go through their answers and use the ones they got wrong to start it
+            CoachFundamentalUserQuiz.objects.filter(slide__section=section).delete()
+            prev_answers =  CoachFundamentalUserAnswer.objects.filter(answer__slide__section=section,user_id=request.user.id,answer__correct=False)
+            already_used = list()
+            for x in range(len(prev_answers)):
+                uq = CoachFundamentalUserQuiz(slide=prev_answers[x].answer.slide,user_id=request.user.id,display_order=x)
+                uq.save()
+                already_used.append(prev_answers[x].answer.slide.id)
+            slides = CoachFundamentalSlide.objects.filter(section=sectionIn).exclude(id__in=already_used).order_by('?')
+            for x in range(len(prev_answers),section.number_of_questions):
+                uq = CoachFundamentalUserQuiz(slide=slides[x],user_id=request.user.id,display_order=x)
+                uq.save()
+            quiz = CoachFundamentalUserQuiz.objects.filter(slide__section=section).order_by('display_order')
+            CoachFundamentalUserAnswer.objects.filter(answer__slide__section=section,user_id=request.user.id).delete()
+            CoachFundamentalUserProgress.objects.filter(section=sectionIn,user=request.user.id).delete()
+        #order slides
+        slide_list = list()
+        for q in quiz:
+            slide_list.append(q.slide.id)
+        clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(slide_list)])
+        ordering = 'CASE %s END' % clauses
+        slides = CoachFundamentalSlide.objects.filter(id__in=slide_list).extra(select={'ordering': ordering}, order_by=('ordering',))
+    else:
+        if restart=="true":
+            CoachFundamentalUserAnswer.objects.filter(answer__slide__section=section,user_id=request.user.id).delete()
+            CoachFundamentalUserProgress.objects.filter(section=sectionIn,user=request.user.id).delete()
+        slides = CoachFundamentalSlide.objects.filter(section=sectionIn).order_by('display_order')
     highest = CoachFundamentalUserProgress.objects.filter(section=sectionIn,user=request.user.id).values("highest_slide")
     if len(highest) <= 0:
         highest=0
@@ -1636,7 +1679,8 @@ def coach_fundamentals_slides(request):
     context = {
         'slides':slides,
         'section':sectionIn,
-        'highest':highest
+        'highest':highest,
+        'isexam':isexam
         }
     return render(request, 'app/coach_fundamentals_slides.html',context=context)
 

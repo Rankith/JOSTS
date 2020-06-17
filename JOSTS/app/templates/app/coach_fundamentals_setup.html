@@ -90,9 +90,9 @@
 
     }
 
-        function GotoSelectedSection() {
+        function GotoSelectedSection(restart=false) {
         var section = $('.check-section:checkbox:checked').val();
-        $.get("/coach_fundamentals_slides/?section=" + section, function (data) {
+        $.get("/coach_fundamentals_slides/?section=" + section + "&restart=" + restart, function (data) {
             $("#divContentParent").empty();
             $("#divContentParent").append(data);
             //$('#sidebarCollapse').click();

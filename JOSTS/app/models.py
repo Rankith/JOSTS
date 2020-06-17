@@ -432,3 +432,8 @@ class CoachFundamentalUserProgress(models.Model):
 class CoachFundamentalUserAnswer(models.Model):
     answer = models.ForeignKey(CoachFundamentalAnswer,on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+
+class CoachFundamentalUserQuiz(models.Model):
+    slide = models.ForeignKey(CoachFundamentalSlide,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    display_order = models.IntegerField(default=0)

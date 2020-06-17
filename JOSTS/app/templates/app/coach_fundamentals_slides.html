@@ -7,11 +7,22 @@
     <div id="divNotepad" class="col-3 d-none d-md-block">
         <div class="pl-2 text-center d-flex flex-column h-100"><div class="text-note-header" style="background-color:#1e1e3a">Notepad</div><div style="flex-grow:1"><textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea></div></div>
 </div>
-<div id="divControls">
-    <button id="btnFirst" type="button" class="btn btn-main pr-3 pl-3" onclick="GoFirst(); event.stopPropagation();"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></button>
-    <button id="btnPrev" type="button" class="btn btn-main pr-3 pl-3" onclick="GoPrevious(); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
-    <button id="btnNext" type="button" class="btn btn-main pr-3 pl-3" onclick="GoNext(); event.stopPropagation();"><i class="fas fa-chevron-right"></i></button>
-    <button id="btnLast" type="button" class="btn btn-main pr-3 pl-3" onclick="GoLast(); event.stopPropagation();"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></button>
+<div class="row no-gutters">
+    <div id="divControls">
+        <button id="btnFirst" type="button" class="btn btn-main pr-3 pl-3" onclick="GoFirst(); event.stopPropagation();"><i class="fas fa-chevron-left"></i><i class="fas fa-chevron-left"></i></button>
+        <button id="btnPrev" type="button" class="btn btn-main pr-3 pl-3" onclick="GoPrevious(); event.stopPropagation();"><i class="fas fa-chevron-left"></i></button>
+        <button id="btnNext" type="button" class="btn btn-main pr-3 pl-3" onclick="GoNext(); event.stopPropagation();"><i class="fas fa-chevron-right"></i></button>
+        <button id="btnLast" type="button" class="btn btn-main pr-3 pl-3" onclick="GoLast(); event.stopPropagation();"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="pl-4">
+        <button id="btnRestart" type="button" class="btn btn-main pr-3 pl-3" {% if isexam %}style="display:none"{% endif %} onclick="RestartQuiz(); event.stopPropagation();">Reset Section</button>
+    </div>
+</div>
+<div id="RestartQuizHolder" style="display:none">
+    <div id="RestartQuiz">
+        <div>Are you sure you want to start this section over?</div>
+        <div class="pt-3 text-right"><button type="button" onclick="RestartQuizConfirm()" class="btn btn-main font-weight-bold">Yes</button><button type="button" data-dismiss="modal" class="ml-4 btn btn-main font-weight-bold">No</button></div>
+    </div>
 </div>
 {% block scripts %}
 <script type="text/javascript">
@@ -67,6 +78,19 @@
             CheckPrevAnswer();
         });
         
+    }
+
+    function RestartQuiz() {
+        $("#modalMainTitle").html("Restart Quiz");
+        $(".modal-dialog").removeClass("mw-100").removeClass("w-75");
+        $("#modalBodyArea2").empty().append($("#RestartQuiz"));
+        $("#RestartQuiz").show();
+        $("#modalMain").modal();
+    }
+
+    function RestartQuizConfirm() {
+        $('#modalMain').modal('toggle');
+        GotoSelectedSection(true);
     }
 
     function CheckPrevAnswer() {

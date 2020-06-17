@@ -3,7 +3,7 @@ from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, Dr
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
     Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
     CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink, CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, \
-    CoachFundamentalUserProgress, CoachFundamentalUserAnswer
+    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -202,7 +202,7 @@ class CoachFundamentalSlideAdmin(ImportExportModelAdmin):
 
 class CoachFundamentalAnswerAdmin(ImportExportModelAdmin):
     list_display=('id','slide','text','response_text','correct')
-    list_editable=('slide','text','response_text','correct')
+    list_editable=('text','response_text','correct')
     list_filter = ('slide__section','slide')
 
 class CoachFundamentalUserProgressAdmin(ImportExportModelAdmin):
@@ -212,6 +212,11 @@ class CoachFundamentalUserProgressAdmin(ImportExportModelAdmin):
 
 class CoachFundamentalUserAnswerAdmin(ImportExportModelAdmin):
     list_display=('id','user','answer')
+
+class CoachFundamentalUserQuizAdmin(ImportExportModelAdmin):
+    list_display=('id','user','slide','display_order')
+    list_editable=('display_order',)
+    list_filter = ('slide__section',)
 
 
 admin.site.register(Element,ElementAdmin)
@@ -255,3 +260,4 @@ admin.site.register(CoachFundamentalSlide,CoachFundamentalSlideAdmin)
 admin.site.register(CoachFundamentalAnswer,CoachFundamentalAnswerAdmin)
 admin.site.register(CoachFundamentalUserProgress,CoachFundamentalUserProgressAdmin)
 admin.site.register(CoachFundamentalUserAnswer,CoachFundamentalUserAnswerAdmin)
+admin.site.register(CoachFundamentalUserQuiz,CoachFundamentalUserQuizAdmin)
