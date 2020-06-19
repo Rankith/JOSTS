@@ -6,7 +6,7 @@
     </div>
     <div id="divNotepad" class="{% if isquiz or isexam %} {% else %} col-3 d-md-block{% endif %} d-none ">
      <div class="pl-2 d-flex flex-column h-100">
-        <div class="text-note-header text-center" style="background-color:#1e1e3a">Notepad</div>
+        <div class="text-note-header text-center ml-4 mr-4" style="background-color:#1e1e3a">Notepad</div>
         <div class="accordian d-flex flex-column h-100" id="notepadAccordian">
         {% for cat in categories %}
             <div class="text-note-header text-center" style="background-color:#1e1e3a;cursor:pointer" data-toggle="collapse" data-target="#divNotepadCategory{{cat.name}}">{{cat.name}}</div>
