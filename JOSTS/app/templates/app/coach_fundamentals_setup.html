@@ -37,8 +37,19 @@
     {% endblock %}
     {% block scripts %}
     <script type="text/javascript">
+        function SetLocked() {
+            {% for key,value in locked.items %}
+            {% if value == True %}
+              $("#chkS{{key}}").prop("disabled",true).next().addClass("disabled-button").removeClass("value-button")
+            {% endif %}
+           
+            {% endfor %}
+        }
+    </script>
+    <script type="text/javascript">
     LoadLastSelections();
-    GotoSelectedSection();
+        GotoSelectedSection();
+        SetLocked();
     function ChangeSection(el) {
         console.log("change section");
         if (!el.checked)

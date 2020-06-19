@@ -1,11 +1,21 @@
 ﻿{% load staticfiles %}
 <div class="row no-gutters">
-    <div id="divSlideArea" class="col-12 col-md-9 slide-base pl-2" style="min-height:400px">
+    <div id="divSlideArea" class="col-12 {% if isquiz or isexam %} col-md-12 {% else %} col-md-9 {% endif %} slide-base pl-2" style="min-height:400px">
         <div id="divCounter" style="position:absolute;right:5px;bottom:5px;z-index:1001"></div>
         <div id="divSlide"></div>
     </div>
-    <div id="divNotepad" class="col-3 d-none d-md-block">
-        <div class="pl-2 text-center d-flex flex-column h-100"><div class="text-note-header" style="background-color:#1e1e3a">Notepad</div><div style="flex-grow:1"><textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea></div></div>
+    <div id="divNotepad" class="{% if isquiz or isexam %} {% else %} col-3 d-md-block{% endif %} d-none ">
+     <div class="pl-2 d-flex flex-column h-100">
+        <div class="text-note-header text-center" style="background-color:#1e1e3a">Notepad</div>
+        <div class="accordian d-flex flex-column h-100" id="notepadAccordian">
+        {% for cat in categories %}
+            <div class="text-note-header text-center" style="background-color:#1e1e3a;cursor:pointer" data-toggle="collapse" data-target="#divNotepadCategory{{cat.name}}">{{cat.name}}</div>
+            <div id="divNotepadCategory{{cat.name}}" class="collapse {% if cat.id == category_on %} show {% endif %}" data-parent="#notepadAccordian" style="flex-grow:1">
+                <textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea>
+                </div>
+        {% endfor %}
+        </div>
+       </div>
 </div>
 <div class="row no-gutters pt-1">
     <div id="divControls">
@@ -63,7 +73,10 @@
     function PopulateSlide(which) {
         if (which > HighestOn) {
             HighestOn = which;
-            UpdateProgress(false);
+            if (OnSlide == NumSlides - 1)
+                UpdateProgress(true);
+            else
+                UpdateProgress(false);
         }
         
         SetNavButtons();
@@ -117,7 +130,11 @@
             },
             dataType: 'json',
             success: function (data) {
-              
+                
+                if (finished) {
+                    console.log("unlocking " + data['unlock']);
+                    $("#chkS" + data['unlock']).prop("disabled", false).next().removeClass("disabled-button").addClass("value-button");
+                }
             }
       });
     }

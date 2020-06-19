@@ -1620,8 +1620,26 @@ def coach_fundamentals(request):
 
 def coach_fundamentals_setup(request):
     sects = CoachFundamentalSection.objects.filter(category__disc=request.session.get('disc',1)).order_by('category__display_order','display_order')
+    progress = CoachFundamentalUserProgress.objects.filter(user=request.user.id)
+    sectDict = {}
+    prev_cat = ""
+    lock_next = False
+    for sect in sects:
+        if prev_cat != sect.category:
+            lock_next=False
+            prev_cat = sect.category
+        sectDict[sect.id] = lock_next
+        this_sect = progress.filter(section=sect)
+        if len(this_sect) > 0:
+            if this_sect[0].finished:
+                lock_next=False
+            else:
+                lock_next=True
+        else:
+            lock_next=True
     context = {
         'sects':sects,
+        'locked':sectDict
         }
     return render(request, 'app/coach_fundamentals_setup.html',context=context)
 
@@ -1629,9 +1647,14 @@ def coach_fundamentals_slides(request):
     sectionIn = request.GET.get('section')
     restart = request.GET.get('restart')
     section = CoachFundamentalSection.objects.get(pk=sectionIn)
+    category_on = section.category.id
+    categories = CoachFundamentalCategory.objects.filter(disc=request.session.get('disc',1))
     isexam = False
+    isquiz = False
     if section.is_graded:
         isexam = True
+    if section.is_quiz:
+        isquiz = True
     #check for quiz and quiz structure
     if section.is_quiz:
         #check to see if quiz is made
@@ -1680,7 +1703,10 @@ def coach_fundamentals_slides(request):
         'slides':slides,
         'section':sectionIn,
         'highest':highest,
-        'isexam':isexam
+        'isexam':isexam,
+        'isquiz':isquiz,
+        'categories':categories,
+        'category_on':category_on
         }
     return render(request, 'app/coach_fundamentals_slides.html',context=context)
 
@@ -1738,7 +1764,17 @@ def coach_update_progress(request):
         user=request.user.id,section=sectionInstance,
         defaults={'user': request.user,'section':sectionInstance,'highest_slide':highest,'finished':finished},
     )
-    resp = {'updated':True}
+    unlock = -1
+    if finished:
+        ids = list(CoachFundamentalSection.objects.filter(category__disc=request.session.get('disc',1)).order_by('category__display_order','display_order').values_list('id',flat=True))
+        index = ids.index(int(section))
+        if index < len(ids)-1 and finished:
+            this_sect = CoachFundamentalSlide.objects.filter(section__id=ids[index+1])
+            if len(this_sect) > 0:
+                unlock=ids[index+1]
+
+    resp = {'updated':True,
+            'unlock':unlock}
     return JsonResponse(resp)
 
 def coach_set_answer(request):
