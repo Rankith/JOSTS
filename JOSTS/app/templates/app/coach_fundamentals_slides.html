@@ -9,7 +9,7 @@
         <div class="text-note-header text-center ml-4 mr-4" style="background-color:#1e1e3a">Notepad</div>
         <div class="accordian d-flex flex-column h-100" id="notepadAccordian">
         {% for cat in categories %}
-            <div class="text-note-header text-center" style="background-color:#1e1e3a;cursor:pointer" data-toggle="collapse" data-target="#divNotepadCategory{{cat.name}}">{{cat.name}}</div>
+            <div class="text-note-header text-center" style="background-color:#20b5c3;cursor:pointer" data-toggle="collapse" data-target="#divNotepadCategory{{cat.name}}">{{cat.name}}</div>
             <div id="divNotepadCategory{{cat.name}}" class="collapse {% if cat.id == category_on %} show {% endif %}" data-parent="#notepadAccordian" style="flex-grow:1">
                 <textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea>
                 </div>
