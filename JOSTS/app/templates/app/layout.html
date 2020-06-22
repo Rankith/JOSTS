@@ -63,7 +63,7 @@
                     </li>
                     {% endif %}
                     {% if request.user.is_staff or request.user.is_superuser %}
-                     <li class="nav-item dropdown">
+                     <!--<li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle  {% if "coach" in request.path %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Coach
                         </a>
@@ -71,7 +71,7 @@
                           <a class="dropdown-item {% if "coach_elements" in request.path %}active{% endif %}" href="{% url 'coach_elements' %}"  >Elements</a>
                          <a class="dropdown-item {% if "coach_fundamentals" in request.path %}active{% endif %}" href="{% url 'coach_fundamentals' %}"  >Fundamentals</a>
                         </div>
-                    </li>
+                    </li>-->
                     {% endif %}
                 </ul>
                 {% include 'app/loginpartial.html' %}
