@@ -437,3 +437,8 @@ class CoachFundamentalUserQuiz(models.Model):
     slide = models.ForeignKey(CoachFundamentalSlide,on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     display_order = models.IntegerField(default=0)
+
+class CoachUserNote(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    category = models.ForeignKey(CoachFundamentalCategory,on_delete=models.CASCADE)
+    note = models.CharField(max_length=4000,blank=True,default='')

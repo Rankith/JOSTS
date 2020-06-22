@@ -11,7 +11,7 @@
         {% for cat in categories %}
             <div class="text-note-header text-center" style="background-color:#20b5c3;cursor:pointer;color:black" data-toggle="collapse" data-target="#divNotepadCategory{{cat.name}}">{{cat.name}}</div>
             <div id="divNotepadCategory{{cat.name}}" class="collapse {% if cat.id == category_on %} show {% endif %}" data-parent="#notepadAccordian" style="flex-grow:1">
-                <textarea class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea>
+                <textarea id="txtNotepad{{cat.id}}" onkeyup="NotesKeyUp({{cat.id}})" class="w-100 h-100" style="max-width:100%!important;resize:none!important"></textarea>
                 </div>
         {% endfor %}
         </div>
@@ -43,6 +43,9 @@
         Slides[{{ forloop.counter0 }}] = {{s.id}};
         InteractType[{{ forloop.counter0 }}] = "{{ s.interaction_type}}";
     {% endfor %}
+    {% for n in notes %}
+    $("#txtNotepad{{n.category.id}}").html("{{n.note}}");
+    {% endfor %}
     var Section = {{section}}
     var OnSlide = 0;
     var Answered = false;
@@ -56,7 +59,12 @@
     var HoldData;
     var ProgURL = '{% url "coach_update_progress" %}';
     var SetAnswerURL = '{% url "coach_set_answer" %}';
-    var HighestStart = {{highest}}
+    var NoteURL = '{% url "coach_save_note" %}';
+    var HighestStart = {{highest}};
+    var typingTimer = "";
+    var doneTypingInterval = 1000;
+
+
 
 </script>
 <script type="text/javascript">
@@ -92,7 +100,31 @@
         });
         
     }
+    
+    function NotesKeyUp(cat) {
+        clearTimeout(typingTimer);
+        if ($('#txtNotepad' + cat).val()) {
+          
+            typingTimer = setTimeout(function() {
+                    SaveNote(cat);
+                    }, doneTypingInterval);
+        }
+        //console.log(cat);
+    }
+    function SaveNote(cat) {
 
+        var note = $('#txtNotepad' + cat).val();
+        $.ajax({
+            url: NoteURL,
+            data: {
+                'note': note,
+                'category': cat
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+      });
+    }
     function RestartQuiz() {
         $("#modalMainTitle").html("Restart Section");
         $(".modal-dialog").removeClass("mw-100").removeClass("w-75");

@@ -3,7 +3,7 @@ from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, Dr
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
     Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
     CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink, CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, \
-    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz
+    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz, CoachUserNote
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -261,3 +261,4 @@ admin.site.register(CoachFundamentalAnswer,CoachFundamentalAnswerAdmin)
 admin.site.register(CoachFundamentalUserProgress,CoachFundamentalUserProgressAdmin)
 admin.site.register(CoachFundamentalUserAnswer,CoachFundamentalUserAnswerAdmin)
 admin.site.register(CoachFundamentalUserQuiz,CoachFundamentalUserQuizAdmin)
+admin.site.register(CoachUserNote)

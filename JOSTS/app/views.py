@@ -8,7 +8,7 @@ from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
     Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
-    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz
+    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz,CoachUserNote
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1649,6 +1649,7 @@ def coach_fundamentals_slides(request):
     section = CoachFundamentalSection.objects.get(pk=sectionIn)
     category_on = section.category.id
     categories = CoachFundamentalCategory.objects.filter(disc=request.session.get('disc',1))
+    notes = CoachUserNote.objects.filter(user_id=request.user.id,category__disc=request.session.get('disc',1))
     isexam = False
     isquiz = False
     if section.is_graded:
@@ -1706,7 +1707,8 @@ def coach_fundamentals_slides(request):
         'isexam':isexam,
         'isquiz':isquiz,
         'categories':categories,
-        'category_on':category_on
+        'category_on':category_on,
+        'notes':notes
         }
     return render(request, 'app/coach_fundamentals_slides.html',context=context)
 
@@ -1783,4 +1785,17 @@ def coach_set_answer(request):
         ua = CoachFundamentalUserAnswer(user_id=request.user.id,answer_id=answer)
         ua.save()
     resp = {'updated':True}
+    return JsonResponse(resp)
+
+def coach_save_note(request):
+    categoryIn = request.GET.get('category')
+    noteIn = request.GET.get('note')
+    categoryInstance = CoachFundamentalCategory.objects.get(pk=categoryIn)
+    note, created = CoachUserNote.objects.update_or_create(
+        user=request.user.id,category=categoryInstance,
+        defaults={'user': request.user,'category':categoryInstance,'note':noteIn},
+    )
+    resp = {'updated':True}
+    #activity log
+    #log_activity(request,'Elements','Update User Note',str(elementInstance))
     return JsonResponse(resp)

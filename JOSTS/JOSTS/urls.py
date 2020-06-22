@@ -102,4 +102,5 @@ urlpatterns = [
     path('ajax/coach_check_answer/', views.coach_check_answer, name='coach_check_answer'),
     path('ajax/coach_update_progress', views.coach_update_progress, name='coach_update_progress'),
     path('ajax/coach_set_answer', views.coach_set_answer, name='coach_set_answer'),
+    path('ajax/coach_save_note', views.coach_save_note, name='coach_save_note'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
