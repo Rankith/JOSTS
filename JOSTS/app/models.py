@@ -35,6 +35,7 @@ class Element(models.Model):
     disc = models.ForeignKey(Disc, on_delete=models.SET_NULL,null=True)
     event = models.CharField(max_length=2)
     str_grp = models.IntegerField(default=0)
+    skill_grp = models.CharField(max_length=2,default='',blank=True)
     code_order = models.IntegerField(default=0)
     id_number = models.CharField(max_length=20)
     letter_value = models.CharField(max_length=2,default='',blank=True)

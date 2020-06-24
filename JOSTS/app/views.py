@@ -376,20 +376,28 @@ def element_search(request):
             }
         return render(request, 'app/element_search_tramp.html',context=context)
     else:
-        vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
+        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+
+        if request.session.get('disc_path') == 'aer':
+            vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('value').values('value').distinct()
+            valueDict = {}
+            for value in vals:
+                valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(value = value['value'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
+                valueDict[value['value']] = valueEvents
+        else:
+            vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
+            valueDict = {}
+            for value in vals:
+                valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
+                valueDict[value['letter_value']] = valueEvents
         groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
         ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
         groupDict = {}
-        valueDict = {}
-        #Video.objects.filter(id__in=TCExample.objects.all().values_list('video__id')).update(approved_liason=True,approved_final=True,approved_sts=True)
-
-        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+        
         for group in groups:
             groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
             groupDict[group['str_grp']] = groupEvents
-        for value in vals:
-            valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
-            valueDict[value['letter_value']] = valueEvents
+        
         context = {
             'vals':vals,
             'groups': groups,
