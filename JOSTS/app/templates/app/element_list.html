@@ -33,7 +33,12 @@
                                 {% endif %}
                             </div>
                             <div class="col text-center">
-                                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{ element.element.image_url}}.svg?2"  style="max-height:140px;overflow:hidden"/>
+                                {% if element.element.disc.folder_name == "aer" %}
+                                    <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.element.skill_grp|lower}}{{ element.id_number_text}}M.svg?2"  style="max-height:140px;overflow:hidden"/>
+                                {% else %}
+                                    <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{ element.element.image_url}}.svg?2"  style="max-height:140px;overflow:hidden"/>
+                                {% endif %}
+                                
                             </div>
                             
                         </div>
