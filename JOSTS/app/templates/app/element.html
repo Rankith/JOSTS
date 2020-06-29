@@ -30,7 +30,7 @@
                 </div>
                 <div class="row h-100 justify-content-center align-items-center">
                     <div class="col-12 position-relative">
-                        <img class="img-fluid detail-image" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{ lang_elements.element.image_url}}.svg?2"/>
+                        <img class="img-fluid detail-image" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{ lang_elements.element.image_url}}{{image_sex}}.svg?2"/>
                     </div>
                     <div class="col-12 pb-1 " style="margin-top:-1rem;line-height:1.1;height:36px;overflow:hidden">
                         {{lang_elements.text}}

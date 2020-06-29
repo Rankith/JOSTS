@@ -33,7 +33,7 @@
                                 {% endif %}
                             </div>
                             <div class="col text-center">
-                                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{ element.element.image_url}}.svg?2"  style="max-height:140px;overflow:hidden"/>
+                                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{ element.element.image_url}}{{image_sex}}.svg?2"  style="max-height:140px;overflow:hidden"/>
                             </div>
                             
                         </div>

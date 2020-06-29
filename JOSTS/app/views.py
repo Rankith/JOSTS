@@ -324,10 +324,15 @@ def element(request):
         userNote = userNote[0].note;
     else:
         userNote = '';
+    if request.session.get('disc_path') == 'aer':
+        image_sex = 'M'
+    else:
+        image_sex = ''
     context = {
         'lang_elements': element[0],
         'user_note': userNote,
         'val_display': value_display,
+        'image_sex':image_sex,
         }
     #activity log
     log_activity(request,'Elements','View',str(element[0].element))
@@ -457,12 +462,17 @@ def element_list(request):
         elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
     elements = elements.filter(element__disc=request.session.get('disc',1))
     groups = StructureGroup.objects.filter(disc_id=request.session.get('disc',1),event=event[0]).order_by('group')
+    if request.session.get('disc_path') == 'aer':
+        image_sex = 'M'
+    else:
+        image_sex = ''
     context = {
         'lang_elements': elements,
         'num_elements': str(len(elements)) + " Elements",
         'display': display,
         'val_display': value_display,
         'groups':groups,
+        'image_sex':image_sex
         }
 
     #activity log
