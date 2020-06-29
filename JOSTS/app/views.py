@@ -375,29 +375,50 @@ def element_search(request):
             'twistsDict': twistsDict
             }
         return render(request, 'app/element_search_tramp.html',context=context)
-    else:
-        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+    elif request.session.get('disc_path') == 'aer':
+        vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('value').values('value').distinct()
+        groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('skill_grp').values('skill_grp').distinct()
+        ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
+        groupDict = {}
+        valueDict = {}
+        #Video.objects.filter(id__in=TCExample.objects.all().values_list('video__id')).update(approved_liason=True,approved_final=True,approved_sts=True)
 
-        if request.session.get('disc_path') == 'aer':
-            vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('value').values('value').distinct()
-            valueDict = {}
-            for value in vals:
-                valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(value = value['value'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
-                valueDict[value['value']] = valueEvents
-        else:
-            vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
-            valueDict = {}
-            for value in vals:
-                valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
-                valueDict[value['letter_value']] = valueEvents
+        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+        for group in groups:
+            groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(skill_grp = group['skill_grp'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
+            groupDict[group['skill_grp']] = groupEvents
+        for value in vals:
+            valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(value = value['value'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
+            valueDict[value['value']] = valueEvents
+        context = {
+            'vals':vals,
+            'groups': groups,
+            'groupsEvents': groupDict,
+            'valueEvents': valueDict,
+            'events': events,
+            'ranges': ranges,
+            'search_type':'element',
+            'vault_low':Disc.objects.filter(id=request.session.get('disc',1)).first().vault_range_low,
+            'vault_high':Disc.objects.filter(id=request.session.get('disc',1)).first().vault_range_high,
+            'vault_slider':VersionSettings.objects.first().use_level_slider
+            }
+        return render(request, 'app/element_search_aer.html',context=context)
+
+    else:
+        vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('letter_value').values('letter_value').distinct()
         groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('str_grp').values('str_grp').distinct()
         ranges = Element.objects.filter(disc=request.session.get('disc',1)).order_by('range').values('range').exclude(range='').annotate(int_order=Cast('range',IntegerField())).order_by('int_order').distinct()
         groupDict = {}
-        
+        valueDict = {}
+        #Video.objects.filter(id__in=TCExample.objects.all().values_list('video__id')).update(approved_liason=True,approved_final=True,approved_sts=True)
+
+        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
         for group in groups:
             groupEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(str_grp = group['str_grp'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
             groupDict[group['str_grp']] = groupEvents
-        
+        for value in vals:
+            valueEvents = "search-" + " search-".join(str(events['event']) for events in Element.objects.filter(letter_value = value['letter_value'],disc=request.session.get('disc',1)).order_by('event').values('event').distinct())
+            valueDict[value['letter_value']] = valueEvents
         context = {
             'vals':vals,
             'groups': groups,

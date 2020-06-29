@@ -9,7 +9,11 @@
 {% if request.session.disc_path != "tra" %}
             <div class="card rules-subsection-header">
                 <div class="card-header card-header-custom" data-toggle="collapse" data-target="#detail-{{forloop.counter}}" style="cursor:pointer">
+                    {% if request.session.disc_path != "aer" %}
                     Group {{element.element.str_grp}} - {% for g in groups %}{% if g.group == element.element.str_grp %}{{g.name}}{% endif %} {% endfor %}
+                    {% else %}
+                    {% for g in groups %}{% if g.group == element.element.str_grp %}{{g.name}}{% endif %} {% endfor %}
+                    {% endif %}
                 </div>
             </div>
 {% endif %}
