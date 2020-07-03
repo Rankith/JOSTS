@@ -142,8 +142,13 @@ var FrameCountIntervalID = setInterval("UpdateFrame()", 100);
 
 function UpdateFrame() {
     CurFrame = Math.round(VidJSPlayer.currentTime() * VidFPS);
-    $("#VidFrameDisplay").html(CurFrame);  
-    HighlightNote(CurFrame);
+    $("#VidFrameDisplay").html(CurFrame);
+    try {
+        HighlightNote(CurFrame);
+    }
+    catch (err) {
+
+    }
 }
 
 function ShowVideoFrames() {

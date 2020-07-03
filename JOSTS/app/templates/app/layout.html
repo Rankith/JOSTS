@@ -168,6 +168,11 @@
         function SetTheme(ThemeIn) {
             $("#ThemeLink").prop('href', ThemeLocation + ThemeIn + ThemeVersion);
         }
+       $('#modalMain').on('hidden.bs.modal', function () {
+           VidJSPlayer.pause();
+           //stop video player when that gets closed
+        });
+
     </script>
      
     <script src="{% static 'app/scripts/jquery.mobile-1.4.5.min.js' %}"></script>

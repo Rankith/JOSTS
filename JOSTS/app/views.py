@@ -1072,12 +1072,20 @@ def video_notes(request):
             if len(jnote) >= 1:
                 frame_jump = jnote[0].frame
 
+        tc_type = ""
+        extra_note = ""
         #remove 0 deductions if not rules
         if type == 'element':
             notes = notes.exclude(Q(rule_link__deduction_amount=0) & ~Q(rule_link__text='--- no E-jury deductions ---'))
+        elif type == "example":
+            tc = TCExample.objects.filter(video=video)
+            tc_type = tc[0].type
+            extra_note = tc[0].special_notes
         context = {
             'elementjump':frame_jump,
-            'notes':notes
+            'notes':notes,
+            'type':tc_type.upper(),
+            'extranote':extra_note,
             }
 
         return render(request, 'app/video_notes.html',context=context)
