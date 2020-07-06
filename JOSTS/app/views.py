@@ -1123,6 +1123,16 @@ def import_from_fig(request):
     if discipline.exists():
         #delete for that disc
         discid = discipline[0].id
+        if 'incrementvalue' in type:
+            elements = Element.objects.filter(disc_id=discid)
+            for e in elements:
+                if e.letter_value != "":
+                    e.up_value_letter = chr(ord(e.letter_value)+1)
+                    if e.letter_value != "A":
+                        e.down_value_letter = chr(ord(e.letter_value)-1)
+                    else:
+                        e.down_value_letter = "A"
+                    e.save()
         if 'element' in type or type=='all':
             ElementText.objects.filter(element__disc_id=discid).delete()
             Element.objects.filter(disc_id=discid).delete()
