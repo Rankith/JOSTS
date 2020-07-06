@@ -111,7 +111,7 @@
             </div></div>
             {% endif %}
             <div id="divHud{{note.frame}}" frame="{{note.frame}}" style="position:relative;cursor:pointer" class="HudContainer" onclick="VideoNoteClick({{note.frame}})">
-                {% if request.session.disc_path == "wag" %}
+                {% if request.session.disc_path == "wag" and note.unrated_link.event != 'V' %}
                     <img id="vsStrike{{note.frame}}" src="{% static 'app/images/'%}{% if request.session.disc_path == 'wag' %}redscross.svg{% else %}redstripe.svg{% endif %}" style="position:absolute;height:65px;top:0px">
                 {% endif %}
                 <div class="text-center" style="font-size:0.9rem">&nbsp;</div>
