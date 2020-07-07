@@ -70,7 +70,7 @@
         </div>
     {% endif %}
     {% endfor %}
-    {% if extranote != "" and type == "E" and extranote != "0" %}
+    {% if extranote != "" and type != "D" and extranote != "0" %}
         <div id="extranotearea">
             {% autoescape off %}
                 {{extranote}}
