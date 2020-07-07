@@ -55,7 +55,7 @@
     <div>
         •  {{note.unrated_link.name}}
     </div>
-    {% elif note.rule_link.type|upper == "E" %}
+    {% elif note.rule_link.type|upper != "D" %}
         <div class="row row no-gutters">
             {% if note.skip_frame == False %}
             <div id="vnE{{note.frame}}" style="flex-grow:1" class="video-note-line e-note video-note-color-{{note.color}} col-11-half" onclick="VideoNoteClickE({{note.frame}},'{{note.rule_link.pause_time}}')">
@@ -70,7 +70,7 @@
         </div>
     {% endif %}
     {% endfor %}
-    {% if extranote != "" and type != "D" and extranote != "0" %}
+    {% if extranote != "" and type == "E" and extranote != "0" %}
         <div id="extranotearea">
             {% autoescape off %}
                 {{extranote}}
