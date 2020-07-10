@@ -104,7 +104,11 @@
                 <div class="text-center" style="font-size:0.5rem">&nbsp;
         {% elif note.rule_link != None %}
             {% if note.rule_link.deduction_amount > 0 %}
-                0.{{note.rule_link.deduction_amount}}&nbsp;
+                {% if note.rule_link.deduction_amount < 10 %}
+                    0.{{note.rule_link.deduction_amount}}&nbsp;
+                {% else %}
+                    {% widthratio note.rule_link.deduction_amount 10 1%}.0
+                {% endif %}
             {% endif %}
         {% elif note.unrated_link != None %}
             {% if not forloop.first %}

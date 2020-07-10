@@ -1342,7 +1342,7 @@ def import_from_fig(request):
                 if type.lower() == "element" and novaluetype.lower() == "unrated":
                     ul = UnratedElement.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.unrated_link = ul
-                elif type == 'E' or type == 'D':
+                elif type == 'E' or type == 'D' or type == 'A':
                     rl = RuleLink.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.rule_link = rl
                 else:
@@ -1367,7 +1367,7 @@ def import_from_fig(request):
             response +=  " | tc videos created: " + str(TCExample.objects.filter(video__disc_id=discid).count())
 
         if 'tcnotes' in type or type=='all':
-            #VideoNote.objects.filter(video__disc_id=discid).delete()
+            VideoNote.objects.filter(video__disc_id=discid).exclude(video__tcexample=None).delete()
             query="Select videoid,type,color,linkid,frame,Event,type,event,cr,overridetext,novaluetype,skipframe FROM tcexamplesnotes order by videoid"
             cursor.execute(query)
             lastvid = ""
@@ -1401,7 +1401,7 @@ def import_from_fig(request):
                 if type.lower() == "element" and novaluetype.lower() == "unrated":
                     ul = UnratedElement.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.unrated_link = ul
-                elif type == 'E' or type == 'D':
+                elif type == 'E' or type == 'D' or type == 'A':
                     rl = RuleLink.objects.filter(old_id=linkid,disc_id=discid).first()
                     vn.rule_link = rl
                 else:
