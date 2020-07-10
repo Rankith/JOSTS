@@ -97,7 +97,7 @@ class RuleLinkAdmin(ImportExportModelAdmin):
     search_fields = ('event','text','category_name','deduction_amount','type','rule')
     list_filter = ('event','type')
 
-class VideoNoteAdmin(admin.ModelAdmin):
+class VideoNoteAdmin(ImportExportModelAdmin):
     list_display = ('id','video','rule_link','element_link','frame','skip_frame','color','event','cr','override_text','no_value_type','timestamp')
     list_editable = ('frame','skip_frame','color','event','cr','override_text','no_value_type')
     search_fields = ('event','color','video__id','rule_link__id','element_link__id','color','override_text')
