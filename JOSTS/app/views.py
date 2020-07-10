@@ -396,7 +396,7 @@ def element_search(request):
             }
         return render(request, 'app/element_search_tramp.html',context=context)
     elif request.session.get('disc_path') == 'acro':
-        cats = AcroBalance.objects.filter(event="B").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as UNSIGNED)"}).order_by('category').values_list('category',flat=True).distinct()
+        cats = AcroBalance.objects.filter(event="B").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
 
         events=request.session.get('disc_events','V,UB,BB,FX').split(",")
         context = {
