@@ -443,3 +443,41 @@ class CoachUserNote(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     category = models.ForeignKey(CoachFundamentalCategory,on_delete=models.CASCADE)
     note = models.CharField(max_length=4000,blank=True,default='')
+
+class AcroBalance(models.Model):
+    event = models.CharField(max_length=2)
+    category = models.CharField(max_length=10,default='',blank=True)
+    skill_number = models.IntegerField(default=0)
+    value = models.IntegerField(default=0)
+    value2 = models.IntegerField(default=0)
+    value3 = models.IntegerField(default=0)
+    value4 = models.IntegerField(default=0)
+    value = models.IntegerField(default=0)
+    bonus = models.IntegerField(default=0)
+    transition_bonus = models.CharField(max_length=12,default='',blank=True)
+    skill_name = models.CharField(max_length=255,default='',blank=True)
+    skill_description = models.CharField(max_length=255,default='',blank=True)
+    orientation = models.CharField(max_length=1,default='',blank=True)
+    layer = models.CharField(max_length=3,default='',blank=True)
+    base_box_number = models.IntegerField(default=0)
+    transition_group = models.CharField(max_length=3,default='',blank=True)
+    top_bottom = models.CharField(max_length=1,default='',blank=True)
+    top_interface_point = models.CharField(max_length=5,default='',blank=True)
+    bottom_interface_point = models.CharField(max_length=5,default='',blank=True)
+    bottom_interface_point2 = models.CharField(max_length=5,default='',blank=True)
+    special_base_number = models.IntegerField(default=0)
+    base_number = models.CharField(max_length=5,default='',blank=True)
+    page_number = models.IntegerField(default=0)
+    thumbnail_direction = models.CharField(max_length=1,default='',blank=True)
+    start_number = models.CharField(max_length=60,default='',blank=True)
+
+    def __str__(self):
+        return self.event + " " + str(self.skill_name)
+    def image_url(self):
+        return self.event.lower() + self.skill_name.replace(".","")
+
+class AcroWomensBonus(models.Model):
+     bottom_interface = models.CharField(max_length=10,default='',blank=True)
+     top_interface = models.CharField(max_length=10,default='',blank=True)
+     bonus = models.IntegerField(default=0)
+     bonus_extra = models.IntegerField(default=0)

@@ -8,7 +8,8 @@ from django.http import HttpRequest,JsonResponse
 from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnImage,SymbolDuplicate,SubscriptionTest,Subscription,SubscriptionSetup,QuizResult, \
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
     Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
-    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz,CoachUserNote
+    CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz,CoachUserNote, \
+    AcroBalance
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -290,6 +291,20 @@ def unsubscribe_feedback(request):
 @login_required(login_url='/login/')
 @user_passes_test(subscription_check,login_url='/subscriptions/')
 def elements(request):
+    #AcroBalance.objects.filter(bottom_interface_point='2B',event='B').update(category='1')
+    #AcroBalance.objects.filter(bottom_interface_point='SA-H',event='B').update(category='2')
+    #AcroBalance.objects.filter(bottom_interface_point='2F',event='B').update(category='3')
+    #AcroBalance.objects.filter(bottom_interface_point='2FW',event='B').update(category='3')
+    #AcroBalance.objects.filter(bottom_interface_point='2FEW',event='B').update(category='3')
+    #AcroBalance.objects.filter(top_interface_point='25F',event='B').update(category='4')
+    #AcroBalance.objects.filter(bottom_interface_point='SA',event='B').update(category='5')
+    #AcroBalance.objects.filter(top_interface_point='25A',event='B').update(category='6')
+    #AcroBalance.objects.filter(bottom_interface_point='1B',event='B').update(category='7')
+    #AcroBalance.objects.filter(bottom_interface_point='SAN',event='B').update(category='8')
+    #AcroBalance.objects.filter(bottom_interface_point='H',event='B').update(category='9')
+    #AcroBalance.objects.filter(bottom_interface_point='1SA',event='B').update(category='10')
+    #AcroBalance.objects.filter(top_interface_point='26',event='B').update(category='11')
+    #AcroBalance.objects.filter(bottom_interface_point='1F',event='B').update(category='12')
     #elements = ElementText.objects.filter(language="EN")
     #vals = Element.objects.order_by('letter_value').values('letter_value').distinct()
     #groups = Element.objects.order_by('str_grp').values('str_grp').distinct()
@@ -380,6 +395,16 @@ def element_search(request):
             'twistsDict': twistsDict
             }
         return render(request, 'app/element_search_tramp.html',context=context)
+    elif request.session.get('disc_path') == 'acro':
+        cats = AcroBalance.objects.filter(event="B").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as UNGISNED)"}).order_by('category').values_list('category',flat=True).distinct()
+
+        events=request.session.get('disc_events','V,UB,BB,FX').split(",")
+        context = {
+            'categories':cats,
+            'events': events,
+            'search_type':'element',
+            }
+        return render(request, 'app/element_search_acro.html',context=context)
     elif request.session.get('disc_path') == 'aer':
         vals = Element.objects.filter(disc=request.session.get('disc',1)).exclude(event="V").order_by('value').values('value').distinct()
         groups = Element.objects.filter(disc=request.session.get('disc',1)).order_by('skill_grp').values('skill_grp').distinct()
@@ -1385,6 +1410,130 @@ def import_from_fig(request):
                 vn.save();
 
             response +=  " | tc notes created: " + str(VideoNote.objects.filter(video__disc_id=discid).exclude(video__tcexample=None).count())
+
+        if 'acrobalancepairs' in type or type=='acroall':
+            AcroBalance.objects.filter(event='B').delete()
+            
+            #balance pairs
+            query="Select Catagory,`Skill Number`,Value,Bonus,`Transition Bonus`,`Skill Name`,`Skill Description`,TransitionGroup,`Top/Bottom`,`Top Interface Point`,`Bottom Interface Point`,BaseNumber,PageNumber,ThumbnailDirection FROM main"
+            cursor.execute(query)
+
+            for (cat,skillnum,value,bonus,transbonus,name,description,transgroup,topbottom,topinterface,bottominterface,basenumber,pagenumber,thumbnaildirection) in cursor:
+                if transbonus == None:
+                    transbonus = ''
+                if transgroup == None:
+                    transgroup = ''
+                if topinterface == None:
+                    topinterface = ''
+                if bottominterface == None:
+                    bottominterface = ''
+                if basenumber == None:
+                    basenumber = ''
+                if value == None:
+                    value = -1
+                if bonus == None:
+                    bonus = -1
+                ab = AcroBalance(event='B',category=cat,skill_number=skillnum,value=value,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface, \
+                    base_number=basenumber,page_number=pagenumber,thumbnail_direction=thumbnaildirection)
+                ab.save()
+
+            response +=  " | acro balance pairs created: " + str(AcroBalance.objects.all().count())
+
+        if 'acrobalancetrio' in type or type=='acroall':
+            AcroBalance.objects.filter(event='BT').delete()
+
+             #balance trios
+            query="Select Event,Category,`Skill Number`,Value,Value2,Value3,Value4,Bonus,`Transition Bonus`,`Skill Name`,`Skill Description`,Orientation,Layer,BaseBoxNumber,TransitionGroup,`Top/Bottom`,`Top Interface Point`,`Bottom Interface Point`,`Bottom Interface Point 2`,SpecialBaseNumber,BaseNumber,PageNumber,ThumbnailDirection,StartNumber FROM maintrio"
+            cursor.execute(query)
+
+            for (event,cat,skillnum,value,value2,value3,value4,bonus,transbonus,name,description,orientation,layer,baseboxnumber,transgroup,topbottom,topinterface,bottominterface,bottominterface2,specialbasenumber,basenumber,pagenumber,thumbnaildirection,startnumber) in cursor:
+                if transbonus == None:
+                    transbonus = ''
+                if transgroup == None:
+                    transgroup = ''
+                if topinterface == None:
+                    topinterface = ''
+                if description == None:
+                    description = ''
+                if bottominterface == None:
+                    bottominterface = ''
+                if basenumber == None:
+                    basenumber = ''
+                if startnumber == None:
+                    startnumber = ''
+                if orientation == None:
+                    orientation = ''
+                if cat == None:
+                    cat = ''
+                if layer == None:
+                    layer = ''
+                if specialbasenumber == None:
+                    specialbasenumber = ''
+                if bottominterface2 == None:
+                    bottominterface2 = ''
+                if value == None:
+                    value = -1
+                if value2 == None:
+                    value2 = -1
+                if value3 == None:
+                    value3 = -1
+                if value4 == None:
+                    value4 = -1
+                if bonus == None:
+                    bonus = -1
+                ab = AcroBalance(event='BT',category=cat,skill_number=skillnum,value=value,value2=value2,value3=value3,value4=value4,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface,bottom_interface_point2=bottominterface2, \
+                    base_number=basenumber,page_number=pagenumber,thumbnail_direction=thumbnaildirection,orientation=orientation,layer=layer,special_base_number=specialbasenumber,start_number=startnumber,base_box_number=baseboxnumber)
+                ab.save()
+
+            response +=  " | acro balance trios created: " + str(AcroBalance.objects.all().count())
+
+        if 'acrobalancegroup' in type or type=='acroall':
+            AcroBalance.objects.filter(event='BG').delete()
+
+             #balance trios
+            query="Select Event,Category,`Skill Number`,Value,Value2,Value3,Value4,Bonus,`Transition Bonus`,`Skill Name`,`Skill Description`,Orientation,Layer,BaseBoxNumber,TransitionGroup,`Top/Bottom`,`Top Interface Point`,`Bottom Interface Point`,`Bottom Interface Point 2`,SpecialBaseNumber,BaseNumber,PageNumber,ThumbnailDirection,StartNumber FROM maingroup"
+            cursor.execute(query)
+
+            for (event,cat,skillnum,value,value2,value3,value4,bonus,transbonus,name,description,orientation,layer,baseboxnumber,transgroup,topbottom,topinterface,bottominterface,bottominterface2,specialbasenumber,basenumber,pagenumber,thumbnaildirection,startnumber) in cursor:
+                if transbonus == None:
+                    transbonus = ''
+                if transgroup == None:
+                    transgroup = ''
+                if topinterface == None:
+                    topinterface = ''
+                if description == None:
+                    description = ''
+                if bottominterface == None:
+                    bottominterface = ''
+                if basenumber == None:
+                    basenumber = ''
+                if startnumber == None:
+                    startnumber = ''
+                if orientation == None:
+                    orientation = ''
+                if cat == None:
+                    cat = ''
+                if layer == None:
+                    layer = ''
+                if specialbasenumber == None:
+                    specialbasenumber = ''
+                if bottominterface2 == None:
+                    bottominterface2 = ''
+                if value == None or value == '':
+                    value = -1
+                if value2 == None or value2 == '':
+                    value2 = -1
+                if value3 == None or value3 == '':
+                    value3 = -1
+                if value4 == None or value4 == '':
+                    value4 = -1
+                if bonus == None or bonus == '':
+                    bonus = -1
+                ab = AcroBalance(event='BG',category=cat,skill_number=skillnum,value=value,value2=value2,value3=value3,value4=value4,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface,bottom_interface_point2=bottominterface2, \
+                    base_number=basenumber,page_number=pagenumber,thumbnail_direction=thumbnaildirection,orientation=orientation,layer=layer,special_base_number=specialbasenumber,start_number=startnumber,base_box_number=baseboxnumber)
+                ab.save()
+
+            response +=  " | acro balance groups created: " + str(AcroBalance.objects.all().count())
 
     return JsonResponse({'result':response})
 

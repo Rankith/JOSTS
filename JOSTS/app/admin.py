@@ -3,7 +3,7 @@ from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, Dr
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
     Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
     CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink, CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, \
-    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz, CoachUserNote
+    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz, CoachUserNote, AcroBalance, AcroWomensBonus
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -218,6 +218,15 @@ class CoachFundamentalUserQuizAdmin(ImportExportModelAdmin):
     list_editable=('display_order',)
     list_filter = ('slide__section',)
 
+class AcroBalanceAdmin(ImportExportModelAdmin):
+    list_display=('id','event','category','skill_number','skill_name')
+    list_editable=('event','category','skill_number','skill_name')
+    list_filter = ('event','category','top_bottom')
+
+class AcroWomensBonusAdmin(ImportExportModelAdmin):
+    list_display=('id','bottom_interface','top_interface','bonus','bonus_extra')
+    list_editable=('bottom_interface','top_interface','bonus','bonus_extra')
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -261,3 +270,5 @@ admin.site.register(CoachFundamentalAnswer,CoachFundamentalAnswerAdmin)
 admin.site.register(CoachFundamentalUserProgress,CoachFundamentalUserProgressAdmin)
 admin.site.register(CoachFundamentalUserAnswer,CoachFundamentalUserAnswerAdmin)
 admin.site.register(CoachFundamentalUserQuiz,CoachFundamentalUserQuizAdmin)
+admin.site.register(AcroBalance,AcroBalanceAdmin)
+admin.site.register(AcroWomensBonus,AcroWomensBonusAdmin)

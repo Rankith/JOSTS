@@ -1,0 +1,238 @@
+﻿{% block content %}
+{% load staticfiles %}
+<div class="sidebar-header">
+   
+</div>
+{% if search_type == 'element' or search_type == 'rule' %}
+<div class="input-group input-group-sm mt-1" id="divSearch">
+  <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="txtSearch">
+    <div class="input-group-append">
+        <button class="btn border border-left-0" style="background-color:#fff" onclick="ClearSearch()">
+      <i class="fas fa-times fa-xs" style="background-color:#fff;color:black;cursor:pointer;"></i>
+            </button>
+    </div>
+  <div class="input-group-append">
+     <button class="btn btn-outline-secondary" type="button" onclick="SearchClick()">
+                <i class="fas fa-search"></i>
+            </button>
+  </div>
+</div>
+{% endif %}
+
+<div class="row no-gutters pt-2">
+    {% for event in events %}
+    <div class="col">
+        <label id="lblE{{event}}" class="search-button">
+            <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search check-search-event" data-search="event" onchange="SearchChangeEvent(this)">
+            <div class="search-button event-button">
+                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/{{event}}_White.svg" />
+            </div>
+        </label>
+    </div>
+    {% endfor %}
+</div>
+{% if search_type == 'element' %}
+ <div class="row no-gutters">
+     <div class="pr-2">
+            <label id="lblAcrBAL" class="search-button">
+                <input type="checkbox" id="chkAcrBAL" value="AcroBalance" class="check-search search-XP search-WP search-MP" data-search="AcroBalance" onchange="SearchChange(this)">
+                <div class="search-button group-button"><div style="font-size:1.3rem">BAL</div></div>
+            </label>
+        </div>
+     <div class="pr-2">
+            <label id="lblAcrMNT" class="search-button">
+                <input type="checkbox" id="chkAcrMNT" value="AcroMount" class="check-search search-XP search-WP search-MP" data-search="AcroMount" onchange="SearchChange(this)">
+                <div class="search-button group-button"><div style="font-size:1.3rem">MNT</div></div>
+            </label>
+        </div>
+         <div class="pr-2">
+            <label id="lblAcrDYN" class="search-button">
+                <input type="checkbox" id="chkAcrDYN" value="AcroDynamic" class="check-search search-XP search-WP search-MP" data-search="AcroDynamic" onchange="SearchChange(this)">
+                <div class="search-button group-button"><div style="font-size:1.3rem">DYN</div></div>
+            </label>
+        </div>
+</div>
+ <div class="row no-gutters" id="divBalanceSearch">
+        {% for cat in categories %}
+        <div class="pr-2">
+            <label id="lblAcrC{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkAcrG{{forloop.counter}}" value="{{cat}}" class="check-search check-search-show" data-search="category" onchange="SearchChange(this)">
+                <div class="search-button value-button"> <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/acro-{{cat}}.svg" /></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="row no-gutters">
+        {% for rule in sections %}
+        <div class="pr-2">
+            <label id="lblS{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkS{{forloop.counter}}" value="{{rule.section}}" class="check-search" data-search="rule__section" onchange="SearchChange(this)">
+                <div class="search-button value-button"><div style="text-transform:uppercase">{{rule.search_display}}</div></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<div class="row no-gutters">
+    <div class="pr-2">
+        <label id="lblReset" class="search-button">
+
+            <div class="search-button red-button" onclick="SearchReset()"><div style="text-transform:uppercase"><i class="fas fa-undo"></i></div></div>
+        </label>
+    </div>
+</div>
+
+{% if search_type == 'shorthand' %}
+
+{% endif %}
+
+
+<div id="divElementCountDisplay" style="padding-bottom:60px"></div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+        var search_type = '{{search_type}}';
+
+</script>
+<script type="text/javascript">
+    var Event = "";
+    var ValueDisplay = "value";
+
+    $('#txtSearch').keypress(function (e) {
+      if (e.which == 13) {
+          SearchClick();
+        return false;    //<---- Add this line
+      }
+    });
+    function ClearSearch() {
+        $('#txtSearch').val("")
+    }
+   
+    function SearchChangeEvent(el) {
+        //console.log("SCE");
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-event').not(el).prop('checked', false);
+            $('.check-search-event').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            ShowHideSearches();
+            CreateSearchParams();
+            //Event = $(el).val();
+        }
+    }
+
+    function DisplayChange(el) {
+        //console.log("DC");
+         if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-display').not(el).prop('checked', false);
+            $('.check-search-display').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            CreateSearchParams();
+            //Event = $(el).val();
+        }
+    }
+
+    function ShowHideSearches() {
+        if (search_type != "rule") {
+            ev = $('.check-search-event:checked').val();
+            $('.check-search').not('.check-search-event').not('.check-search-show').not('.search-' + ev).parent().hide();
+            $('.check-search.search-' + ev).parent().show();
+        }
+        /*if (ev == "V") {
+            $('#Values').hide();
+            $('#VaultValues').hide();*/
+        
+    }
+
+    function SearchClick() {
+        CreateSearchParams();
+    }
+
+    function SearchChange(el) {
+        //console.log("SC");
+        localStorage.setItem(el.id, el.checked ? 1 : 0);
+        CreateSearchParams();
+    }
+    function CreateSearchParams() {
+        //console.log("CSP");
+        var strValues = "";
+        Event = $('.check-search-event:checkbox:checked').val();
+        if (list_type !== 'undefined') {
+            $(".check-search:checkbox:checked").each(function (i) {
+                if ($(this).parent().is(":visible"))
+                    strValues += $(this).attr("data-search") + "=" + $(this).val() + "&";
+                //console.log($(this).attr("data-search") + " : " + $(this).val());
+            });
+            
+            ValueDisplay = "value";
+            strValues = "value_display=" + ValueDisplay + "&" + strValues;
+            if (search_type == "element" || type == "shorthand_trainer") {
+                strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
+            }
+            //if ($("#txtSearch").val() != "")
+            strValues = "search=" + $("#txtSearch").val() + "&" + strValues;
+            
+            $.get("/" + list_type + "_list/?" + strValues, function (data) {
+                $("#divElementList").empty();
+                $("#divElementList").append(data);
+                $("#divElementCountDisplay").html(($("#divNumElements").html()));
+                $("#div" + SelectedElement).click();
+            });
+        }
+        //$("#divElementList").empty();
+        //$("#divElementList").load("/element_list/?" + strValues);
+    }
+    function SearchReset() {
+        $(".check-search:checkbox:checked:not(.check-search-event)").each(function (i) {
+            localStorage.setItem(this.id, 0);
+            $(this).removeAttr('checked');
+            
+        });
+        $("#txtSearch").val("");
+        CreateSearchParams();
+        }
+    function LoadLastSelections() {
+        //console.log("LLS");
+        //console.log(localStorage);
+
+        $(".check-search:checkbox").each(function (i) {
+            console.log(this.id);
+             console.log(localStorage.getItem(this.id));
+            if (localStorage.getItem(this.id) == "1")
+                $(this).prop('checked', true);
+            else
+                $(this).prop('checked', false);
+        });
+        if (search_type == "element" || type == "shorthand_trainer") {
+             $(".check-search-display:checkbox").each(function (i) {
+                if (localStorage.getItem(this.id) == "1")
+                    $(this).prop('checked', true);
+                else
+                    $(this).prop('checked', false);
+             });
+            if ($('.check-search-display:checked').val() == undefined) {
+                $("#chkDisplayImage").prop('checked', true);
+                 localStorage.setItem('chkDisplayImage', 1);
+            }
+        }
+        console.log($(".check-search-event:checkbox:checked").length);
+        if ($(".check-search-event:checkbox:checked").length == 0 && $(".check-search-event:checkbox").length > 0) 
+            $(".check-search-event:checkbox")[0].click();
+        else {
+            ShowHideSearches();
+            CreateSearchParams();
+        }
+    }
+</script>
+{% endblock %}
