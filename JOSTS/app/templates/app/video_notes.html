@@ -48,11 +48,11 @@
 <div id="NotesE" style="border:1px solid black;font-size:0.8rem;" class="p-1 collapse show">
     {% for note in notes %}
     {% if note.element_link != None %}
-    <div>
+    <div class="video-note-color-{{note.color}}">
         • {{note.element_link.elementtext_set.all.first.short_text}}
     </div>
     {% elif note.unrated_link != None %}
-    <div>
+    <div class="video-note-color-{{note.color}}">
         •  {{note.unrated_link.name}}
     </div>
     {% elif note.rule_link.type|upper != "D" %}
