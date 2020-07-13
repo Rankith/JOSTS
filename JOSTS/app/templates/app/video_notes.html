@@ -31,7 +31,7 @@
                 (no value, {{note.no_value_type}} element {{note.element_link.elementtext_set.all.first.id_number_text}})
         </div>      
     {% elif note.rule_link.type == "D" %}
-        <div>
+        <div class="video-note-color-{{note.color}}">
             {{note.rule_link.text}}
         </div>
     {% endif %}
