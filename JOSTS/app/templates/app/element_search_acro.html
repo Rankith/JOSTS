@@ -35,19 +35,19 @@
  <div class="row no-gutters">
      <div class="pr-2">
             <label id="lblAcrBAL" class="search-button">
-                <input type="checkbox" id="chkAcrBAL" value="AcroBalance" class="check-search search-XP search-WP search-MP" data-search="AcroBalance" onchange="SearchChange(this)">
+                <input type="checkbox" id="chkAcrBAL" value="AcroBalance" class="check-search search-XP search-WP search-MP check-search-type" data-search="type" onchange="SearchChangeType(this)">
                 <div class="search-button group-button"><div style="font-size:1.3rem">BAL</div></div>
             </label>
         </div>
      <div class="pr-2">
             <label id="lblAcrMNT" class="search-button">
-                <input type="checkbox" id="chkAcrMNT" value="AcroMount" class="check-search search-XP search-WP search-MP" data-search="AcroMount" onchange="SearchChange(this)">
+                <input type="checkbox" id="chkAcrMNT" value="AcroMount" class="check-search search-XP search-WP search-MP check-search-type" data-search="type" onchange="SearchChangeType(this)">
                 <div class="search-button group-button"><div style="font-size:1.3rem">MNT</div></div>
             </label>
         </div>
          <div class="pr-2">
             <label id="lblAcrDYN" class="search-button">
-                <input type="checkbox" id="chkAcrDYN" value="AcroDynamic" class="check-search search-XP search-WP search-MP" data-search="AcroDynamic" onchange="SearchChange(this)">
+                <input type="checkbox" id="chkAcrDYN" value="AcroDynamic" class="check-search search-XP search-WP search-MP check-search-type" data-search="type" onchange="SearchChangeType(this)">
                 <div class="search-button group-button"><div style="font-size:1.3rem">DYN</div></div>
             </label>
         </div>
@@ -128,6 +128,22 @@
         }
     }
 
+        function SearchChangeType(el) {
+        //console.log("SCE");
+        if (!el.checked)
+            $(el).prop('checked', true);
+        else {
+            localStorage.setItem(el.id, el.checked ? 1 : 0);
+            $('.check-search-type').not(el).prop('checked', false);
+            $('.check-search-type').not(el).each(function (i) {
+                localStorage.setItem(this.id, 0);
+            });
+            ShowHideSearches();
+            CreateSearchParams();
+            //Event = $(el).val();
+        }
+    }
+
     function DisplayChange(el) {
         //console.log("DC");
          if (!el.checked)
@@ -175,11 +191,6 @@
                 //console.log($(this).attr("data-search") + " : " + $(this).val());
             });
             
-            ValueDisplay = "value";
-            strValues = "value_display=" + ValueDisplay + "&" + strValues;
-            if (search_type == "element" || type == "shorthand_trainer") {
-                strValues = "display=" + $('.check-search-display:checked').val() + "&" + strValues;
-            }
             //if ($("#txtSearch").val() != "")
             strValues = "search=" + $("#txtSearch").val() + "&" + strValues;
             

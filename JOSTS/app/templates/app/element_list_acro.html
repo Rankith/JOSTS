@@ -1,0 +1,25 @@
+﻿
+{% load staticfiles %} 
+<div class="row no-gutters">
+    <div class="col-6">
+        <div id="divContextListBase" style="height:520px;width:120px;overflow: auto;font-size:11px">
+        {% for element in bottoms %}
+            <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_bottom}}_tn.svg?"  style="width:100px;overflow:hidden"/>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="col-6">
+        <div id="divContextListTop" style="height:520px;width:120px;overflow: auto;font-size:11px">
+        {% for element in tops %}
+            <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_top}}_tn.svg?"  style="width:100px;overflow:hidden"/>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+<div id="divNumElements" style="display:none">{{num_elements}}</div>
+<script type="text/javascript">
+    var ElementList = new Array();
+    var elcount = 0;
+
+
+</script>
