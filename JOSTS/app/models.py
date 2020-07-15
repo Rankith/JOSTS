@@ -476,7 +476,7 @@ class AcroBalance(models.Model):
     def image_url(self):
         return self.skill_name.replace(".","")
     def thumb_url(self):
-        return self.skill_name.replace(".","") + "-" + self.thumbnail_direction
+        return self.skill_name.replace(".","") + "-" + self.thumbnail_direction.lower()
 
 class AcroWomensBonus(models.Model):
      bottom_interface = models.CharField(max_length=10,default='',blank=True)
