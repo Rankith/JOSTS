@@ -483,13 +483,15 @@ def element_list(request):
         if dget['event'] == "WP" or dget['event'] == "MP":
             dget['event'] = "XP"
         event = dget['event']
+        query=Q()
         for k,v in dget.items():
             innerQuery = Q()
             for i in v:
                 for ks in k.split(','):#allow multi things
                     kwargs = {'{0}'.format(ks): i}
                     innerQuery.add(Q(**kwargs), Q.OR)
-        elements = AcroBalance.objects.filter(innerQuery).order_by('page_number')
+            query.add(innerQuery,Q.AND)
+        elements = AcroBalance.objects.filter(query).order_by('page_number')
         bottoms = elements.filter(top_bottom='B')
         tops = elements.filter(top_bottom='T')
         context = {
