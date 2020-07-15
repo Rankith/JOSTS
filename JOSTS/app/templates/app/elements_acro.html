@@ -1,0 +1,36 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+{% load staticfiles %}
+<div class="wrapper-sidebar">
+    <div id="divContentParent" class="position-relative">
+
+        <div class="text-base col pr-0 pl-0 " id="divElementList" style="min-height:100%">
+            <div id="divElementHolder" class="row" style="flex-wrap:nowrap">
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+  
+    <script type="text/javascript">
+    </script>
+<script type="text/javascript">
+    var OnElement = 0;
+    var ElementSkeleton = '<div id="divElement[ElementNumber]" class="col-md-4 col-10 d-flex align-items-center justify-content-center" style="height:calc(100vh - 100px)"><button id = "btnNext" type = "button" class="btn btn-main pr-3 pl-3 search-button" onclick = "AddElement()" ><i class="fas fa-plus"></i></button ></div >';
+    SetNextContainer();
+
+    function AddElement() {
+        $("#divElement" + OnElement).load("/element_search", SetNextContainer);
+    }
+    function SetNextContainer() {
+        OnElement++;
+        $("#divElementHolder").append(ElementSkeleton.replace("[ElementNumber]", OnElement));
+    }
+   
+
+</script>
+{% endblock %}

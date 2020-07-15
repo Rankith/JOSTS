@@ -291,9 +291,9 @@ def unsubscribe_feedback(request):
 @login_required(login_url='/login/')
 @user_passes_test(subscription_check,login_url='/subscriptions/')
 def elements(request):
-    AcroBalance.objects.filter(event='B').update(event='XP')
-    AcroBalance.objects.filter(event='BG').update(event='GR')
-    AcroBalance.objects.filter(event='BT').update(event='TR')
+    #AcroBalance.objects.filter(event='B').update(event='XP')
+    #AcroBalance.objects.filter(event='BG').update(event='GR')
+    #AcroBalance.objects.filter(event='BT').update(event='TR')
     #AcroBalance.objects.filter(bottom_interface_point='2B',event='B').update(category='1')
     #AcroBalance.objects.filter(bottom_interface_point='SA-H',event='B').update(category='2')
     #AcroBalance.objects.filter(bottom_interface_point='2F',event='B').update(category='3')
@@ -326,12 +326,18 @@ def elements(request):
     #QuizResult.objects.filter(disc__isnull=True).update(disc=1)
     #ActivityLog.objects.filter(disc__isnull=True).update(disc=1)
     #RuleLink.objects.filter(type="E").update(pause_time='indef')
-    context = {
-        'type':'element',
-        'search_type':'element',
-        'list_type':'element',
+    if request.session.get('disc_path') == 'acro':
+        context = {
+        'type':'acro',
         }
-    return render(request, 'app/elements_fixed.html',context=context)
+        return render(request, 'app/elements_acro.html',context=context)
+    else:
+        context = {
+            'type':'element',
+            'search_type':'element',
+            'list_type':'element',
+            }
+        return render(request, 'app/elements_fixed.html',context=context)
 
 def element(request):
     idIn = request.GET.get('id')

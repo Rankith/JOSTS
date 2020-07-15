@@ -1,8 +1,6 @@
 ﻿{% block content %}
 {% load staticfiles %}
-<div class="sidebar-header">
-   
-</div>
+<div style="width:190px" class="search-background pr-2 pl-2 pt-2 pb-2">
 {% if search_type == 'element' or search_type == 'rule' %}
 <div class="input-group input-group-sm mt-1" id="divSearch">
   <input type="text" class="form-control" placeholder="Search" aria-label="Search" id="txtSearch">
@@ -88,9 +86,7 @@
 {% if search_type == 'shorthand' %}
 
 {% endif %}
-
-
-<div id="divElementCountDisplay" style="padding-bottom:60px"></div>
+</div>
 
 {% endblock %}
 {% block scripts %}

@@ -399,3 +399,7 @@ input:checked + .display-button {
     background-color: #007bff;
 	font-weight: bold;
 }
+
+.search-background {
+    background: #2e2e5a;
+}
