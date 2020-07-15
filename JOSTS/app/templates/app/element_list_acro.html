@@ -1,17 +1,17 @@
 ﻿
 {% load staticfiles %} 
-<div class="row no-gutters">
+<div class="row no-gutters search-background">
     <div class="col-6">
         <div id="divContextListBase" style="height:520px;width:120px;overflow: auto;font-size:11px">
         {% for element in bottoms %}
-            <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_bottom}}_tn.svg?"  style="width:100px;overflow:hidden"/>
+            <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_bottom}}_tn.svg"  style="width:100px;overflow:hidden"/>
         {% endfor %}
         </div>
     </div>
     <div class="col-6">
         <div id="divContextListTop" style="height:520px;width:120px;overflow: auto;font-size:11px">
         {% for element in tops %}
-            <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_top}}_tn.svg?"  style="width:100px;overflow:hidden"/>
+            <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_top}}_tn.svg"  style="width:100px;overflow:hidden"/>
         {% endfor %}
         </div>
     </div>
