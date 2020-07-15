@@ -2495,7 +2495,7 @@
     <Content Include="app\templates\app\coach_element_list.html" />
     <Content Include="app\templates\app\coach_fundamentals_individual_slide.html" />
     <Content Include="app\templates\app\elements_acro.html" />
-    <Content Include="app\templates\app\element_list_acro.html" />
+    <Content Include="app\templates\app\element_builder_acro.html" />
     <Content Include="app\templates\app\element_search_acro.html" />
     <Content Include="app\templates\app\element_search_aer.html" />
     <Content Include="app\templates\app\element_search_tramp.html" />

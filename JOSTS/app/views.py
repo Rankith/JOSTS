@@ -472,8 +472,7 @@ def element_search(request):
             }
         return render(request, 'app/element_search.html',context=context)
 
-def element_list(request):
-    if request.session.get('disc_path') == 'acro':
+def element_builder_acro(request):
         dget = dict(request.GET)
         search = dget['search'][0]
         search = search.replace("1/2","½")
@@ -504,47 +503,48 @@ def element_list(request):
 
         #activity log
         log_activity(request,'Elements','List',request.GET.get('event'))
-        return render(request, 'app/element_list_acro.html',context=context)
-    else:
-        dget = dict(request.GET)
-        display = dget['display'][0]
-        del dget['display']
-        search = dget['search'][0]
-        search = search.replace("1/2","½")
-        search = search.replace("1/4","¼")
-        del dget['search']
-        value_display = dget['value_display'][0]
-        del dget['value_display']
-        event = dget['element__event']
-        query = Q(language="EN")
-        for k,v in dget.items():
-            innerQuery = Q()
-            for i in v:
-                for ks in k.split(','):#allow multi things
-                    kwargs = {'{0}'.format(ks): i}
-                    innerQuery.add(Q(**kwargs), Q.OR)
-            query.add(innerQuery,Q.AND)
-        elements = ElementText.objects.filter(query).order_by('element__str_grp','element__code_order')
-        if search != "":
-            elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
-        elements = elements.filter(element__disc=request.session.get('disc',1))
-        groups = StructureGroup.objects.filter(disc_id=request.session.get('disc',1),event=event[0]).order_by('group')
-        if request.session.get('disc_path') == 'aer':
-            image_sex = 'M'
-        else:
-            image_sex = ''
-        context = {
-            'lang_elements': elements,
-            'num_elements': str(len(elements)) + " Elements",
-            'display': display,
-            'val_display': value_display,
-            'groups':groups,
-            'image_sex':image_sex
-            }
+        return render(request, 'app/element_builder_acro.html',context=context)
 
-        #activity log
-        log_activity(request,'Elements','List',request.GET.get('element__event'))
-        return render(request, 'app/element_list.html',context=context)
+def element_list(request):
+    dget = dict(request.GET)
+    display = dget['display'][0]
+    del dget['display']
+    search = dget['search'][0]
+    search = search.replace("1/2","½")
+    search = search.replace("1/4","¼")
+    del dget['search']
+    value_display = dget['value_display'][0]
+    del dget['value_display']
+    event = dget['element__event']
+    query = Q(language="EN")
+    for k,v in dget.items():
+        innerQuery = Q()
+        for i in v:
+            for ks in k.split(','):#allow multi things
+                kwargs = {'{0}'.format(ks): i}
+                innerQuery.add(Q(**kwargs), Q.OR)
+        query.add(innerQuery,Q.AND)
+    elements = ElementText.objects.filter(query).order_by('element__str_grp','element__code_order')
+    if search != "":
+        elements = elements.filter(element__usernote__note__icontains=search).distinct() | elements.filter(text__icontains=search).distinct() | elements.filter(short_text__icontains=search).distinct() | elements.filter(named__icontains=search).distinct() | elements.filter(additional_info__icontains=search).distinct()
+    elements = elements.filter(element__disc=request.session.get('disc',1))
+    groups = StructureGroup.objects.filter(disc_id=request.session.get('disc',1),event=event[0]).order_by('group')
+    if request.session.get('disc_path') == 'aer':
+        image_sex = 'M'
+    else:
+        image_sex = ''
+    context = {
+        'lang_elements': elements,
+        'num_elements': str(len(elements)) + " Elements",
+        'display': display,
+        'val_display': value_display,
+        'groups':groups,
+        'image_sex':image_sex
+        }
+
+    #activity log
+    log_activity(request,'Elements','List',request.GET.get('element__event'))
+    return render(request, 'app/element_list.html',context=context)
 
 
 #RULES

@@ -6,7 +6,7 @@
     <div id="divContentParent" class="position-relative">
 
         <div class="text-base col pr-0 pl-0 " id="divElementList" style="min-height:100%">
-            <div id="divElementHolder" class="row" style="flex-wrap:nowrap">
+            <div id="divElementHolder" class="row" style="flex-wrap:nowrap;">
                 
             </div>
         </div>
@@ -20,7 +20,7 @@
     </script>
 <script type="text/javascript">
     var OnElement = 0;
-    var ElementSkeleton = '<div id="divElement[ElementNumber]" class="col-md-4 col-10 d-flex align-items-center justify-content-center" style="height:calc(100vh - 100px)"><button id = "btnNext" type = "button" class="btn btn-main pr-3 pl-3 search-button" onclick = "AddElement()" ><i class="fas fa-plus"></i></button ></div >';
+    var ElementSkeleton = '<div id="divElement[ElementNumber]" class="col-md-4 col-10 d-flex justify-content-center" style="height:calc(100vh - 100px);align-items: safe center"><div style=""><button id = "btnNext" type = "button" class="btn btn-main pr-3 pl-3 search-button" onclick = "AddElement()" ><i class="fas fa-plus"></i></button ></div></div >';
     SetNextContainer();
 
     function AddElement() {
@@ -130,7 +130,7 @@
         strValues = "search=" + $("#txtSearch").val() + "&" + strValues;
         console.log(strValues);
 
-        $.get("/element_list/?" + strValues, function (data) {
+        $.get("/element_builder_acro/?" + strValues, function (data) {
             $("#divElement" + OnElement).empty();
             $("#divElement" + OnElement).append(data);
             SetNextContainer();
