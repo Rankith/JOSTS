@@ -20,7 +20,7 @@
             {% else %}
                 ({{note.element_link.letter_value}} value,
             {% endif %}
-             element {{note.element_link.elementtext_set.all.first.id_number_text}}{% if note.cr != '' %}, CR {{note.cr}}{% endif %})
+             element {{note.element_link.elementtext_set.all.first.id_number_text}}{% if note.cr != '' %}, CR {% for c in note.cr%}{% if not forloop.first %} and {% endif %}{{c}}{% endfor %}{% endif %})
         </div>
      {% elif note.unrated_link != None %}
         {% if note.skip_frame == False %}

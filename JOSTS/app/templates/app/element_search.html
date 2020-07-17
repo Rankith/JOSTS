@@ -22,8 +22,8 @@
 <div class="row no-gutters pt-2">
     {% for event in events %}
     <div class="col">
-        <label id="lblE{{event}}" class="search-button">
-            <input type="checkbox" id="chkE{{event}}" value="{{event}}" class="check-search check-search-event" data-search="element__event" onchange="SearchChangeEvent(this)">
+        <label id="lblE{{event}}{{request.session.disc_path}}" class="search-button">
+            <input type="checkbox" id="chkE{{event}}{{request.session.disc_path}}" value="{{event}}" class="check-search check-search-event" data-search="element__event" onchange="SearchChangeEvent(this)">
             <div class="search-button event-button">
                 <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/{{event}}_White.svg" />
             </div>
