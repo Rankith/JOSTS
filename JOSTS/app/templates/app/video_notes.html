@@ -12,14 +12,15 @@
         {% endif %}
             • {{note.element_link.elementtext_set.all.first.short_text}}
             {% if note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'unrecognized' or note.no_value_type == 'special repitition' %}
-                (no value, {{note.no_value_type}} element {{note.element_link.elementtext_set.all.first.id_number_text}})
+                (no value, {{note.no_value_type}} 
             {% elif note.no_value_type == 'upvalue' %}
-                (<span class="video-note-upvalue">{{note.element_link.up_value_letter}} value</span>, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+                (<span class="video-note-upvalue">{{note.element_link.up_value_letter}} value</span>,
             {% elif note.no_value_type == 'devalue' %}
-                (<span class="video-note-devalue">{{note.element_link.down_value_letter}} value</span>, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+                (<span class="video-note-devalue">{{note.element_link.down_value_letter}} value</span>,
             {% else %}
-                ({{note.element_link.letter_value}} value, element {{note.element_link.elementtext_set.all.first.id_number_text}})
+                ({{note.element_link.letter_value}} value,
             {% endif %}
+             element {{note.element_link.elementtext_set.all.first.id_number_text}}{% if note.cr != '' %}, CR {{note.cr}}{% endif %})
         </div>
      {% elif note.unrated_link != None %}
         {% if note.skip_frame == False %}
