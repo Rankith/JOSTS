@@ -8,7 +8,7 @@
         {% if note.skip_frame == False %}
         <div id="vn{{note.frame}}" class="video-note-line d-note video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
         {% else %}
-        <div>
+        <div class="video-note-color-{{note.color}}">
         {% endif %}
             • {{note.element_link.elementtext_set.all.first.short_text}}
             {% if note.no_value_type == 'repeat' or note.no_value_type == 'unrated' or note.no_value_type == 'unrecognized' or note.no_value_type == 'special repitition' %}
@@ -26,7 +26,7 @@
         {% if note.skip_frame == False %}
         <div id="vn{{note.frame}}" class="video-note-line d-note video-note-color-{{note.color}}" onclick="VideoNoteClick({{note.frame}})">
         {% else %}
-        <div>
+        <div  class="video-note-color-{{note.color}}">
         {% endif %}
             • {{note.unrated_link.name}}
                 (no value, {{note.no_value_type}} element {{note.element_link.elementtext_set.all.first.id_number_text}})
@@ -61,7 +61,7 @@
             {% if note.skip_frame == False %}
             <div id="vnE{{note.frame}}" style="flex-grow:1" class="video-note-line e-note video-note-color-{{note.color}} col-11-half" onclick="VideoNoteClickE({{note.frame}},'{{note.rule_link.pause_time}}')">
             {% else %}
-            <div>
+            <div class="video-note-color-{{note.color}}">
             {% endif %}
                  {{note.rule_link.text}}
             </div>
