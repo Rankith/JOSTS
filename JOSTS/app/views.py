@@ -479,9 +479,9 @@ def element_builder_acro(request):
         search = search.replace("1/4","¼")
         del dget['type']
         del dget['search']
-        if dget['event'] == "WP" or dget['event'] == "MP":
-            dget['event'] = "XP"
-        event = dget['event']
+        event_combo = dget['event'][0]
+        if dget['event'] == ["WP"] or dget['event'] == ["MP"]:
+            dget['event'] = ["XP"]
         query=Q()
         for k,v in dget.items():
             innerQuery = Q()
@@ -493,11 +493,20 @@ def element_builder_acro(request):
         elements = AcroBalance.objects.filter(query).order_by('page_number')
         bottoms = elements.filter(top_bottom='B')
         tops = elements.filter(top_bottom='T')
+        if event_combo=="WP":
+            image_sex_bottom = "W"
+            image_sex_top = "W"
+        elif event_combo=="MP":
+            image_sex_bottom = "M"
+            image_sex_top = "M"
+        else:
+            image_sex_bottom = "M"
+            image_sex_top = "W"
         context = {
             'bottoms': bottoms,
             'tops': tops,
-            'image_sex_bottom':"M",
-            'image_sex_top':"W",
+            'image_sex_bottom':image_sex_bottom,
+            'image_sex_top':image_sex_top,
             'num_elements': str(len(elements)) + " Elements",
             }
 

@@ -54,7 +54,7 @@
                 localStorage.setItem(this.id, 0);
             });
             ShowHideSearches();
-            CreateSearchParams();
+            //CreateSearchParams();
             //Event = $(el).val();
         }
     }
@@ -70,22 +70,7 @@
                 localStorage.setItem(this.id, 0);
             });
             ShowHideSearches();
-            CreateSearchParams();
-            //Event = $(el).val();
-        }
-    }
-
-    function DisplayChange(el) {
-        //console.log("DC");
-        if (!el.checked)
-            $(el).prop('checked', true);
-        else {
-            localStorage.setItem(el.id, el.checked ? 1 : 0);
-            $('.check-search-display').not(el).prop('checked', false);
-            $('.check-search-display').not(el).each(function (i) {
-                localStorage.setItem(this.id, 0);
-            });
-            CreateSearchParams();
+            //CreateSearchParams();
             //Event = $(el).val();
         }
     }
@@ -146,7 +131,7 @@
 
         });
         $("#txtSearch").val("");
-        CreateSearchParams();
+        //CreateSearchParams();
     }
     function LoadLastSelections() {
         //console.log("LLS");
