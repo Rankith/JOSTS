@@ -403,3 +403,7 @@ input:checked + .display-button {
 .search-background {
     background: #2e2e5a;
 }
+
+.acro-selected {
+    background-color: #3879d9;
+}

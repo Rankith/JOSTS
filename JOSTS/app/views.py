@@ -477,6 +477,8 @@ def element_builder_acro(request):
         search = dget['search'][0]
         search = search.replace("1/2","½")
         search = search.replace("1/4","¼")
+        onelement = dget['onelement']
+        del dget['onelement']
         del dget['type']
         del dget['search']
         event_combo = dget['event'][0]
@@ -507,6 +509,7 @@ def element_builder_acro(request):
             'tops': tops,
             'image_sex_bottom':image_sex_bottom,
             'image_sex_top':image_sex_top,
+            'on_element':onelement[0],
             'num_elements': str(len(elements)) + " Elements",
             }
 
