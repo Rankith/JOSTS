@@ -1032,7 +1032,7 @@ def video_notes_builder(request):
         #videos = Video.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
     unrated = UnratedElement.objects.filter(event__iexact=event,disc=request.session.get('disc',1)).order_by('id')
     elements = ElementText.objects.filter(element__event__iexact=event,element__disc=request.session.get('disc',1)).order_by('element__str_grp','element__code_order')
-    rules = RuleLink.objects.filter(event='',disc=request.session.get('disc',1)) | RuleLink.objects.filter(event__iexact=event,disc=request.session.get('disc',1))
+    rules = RuleLink.objects.filter(event='',disc=request.session.get('disc',1)) | RuleLink.objects.filter(event__contains=event,disc=request.session.get('disc',1))
     events=request.session.get('disc_events','V,UB,BB,FX').split(",")
     context = {
         'elements': elements,
