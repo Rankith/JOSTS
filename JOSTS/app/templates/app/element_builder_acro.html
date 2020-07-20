@@ -1,70 +1,73 @@
 ﻿
 {% load staticfiles %} 
 <div class="row no-gutters">
-    <div id="divCombine{{on_element}}" style="margin:auto">
-        <div style="position:relative;height:360px;width:270px" class="image-background">
-            <div id="divB{{on_element}}NotAllowed" style="position:absolute;left:85px;top:300px;font-weight:bold;z-index:101;display:none">Not Allowed</div>
-			<!--<img id="C{{on_element}}Combo" style="position:absolute;left:0px;top:0px;z-index:102" width="260" height = "400">-->
-			<img id="C{{on_element}}top" style="position:absolute;left:0px;top:0px;display:none;z-index:101" width="270" height = "360">
-			<img id="C{{on_element}}base" style="position:absolute;left:0px;top:0px;display:none" width="270" height = "360">
-        </div>
-        <div class="detail-background pl-1" style="font-size:0.7rem">
-            <div class="row no-gutters">
-                <div class="col-4">
-                    Static Top:
-                </div>
-                <div class="col-1-half">
-                    1C
-                </div>
-                <div class="col-1-half">
-                    4 + 3
-                </div>
-                <div class="col-2 pl-2">
-                    Top:
-                </div>
-                 <div class="col-1-half">
-                    1C
-                </div>
-                <div class="col-1-half">
-                    4 + 3
-                </div>
+    <div class="col-12">
+        <div id="divCombine{{on_element}}" style="margin:auto;width:270px">
+            <div style="position:relative;height:360px;width:270px" class="image-background">
+                <div id="divB{{on_element}}NotAllowed" style="position:absolute;left:85px;top:300px;font-weight:bold;z-index:101;display:none">Not Allowed</div>
+			    <!--<img id="C{{on_element}}Combo" style="position:absolute;left:0px;top:0px;z-index:102" width="260" height = "400">-->
+			    <img id="C{{on_element}}top" style="position:absolute;left:0px;top:0px;display:none;z-index:101" width="270" height = "360">
+			    <img id="C{{on_element}}base" style="position:absolute;left:0px;top:0px;display:none" width="270" height = "360">
             </div>
-            <div class="row no-gutters">
-                <div class="col-4">
-                    Motion Top:
+            <div class="detail-background pl-1" style="font-size:0.7rem">
+                <div class="row no-gutters">
+                    <div class="col-4">
+                        Static Top:
+                    </div>
+                    <div class="col-1-half">
+                        1C
+                    </div>
+                    <div class="col-1-half">
+                        4 + 3
+                    </div>
+                    <div class="col-2 pl-2">
+                        Top:
+                    </div>
+                     <div class="col-1-half">
+                        1C
+                    </div>
+                    <div class="col-1-half">
+                        4 + 3
+                    </div>
                 </div>
-                <div class="col-1-half">
-                    G-C
+                <div class="row no-gutters">
+                    <div class="col-4">
+                        Motion Top:
+                    </div>
+                    <div class="col-1-half">
+                        G-C
+                    </div>
+                     <div class="col-1-half">
+                        0
+                    </div>
+                    <div class="col-2 pl-2">
+                        Base:
+                    </div>
+                     <div class="col-1-half">
+                        18-6
+                    </div>
+                    <div class="col-1-half">
+                        1
+                    </div>
                 </div>
-                 <div class="col-1-half">
-                    0
-                </div>
-                <div class="col-2 pl-2">
-                    Base:
-                </div>
-                 <div class="col-1-half">
-                    18-6
-                </div>
-                <div class="col-1-half">
-                    1
-                </div>
-            </div>
-            <div class="row no-gutters">
-                <div class="col-4">
-                    Motion Base:
-                </div>
-                <div class="col-1-half">
-                    K-H
-                </div>
-                 <div class="col-1-half">
-                    3 + 9
-                </div>
-                <div class="col-5 pl-2">
-                    <strong>Total Value: 31</strong>
+                <div class="row no-gutters">
+                    <div class="col-4">
+                        Motion Base:
+                    </div>
+                    <div class="col-1-half">
+                        K-H
+                    </div>
+                     <div class="col-1-half">
+                        3 + 9
+                    </div>
+                    <div class="col-5 pl-2">
+                        <strong>Total Value: 31</strong>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="col-6 justify-content-end d-flex">
         <div id="divContextListBase" class="image-background" style="height:400px;width:135px;overflow: auto;font-size:11px">
         {% for element in bottoms %}
