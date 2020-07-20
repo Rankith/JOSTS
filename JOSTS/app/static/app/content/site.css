@@ -381,6 +381,18 @@ a.BlueLoginButton {
     padding-left: 15px;
 }
 
+.col-1-half {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 12.4999999%;
+    flex: 0 0 12.4999999%;
+    max-width: 12.4999999%;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
 .video-note-line {
     font-weight:600;
     cursor:pointer;

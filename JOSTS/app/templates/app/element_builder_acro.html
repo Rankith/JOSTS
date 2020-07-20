@@ -2,15 +2,71 @@
 {% load staticfiles %} 
 <div class="row no-gutters">
     <div id="divCombine{{on_element}}" style="margin:auto">
-        <div style="position:relative;height:400px;width:260px">
+        <div style="position:relative;height:360px;width:270px" class="image-background">
             <div id="divB{{on_element}}NotAllowed" style="position:absolute;left:85px;top:300px;font-weight:bold;z-index:101;display:none">Not Allowed</div>
-			<img id="C{{on_element}}Combo" style="position:absolute;left:0px;top:0px;z-index:102" width="260" height = "400">
-			<img id="C{{on_element}}top" style="position:absolute;left:0px;top:0px;display:none;z-index:101" width="260" height = "400">
-			<img id="C{{on_element}}base" style="position:absolute;left:0px;top:0px;display:none" width="260" height = "400">
+			<!--<img id="C{{on_element}}Combo" style="position:absolute;left:0px;top:0px;z-index:102" width="260" height = "400">-->
+			<img id="C{{on_element}}top" style="position:absolute;left:0px;top:0px;display:none;z-index:101" width="270" height = "360">
+			<img id="C{{on_element}}base" style="position:absolute;left:0px;top:0px;display:none" width="270" height = "360">
+        </div>
+        <div class="detail-background pl-1" style="font-size:0.7rem">
+            <div class="row no-gutters">
+                <div class="col-4">
+                    Static Top:
+                </div>
+                <div class="col-1-half">
+                    1C
+                </div>
+                <div class="col-1-half">
+                    4 + 3
+                </div>
+                <div class="col-2 pl-2">
+                    Top:
+                </div>
+                 <div class="col-1-half">
+                    1C
+                </div>
+                <div class="col-1-half">
+                    4 + 3
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-4">
+                    Motion Top:
+                </div>
+                <div class="col-1-half">
+                    G-C
+                </div>
+                 <div class="col-1-half">
+                    0
+                </div>
+                <div class="col-2 pl-2">
+                    Base:
+                </div>
+                 <div class="col-1-half">
+                    18-6
+                </div>
+                <div class="col-1-half">
+                    1
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-4">
+                    Motion Base:
+                </div>
+                <div class="col-1-half">
+                    K-H
+                </div>
+                 <div class="col-1-half">
+                    3 + 9
+                </div>
+                <div class="col-5 pl-2">
+                    <strong>Total Value: 31</strong>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-6 justify-content-end d-flex">
-        <div id="divContextListBase" class="search-background" style="height:400px;width:130px;overflow: auto;font-size:11px">
+        <div id="divContextListBase" class="image-background" style="height:400px;width:135px;overflow: auto;font-size:11px">
         {% for element in bottoms %}
             <div id="Acro{{on_element}}base{{element.id}}" onclick="AcroSkillClick('base','{{on_element}}','{{element.id}}','{{element.image_url}}','{{image_sex_bottom}}')" class="acro-select acro-filter-base{{on_element}}">
                 <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_bottom}}_tn.svg"  style="width:110px;overflow:hidden"/>
@@ -19,7 +75,7 @@
         </div>
     </div>
     <div class="col-6 ">
-        <div id="divContextListTop" class="search-background" style="height:400px;width:130px;overflow: auto;font-size:11px">
+        <div id="divContextListTop" class="image-background" style="height:400px;width:135px;overflow: auto;font-size:11px">
         {% for element in tops %}
             <div id="Acro{{on_element}}top{{element.id}}" onclick="AcroSkillClick('top','{{on_element}}','{{element.id}}','{{element.image_url}}','{{image_sex_top}}')" class="acro-select acro-filter-top{{on_element}}">
                 <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_top}}_tn.svg"  style="width:110px;overflow:hidden"/>
