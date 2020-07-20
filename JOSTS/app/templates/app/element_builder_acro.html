@@ -1,20 +1,28 @@
 ﻿
 {% load staticfiles %} 
-<div class="row no-gutters search-background">
-    <div class="col-6">
-        <div id="divContextListBase" style="height:520px;width:120px;overflow: auto;font-size:11px">
+<div class="row no-gutters">
+    <div id="divCombine{{on_element}}" style="margin:auto">
+        <div style="position:relative;height:400px;width:260px">
+            <div id="divB{{on_element}}NotAllowed" style="position:absolute;left:85px;top:300px;font-weight:bold;z-index:101;display:none">Not Allowed</div>
+			<img id="C{{on_element}}Combo" style="position:absolute;left:0px;top:0px;z-index:102" width="260" height = "400">
+			<img id="C{{on_element}}top" style="position:absolute;left:0px;top:0px;display:none;z-index:101" width="260" height = "400">
+			<img id="C{{on_element}}base" style="position:absolute;left:0px;top:0px;display:none" width="260" height = "400">
+        </div>
+    </div>
+    <div class="col-6 justify-content-end d-flex">
+        <div id="divContextListBase" class="search-background" style="height:400px;width:130px;overflow: auto;font-size:11px">
         {% for element in bottoms %}
-            <div id="Acro{{on_element}}base{{element.id}}" onclick="AcroSkillClick('base','{{on_element}}','{{element.id}}')" class="acro-select acro-filter-base{{on_element}}">
-                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_bottom}}_tn.svg"  style="width:100px;overflow:hidden"/>
+            <div id="Acro{{on_element}}base{{element.id}}" onclick="AcroSkillClick('base','{{on_element}}','{{element.id}}','{{element.image_url}}','{{image_sex_bottom}}')" class="acro-select acro-filter-base{{on_element}}">
+                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_bottom}}_tn.svg"  style="width:110px;overflow:hidden"/>
             </div>
         {% endfor %}
         </div>
     </div>
-    <div class="col-6">
-        <div id="divContextListTop" style="height:520px;width:120px;overflow: auto;font-size:11px">
+    <div class="col-6 ">
+        <div id="divContextListTop" class="search-background" style="height:400px;width:130px;overflow: auto;font-size:11px">
         {% for element in tops %}
-            <div id="Acro{{on_element}}top{{element.id}}" onclick="AcroSkillClick('top','{{on_element}}','{{element.id}}')" class="acro-select acro-filter-top{{on_element}}">
-                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_top}}_tn.svg"  style="width:100px;overflow:hidden"/>
+            <div id="Acro{{on_element}}top{{element.id}}" onclick="AcroSkillClick('top','{{on_element}}','{{element.id}}','{{element.image_url}}','{{image_sex_top}}')" class="acro-select acro-filter-top{{on_element}}">
+                <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_top}}_tn.svg"  style="width:110px;overflow:hidden"/>
             </div>
         {% endfor %}
         </div>

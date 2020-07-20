@@ -24,9 +24,13 @@
     $("#divMain").removeClass("container").addClass("container-fluid");
     SetNextContainer();
 
-    function AcroSkillClick(type, which, id) {
+    function AcroSkillClick(type, which, id, image, sex) {
         $(".acro-filter-" + type + which).removeClass("acro-selected");
         $("#Acro" + which + type + id).addClass("acro-selected");
+        console.log("#C" + which + type);
+        console.log(image + "-s-" + sex + ".svg");
+        $("#C" + which + type).attr("src", image + "-s-" + sex + ".svg");
+        $("#C" + which + type).show();
     }
 
     function AddElement() {
