@@ -113,7 +113,7 @@ class UserToursCompleteAdmin(admin.ModelAdmin):
 
 class VideoLinkAdmin(ImportExportModelAdmin):
     list_display=('id','video','element','order','frame_jump')
-    list_editable=('video','element','order','frame_jump')
+    list_editable=('order','frame_jump')
 
 class VideoAdmin(ImportExportModelAdmin):
     list_display=('id','disc','event','file','fps','approved_final', 'approved_liason','old_id')
