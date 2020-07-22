@@ -452,7 +452,6 @@ class AcroBalance(models.Model):
     value2 = models.IntegerField(default=0)
     value3 = models.IntegerField(default=0)
     value4 = models.IntegerField(default=0)
-    value = models.IntegerField(default=0)
     bonus = models.IntegerField(default=0)
     transition_bonus = models.CharField(max_length=12,default='',blank=True)
     skill_name = models.CharField(max_length=255,default='',blank=True)

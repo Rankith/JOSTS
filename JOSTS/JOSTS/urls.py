@@ -104,4 +104,5 @@ urlpatterns = [
     path('ajax/coach_set_answer', views.coach_set_answer, name='coach_set_answer'),
     path('ajax/coach_save_note', views.coach_save_note, name='coach_save_note'),
     path('element_builder_acro/', views.element_builder_acro, name='element_builder_acro'),
+    path('ajax/acro_get_score/', views.acro_get_score, name='acro_get_score'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

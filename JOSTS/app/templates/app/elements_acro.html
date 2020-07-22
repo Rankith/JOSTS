@@ -18,9 +18,16 @@
   
     <script type="text/javascript">
         var ImagePath = "{% static 'app/images/'%}{{request.session.disc_path}}/elements/";
+        var token = "{{ csrf_token }}";
     </script>
 <script type="text/javascript">
     var OnElement = 0;
+    var IDs = new Array();
+    var Sexes = new Array();
+    IDs['base'] = new Array();
+    IDs['top'] = new Array();
+    Sexes['base'] = new Array();
+    Sexes['top'] = new Array();
     var ElementSkeleton = '<div id="divElement[ElementNumber]" class="col-md-4 col-lg-3 col-10 d-flex justify-content-center" style="height:calc(100vh - 100px);align-items: safe center"><div style=""><button id = "btnNext" type = "button" class="btn btn-main pr-3 pl-3 search-button" onclick = "AddElement()" ><i class="fas fa-plus"></i></button ></div></div >';
     $("#divMain").removeClass("container").addClass("container-fluid");
     SetNextContainer();
@@ -32,6 +39,46 @@
         //console.log(image + "-s-" + sex + ".svg");
         $("#C" + which + type).attr("src", ImagePath + image + "-s-" + sex + ".svg");
         $("#C" + which + type).show();
+        IDs[type][which] = id;
+        Sexes[type][which] = sex;
+        if ($("#C" + which + "base").is(":visible") && $("#C" + which + "top").is(":visible"))
+            CheckAnswer(which);
+    }
+
+     function CheckAnswer(which) {
+        $.ajax({
+            url: '/ajax/acro_get_score/',
+            data: JSON.stringify({
+                Bases: IDs['base'],
+                Tops: IDs['top'],
+                SexBases: Sexes['base'],
+                SexTops:  Sexes['top'],
+            }),
+            headers: { "X-CSRFToken": token },
+            type:'POST',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'text',
+            success: function (data) {
+                data = JSON.parse(data);
+                HoldData = data;
+                //console.log(data);
+                SetResult(data);
+            }
+      });
+    }
+
+    function SetResult(data) {
+        var count = 0;
+        data["score_list"].forEach(function (item) {
+            if (item != null) {
+                $("#divScore" + count + "TopRef").html(item["top_trans_group"]);
+                $("#divScore" + count + "TopVal").html(item["top_value"]);
+                $("#divScore" + count + "BaseRef").html(item["base_trans_group"]);
+                $("#divScore" + count + "BaseVal").html(item["base_value"]);
+                $("#divScore" + count + "Total").html("Total Value: " + item["total"]);
+            }
+            count++;
+        });
     }
 
     function AddElement() {

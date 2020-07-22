@@ -9,7 +9,7 @@ from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnIma
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
     Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
     CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz,CoachUserNote, \
-    AcroBalance
+    AcroBalance,AcroWomensBonus
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -473,49 +473,112 @@ def element_search(request):
         return render(request, 'app/element_search.html',context=context)
 
 def element_builder_acro(request):
-        dget = dict(request.GET)
-        search = dget['search'][0]
-        search = search.replace("1/2","½")
-        search = search.replace("1/4","¼")
-        onelement = dget['onelement']
-        del dget['onelement']
-        del dget['type']
-        del dget['search']
-        event_combo = dget['event'][0]
-        if dget['event'] == ["WP"] or dget['event'] == ["MP"]:
-            dget['event'] = ["XP"]
-        query=Q()
-        for k,v in dget.items():
-            innerQuery = Q()
-            for i in v:
-                for ks in k.split(','):#allow multi things
-                    kwargs = {'{0}'.format(ks): i}
-                    innerQuery.add(Q(**kwargs), Q.OR)
-            query.add(innerQuery,Q.AND)
-        elements = AcroBalance.objects.filter(query).order_by('page_number')
-        bottoms = elements.filter(top_bottom='B')
-        tops = elements.filter(top_bottom='T')
-        if event_combo=="WP":
-            image_sex_bottom = "W"
-            image_sex_top = "W"
-        elif event_combo=="MP":
-            image_sex_bottom = "M"
-            image_sex_top = "M"
-        else:
-            image_sex_bottom = "M"
-            image_sex_top = "W"
-        context = {
-            'bottoms': bottoms,
-            'tops': tops,
-            'image_sex_bottom':image_sex_bottom,
-            'image_sex_top':image_sex_top,
-            'on_element':onelement[0],
-            'num_elements': str(len(elements)) + " Elements",
-            }
+    dget = dict(request.GET)
+    search = dget['search'][0]
+    search = search.replace("1/2","½")
+    search = search.replace("1/4","¼")
+    onelement = dget['onelement']
+    del dget['onelement']
+    del dget['type']
+    del dget['search']
+    event_combo = dget['event'][0]
+    if dget['event'] == ["WP"] or dget['event'] == ["MP"]:
+        dget['event'] = ["XP"]
+    query=Q()
+    for k,v in dget.items():
+        innerQuery = Q()
+        for i in v:
+            for ks in k.split(','):#allow multi things
+                kwargs = {'{0}'.format(ks): i}
+                innerQuery.add(Q(**kwargs), Q.OR)
+        query.add(innerQuery,Q.AND)
+    elements = AcroBalance.objects.filter(query).order_by('page_number')
+    bottoms = elements.filter(top_bottom='B')
+    tops = elements.filter(top_bottom='T')
+    if event_combo=="WP":
+        image_sex_bottom = "W"
+        image_sex_top = "W"
+    elif event_combo=="MP":
+        image_sex_bottom = "M"
+        image_sex_top = "M"
+    else:
+        image_sex_bottom = "M"
+        image_sex_top = "W"
+    context = {
+        'bottoms': bottoms,
+        'tops': tops,
+        'image_sex_bottom':image_sex_bottom,
+        'image_sex_top':image_sex_top,
+        'on_element':onelement[0],
+        'num_elements': str(len(elements)) + " Elements",
+        }
 
-        #activity log
-        log_activity(request,'Elements','List',request.GET.get('event'))
-        return render(request, 'app/element_builder_acro.html',context=context)
+    #activity log
+    log_activity(request,'Elements','List',request.GET.get('event'))
+    return render(request, 'app/element_builder_acro.html',context=context)
+
+def acro_get_score(request):
+    data = json.loads(request.body)
+    two_sec_hold = True
+    base_turn = 0
+    score_list = []
+
+    for i in range(len(data["Bases"])):
+        w_bonus = 0
+        first_bonus = 0
+        score_dict = {}
+        if data["Bases"][i] != None and data["Tops"][i] != None:
+            #grab base and top data
+            base = AcroBalance.objects.get(pk=data["Bases"][i])
+            top = AcroBalance.objects.get(pk=data["Tops"][i])
+            #check if the base is 222324 skill and use top interface
+            if "222324" in base.skill_name:
+                base_extra = AcroBalance.objects.filter(skill_name=base.skill_name, top_interface_point=top.top_interface_point)
+                base_value = base_extra[0].value
+                score_dict["base_trans_group"] =  base_extra[0].transition_group
+            else:
+                base_value = base.value
+                score_dict["base_trans_group"] =  base.transition_group
+            top_value = top.value
+            spec_value_top = top_value
+            score_dict["top_trans_group"] = top.transition_group
+            first_bonus = top.bonus
+            #check WP bonus
+            if data["SexBases"][i] == "W" and data["SexTops"][i] == "W":
+                womens_bonus = AcroWomensBonus.objets.filter(bottom_interface=base.bottom_interface,top_interface=top.top_interface)
+                if len(womens_bonus) > 0:
+                    w_bonus = womens_bonus[0].bonus
+                    if top_value+base_value+first_bonus >= 6:
+                        w_bonus = w_bonus + womens_bonus[0].bonus_extra
+            
+            if two_sec_hold:
+                score_dict["base_value"] = base_value
+                if w_bonus > 0 and first_bonus > 0:
+                    score_dict["top_value"] = str(top_value) + " + " + str(w_bonus) + " + " + str(first_bonus)
+                elif first_bonus > 0:
+                    score_dict["top_value"] = str(top_value) + " + " + str(first_bonus)
+                elif w_bonus > 0:
+                    score_dict["top_value"] = str(top_value) + " + " + str(w_bonus)
+                else:
+                    score_dict["top_value"] = top_value
+                total = base_value + top_value + w_bonus + first_bonus
+                first_bonus += w_bonus
+                
+            else:
+                score_dict["base_value"] = 0
+                score_dict["top_value"] = 0
+                total = 0
+            score_dict["total"] = total
+            score_list.append(score_dict)
+        else:
+            score_list.append(None)
+
+    #if str(answer.id) in data["answers"]:
+     
+    resp = {'score_list':score_list,}
+    #activity log
+
+    return JsonResponse(resp)
 
 def element_list(request):
     dget = dict(request.GET)
