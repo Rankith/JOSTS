@@ -487,3 +487,18 @@ class AcroInvalid(models.Model):
      base = models.ForeignKey(AcroBalance,on_delete=models.CASCADE,null=True,blank=True,related_name='invalid_base')
      top = models.ForeignKey(AcroBalance,on_delete=models.CASCADE,null=True,blank=True,related_name='invalid_top')
      invalid_for = models.CharField(max_length=3,default='',blank=True)
+
+class AcroBalanceTransition(models.Model):
+    event = models.CharField(max_length=2)
+    first_balance = models.CharField(max_length=4)
+    second_balance = models.CharField(max_length=4)
+    movement_value = models.IntegerField(default=0)
+    movement_value_hs_fs = models.IntegerField(default=0)
+    movement_value2 = models.IntegerField(default=0)
+    movement_value3 = models.IntegerField(default=0)
+    movement_value4 = models.IntegerField(default=0)
+    table_number = models.IntegerField(default=0)
+    base_turn_180 = models.IntegerField(default=0)
+    base_turn_180_hs = models.IntegerField(default=0)
+    base_turn_360 = models.IntegerField(default=0)
+    base_turn_360_hs = models.IntegerField(default=0)

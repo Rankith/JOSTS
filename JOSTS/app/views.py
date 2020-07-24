@@ -9,7 +9,7 @@ from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnIma
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
     Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
     CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz,CoachUserNote, \
-    AcroBalance,AcroWomensBonus,AcroInvalid
+    AcroBalance,AcroWomensBonus,AcroInvalid,AcroBalanceTransition
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1722,6 +1722,57 @@ def import_from_fig(request):
                 ai.save()
 
             response +=  " | acro invalid group created: " + str(AcroInvalid.objects.all().count())
+
+        if 'acrobalancetransition' in type or type=='acroall':
+            AcroBalanceTransition.objects.all().delete()
+
+            #pairs
+            query="Select firstbalance,secondbalance,movementvalue,`table number`,baseturn180,baseturn360,baseturn180hs,baseturn360hs FROM pairtransitionvalues"
+            cursor.execute(query)
+
+            for (firstbalance,secondbalance,movementvalue,table_number,baseturn180,baseturn360,baseturn180hs,baseturn360hs) in cursor:
+               if ',' in movementvalue:
+                   movementvaluehs = movementvalue.split(',')[1]
+                   movementvalue = movementvalue.split(',')[0]
+               else:
+                   movementvaluehs = 0
+
+               at = AcroBalanceTransition(event='XP',first_balance=firstbalance,second_balance=secondbalance,movement_value=movementvalue,movement_value_hs_fs=movementvaluehs,table_number=table_number,base_turn_180=baseturn180,base_turn_180_hs=baseturn180hs,base_turn_360=baseturn360,base_turn_360_hs=baseturn360hs)
+               at.save()
+
+            response +=  " | acro balance pairs transition created: " + str(AcroBalanceTransition.objects.all().count())
+
+            #trio
+            query="Select firstbalance,secondbalance,movementvalue,movementvalue2,movementvalue3,movementvalue4,`table number`,baseturn180,baseturn360,baseturn180hs,baseturn360hs FROM triotransitionvalues"
+            cursor.execute(query)
+
+            for (firstbalance,secondbalance,movementvalue,movementvalue2,movementvalue3,movementvalue4,table_number,baseturn180,baseturn360,baseturn180hs,baseturn360hs) in cursor:
+               if ',' in movementvalue:
+                   movementvaluehs = movementvalue.split(',')[1]
+                   movementvalue = movementvalue.split(',')[0]
+               else:
+                   movementvaluehs = 0
+
+               at = AcroBalanceTransition(event='TR',first_balance=firstbalance,second_balance=secondbalance,movement_value=movementvalue,movement_value_hs_fs=movementvaluehs,movement_value2=movementvalue2,movement_value3=movementvalue3,movement_value4=movementvalue4,table_number=table_number,base_turn_180=baseturn180,base_turn_180_hs=baseturn180hs,base_turn_360=baseturn360,base_turn_360_hs=baseturn360hs)
+               at.save()
+
+            response +=  " | acro balance trios transition created: " + str(AcroBalanceTransition.objects.all().count())
+
+            #groups
+            query="Select firstbalance,secondbalance,movementvalue,movementvalue2,movementvalue3,movementvalue4,`table number`,baseturn180,baseturn360,baseturn180hs,baseturn360hs FROM grouptransitionvalues"
+            cursor.execute(query)
+
+            for (firstbalance,secondbalance,movementvalue,movementvalue2,movementvalue3,movementvalue4,table_number,baseturn180,baseturn360,baseturn180hs,baseturn360hs) in cursor:
+               if ',' in movementvalue:
+                   movementvaluehs = movementvalue.split(',')[1]
+                   movementvalue = movementvalue.split(',')[0]
+               else:
+                   movementvaluehs = 0
+
+               at = AcroBalanceTransition(event='GR',first_balance=firstbalance,second_balance=secondbalance,movement_value=movementvalue,movement_value_hs_fs=movementvaluehs,movement_value2=movementvalue2,movement_value3=movementvalue3,movement_value4=movementvalue4,table_number=table_number,base_turn_180=baseturn180,base_turn_180_hs=baseturn180hs,base_turn_360=baseturn360,base_turn_360_hs=baseturn360hs)
+               at.save()
+
+            response +=  " | acro balance groups transition created: " + str(AcroBalanceTransition.objects.all().count())
 
     return JsonResponse({'result':response})
 
