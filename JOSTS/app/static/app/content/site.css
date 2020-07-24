@@ -647,3 +647,10 @@ a.BlueLoginButton {
     padding-bottom:10px;
     cursor:pointer;
 }
+
+.vid-btn-top-left{
+    position:absolute;
+    left:1px;
+    top:-2px;
+    font-size:0.7rem;
+}
