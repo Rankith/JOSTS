@@ -482,3 +482,8 @@ class AcroWomensBonus(models.Model):
      top_interface = models.CharField(max_length=10,default='',blank=True)
      bonus = models.IntegerField(default=0)
      bonus_extra = models.IntegerField(default=0)
+
+class AcroInvalid(models.Model):
+     base = models.ForeignKey(AcroBalance,on_delete=models.CASCADE,null=True,blank=True,related_name='invalid_base')
+     top = models.ForeignKey(AcroBalance,on_delete=models.CASCADE,null=True,blank=True,related_name='invalid_top')
+     invalid_for = models.CharField(max_length=3,default='',blank=True)

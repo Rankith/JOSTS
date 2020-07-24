@@ -3,7 +3,7 @@ from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, Dr
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
     Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
     CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink, CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, \
-    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz, CoachUserNote, AcroBalance, AcroWomensBonus
+    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz, CoachUserNote, AcroBalance, AcroWomensBonus, AcroInvalid
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -227,6 +227,10 @@ class AcroWomensBonusAdmin(ImportExportModelAdmin):
     list_display=('id','bottom_interface','top_interface','bonus','bonus_extra')
     list_editable=('bottom_interface','top_interface','bonus','bonus_extra')
 
+class AcroInvalidAdmin(ImportExportModelAdmin):
+    list_display=('id','base','top','invalid_for')
+    list_editable=('invalid_for',)
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -272,3 +276,4 @@ admin.site.register(CoachFundamentalUserAnswer,CoachFundamentalUserAnswerAdmin)
 admin.site.register(CoachFundamentalUserQuiz,CoachFundamentalUserQuizAdmin)
 admin.site.register(AcroBalance,AcroBalanceAdmin)
 admin.site.register(AcroWomensBonus,AcroWomensBonusAdmin)
+admin.site.register(AcroInvalid,AcroInvalidAdmin)

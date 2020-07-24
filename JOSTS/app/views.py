@@ -9,7 +9,7 @@ from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnIma
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
     Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
     CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz,CoachUserNote, \
-    AcroBalance,AcroWomensBonus
+    AcroBalance,AcroWomensBonus,AcroInvalid
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -531,44 +531,64 @@ def acro_get_score(request):
             #grab base and top data
             base = AcroBalance.objects.get(pk=data["Bases"][i])
             top = AcroBalance.objects.get(pk=data["Tops"][i])
-            #check if the base is 222324 skill and use top interface
-            if "222324" in base.skill_name:
-                base_extra = AcroBalance.objects.filter(skill_name=base.skill_name, top_interface_point=top.top_interface_point)
-                base_value = base_extra[0].value
-                score_dict["base_trans_group"] =  base_extra[0].transition_group
-            else:
-                base_value = base.value
-                score_dict["base_trans_group"] =  base.transition_group
-            top_value = top.value
-            spec_value_top = top_value
-            score_dict["top_trans_group"] = top.transition_group
-            first_bonus = top.bonus
-            #check WP bonus
+            #get pair type
             if data["SexBases"][i] == "W" and data["SexTops"][i] == "W":
-                womens_bonus = AcroWomensBonus.objets.filter(bottom_interface=base.bottom_interface,top_interface=top.top_interface)
-                if len(womens_bonus) > 0:
-                    w_bonus = womens_bonus[0].bonus
-                    if top_value+base_value+first_bonus >= 6:
-                        w_bonus = w_bonus + womens_bonus[0].bonus_extra
-            
-            if two_sec_hold:
-                score_dict["base_value"] = base_value
-                if w_bonus > 0 and first_bonus > 0:
-                    score_dict["top_value"] = str(top_value) + " + " + str(w_bonus) + " + " + str(first_bonus)
-                elif first_bonus > 0:
-                    score_dict["top_value"] = str(top_value) + " + " + str(first_bonus)
-                elif w_bonus > 0:
-                    score_dict["top_value"] = str(top_value) + " + " + str(w_bonus)
-                else:
-                    score_dict["top_value"] = top_value
-                total = base_value + top_value + w_bonus + first_bonus
-                first_bonus += w_bonus
-                
+                pair_type = "WP"
+            elif data["SexBases"][i] == "M" and data["SexTops"][i] == "M":
+                pair_type = "MP"
             else:
-                score_dict["base_value"] = 0
-                score_dict["top_value"] = 0
-                total = 0
-            score_dict["total"] = total
+                pair_type = "XP"
+             #check for invalid
+            if len(AcroInvalid.objects.filter((Q(base=base) | Q(base=None)) & (Q(top=top) | Q(top=None)) & (Q(invalid_for=pair_type) | Q(invalid_for='ALL')))) > 0:
+                 score_dict["top_value"]=""
+                 score_dict["base_value"]=""
+                 score_dict["base_trans_group"] = "Invalid"
+                 score_dict["top_trans_group"] = "Invalid"
+                 score_dict["total"] = "0"
+                 w_bonus = 0
+                 first_bonus = 0
+                 top_value = 0
+                 base_value = 0
+                 total = 0
+            else:
+                #check if the base is 222324 skill and use top interface
+                if "222324" in base.skill_name:
+                    base_extra = AcroBalance.objects.filter(skill_name=base.skill_name, top_interface_point=top.top_interface_point)
+                    base_value = base_extra[0].value
+                    score_dict["base_trans_group"] =  base_extra[0].transition_group
+                else:
+                    base_value = base.value
+                    score_dict["base_trans_group"] =  base.transition_group
+                top_value = top.value
+                spec_value_top = top_value
+                score_dict["top_trans_group"] = top.transition_group
+                first_bonus = top.bonus
+                #check WP bonus
+                if  pair_type == "WP":
+                    womens_bonus = AcroWomensBonus.objets.filter(bottom_interface=base.bottom_interface,top_interface=top.top_interface)
+                    if len(womens_bonus) > 0:
+                        w_bonus = womens_bonus[0].bonus
+                        if top_value+base_value+first_bonus >= 6:
+                            w_bonus = w_bonus + womens_bonus[0].bonus_extra
+            
+                if two_sec_hold:
+                    score_dict["base_value"] = base_value
+                    if w_bonus > 0 and first_bonus > 0:
+                        score_dict["top_value"] = str(top_value) + " + " + str(w_bonus) + " + " + str(first_bonus)
+                    elif first_bonus > 0:
+                        score_dict["top_value"] = str(top_value) + " + " + str(first_bonus)
+                    elif w_bonus > 0:
+                        score_dict["top_value"] = str(top_value) + " + " + str(w_bonus)
+                    else:
+                        score_dict["top_value"] = top_value
+                    total = base_value + top_value + w_bonus + first_bonus
+                    first_bonus += w_bonus    
+                else:
+                    score_dict["base_value"] = 0
+                    score_dict["top_value"] = 0
+                    total = 0
+
+                score_dict["total"] = total
             score_list.append(score_dict)
         else:
             score_list.append(None)
@@ -1529,7 +1549,7 @@ def import_from_fig(request):
             response +=  " | tc notes created: " + str(VideoNote.objects.filter(video__disc_id=discid).exclude(video__tcexample=None).count())
 
         if 'acrobalancepairs' in type or type=='acroall':
-            AcroBalance.objects.filter(event='B').delete()
+            AcroBalance.objects.filter(event='XP').delete()
             
             #balance pairs
             query="Select Catagory,`Skill Number`,Value,Bonus,`Transition Bonus`,`Skill Name`,`Skill Description`,TransitionGroup,`Top/Bottom`,`Top Interface Point`,`Bottom Interface Point`,BaseNumber,PageNumber,ThumbnailDirection FROM main"
@@ -1550,14 +1570,14 @@ def import_from_fig(request):
                     value = -1
                 if bonus == None:
                     bonus = -1
-                ab = AcroBalance(event='B',category=cat,skill_number=skillnum,value=value,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface, \
+                ab = AcroBalance(event='XP',category=cat,skill_number=skillnum,value=value,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface, \
                     base_number=basenumber,page_number=pagenumber,thumbnail_direction=thumbnaildirection)
                 ab.save()
 
             response +=  " | acro balance pairs created: " + str(AcroBalance.objects.all().count())
 
         if 'acrobalancetrio' in type or type=='acroall':
-            AcroBalance.objects.filter(event='BT').delete()
+            AcroBalance.objects.filter(event='TR').delete()
 
              #balance trios
             query="Select Event,Category,`Skill Number`,Value,Value2,Value3,Value4,Bonus,`Transition Bonus`,`Skill Name`,`Skill Description`,Orientation,Layer,BaseBoxNumber,TransitionGroup,`Top/Bottom`,`Top Interface Point`,`Bottom Interface Point`,`Bottom Interface Point 2`,SpecialBaseNumber,BaseNumber,PageNumber,ThumbnailDirection,StartNumber FROM maintrio"
@@ -1598,16 +1618,16 @@ def import_from_fig(request):
                     value4 = -1
                 if bonus == None:
                     bonus = -1
-                ab = AcroBalance(event='BT',category=cat,skill_number=skillnum,value=value,value2=value2,value3=value3,value4=value4,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface,bottom_interface_point2=bottominterface2, \
+                ab = AcroBalance(event='TR',category=cat,skill_number=skillnum,value=value,value2=value2,value3=value3,value4=value4,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface,bottom_interface_point2=bottominterface2, \
                     base_number=basenumber,page_number=pagenumber,thumbnail_direction=thumbnaildirection,orientation=orientation,layer=layer,special_base_number=specialbasenumber,start_number=startnumber,base_box_number=baseboxnumber)
                 ab.save()
 
             response +=  " | acro balance trios created: " + str(AcroBalance.objects.all().count())
 
         if 'acrobalancegroup' in type or type=='acroall':
-            AcroBalance.objects.filter(event='BG').delete()
+            AcroBalance.objects.filter(event='GR').delete()
 
-             #balance trios
+             #balance group
             query="Select Event,Category,`Skill Number`,Value,Value2,Value3,Value4,Bonus,`Transition Bonus`,`Skill Name`,`Skill Description`,Orientation,Layer,BaseBoxNumber,TransitionGroup,`Top/Bottom`,`Top Interface Point`,`Bottom Interface Point`,`Bottom Interface Point 2`,SpecialBaseNumber,BaseNumber,PageNumber,ThumbnailDirection,StartNumber FROM maingroup"
             cursor.execute(query)
 
@@ -1646,11 +1666,62 @@ def import_from_fig(request):
                     value4 = -1
                 if bonus == None or bonus == '':
                     bonus = -1
-                ab = AcroBalance(event='BG',category=cat,skill_number=skillnum,value=value,value2=value2,value3=value3,value4=value4,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface,bottom_interface_point2=bottominterface2, \
+                ab = AcroBalance(event='GR',category=cat,skill_number=skillnum,value=value,value2=value2,value3=value3,value4=value4,bonus=bonus,transition_bonus=transbonus,skill_name=name,skill_description=description,transition_group=transgroup,top_bottom=topbottom,top_interface_point=topinterface,bottom_interface_point=bottominterface,bottom_interface_point2=bottominterface2, \
                     base_number=basenumber,page_number=pagenumber,thumbnail_direction=thumbnaildirection,orientation=orientation,layer=layer,special_base_number=specialbasenumber,start_number=startnumber,base_box_number=baseboxnumber)
                 ab.save()
 
             response +=  " | acro balance groups created: " + str(AcroBalance.objects.all().count())
+
+        if 'acroinvalid' in type or type=='acroall':
+            AcroInvalid.objects.all().delete()
+
+            #balance
+            query="Select Base,Top,InvalidFor FROM acrobalanceinvalid"
+            cursor.execute(query)
+
+            for (base,top,invalidfor) in cursor:
+                if base == 0:
+                    base = None
+                else:
+                    base = AcroBalance.objects.filter(skill_number=base,event='XP').first()
+                    if base == None:
+                        continue #goto next one as this is a bad record
+
+                if top == 0:
+                    top = None
+                else:
+                    top = AcroBalance.objects.filter(skill_number=top,event='XP').first()
+                    if top == None:
+                        continue #goto next one as this is a bad record
+
+                ai = AcroInvalid(base=base,top=top,invalid_for=invalidfor)
+                ai.save()
+
+            response +=  " | acro invalid created: " + str(AcroInvalid.objects.all().count())
+
+            #balance group
+            query="Select Base,Top,InvalidFor FROM acrobalanceinvalidgroup"
+            cursor.execute(query)
+
+            for (base,top,invalidfor) in cursor:
+                if base == 0:
+                    base = None
+                else:
+                    base = AcroBalance.objects.filter(skill_number=base,event='GR').first()
+                    if base == None:
+                        continue #goto next one as this is a bad record
+
+                if top == 0:
+                    top = None
+                else:
+                    top = AcroBalance.objects.filter(skill_number=top,event='GR').first()
+                    if top == None:
+                        continue #goto next one as this is a bad record
+
+                ai = AcroInvalid(base=base,top=top,invalid_for=invalidfor)
+                ai.save()
+
+            response +=  " | acro invalid group created: " + str(AcroInvalid.objects.all().count())
 
     return JsonResponse({'result':response})
 
