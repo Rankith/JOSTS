@@ -231,6 +231,11 @@ class AcroInvalidAdmin(ImportExportModelAdmin):
     list_display=('id','base','top','invalid_for')
     list_editable=('invalid_for',)
 
+class AcroBalanceTransitionAdmin(ImportExportModelAdmin):
+    list_display=('id','event','first_balance','second_balance','movement_value','movement_value_hs_fs')
+    list_editable=('event','first_balance','second_balance','movement_value','movement_value_hs_fs')
+    list_filter = ('event',)
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -277,4 +282,4 @@ admin.site.register(CoachFundamentalUserQuiz,CoachFundamentalUserQuizAdmin)
 admin.site.register(AcroBalance,AcroBalanceAdmin)
 admin.site.register(AcroWomensBonus,AcroWomensBonusAdmin)
 admin.site.register(AcroInvalid,AcroInvalidAdmin)
-admin.site.register(AcroBalanceTransition)
+admin.site.register(AcroBalanceTransition,AcroBalanceTransitionAdmin)

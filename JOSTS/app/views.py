@@ -554,8 +554,12 @@ def acro_get_score(request):
                 #check if the base is 222324 skill and use top interface
                 if "222324" in base.skill_name:
                     base_extra = AcroBalance.objects.filter(skill_name=base.skill_name, top_interface_point=top.top_interface_point)
-                    base_value = base_extra[0].value
-                    score_dict["base_trans_group"] =  base_extra[0].transition_group
+                    if len(base_extra) > 0:
+                        base_value = base_extra[0].value
+                        score_dict["base_trans_group"] =  base_extra[0].transition_group
+                    else:
+                        base_value = 0
+                        score_dict["base_trans_group"] = ""
                 else:
                     base_value = base.value
                     score_dict["base_trans_group"] =  base.transition_group
@@ -586,9 +590,86 @@ def acro_get_score(request):
                 else:
                     score_dict["base_value"] = 0
                     score_dict["top_value"] = 0
-                    total = 0
+                    total = 0  
 
-                score_dict["total"] = total
+            #now get transition value if applicable
+            if data["Bases"][i-1] != None and data["Tops"][i-1] != None:
+                if score_list[i-1]["top_trans_group"] != "Invalid" and score_dict["top_trans_group"] != "Invalid": #make sure both transition groups were valid for previous and current
+                    #set base motion
+                    if len(score_list[i-1]["base_trans_group"]) > 0:
+                        score_dict["base_motion_ref"] = score_list[i-1]["base_trans_group"][-1] + "-"
+                    else:
+                        score_dict["base_motion_ref"] = " -"
+
+                    if len(score_dict["base_trans_group"]) > 0:
+                        score_dict["base_motion_ref"] += score_dict["base_trans_group"][-1]
+                    else:
+                        score_dict["base_motion_ref"] += " "
+                    
+                    if  score_dict["base_trans_group"] !=  score_list[i-1]["base_trans_group"]: 
+                        #has base motion
+                        base_motion_value = AcroBalanceTransition.objects.filter(first_balance=score_list[i-1]["base_trans_group"],second_balance=score_dict["base_trans_group"])
+                        if len(base_motion_value) > 0:
+                            #if the value of the top >=6 and its a HS or FS use other value if its not 0
+                            if top.value >= 6 and ("HS" in top.skill_name or "FS" in top.skill_name) and base_motion_value[0].movement_value_hs_fs > 0:
+                                score_dict["base_motion_value"] = base_motion_value[0].movement_value_hs_fs
+                            else:
+                                score_dict["base_motion_value"] = base_motion_value[0].movement_value
+                            total += score_dict["base_motion_value"]
+                        else:
+                            score_dict["base_motion_value"] = "Invalid"
+                    else:
+                        score_dict["base_motion_value"] = 0
+                        
+
+                    #set base motion
+                    if len(score_list[i-1]["top_trans_group"]) > 0:
+                        score_dict["top_motion_ref"] = score_list[i-1]["top_trans_group"][-1] + "-"
+                    else:
+                        score_dict["top_motion_ref"] = " -"
+
+                    if len(score_dict["top_trans_group"]) > 0:
+                        score_dict["top_motion_ref"] += score_dict["top_trans_group"][-1]
+                    else:
+                        score_dict["top_motion_ref"] += " "
+                    
+                    if score_dict["top_trans_group"] !=  score_list[i-1]["top_trans_group"]: 
+                        #has base motion
+                        top_motion_value = AcroBalanceTransition.objects.filter(first_balance=score_list[i-1]["top_trans_group"],second_balance=score_dict["top_trans_group"])
+                        if len(top_motion_value) > 0:
+                            #if the value of the top >=6 and its a HS or FS use other value if its not 0
+                            if top.value >= 6 and ("HS" in top.skill_name or "FS" in top.skill_name) and top_motion_value[0].movement_value_hs_fs > 0:
+                                score_dict["top_motion_value"] = top_motion_value[0].movement_value_hs_fs
+                            else:
+                                score_dict["top_motion_value"] = top_motion_value[0].movement_value
+                            total += score_dict["top_motion_value"]
+                        else:
+                            score_dict["top_motion_value"] = "Invalid"
+                    else:
+                        score_dict["top_motion_value"] = 0
+
+                    #static top
+                    if score_dict["base_trans_group"] != score_list[i-1]["base_trans_group"] and score_dict["base_motion_value"] != "Invalid" and score_dict["base_motion_value"] != 0: 
+                        if two_sec_hold:
+                            value_top_static = top_value
+                        else:#use the non bonus version if not held
+                            value_top_static = spec_value_top
+
+                        score_dict["static_top_value"] = value_top_static
+                        static_first_bonus = first_bonus
+                        if value_top_static > 0:
+                            if w_bonus > 0 and static_first_bonus > 0:
+                                score_dict["static_top_value"] = str(value_top_static) + " + " + str(w_bonus) + " + " + str(static_first_bonus)
+                            elif first_bonus > 0:
+                                score_dict["static_top_value"] = str(value_top_static) + " + " + str(static_first_bonus)
+                            elif w_bonus > 0:
+                                score_dict["static_top_value"] = str(value_top_static) + " + " + str(w_bonus)
+                            else:
+                                score_dict["static_top_value"] = value_top_static 
+                        total += static_first_bonus + value_top_static + w_bonus
+
+
+            score_dict["total"] = total
             score_list.append(score_dict)
         else:
             score_list.append(None)

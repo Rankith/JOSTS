@@ -76,6 +76,11 @@
                 $("#divScore" + count + "TopVal").html(item["top_value"]);
                 $("#divScore" + count + "BaseRef").html(item["base_trans_group"]);
                 $("#divScore" + count + "BaseVal").html(item["base_value"]);
+                $("#divScore" + count + "MotionBaseRef").html(item["base_motion_ref"]);
+                $("#divScore" + count + "MotionBaseVal").html(item["base_motion_value"]);
+                $("#divScore" + count + "MotionTopRef").html(item["top_motion_ref"]);
+                $("#divScore" + count + "MotionTopVal").html(item["top_motion_value"]);
+                $("#divScore" + count + "StaticTopVal").html(item["static_top_value"]);
                 $("#divScore" + count + "Total").html("Total Value: " + item["total"]);
             }
             count++;
