@@ -28,7 +28,7 @@
     IDs['top'] = new Array();
     Sexes['base'] = new Array();
     Sexes['top'] = new Array();
-    var ElementSkeleton = '<div id="divElement[ElementNumber]" class="col-md-4 col-lg-3 col-10 d-flex justify-content-center" style="height:calc(100vh - 100px);align-items: safe center"><div style=""><button id = "btnNext" type = "button" class="btn btn-main pr-3 pl-3 search-button" onclick = "AddElement()" ><i class="fas fa-plus"></i></button ></div></div >';
+    var ElementSkeleton = '<div id="divElement[ElementNumber]" class="col-md-4 col-lg-3 col-10 d-flex justify-content-center" style="height:calc(100vh - 100px);align-items: safe center"><div style=""></div></div >';
     $("#divMain").removeClass("container").addClass("container-fluid");
     //SetNextContainer();
     AddElement();
@@ -74,7 +74,7 @@
             if (item != null) {
                 $("#divScore" + count + "TopRef").html(item["top_trans_group"]);
                 $("#divScore" + count + "TopVal").html(item["top_value"]);
-                $("#divScore" + count + "BaseRef").html(item["base_trans_group"]);
+                $("#divScore" + count + "BaseRef").html(item["base_trans_group_display"]);
                 $("#divScore" + count + "BaseVal").html(item["base_value"]);
                 $("#divScore" + count + "MotionBaseRef").html(item["base_motion_ref"]);
                 $("#divScore" + count + "MotionBaseVal").html(item["base_motion_value"]);
@@ -93,6 +93,7 @@
     function SetNextContainer() {
         OnElement++;
         $("#divElementHolder").append(ElementSkeleton.replace("[ElementNumber]", OnElement));
+        AddElement();
     }
     var Event = "";
     var ValueDisplay = "value";

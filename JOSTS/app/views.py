@@ -563,6 +563,7 @@ def acro_get_score(request):
                 else:
                     base_value = base.value
                     score_dict["base_trans_group"] =  base.transition_group
+                score_dict["base_trans_group_display"] = str(base.page_number) + "-" + str(base.base_number)
                 top_value = top.value
                 spec_value_top = top_value
                 score_dict["top_trans_group"] = top.transition_group
