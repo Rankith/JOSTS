@@ -618,6 +618,22 @@ def acro_get_score(request):
                             else:
                                 score_dict["base_motion_value"] = base_motion_value[0].movement_value
                             total += score_dict["base_motion_value"]
+
+                            #see if it turns etc
+                            if data["BaseHalf"][i] and "HS" in top.skill_name:
+                                score_dict["base_turn_value"] = base_motion_value[0].base_turn_180_hs
+                            elif data["BaseHalf"][i]:
+                                score_dict["base_turn_value"] = base_motion_value[0].base_turn_180
+                            elif data["BaseFull"][i] and "HS" in top.skill_name:
+                                score_dict["base_turn_value"] = base_motion_value[0].base_turn_360_hs
+                            elif data["BaseHalf"][i]:
+                                score_dict["base_turn_value"] = base_motion_value[0].base_turn_360
+                            else:
+                                score_dict["base_turn_value"] = 0
+                            total += score_dict["base_turn_value"]
+                            if score_dict["base_turn_value"] != 0:
+                                 score_dict["base_motion_value"] = str(score_dict["base_motion_value"]) + " + " + str(score_dict["base_turn_value"])
+
                         else:
                             score_dict["base_motion_value"] = "Invalid"
                     else:

@@ -22,21 +22,55 @@
     </script>
 <script type="text/javascript">
     var OnElement = 1;
-    var IDs = new Array();
-    var Sexes = new Array();
-    IDs['base'] = new Array();
-    IDs['top'] = new Array();
-    Sexes['base'] = new Array();
-    Sexes['top'] = new Array();
+    var OETrans = new Array();
+    var OETransReverse = new Array();
+    var RemovedCount = 0;
+
     var ElementSkeleton = '<div id="divElement[ElementNumber]" class="col-md-4 col-lg-3 col-10 d-flex justify-content-center" style="height:calc(100vh - 100px);align-items: safe center"><div style=""></div></div >';
     $("#divMain").removeClass("container").addClass("container-fluid");
     //SetNextContainer();
     AddElement();
+    OETrans[0] = -1;
 
     function RemoveElement(which) {
         $("#divElement" + which).remove();
-        IDs['base'][which] = null;
-        IDs['top'][which] = null;
+        RemovedCount++;
+        for (var i = 0; i < OETrans.length; i++){
+            if (OETrans[i] == which)
+                OETrans.splice(i, 1); 
+        }
+        SetReverse();
+        GetScore();
+        //OETrans.splice(which, 1);
+        //fix translation
+    }
+
+    function SetReverse() {
+        OETransReverse = new Array();
+        for (var i = 0; i < OETrans.length; i++) {
+            if (OETrans[i] != -1)
+                OETransReverse[OETrans[i]] = i;
+        }
+    }
+
+
+    function BaseTurnHalfClick(which)
+    {
+        if ($("#chk" + which + "BaseTurnHalf").is(":checked"))
+            $("#chk" + which + "BaseTurnFull").prop("checked",false)
+        CheckAndGetScore(which);
+    }
+
+    function BaseTurnFullClick(which)
+    {
+        if ($("#chk" + which + "BaseTurnFull").is(":checked"))
+            $("#chk" + which + "BaseTurnHalf").prop("checked",false)
+        CheckAndGetScore(which);
+    }
+
+    function CheckAndGetScore(which) {
+        if ($("#C" + which + "base").is(":visible") && $("#C" + which + "top").is(":visible"))
+            GetScore();
     }
 
     function AcroSkillClick(type, which, id, image, sex) {
@@ -46,42 +80,58 @@
         //console.log(image + "-s-" + sex + ".svg");
         $("#C" + which + type).attr("src", ImagePath + image + "-s-" + sex + ".svg");
         $("#C" + which + type).show();
-        IDs[type][which] = id;
-        Sexes[type][which] = sex;
-        if ($("#C" + which + "base").is(":visible") && $("#C" + which + "top").is(":visible"))
-            GetScore(which);
+        //IDs[type][which] = id;
+        //Sexes[type][which] = sex;
+        CheckAndGetScore(which);
     }
 
-    function GetScore(which) {
+    function GetScore() {
+        var IDs = new Array();
+        var Sexes = new Array();
+        IDs['base'] = new Array();
+        IDs['top'] = new Array();
+        Sexes['base'] = new Array();
+        Sexes['top'] = new Array();
         var Connect = new Array();
         var BaseHalf = new Array();
         var BaseFull = new Array();
         var Hold = new Array();
+
+        $(".acro-select-base.acro-selected").each(function (i) {
+            IDs['base'][OETransReverse[$(this).attr("data-link")]] = $(this).attr("data-id");
+            Sexes['base'][OETransReverse[$(this).attr("data-link")]] = $(this).attr("data-sex");
+        });
+
+        $(".acro-select-top.acro-selected").each(function (i) {
+            IDs['top'][OETransReverse[$(this).attr("data-link")]] = $(this).attr("data-id");
+            Sexes['top'][OETransReverse[$(this).attr("data-link")]] = $(this).attr("data-sex");
+        });
+
         $(".check-connected").each(function (i) {
             if ($(this).is(":checked"))
-                Connect[$(this).val()] = true;
+                Connect[OETransReverse[$(this).val()]] = true;
             else
-                Connect[$(this).val()] = false;
+                Connect[OETransReverse[$(this).val()]] = false;
         });
         $(".check-hold").each(function (i) {
             if ($(this).is(":checked"))
-                Hold[$(this).val()] = true;
+                Hold[OETransReverse[$(this).val()]] = true;
             else
-                Hold[$(this).val()] = false;
+                Hold[OETransReverse[$(this).val()]] = false;
         });
         $(".check-base-turn-half").each(function (i) {
             if ($(this).is(":checked"))
-                BaseHalf[$(this).val()] = true;
+                BaseHalf[OETransReverse[$(this).val()]] = true;
             else
-                BaseHalf[$(this).val()] = false;
+                BaseHalf[OETransReverse[$(this).val()]] = false;
         });
         $(".check-base-turn-full").each(function (i) {
             if ($(this).is(":checked"))
-                BaseFull[$(this).val()] = true;
+                BaseFull[OETransReverse[$(this).val()]] = true;
             else
-                BaseFull[$(this).val()] = false;
+                BaseFull[OETransReverse[$(this).val()]] = false;
         });
-        console.log(Connect);
+        //console.log(Connect);
         $.ajax({
             url: '/ajax/acro_get_score/',
             data: JSON.stringify({
@@ -100,7 +150,7 @@
             dataType: 'text',
             success: function (data) {
                 data = JSON.parse(data);
-                HoldData = data;
+                //HoldData = data;
                 //console.log(data);
                 SetResult(data);
             }
@@ -111,16 +161,16 @@
         var count = 0;
         data["score_list"].forEach(function (item) {
             if (item != null) {
-                $("#divScore" + count + "TopRef").html(item["top_trans_group"]);
-                $("#divScore" + count + "TopVal").html(item["top_value"]);
-                $("#divScore" + count + "BaseRef").html(item["base_trans_group_display"]);
-                $("#divScore" + count + "BaseVal").html(item["base_value"]);
-                $("#divScore" + count + "MotionBaseRef").html(item["base_motion_ref"]);
-                $("#divScore" + count + "MotionBaseVal").html(item["base_motion_value"]);
-                $("#divScore" + count + "MotionTopRef").html(item["top_motion_ref"]);
-                $("#divScore" + count + "MotionTopVal").html(item["top_motion_value"]);
-                $("#divScore" + count + "StaticTopVal").html(item["static_top_value"]);
-                $("#divScore" + count + "Total").html("Total Value: " + item["total"]);
+                $("#divScore" + OETrans[count] + "TopRef").html((item["top_trans_group"] == undefined ? '' : item["top_trans_group"]));
+                $("#divScore" + OETrans[count] + "TopVal").html((item["top_value"] == undefined ? '' : item["top_value"]));
+                $("#divScore" + OETrans[count] + "BaseRef").html((item["base_trans_group_display"] == undefined ? '' : item["base_trans_group_display"]));
+                $("#divScore" + OETrans[count] + "BaseVal").html((item["base_value"] == undefined ? '' : item["base_value"]));
+                $("#divScore" + OETrans[count] + "MotionBaseRef").html((item["base_motion_ref"] == undefined ? '' : item["base_motion_ref"]));
+                $("#divScore" + OETrans[count] + "MotionBaseVal").html((item["base_motion_value"] == undefined ? '' : item["base_motion_value"]));
+                $("#divScore" + OETrans[count] + "MotionTopRef").html((item["top_motion_ref"] == undefined ? '' : item["top_motion_ref"]));
+                $("#divScore" + OETrans[count] + "MotionTopVal").html((item["top_motion_value"] == undefined ? '' : item["top_motion_value"]));
+                $("#divScore" + OETrans[count] + "StaticTopVal").html((item["static_top_value"] == undefined ? '' : item["static_top_value"]));
+                $("#divScore" + OETrans[count] + "Total").html("Total Value: " + (item["total"] == undefined ? '' : item["total"]));
             }
             count++;
         });
@@ -130,6 +180,8 @@
         $("#divElement" + OnElement).load("/element_search", LoadLastSelections);
     }
     function SetNextContainer() {
+        OETrans.push(OnElement);
+        SetReverse();
         OnElement++;
         $("#divElementHolder").append(ElementSkeleton.replace("[ElementNumber]", OnElement));
         AddElement();
@@ -217,7 +269,7 @@
 
         //if ($("#txtSearch").val() != "")
         strValues = "onelement=" + OnElement + "&search=" + $("#txtSearch").val() + "&" + strValues;
-        console.log(strValues);
+        //console.log(strValues);
 
         $.get("/element_builder_acro/?" + strValues, function (data) {
             $("#divElement" + OnElement).empty();
@@ -242,8 +294,8 @@
         //console.log(localStorage);
 
         $(".check-search:checkbox").each(function (i) {
-            console.log(this.id);
-            console.log(localStorage.getItem(this.id));
+            //console.log(this.id);
+            //console.log(localStorage.getItem(this.id));
             if (localStorage.getItem(this.id) == "1")
                 $(this).prop('checked', true);
             else
@@ -261,7 +313,7 @@
                 localStorage.setItem('chkAcrBAL', 1);
             }
         }
-        console.log($(".check-search-event:checkbox:checked").length);
+       // console.log($(".check-search-event:checkbox:checked").length);
         if ($(".check-search-event:checkbox:checked").length == 0 && $(".check-search-event:checkbox").length > 0)
             $(".check-search-event:checkbox")[0].click();
         else {
