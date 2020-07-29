@@ -519,7 +519,7 @@ def element_builder_acro(request):
 
 def acro_get_score(request):
     data = json.loads(request.body)
-    two_sec_hold = True
+    three_sec_hold = True
     base_turn = 0
     score_list = []
 
@@ -531,6 +531,7 @@ def acro_get_score(request):
             #grab base and top data
             base = AcroBalance.objects.get(pk=data["Bases"][i])
             top = AcroBalance.objects.get(pk=data["Tops"][i])
+            
             #get pair type
             if data["SexBases"][i] == "W" and data["SexTops"][i] == "W":
                 pair_type = "WP"
@@ -576,7 +577,7 @@ def acro_get_score(request):
                         if top_value+base_value+first_bonus >= 6:
                             w_bonus = w_bonus + womens_bonus[0].bonus_extra
             
-                if two_sec_hold:
+                if data["Hold"][i]:
                     score_dict["base_value"] = base_value
                     if w_bonus > 0 and first_bonus > 0:
                         score_dict["top_value"] = str(top_value) + " + " + str(w_bonus) + " + " + str(first_bonus)
@@ -594,7 +595,7 @@ def acro_get_score(request):
                     total = 0  
 
             #now get transition value if applicable
-            if data["Bases"][i-1] != None and data["Tops"][i-1] != None:
+            if data["Bases"][i-1] != None and data["Tops"][i-1] != None and data["Connect"][i]:
                 if score_list[i-1]["top_trans_group"] != "Invalid" and score_dict["top_trans_group"] != "Invalid": #make sure both transition groups were valid for previous and current
                     #set base motion
                     if len(score_list[i-1]["base_trans_group"]) > 0:
@@ -651,7 +652,7 @@ def acro_get_score(request):
 
                     #static top
                     if score_dict["base_trans_group"] != score_list[i-1]["base_trans_group"] and score_dict["base_motion_value"] != "Invalid" and score_dict["base_motion_value"] != 0: 
-                        if two_sec_hold:
+                        if data["Hold"][i]:
                             value_top_static = top_value
                         else:#use the non bonus version if not held
                             value_top_static = spec_value_top

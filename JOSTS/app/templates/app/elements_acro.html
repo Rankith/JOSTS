@@ -33,6 +33,12 @@
     //SetNextContainer();
     AddElement();
 
+    function RemoveElement(which) {
+        $("#divElement" + which).remove();
+        IDs['base'][which] = null;
+        IDs['top'][which] = null;
+    }
+
     function AcroSkillClick(type, which, id, image, sex) {
         $(".acro-filter-" + type + which).removeClass("acro-selected");
         $("#Acro" + which + type + id).addClass("acro-selected");
@@ -43,17 +49,50 @@
         IDs[type][which] = id;
         Sexes[type][which] = sex;
         if ($("#C" + which + "base").is(":visible") && $("#C" + which + "top").is(":visible"))
-            CheckAnswer(which);
+            GetScore(which);
     }
 
-     function CheckAnswer(which) {
+    function GetScore(which) {
+        var Connect = new Array();
+        var BaseHalf = new Array();
+        var BaseFull = new Array();
+        var Hold = new Array();
+        $(".check-connected").each(function (i) {
+            if ($(this).is(":checked"))
+                Connect[$(this).val()] = true;
+            else
+                Connect[$(this).val()] = false;
+        });
+        $(".check-hold").each(function (i) {
+            if ($(this).is(":checked"))
+                Hold[$(this).val()] = true;
+            else
+                Hold[$(this).val()] = false;
+        });
+        $(".check-base-turn-half").each(function (i) {
+            if ($(this).is(":checked"))
+                BaseHalf[$(this).val()] = true;
+            else
+                BaseHalf[$(this).val()] = false;
+        });
+        $(".check-base-turn-full").each(function (i) {
+            if ($(this).is(":checked"))
+                BaseFull[$(this).val()] = true;
+            else
+                BaseFull[$(this).val()] = false;
+        });
+        console.log(Connect);
         $.ajax({
             url: '/ajax/acro_get_score/',
             data: JSON.stringify({
                 Bases: IDs['base'],
                 Tops: IDs['top'],
                 SexBases: Sexes['base'],
-                SexTops:  Sexes['top'],
+                SexTops: Sexes['top'],
+                Hold: Hold,
+                Connect: Connect,
+                BaseHalf: BaseHalf,
+                BaseFull: BaseFull,
             }),
             headers: { "X-CSRFToken": token },
             type:'POST',
