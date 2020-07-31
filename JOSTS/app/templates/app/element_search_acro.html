@@ -33,19 +33,19 @@
  <div class="row no-gutters">
      <div class="pr-2">
             <label id="lblAcrBAL" class="search-button">
-                <input type="checkbox" id="chkAcrBAL" value="AcroBalance" class="check-search search-XP search-WP search-MP check-search-type" data-search="type" onchange="SearchChangeType(this)">
+                <input type="checkbox" id="chkAcrBAL" value="AcroBalance" class="check-search search-XP search-WP search-MP search-GR search-TR check-search-type" data-search="type" onchange="SearchChangeType(this)">
                 <div class="search-button group-button"><div style="font-size:1.3rem">BAL</div></div>
             </label>
         </div>
      <div class="pr-2">
             <label id="lblAcrMNT" class="search-button">
-                <input type="checkbox" id="chkAcrMNT" value="AcroMount" class="check-search search-XP search-WP search-MP check-search-type" data-search="type" onchange="SearchChangeType(this)">
+                <input type="checkbox" id="chkAcrMNT" value="AcroMount" class="check-search search-XP search-WP search-MP search-GR search-TR check-search-type" data-search="type" onchange="SearchChangeType(this)">
                 <div class="search-button group-button"><div style="font-size:1.3rem">MNT</div></div>
             </label>
         </div>
          <div class="pr-2">
             <label id="lblAcrDYN" class="search-button">
-                <input type="checkbox" id="chkAcrDYN" value="AcroDynamic" class="check-search search-XP search-WP search-MP check-search-type" data-search="type" onchange="SearchChangeType(this)">
+                <input type="checkbox" id="chkAcrDYN" value="AcroDynamic" class="check-search search-XP search-WP search-MP search-GR search-TR check-search-type" data-search="type" onchange="SearchChangeType(this)">
                 <div class="search-button group-button"><div style="font-size:1.3rem">DYN</div></div>
             </label>
         </div>
@@ -54,12 +54,33 @@
         {% for cat in categories %}
         <div class="pr-2">
             <label id="lblAcrC{{forloop.counter}}" class="search-button">
-                <input type="checkbox" id="chkAcrG{{forloop.counter}}" value="{{cat}}" class="check-search check-search-show" data-search="category" onchange="SearchChange(this)">
+                <input type="checkbox" id="chkAcrG{{forloop.counter}}" value="{{cat}}" class="check-search search-XP search-WP search-MP" data-search="category" onchange="SearchChange(this)">
                 <div class="search-button value-button"> <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/acro-{{cat}}.svg" /></div>
             </label>
         </div>
         {% endfor %}
+</div>
+    <div class="row no-gutters" id="divBalanceSearchGR">
+      {% for cat in gr_categories %}
+        <div class="pr-2">
+            <label id="lblAcrC{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkAcrG{{forloop.counter}}" value="{{cat}}" class="check-search search-GR" data-search="category" onchange="SearchChange(this)">
+                <div class="search-button value-button"> <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/acro-gr-{{cat}}.svg" /></div>
+            </label>
+        </div>
+        {% endfor %}
     </div>
+    <div class="row no-gutters" id="divBalanceSearchTR">
+      {% for cat in tr_categories %}
+        <div class="pr-2">
+            <label id="lblAcrC{{forloop.counter}}" class="search-button">
+                <input type="checkbox" id="chkAcrG{{forloop.counter}}" value="{{cat}}" class="check-search search-TR" data-search="category" onchange="SearchChange(this)">
+                <div class="search-button value-button"> <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/acro-tr-{{cat}}.svg" /></div>
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+
 
 {% else %}
     <div class="row no-gutters">

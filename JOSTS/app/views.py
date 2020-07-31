@@ -406,10 +406,13 @@ def element_search(request):
         return render(request, 'app/element_search_tramp.html',context=context)
     elif request.session.get('disc_path') == 'acro':
         cats = AcroBalance.objects.filter(event="XP").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
-
+        gr_cats = AcroBalance.objects.filter(event="GR").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
+        tr_cats = AcroBalance.objects.filter(event="TR").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
         events=request.session.get('disc_events','V,UB,BB,FX').split(",")
         context = {
             'categories':cats,
+            'gr_categories':gr_cats,
+            'tr_categories':tr_cats,
             'events': events,
             'search_type':'element',
             }
@@ -554,7 +557,7 @@ def acro_get_score(request):
             else:
                 #check if the base is 222324 skill and use top interface
                 if "222324" in base.skill_name:
-                    base_extra = AcroBalance.objects.filter(skill_name=base.skill_name, top_interface_point=top.top_interface_point)
+                    base_extra = AcroBalance.objects.filter(skill_name=base.skill_name, top_interface_point=top.top_interface_point,event=data['Events'][i])
                     if len(base_extra) > 0:
                         base_value = base_extra[0].value
                         score_dict["base_trans_group"] =  base_extra[0].transition_group
@@ -610,7 +613,7 @@ def acro_get_score(request):
                     
                     if  score_dict["base_trans_group"] !=  score_list[i-1]["base_trans_group"]: 
                         #has base motion
-                        base_motion_value = AcroBalanceTransition.objects.filter(first_balance=score_list[i-1]["base_trans_group"],second_balance=score_dict["base_trans_group"])
+                        base_motion_value = AcroBalanceTransition.objects.filter(first_balance=score_list[i-1]["base_trans_group"],second_balance=score_dict["base_trans_group"],event=data['Events'][i])
                         if len(base_motion_value) > 0:
                             #if the value of the top >=6 and its a HS or FS use other value if its not 0
                             if top.value >= 6 and ("HS" in top.skill_name or "FS" in top.skill_name) and base_motion_value[0].movement_value_hs_fs > 0:
@@ -653,7 +656,7 @@ def acro_get_score(request):
                     
                     if score_dict["top_trans_group"] !=  score_list[i-1]["top_trans_group"]: 
                         #has base motion
-                        top_motion_value = AcroBalanceTransition.objects.filter(first_balance=score_list[i-1]["top_trans_group"],second_balance=score_dict["top_trans_group"])
+                        top_motion_value = AcroBalanceTransition.objects.filter(first_balance=score_list[i-1]["top_trans_group"],second_balance=score_dict["top_trans_group"],event=data['Events'][i])
                         if len(top_motion_value) > 0:
                             #if the value of the top >=6 and its a HS or FS use other value if its not 0
                             if top.value >= 6 and ("HS" in top.skill_name or "FS" in top.skill_name) and top_motion_value[0].movement_value_hs_fs > 0:

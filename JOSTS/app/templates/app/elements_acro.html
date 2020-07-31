@@ -88,6 +88,7 @@
     function GetScore() {
         var IDs = new Array();
         var Sexes = new Array();
+        var Events = new Array();
         IDs['base'] = new Array();
         IDs['top'] = new Array();
         Sexes['base'] = new Array();
@@ -100,6 +101,7 @@
         $(".acro-select-base.acro-selected").each(function (i) {
             IDs['base'][OETransReverse[$(this).attr("data-link")]] = $(this).attr("data-id");
             Sexes['base'][OETransReverse[$(this).attr("data-link")]] = $(this).attr("data-sex");
+            Events[OETransReverse[$(this).attr("data-link")]] = $(this).attr("data-event");
         });
 
         $(".acro-select-top.acro-selected").each(function (i) {
@@ -143,6 +145,7 @@
                 Connect: Connect,
                 BaseHalf: BaseHalf,
                 BaseFull: BaseFull,
+                Events: Events,
             }),
             headers: { "X-CSRFToken": token },
             type:'POST',
