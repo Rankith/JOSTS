@@ -18,7 +18,11 @@
             {% elif note.no_value_type == 'devalue' %}
                 (<span class="video-note-devalue">{{note.element_link.down_value_letter}} value</span>,
             {% else %}
-                ({{note.element_link.letter_value}} value,
+                {% if note.element_link.event != "V" %}
+                    ({{note.element_link.letter_value}} value,
+                {% else %}
+                    ({{note.element_link.value}} value,
+                {% endif %}
             {% endif %}
              element {{note.element_link.elementtext_set.all.first.id_number_text}}{% if note.cr != '' %}, CR {% for c in note.cr%}{% if not forloop.first %} and {% endif %}{{c}}{% endfor %}{% endif %})
         </div>
