@@ -411,8 +411,8 @@ def element_search(request):
         events=request.session.get('disc_events','V,UB,BB,FX').split(",")
         context = {
             'categories':cats,
-            'gr_categories':'',
-            'tr_categories':'',
+            'gr_categories':gr_cats,
+            'tr_categories':tr_cats,
             'events': events,
             'search_type':'element',
             }
