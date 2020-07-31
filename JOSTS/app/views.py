@@ -406,13 +406,13 @@ def element_search(request):
         return render(request, 'app/element_search_tramp.html',context=context)
     elif request.session.get('disc_path') == 'acro':
         cats = AcroBalance.objects.filter(event="XP").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
-        gr_cats = AcroBalance.objects.filter(event="GR").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
-        tr_cats = AcroBalance.objects.filter(event="TR").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
+        #gr_cats = AcroBalance.objects.filter(event="GR").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
+        #tr_cats = AcroBalance.objects.filter(event="TR").exclude(category='B').exclude(category='M').extra({'category':"CAST(category as INTEGER)"}).order_by('category').values_list('category',flat=True).distinct()
         events=request.session.get('disc_events','V,UB,BB,FX').split(",")
         context = {
             'categories':cats,
-            'gr_categories':gr_cats,
-            'tr_categories':tr_cats,
+            'gr_categories':'',
+            'tr_categories':'',
             'events': events,
             'search_type':'element',
             }
