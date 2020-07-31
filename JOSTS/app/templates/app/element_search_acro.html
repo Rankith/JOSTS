@@ -65,7 +65,7 @@
         <div class="pr-2">
             <label id="lblAcrC{{forloop.counter}}" class="search-button" style="height:100px !important">
                 <input type="checkbox" id="chkAcrG{{forloop.counter}}" value="{{cat}}" class="check-search search-GR" data-search="category" onchange="SearchChange(this)">
-                <div class="search-button value-button"> <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/acro-gr-{{cat}}.svg" /></div>
+                <div class="search-button value-button"  style="height:100px !important"> <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/acro-gr-{{cat}}.svg" /></div>
             </label>
         </div>
         {% endfor %}
@@ -75,7 +75,7 @@
         <div class="pr-2">
             <label id="lblAcrC{{forloop.counter}}" class="search-button"  style="height:100px !important">
                 <input type="checkbox" id="chkAcrG{{forloop.counter}}" value="{{cat}}" class="check-search search-TR" data-search="category" onchange="SearchChange(this)">
-                <div class="search-button value-button"> <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/acro-tr-{{cat}}.svg" /></div>
+                <div class="search-button value-button" style="height:100px !important"> <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/acro-tr-{{cat}}.svg" /></div>
             </label>
         </div>
         {% endfor %}
