@@ -105,7 +105,7 @@
     <div class="col-6 justify-content-end d-flex">
         <div id="divContextListBase" class="image-background" style="height:400px;width:135px;overflow: auto;font-size:11px">
         {% for element in bottoms %}
-            <div id="Acro{{on_element}}base{{element.id}}" onclick="AcroSkillClick('base','{{on_element}}','{{element.id}}','{{element.image_url}}','{{image_sex_bottom}}')" data-id="{{element.id}}" data-sex="{{image_sex_bottom}}" data-link="{{on_element}}" data-event="{{element.event}}" class="acro-select acro-select-base acro-filter-base{{on_element}}">
+            <div id="Acro{{on_element}}base{{element.id}}" onclick="AcroSkillClick('base','{{on_element}}','{{element.id}}','{{element.image_url}}','{{image_sex_bottom}}','{{element.thumbnail_direction}}')" data-id="{{element.id}}" data-sex="{{image_sex_bottom}}" data-link="{{on_element}}" data-event="{{element.event}}" class="acro-select acro-select-base acro-filter-base{{on_element}}">
                 <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_bottom}}_tn.svg"  style="width:110px;overflow:hidden"/>
             </div>
         {% endfor %}
@@ -114,7 +114,7 @@
     <div class="col-6 ">
         <div id="divContextListTop" class="image-background" style="height:400px;width:135px;overflow: auto;font-size:11px">
         {% for element in tops %}
-            <div id="Acro{{on_element}}top{{element.id}}" onclick="AcroSkillClick('top','{{on_element}}','{{element.id}}','{{element.image_url}}','{{image_sex_top}}')" data-id="{{element.id}}" data-sex="{{image_sex_top}}" data-link="{{on_element}}" class="acro-select acro-select-top acro-filter-top{{on_element}}">
+            <div id="Acro{{on_element}}top{{element.id}}" onclick="AcroSkillClick('top','{{on_element}}','{{element.id}}','{{element.image_url}}','{{image_sex_top}}','')" data-id="{{element.id}}" data-sex="{{image_sex_top}}" data-link="{{on_element}}" class="acro-select acro-select-top acro-filter-top{{on_element}}">
                 <img class="img-fluid" src="{% static 'app/images/'%}{{request.session.disc_path}}/elements/{{element.thumb_url}}-{{image_sex_top}}_tn.svg"  style="width:110px;overflow:hidden"/>
             </div>
         {% endfor %}
