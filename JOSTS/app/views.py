@@ -494,6 +494,8 @@ def element_builder_acro(request):
             for ks in k.split(','):#allow multi things
                 kwargs = {'{0}'.format(ks): i}
                 innerQuery.add(Q(**kwargs), Q.OR)
+        if k=='category' and (dget['event'] == ['GR'] or dget['event'] == ['TR']):
+            innerQuery.add(Q(category=''),Q.OR)
         query.add(innerQuery,Q.AND)
     elements = AcroBalance.objects.filter(query).order_by('page_number')
     bottoms = elements.filter(top_bottom='B')
@@ -504,6 +506,12 @@ def element_builder_acro(request):
     elif event_combo=="MP":
         image_sex_bottom = "M"
         image_sex_top = "M"
+    elif event_combo=="GR":
+        image_sex_bottom = "M"
+        image_sex_top = "M"
+    elif event_combo=="TR":
+        image_sex_bottom = "W"
+        image_sex_top = "W"
     else:
         image_sex_bottom = "M"
         image_sex_top = "W"
