@@ -576,12 +576,23 @@ def acro_get_score(request):
                     base_value = base.value
                     score_dict["base_trans_group"] =  base.transition_group
                 score_dict["base_trans_group_display"] = str(base.page_number) + "-" + str(base.base_number)
-                top_value = top.value
+                #get specific top value for GR or TR depending on base value
+                if data['Events'][i] == 'GR' or data['Events'][i] == 'TR':
+                    if base_value >= 1 and base_value <= 8:
+                        top_value = top.value
+                    elif base_value >= 9 and base_value <= 13:
+                        top_value = top.value2
+                    elif base_value >= 14 and base_value <= 17:
+                        top_value = top.value3
+                    else:
+                         top_value = top.value4
+                else:
+                    top_value = top.value
                 spec_value_top = top_value
                 score_dict["top_trans_group"] = top.transition_group
                 first_bonus = top.bonus
                 #check WP bonus
-                if  pair_type == "WP":
+                if  data['Events'][i] == "WP":
                     womens_bonus = AcroWomensBonus.objets.filter(bottom_interface=base.bottom_interface,top_interface=top.top_interface)
                     if len(womens_bonus) > 0:
                         w_bonus = womens_bonus[0].bonus
