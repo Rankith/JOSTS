@@ -318,6 +318,9 @@ def elements(request):
     #Rule.objects.filter(section="Appendix 12").update(display_order=112,search_display='A12')
     #Rule.objects.filter(section="Appendix 7").update(display_order=107,search_display='A7')
 
+    legs_together = ['HS1-Aa','HS1-Ab','HS1-Ac','HS1-Ai','HS1-Ba','HS1-B1a','HS1-B1d','HS1-Ca','HS1-Ea','HS2-Aa','HS2-Ab','HS2-Ac','HS2-Ai','HS2-Ba','HS2-B1a','HS2-B1d','HS2-Ca','HS2-Ea','HS2N-Aa','HS2N-Ab','HS2N-Ac','HS2N-Ai','HS2N-Ba','HS2N-B1a','HS2N-B1d','HS2N-Ca','HS2N-Ea','HSSAH-Aa','HSSAH-Ab','HSSAH-Ac','HSSAH-Ai','HSSAH-Ba','HSSAH-B1a','HSSAH-B1d','HSSAH-Ca','HSSAH-Ea','MS1-Ac','MS1-Af','MS1-Fa','MS1-Ha','MS1-Hb','MS2-Ac','MS2-Af','MS2-Fa','MS2-Ha','MS2-Hb','MS2N-Ac','MS2N-Af','MS2N-Fa','MS2N-Ha','MS2N-Hb','MSSAH-Ac','MSSAH-Af','MSSAH-Fa','MSSAH-Ha','MSSAH-Hb']
+    AcroBalance.objects.filter(event='GR',skill_name__in=legs_together).update(legs_together_bonus=1)
+    AcroBalance.objects.filter(event='TR',skill_name__in=legs_together).update(legs_together_bonus=1)
     #Element.objects.filter(disc__isnull=True).update(disc=1)
     #Rule.objects.filter(disc__isnull=True).update(disc=1)
     #Video.objects.filter(disc__isnull=True).update(disc=1)
@@ -609,7 +612,9 @@ def acro_get_score(request):
                         score_dict["top_value"] = str(top_value) + " + " + str(w_bonus)
                     else:
                         score_dict["top_value"] = top_value
-                    total = base_value + top_value + w_bonus + first_bonus
+                    if top.legs_together_bonus > 0:
+                        score_dict["top_value"] = score_dict["top_value"] + " + " + str(top.legs_together_bonus)
+                    total = base_value + top_value + w_bonus + first_bonus + top.legs_together_bonus
                     first_bonus += w_bonus    
                 else:
                     score_dict["base_value"] = 0
