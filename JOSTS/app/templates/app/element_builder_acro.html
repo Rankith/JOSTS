@@ -30,8 +30,14 @@
                 </div>
                 <div id="divB{{on_element}}NotAllowed" style="position:absolute;left:85px;top:300px;font-weight:bold;z-index:101;display:none">Not Allowed</div>
 			    <!--<img id="C{{on_element}}Combo" style="position:absolute;left:0px;top:0px;z-index:102" width="260" height = "400">-->
-			    <img id="C{{on_element}}top" style="position:absolute;left:0px;top:0px;display:none;z-index:101" width="270" height = "360">
-			    <img id="C{{on_element}}base" style="position:absolute;left:0px;top:0px;display:none" width="270" height = "360">
+                {% if event_combo == 'GR' or event_combo == 'TR' %}
+                    <img id="C{{on_element}}top" style="position:absolute;left:0px;top:0px;display:none;z-index:101" width="270" height = "352">
+			        <img id="C{{on_element}}base" style="position:absolute;left:0px;top:0px;display:none" width="270" height = "580">
+                {% else %}
+                    <img id="C{{on_element}}top" style="position:absolute;left:0px;top:0px;display:none;z-index:101" width="270" height = "360">
+			        <img id="C{{on_element}}base" style="position:absolute;left:0px;top:0px;display:none" width="270" height = "360">
+                {% endif %}
+			    
                 <div style="position: absolute;left:4px;bottom:1px;z-index:104">
                     <label style="margin-bottom:0.1rem"><input type="checkbox" id="chk{{on_element}}Connected" value="{{on_element}}" checked="checked" class="check-connected" onclick="CheckAndGetScore({{on_element}})" /> Connected</label><br/>
                     <label style="margin-bottom:0.1rem"><input type="checkbox" id="chk{{on_element}}Hold" value="{{on_element}}" checked="checked" class="check-hold"  onclick="CheckAndGetScore({{on_element}})"/> 3 Second Hold</label>
