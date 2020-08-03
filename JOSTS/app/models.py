@@ -474,7 +474,7 @@ class AcroBalance(models.Model):
     def __str__(self):
         return self.event + " " + str(self.skill_name)
     def image_url(self):
-        return self.skill_name
+        return self.skill_name + "-" + self.thumbnail_direction.lower()
     def thumb_url(self):
         return self.skill_name + "-" + self.thumbnail_direction.lower()
 
