@@ -57,13 +57,14 @@
         else {
             localStorage.setItem(el.id, el.checked ? 1 : 0);
            
+            //Event = $(el).val();
+        }
+        
             $('.check-section').not(el).prop('checked', false);
             $('.check-section').not(el).each(function (i) {
                 localStorage.setItem(this.id, 0);
             });
             GotoSelectedSection();
-            //Event = $(el).val();
-        }
     }
 
     function ChangeCategory(el) {
