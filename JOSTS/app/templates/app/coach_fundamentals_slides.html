@@ -25,7 +25,7 @@
         <button id="btnLast" type="button" class="btn btn-main pr-3 pl-3" onclick="GoLast(); event.stopPropagation();"><i class="fas fa-chevron-right"></i><i class="fas fa-chevron-right"></i></button>
     </div>
     <div class="pl-4">
-        <button id="btnRestart" type="button" class="btn btn-main pr-3 pl-3" {% if isexam %}style="display:none"{% endif %} onclick="RestartQuiz(); event.stopPropagation();">Reset Section</button>
+        <button id="btnRestart" type="button" class="btn btn-main pr-3 pl-3" {% if isexam %}style="display:none"{% endif %} onclick="RestartQuiz(); event.stopPropagation();">Reset{% if isquiz %} Quiz{% else %} Lecture{% endif %}</button>
     </div>
 </div>
 <div id="RestartQuizHolder" style="display:none">
