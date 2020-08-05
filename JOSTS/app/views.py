@@ -2081,7 +2081,12 @@ def change_disc(request):
     request.session['version_name'] = VersionSettings.objects.first().name
     request.session['exclude_screens'] = disc.exclude_screens
     
-    return redirect(request.GET.get('next'))  
+    if request.GET.get('next').replace('/','') in disc.exclude_screens:
+        next = "/elements/"
+    else:
+        next = request.GET.get('next')
+
+    return redirect(next)  
 
 def contact(request):
     if request.method == 'GET':
