@@ -503,3 +503,12 @@ class AcroBalanceTransition(models.Model):
     base_turn_180_hs = models.IntegerField(default=0)
     base_turn_360 = models.IntegerField(default=0)
     base_turn_360_hs = models.IntegerField(default=0)
+
+class AcroMount(models.Model):
+    event = models.CharField(max_length=2)
+    category = models.IntegerField(default=0)
+    mount = models.CharField(max_length=12)
+    base = models.ForeignKey(AcroBalance,on_delete=models.CASCADE,null=True,blank=True,related_name='mount_base')
+    top = models.ForeignKey(AcroBalance,on_delete=models.CASCADE,null=True,blank=True,related_name='mount_top')
+    value = models.IntegerField(default=0)
+    page_number = models.IntegerField(default=0)

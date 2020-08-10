@@ -3,7 +3,7 @@ from app.models import Element, ElementText, Video, UserNote, Rule, RuleText, Dr
     SubscriptionSetup, QuizResult, ActivityLog, UnsubscribeFeedback, Theme, UserSettings, RuleLink, VideoNote, PageTour, UserToursComplete, VideoLink, \
     Disc, UnratedElement, VersionSettings,StructureGroup,Competition,CompetitionGroup,CompetitionType,CompetitionVideo,TCExample,JudgeInstruction, \
     CoachMethodology, CoachEnvironment, CoachInstruction, CoachVideoLine, CoachVideoLink, CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, \
-    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz, CoachUserNote, AcroBalance, AcroWomensBonus, AcroInvalid, AcroBalanceTransition
+    CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz, CoachUserNote, AcroBalance, AcroWomensBonus, AcroInvalid, AcroBalanceTransition, AcroMount
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -236,6 +236,11 @@ class AcroBalanceTransitionAdmin(ImportExportModelAdmin):
     list_editable=('event','first_balance','second_balance','movement_value','movement_value_hs_fs')
     list_filter = ('event',)
 
+class AcroMountAdmin(ImportExportModelAdmin):
+    list_display=('id','event','category','base','top','value','page_number')
+    list_editable=('event','category','value','page_number')
+    list_filter = ('event','category','page_number')
+
 
 admin.site.register(Element,ElementAdmin)
 admin.site.register(ElementText,ElementTextAdmin)
@@ -283,3 +288,4 @@ admin.site.register(AcroBalance,AcroBalanceAdmin)
 admin.site.register(AcroWomensBonus,AcroWomensBonusAdmin)
 admin.site.register(AcroInvalid,AcroInvalidAdmin)
 admin.site.register(AcroBalanceTransition,AcroBalanceTransitionAdmin)
+admin.site.register(AcroMount,AcroMountAdmin)

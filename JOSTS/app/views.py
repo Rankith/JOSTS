@@ -9,7 +9,7 @@ from app.models import Element,ElementText,Video,UserNote,Rule,RuleText,DrawnIma
     ActivityLog,UserSettings,Theme,PageTour,UserToursComplete,RuleLink,VideoNote,VideoNoteTemp,VideoLink,Disc,UnratedElement,VersionSettings,StructureGroup, \
     Competition,CompetitionType,CompetitionGroup,CompetitionVideo,TCExample,JudgeInstruction,CoachInstruction,CoachEnvironment,CoachMethodology,CoachVideoLine,CoachVideoLink, \
     CoachFundamentalCategory, CoachFundamentalSection, CoachFundamentalSlide, CoachFundamentalAnswer, CoachFundamentalUserProgress, CoachFundamentalUserAnswer, CoachFundamentalUserQuiz,CoachUserNote, \
-    AcroBalance,AcroWomensBonus,AcroInvalid,AcroBalanceTransition
+    AcroBalance,AcroWomensBonus,AcroInvalid,AcroBalanceTransition,AcroMount
     
 from django.db.models import Q
 from django.db.models import IntegerField
@@ -1900,6 +1900,56 @@ def import_from_fig(request):
                at.save()
 
             response +=  " | acro balance groups transition created: " + str(AcroBalanceTransition.objects.all().count())
+
+        
+        if 'acromountspairs' in type or type=='acroall':
+            AcroMount.objects.filter(event='XP').delete()
+            
+            #mount pairs
+            query="Select Mount,Base,Top,MountValue,PageNumber FROM acromounts where MountValue is not null"
+            cursor.execute(query)
+
+            for (mount,base,top,mountvalue,pagenumber) in cursor:
+                if 'MFS' in mount:
+                    cat=1
+                else:
+                    cat=2
+
+                base = AcroBalance.objects.filter(skill_name=base,event='XP').first()
+                top = AcroBalance.objects.filter(skill_name=top,event='XP').first()
+
+                am = AcroMount(event='XP',category=cat,mount=mount,base=base,top=top,value=mountvalue,page_number=pagenumber)
+                am.save()
+
+            response +=  " | acro mount pairs created: " + str(AcroMount.objects.all().count())
+
+        if 'acromountsgroup' in type or type=='acroall':
+            AcroMount.objects.filter(event='GR').delete()
+            
+            #mount groups
+            query="Select Mount,StartNumber,MountValue,PageNumber FROM acromountsgroup where MountValue is not null"
+            cursor.execute(query)
+
+            for (mount,startnumber,mountvalue,pagenumber) in cursor:
+
+                am = AcroMount(event='GR',category=startnumber,mount=mount,value=mountvalue,page_number=pagenumber)
+                am.save()
+
+            response +=  " | acro mount groups created: " + str(AcroMount.objects.all().count())
+
+        if 'acromountstrio' in type or type=='acroall':
+            AcroMount.objects.filter(event='TR').delete()
+            
+            #mount trios
+            query="Select Mount,StartNumber,MountValue,PageNumber FROM acromountstrio where MountValue is not null"
+            cursor.execute(query)
+
+            for (mount,startnumber,mountvalue,pagenumber) in cursor:
+
+                am = AcroMount(event='TR',category=startnumber,mount=mount,value=mountvalue,page_number=pagenumber)
+                am.save()
+
+            response +=  " | acro mount trios created: " + str(AcroMount.objects.all().count())
 
     return JsonResponse({'result':response})
 
