@@ -80,7 +80,7 @@
             if (Direction[which] != dir) {
                 //if top was already set, change its facing
                 if ($("#C" + which + "top").attr("src") != undefined)
-                    $("#C" + which + "top").attr("src", $("#C" + which + "top").attr("src").replace("-" + Direction[which] + "-", "-" + dir + "-"));
+                    $("#C" + which + "top").attr("src", $("#C" + which + "top").attr("src").replace("-" + Direction[which].toLowerCase() + "-", "-" + dir + "-"));
                 Direction[which] = dir;
             }
         }
