@@ -179,6 +179,7 @@
                         </div>
                         {% endfor %}
                 </div>
+        <div id="divOldID"></div>
         <table>
             <tr>
                 <td align="right">
@@ -604,6 +605,7 @@
         $(".video-select").removeClass("div-selected");
         $(el).addClass("div-selected");
         OnVideo = idIn;
+        $("#divOldID").html("Old ID: " + oldIDIn);
         GetNotes();
         PreviewNotesVideo();
         $("#txtFrameJump").show();
