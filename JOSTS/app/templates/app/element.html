@@ -26,7 +26,7 @@
                 </div>
                 <div id="divYourNote" class="your-note">
 			        <label class="text-note-header mb-0">Your Note:</label><br/>
-                    <textarea id="txtUserNotes" name="txtUserNotes" rows="3" class="w-100">{{user_note}}</textarea>
+                    <textarea id="txtUserNotes" name="txtUserNotes" rows="3" class="w-100" style="resize: none;">{{user_note}}</textarea>
                 </div>
                 <div class="row h-100 justify-content-center align-items-center">
                     <div class="col-12 position-relative">
@@ -84,6 +84,13 @@
                 </tr>
             </table>
         </div>-->
+        
+        {% if lang_elements.element.videolink_set.all.count > 0 %}
+            {% if request.user.is_staff or request.user.is_superuser or SHOW_VIDEOS %}
+             <div class="col"><div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold"  onclick="LoadVideoFromElement()">
+                    <i class="fas fa-play-circle"></i>&nbsp;{{ lang_elements.element.videolink_set.all.count }}</button></div></div>
+            {% endif %}
+        {% endif %}
         <div class="col">
             <table class="w-100">
                 <tr>
@@ -98,12 +105,6 @@
                 </tr>
             </table>
         </div>
-        {% if lang_elements.element.videolink_set.all.count > 0 %}
-            {% if request.user.is_staff or request.user.is_superuser or SHOW_VIDEOS %}
-             <div class="col"><div class="text-center"><button id="btnVideo" type="button" class="btn btn-main pr-3 pl-3"  data-toggle="modal" data-target="#modalMain" style="padding: 0rem 0.2rem;font-size:0.95rem;font-weight:bold"  onclick="LoadVideoFromElement()">
-                    <i class="fas fa-play-circle"></i>&nbsp;{{ lang_elements.element.videolink_set.all.count }}</button></div></div>
-            {% endif %}
-        {% endif %}
     </div>
 </div>
 

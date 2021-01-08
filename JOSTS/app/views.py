@@ -346,7 +346,7 @@ def element(request):
     idIn = request.GET.get('id')
     value_display = request.GET.get('value_display')
     element = ElementText.objects.filter(id=idIn)
-    userNote = UserNote.objects.filter(user=request.user.id,element=idIn)
+    userNote = UserNote.objects.filter(user=request.user.id,element=element[0].element)
     if (len(userNote) > 0):
         userNote = userNote[0].note;
     else:
